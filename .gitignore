@@ -1,2 +1,11 @@
 *.agdai
 **/MAlonzo/**
+
+.DS_Store
+*.swp
+*.swo
+
+_build/
+temp/
+src/everything.lagda.md
+agdaFiles

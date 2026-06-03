@@ -1,0 +1,5 @@
+name: Codex-Homotopy-Group
+include:
+  src
+  agda-unimath/src
+flags: --without-K --exact-split --no-import-sorts --auto-inline --no-require-unique-meta-solutions -WnoWithoutKFlagPrimEraseEquality --no-postfix-projections
