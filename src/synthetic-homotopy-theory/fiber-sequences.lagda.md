@@ -112,32 +112,32 @@ module _
   base-fiber-sequence-Pointed-Type : Pointed-Type l3
   base-fiber-sequence-Pointed-Type = pr1 (pr2 (pr2 s))
 
-  map-fiber-fiber-sequence-Pointed-Type :
+  fiber-inclusion-fiber-sequence-Pointed-Type :
     fiber-fiber-sequence-Pointed-Type →∗
     total-space-fiber-sequence-Pointed-Type
-  map-fiber-fiber-sequence-Pointed-Type = pr1 (pr2 (pr2 (pr2 s)))
+  fiber-inclusion-fiber-sequence-Pointed-Type = pr1 (pr2 (pr2 (pr2 s)))
 
-  map-base-fiber-sequence-Pointed-Type :
+  fibration-fiber-sequence-Pointed-Type :
     total-space-fiber-sequence-Pointed-Type →∗
     base-fiber-sequence-Pointed-Type
-  map-base-fiber-sequence-Pointed-Type = pr1 (pr2 (pr2 (pr2 (pr2 s))))
+  fibration-fiber-sequence-Pointed-Type = pr1 (pr2 (pr2 (pr2 (pr2 s))))
 
   is-fiber-sequence-fiber-sequence-Pointed-Type :
     is-fiber-sequence-Pointed-Type
-      ( map-fiber-fiber-sequence-Pointed-Type)
-      ( map-base-fiber-sequence-Pointed-Type)
+      ( fiber-inclusion-fiber-sequence-Pointed-Type)
+      ( fibration-fiber-sequence-Pointed-Type)
   is-fiber-sequence-fiber-sequence-Pointed-Type =
     pr2 (pr2 (pr2 (pr2 (pr2 s))))
 
   pointed-equiv-fiber-fiber-sequence-Pointed-Type :
     fiber-fiber-sequence-Pointed-Type ≃∗
-    fiber-Pointed-Type map-base-fiber-sequence-Pointed-Type
+    fiber-Pointed-Type fibration-fiber-sequence-Pointed-Type
   pointed-equiv-fiber-fiber-sequence-Pointed-Type =
     pr1 is-fiber-sequence-fiber-sequence-Pointed-Type
 
   pointed-map-fiber-fiber-sequence-Pointed-Type :
     fiber-fiber-sequence-Pointed-Type →∗
-    fiber-Pointed-Type map-base-fiber-sequence-Pointed-Type
+    fiber-Pointed-Type fibration-fiber-sequence-Pointed-Type
   pointed-map-fiber-fiber-sequence-Pointed-Type =
     pointed-map-pointed-equiv
       ( pointed-equiv-fiber-fiber-sequence-Pointed-Type)
@@ -149,9 +149,9 @@ module _
       ( pointed-equiv-fiber-fiber-sequence-Pointed-Type)
 
   pointed-htpy-inclusion-fiber-fiber-sequence-Pointed-Type :
-    ( inclusion-fiber-Pointed-Type map-base-fiber-sequence-Pointed-Type ∘∗
+    ( inclusion-fiber-Pointed-Type fibration-fiber-sequence-Pointed-Type ∘∗
       pointed-map-fiber-fiber-sequence-Pointed-Type) ~∗
-    map-fiber-fiber-sequence-Pointed-Type
+    fiber-inclusion-fiber-sequence-Pointed-Type
   pointed-htpy-inclusion-fiber-fiber-sequence-Pointed-Type =
     pr2 is-fiber-sequence-fiber-sequence-Pointed-Type
 ```
