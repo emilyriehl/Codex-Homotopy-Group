@@ -1,7 +1,7 @@
 # Fiber sequences
 
 ```agda
-module synthetic-homotopy-theory.fiber-sequences where
+module structured-types.fiber-sequences where
 ```
 
 <details><summary>Imports</summary>
