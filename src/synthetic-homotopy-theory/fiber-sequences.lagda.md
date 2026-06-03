@@ -77,7 +77,7 @@ module _
   is-fiber-sequence-Pointed-Type =
     Σ ( F ≃∗ fiber-Pointed-Type g)
       ( λ e →
-        coherence-triangle-pointed-maps'
+        coherence-triangle-pointed-maps
           ( f)
           ( inclusion-fiber-Pointed-Type g)
           ( pointed-map-pointed-equiv e))
@@ -152,17 +152,24 @@ module _
       ( pointed-equiv-fiber-fiber-sequence-Pointed-Type)
 
   coherence-triangle-fiber-sequence-Pointed-Type :
-    coherence-triangle-pointed-maps'
+    coherence-triangle-pointed-maps
       ( fiber-inclusion-fiber-sequence-Pointed-Type)
       ( inclusion-fiber-Pointed-Type fibration-fiber-sequence-Pointed-Type)
       ( pointed-map-fiber-fiber-sequence-Pointed-Type)
   coherence-triangle-fiber-sequence-Pointed-Type =
     pr2 is-fiber-sequence-fiber-sequence-Pointed-Type
 
+  pointed-htpy-fiber-inclusion-fiber-sequence-Pointed-Type :
+    fiber-inclusion-fiber-sequence-Pointed-Type ~∗
+    ( inclusion-fiber-Pointed-Type fibration-fiber-sequence-Pointed-Type ∘∗
+      pointed-map-fiber-fiber-sequence-Pointed-Type)
+  pointed-htpy-fiber-inclusion-fiber-sequence-Pointed-Type =
+    coherence-triangle-fiber-sequence-Pointed-Type
+
   pointed-htpy-inclusion-fiber-fiber-sequence-Pointed-Type :
     ( inclusion-fiber-Pointed-Type fibration-fiber-sequence-Pointed-Type ∘∗
       pointed-map-fiber-fiber-sequence-Pointed-Type) ~∗
     fiber-inclusion-fiber-sequence-Pointed-Type
   pointed-htpy-inclusion-fiber-fiber-sequence-Pointed-Type =
-    coherence-triangle-fiber-sequence-Pointed-Type
+    inv-pointed-htpy pointed-htpy-fiber-inclusion-fiber-sequence-Pointed-Type
 ```
