@@ -239,6 +239,44 @@ Related commit:
 
 - `6bf01e5` — Move fiber sequences to structured types.
 
+### Long exact sequence prerequisites
+
+Request: attempt the next objective from `FORMALIZATION-PLAN.md`, namely the
+long exact sequence of homotopy groups and any missing prerequisites.
+
+Actions:
+
+- Added functoriality of iterated loop spaces for pointed maps.
+- Added functoriality of homotopy automorphism concrete groups, using the
+  connected component of the base point in the `1`-truncation.
+- Added induced homomorphisms on concrete homotopy groups.
+- Added algebraic exactness for group and concrete group homomorphisms as
+  equality of image and kernel subgroups.
+- Added a homotopy LES module for a fiber sequence:
+  - induced maps on homotopy groups from the fiber inclusion and fibration,
+  - the canonical boundary pointed map `Ω B →∗ F`,
+  - the induced recursive boundary homomorphisms
+    `π(n+2) B → π(n+1) F`,
+  - the exactness predicates for the fiber, total-space, and base terms.
+
+Verification:
+
+```sh
+./check.sh src/group-theory/functoriality-homotopy-automorphism-groups.lagda.md
+./check.sh src/group-theory/exact-sequences-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/functoriality-iterated-loop-spaces.lagda.md
+./check.sh src/synthetic-homotopy-theory/functoriality-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+all passed.
+
+Status:
+
+- The canonical boundary maps and exactness statement are formalized.
+- The proof that these maps are exact is still open; this is the remaining
+  mathematical core of the LES theorem.
+
 ### Add running chat log
 
 Request: keep a running record of this chat in the Git repository, extending
