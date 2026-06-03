@@ -11,6 +11,7 @@ open import foundation.dependent-pair-types
 open import foundation.identity-types
 open import foundation.universe-levels
 
+open import structured-types.commuting-triangles-of-pointed-maps
 open import structured-types.fibers-of-pointed-maps
 open import structured-types.pointed-equivalences
 open import structured-types.pointed-homotopies
@@ -76,8 +77,10 @@ module _
   is-fiber-sequence-Pointed-Type =
     Σ ( F ≃∗ fiber-Pointed-Type g)
       ( λ e →
-        ( inclusion-fiber-Pointed-Type g ∘∗ pointed-map-pointed-equiv e) ~∗
-        f)
+        coherence-triangle-pointed-maps'
+          ( f)
+          ( inclusion-fiber-Pointed-Type g)
+          ( pointed-map-pointed-equiv e))
 
 fiber-sequence-Pointed-Type :
   (l1 l2 l3 : Level) → UU (lsuc l1 ⊔ lsuc l2 ⊔ lsuc l3)
@@ -148,10 +151,18 @@ module _
     is-equiv-map-pointed-equiv
       ( pointed-equiv-fiber-fiber-sequence-Pointed-Type)
 
+  coherence-triangle-fiber-sequence-Pointed-Type :
+    coherence-triangle-pointed-maps'
+      ( fiber-inclusion-fiber-sequence-Pointed-Type)
+      ( inclusion-fiber-Pointed-Type fibration-fiber-sequence-Pointed-Type)
+      ( pointed-map-fiber-fiber-sequence-Pointed-Type)
+  coherence-triangle-fiber-sequence-Pointed-Type =
+    pr2 is-fiber-sequence-fiber-sequence-Pointed-Type
+
   pointed-htpy-inclusion-fiber-fiber-sequence-Pointed-Type :
     ( inclusion-fiber-Pointed-Type fibration-fiber-sequence-Pointed-Type ∘∗
       pointed-map-fiber-fiber-sequence-Pointed-Type) ~∗
     fiber-inclusion-fiber-sequence-Pointed-Type
   pointed-htpy-inclusion-fiber-fiber-sequence-Pointed-Type =
-    pr2 is-fiber-sequence-fiber-sequence-Pointed-Type
+    coherence-triangle-fiber-sequence-Pointed-Type
 ```
