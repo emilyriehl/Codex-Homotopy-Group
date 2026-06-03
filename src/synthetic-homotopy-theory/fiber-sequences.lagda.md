@@ -79,8 +79,19 @@ module _
         ( inclusion-fiber-Pointed-Type g ∘∗ pointed-map-pointed-equiv e) ~∗
         f)
 
-  fiber-sequence-Pointed-Type : UU (l1 ⊔ l2 ⊔ l3)
-  fiber-sequence-Pointed-Type = is-fiber-sequence-Pointed-Type
+fiber-sequence-Pointed-Type :
+  (l1 l2 l3 : Level) → UU (lsuc l1 ⊔ lsuc l2 ⊔ lsuc l3)
+fiber-sequence-Pointed-Type l1 l2 l3 =
+  Σ (Pointed-Type l1)
+    ( λ F →
+      Σ (Pointed-Type l2)
+        ( λ E →
+          Σ (Pointed-Type l3)
+            ( λ B →
+              Σ ( F →∗ E)
+                ( λ f →
+                  Σ ( E →∗ B)
+                    ( λ g → is-fiber-sequence-Pointed-Type f g)))))
 ```
 
 ## Properties
@@ -89,18 +100,44 @@ module _
 
 ```agda
 module _
-  {l1 l2 l3 : Level}
-  {F : Pointed-Type l1} {E : Pointed-Type l2} {B : Pointed-Type l3}
-  {f : F →∗ E} {g : E →∗ B}
-  (s : fiber-sequence-Pointed-Type f g)
+  {l1 l2 l3 : Level} (s : fiber-sequence-Pointed-Type l1 l2 l3)
   where
 
+  fiber-fiber-sequence-Pointed-Type : Pointed-Type l1
+  fiber-fiber-sequence-Pointed-Type = pr1 s
+
+  total-space-fiber-sequence-Pointed-Type : Pointed-Type l2
+  total-space-fiber-sequence-Pointed-Type = pr1 (pr2 s)
+
+  base-fiber-sequence-Pointed-Type : Pointed-Type l3
+  base-fiber-sequence-Pointed-Type = pr1 (pr2 (pr2 s))
+
+  map-fiber-fiber-sequence-Pointed-Type :
+    fiber-fiber-sequence-Pointed-Type →∗
+    total-space-fiber-sequence-Pointed-Type
+  map-fiber-fiber-sequence-Pointed-Type = pr1 (pr2 (pr2 (pr2 s)))
+
+  map-base-fiber-sequence-Pointed-Type :
+    total-space-fiber-sequence-Pointed-Type →∗
+    base-fiber-sequence-Pointed-Type
+  map-base-fiber-sequence-Pointed-Type = pr1 (pr2 (pr2 (pr2 (pr2 s))))
+
+  is-fiber-sequence-fiber-sequence-Pointed-Type :
+    is-fiber-sequence-Pointed-Type
+      ( map-fiber-fiber-sequence-Pointed-Type)
+      ( map-base-fiber-sequence-Pointed-Type)
+  is-fiber-sequence-fiber-sequence-Pointed-Type =
+    pr2 (pr2 (pr2 (pr2 (pr2 s))))
+
   pointed-equiv-fiber-fiber-sequence-Pointed-Type :
-    F ≃∗ fiber-Pointed-Type g
-  pointed-equiv-fiber-fiber-sequence-Pointed-Type = pr1 s
+    fiber-fiber-sequence-Pointed-Type ≃∗
+    fiber-Pointed-Type map-base-fiber-sequence-Pointed-Type
+  pointed-equiv-fiber-fiber-sequence-Pointed-Type =
+    pr1 is-fiber-sequence-fiber-sequence-Pointed-Type
 
   pointed-map-fiber-fiber-sequence-Pointed-Type :
-    F →∗ fiber-Pointed-Type g
+    fiber-fiber-sequence-Pointed-Type →∗
+    fiber-Pointed-Type map-base-fiber-sequence-Pointed-Type
   pointed-map-fiber-fiber-sequence-Pointed-Type =
     pointed-map-pointed-equiv
       ( pointed-equiv-fiber-fiber-sequence-Pointed-Type)
@@ -112,8 +149,9 @@ module _
       ( pointed-equiv-fiber-fiber-sequence-Pointed-Type)
 
   pointed-htpy-inclusion-fiber-fiber-sequence-Pointed-Type :
-    ( inclusion-fiber-Pointed-Type g ∘∗
+    ( inclusion-fiber-Pointed-Type map-base-fiber-sequence-Pointed-Type ∘∗
       pointed-map-fiber-fiber-sequence-Pointed-Type) ~∗
-    f
-  pointed-htpy-inclusion-fiber-fiber-sequence-Pointed-Type = pr2 s
+    map-fiber-fiber-sequence-Pointed-Type
+  pointed-htpy-inclusion-fiber-fiber-sequence-Pointed-Type =
+    pr2 is-fiber-sequence-fiber-sequence-Pointed-Type
 ```
