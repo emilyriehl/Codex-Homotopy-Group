@@ -324,6 +324,37 @@ Verification:
 
 both passed.
 
+### Decompose exactness comparison implications
+
+Request: record the convention that theorem formalization means proving the
+theorem rather than only defining its type, allow committing explicit holes
+when necessary, and decompose the concrete/algebraic exactness comparison into
+separate named implications using the `B-A-...` naming pattern.
+
+Actions:
+
+- Updated `.codex/skills/agda-unimath-reference/references/hott-skills.md`:
+  - theorem requests should be treated as proof requests,
+  - if a proof is unavailable, leave a named theorem with holes rather than a
+    type-level placeholder,
+  - implication names should be conclusion-then-hypothesis, e.g.
+    `is-algebraically-exact-is-exact-hom-Concrete-Group`.
+- In `src/group-theory/exact-sequences-groups.lagda.md`, split the comparison
+  into:
+  - `is-algebraically-exact-is-exact-hom-Concrete-Group`,
+  - `is-exact-is-algebraically-exact-hom-Concrete-Group`,
+  - `logical-equivalence-is-exact-is-algebraically-exact-hom-Concrete-Group`,
+    assembled from the two directions.
+
+Verification:
+
+```sh
+./check.sh src/group-theory/exact-sequences-groups.lagda.md
+```
+
+failed only because of the two explicit holes in the directional comparison
+theorems.
+
 Status:
 
 - The native concrete-group definition is in place.

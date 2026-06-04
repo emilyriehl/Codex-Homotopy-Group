@@ -33,8 +33,19 @@ For parallel native and algebraic definitions, prefer this structure:
 
 - `is-...-Concrete-Group` for the native concrete-group definition.
 - `is-algebraically-...-Concrete-Group` for the ordinary-group reinterpretation.
-- A named logical equivalence type or theorem connecting them.
+- A named logical equivalence theorem connecting them.
 
-If the comparison proof is not yet available, leave a typechecked definition of
-the comparison target rather than adding a postulate or proving only one
-direction under an unclear name.
+When asked to formalize a theorem, do not only formalize the statement of the
+theorem as an element of `UU`. The request is to prove the theorem. If the proof
+is not yet available, state the theorem with a proof name following the naming
+conventions and leave a hole in the definition if necessary. Then write an
+informal proof plan and try to formalize the proof following that plan. If the
+plan exposes a missing prerequisite or a mismatch in the theorem statement,
+record that explicitly rather than replacing the theorem by a definition of its
+type.
+
+When decomposing a theorem into implications, name each direction by the
+conclusion followed by the hypothesis. For a proof of `A → B`, use a name of
+the form `B-A-...`; for example, a proof from exact concrete-group data to
+algebraic exactness should be named
+`is-algebraically-exact-is-exact-hom-Concrete-Group`.
