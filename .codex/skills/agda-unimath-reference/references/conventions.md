@@ -127,7 +127,8 @@ equals** `＝` (U+FF1D), because ASCII `=` is reserved in Agda.
   concise.
 - **Anonymous modules** group constructions sharing parameters; declare module variables on a new
   line indented +2, with `where` on its own following line (also +2). Leave one blank line after a
-  module declaration. Don't let a module span across `##`/`###` section headers — start a fresh one.
+  module declaration. Agda modules should not span multiple markdown sections or subsections; do not
+  let a module cross `##`/`###` section headers — start a fresh one.
 - **`where` blocks** are permitted but discouraged (their contents aren't reusable). Prefer them over
   `let`. If used: indent the `where` keyword +2 below the proof, type every helper, align contents
   with `where`. Better still, factor the helper into a top-level named lemma.

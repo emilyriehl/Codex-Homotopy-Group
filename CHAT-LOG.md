@@ -329,3 +329,27 @@ Status:
 - The native concrete-group definition is in place.
 - The logical equivalence with ordinary group exactness is not yet proved; the
   comparison target is formalized as a typechecked definition.
+
+### Markdown section boundaries for Agda modules
+
+Request: update the agda-unimath reference conventions to state that Agda
+modules should not span multiple markdown sections, and apply the convention to
+`src/group-theory/exact-sequences-groups.lagda.md`.
+
+Actions:
+
+- Updated
+  `.codex/skills/agda-unimath-reference/references/conventions.md` with the
+  explicit markdown-section-boundary convention.
+- Split the anonymous concrete-group modules in
+  `src/group-theory/exact-sequences-groups.lagda.md` so each `###` subsection
+  starts a fresh anonymous module.
+
+Verification:
+
+```sh
+./check.sh src/group-theory/exact-sequences-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+both passed.

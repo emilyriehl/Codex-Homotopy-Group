@@ -73,6 +73,12 @@ module _
 ### Exactness of a pair of concrete group homomorphisms
 
 ```agda
+module _
+  {l1 l2 l3 : Level}
+  (G : Concrete-Group l1) (H : Concrete-Group l2) (K : Concrete-Group l3)
+  (f : hom-Concrete-Group G H) (g : hom-Concrete-Group H K)
+  where
+
   is-exact-hom-Concrete-Group : UU (l1 ⊔ l2 ⊔ l3)
   is-exact-hom-Concrete-Group =
     is-fiber-sequence-Pointed-Type f g
@@ -81,9 +87,15 @@ module _
 ### The comparison problem between concrete and algebraic exactness
 
 ```agda
+module _
+  {l1 l2 l3 : Level}
+  (G : Concrete-Group l1) (H : Concrete-Group l2) (K : Concrete-Group l3)
+  (f : hom-Concrete-Group G H) (g : hom-Concrete-Group H K)
+  where
+
   logical-equivalence-is-exact-is-algebraically-exact-hom-Concrete-Group :
     UU (l1 ⊔ l2 ⊔ l3)
   logical-equivalence-is-exact-is-algebraically-exact-hom-Concrete-Group =
-    is-exact-hom-Concrete-Group ↔
-    is-algebraically-exact-hom-Concrete-Group
+    is-exact-hom-Concrete-Group G H K f g ↔
+    is-algebraically-exact-hom-Concrete-Group G H K f g
 ```
