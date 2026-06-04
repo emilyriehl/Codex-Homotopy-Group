@@ -7,6 +7,7 @@ module group-theory.exact-sequences-groups where
 <details><summary>Imports</summary>
 
 ```agda
+open import foundation.logical-equivalences
 open import foundation.universe-levels
 
 open import group-theory.concrete-groups
@@ -16,6 +17,8 @@ open import group-theory.homomorphisms-groups
 open import group-theory.images-of-group-homomorphisms
 open import group-theory.kernels-homomorphisms-groups
 open import group-theory.subgroups
+
+open import structured-types.fiber-sequences
 ```
 
 </details>
@@ -24,6 +27,11 @@ open import group-theory.subgroups
 
 A pair of composable group homomorphisms is exact when the image of the first
 homomorphism is the kernel of the second.
+
+For [concrete groups](group-theory.concrete-groups.md), exactness is a native
+homotopical condition: the two classifying pointed maps form a
+[fiber sequence](structured-types.fiber-sequences.md). The corresponding
+ordinary group condition is kept as a separate algebraic comparison definition.
 
 ## Definitions
 
@@ -43,7 +51,7 @@ module _
       ( subgroup-kernel-hom-Group H K g)
 ```
 
-### Exactness of a pair of concrete group homomorphisms
+### Algebraic exactness of a pair of concrete group homomorphisms
 
 ```agda
 module _
@@ -52,12 +60,30 @@ module _
   (f : hom-Concrete-Group G H) (g : hom-Concrete-Group H K)
   where
 
-  is-exact-hom-Concrete-Group : UU (l1 ⊔ l2 ⊔ l3)
-  is-exact-hom-Concrete-Group =
+  is-algebraically-exact-hom-Concrete-Group : UU (l1 ⊔ l2 ⊔ l3)
+  is-algebraically-exact-hom-Concrete-Group =
     is-exact-hom-Group
       ( group-Concrete-Group G)
       ( group-Concrete-Group H)
       ( group-Concrete-Group K)
       ( hom-group-hom-Concrete-Group G H f)
       ( hom-group-hom-Concrete-Group H K g)
+```
+
+### Exactness of a pair of concrete group homomorphisms
+
+```agda
+  is-exact-hom-Concrete-Group : UU (l1 ⊔ l2 ⊔ l3)
+  is-exact-hom-Concrete-Group =
+    is-fiber-sequence-Pointed-Type f g
+```
+
+### The comparison problem between concrete and algebraic exactness
+
+```agda
+  logical-equivalence-is-exact-is-algebraically-exact-hom-Concrete-Group :
+    UU (l1 ⊔ l2 ⊔ l3)
+  logical-equivalence-is-exact-is-algebraically-exact-hom-Concrete-Group =
+    is-exact-hom-Concrete-Group ↔
+    is-algebraically-exact-hom-Concrete-Group
 ```

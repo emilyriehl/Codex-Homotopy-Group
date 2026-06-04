@@ -11,7 +11,7 @@ under `src/`, organized one concept per file by mathematical subject). This skil
 half of the agda-unimath toolkit; the `agda-unimath-formalization` skill covers the *workflow*
 (the type-check loop, porting prerequisites, PR/merge norms). Use them together.
 
-The substance lives in four reference files under `references/`. **Don't try to recall agda-unimath
+The substance lives in five reference files under `references/`. **Don't try to recall agda-unimath
 specifics from memory — load the relevant file and quote it.** The library is large and moves; every
 name, path, and signature should be confirmed against the file (and ultimately against the source
 clone) rather than guessed.
@@ -24,6 +24,7 @@ clone) rather than guessed.
 | Find where something lives / which namespace / how to search for an existing lemma | `references/namespace-map.md` |
 | Get the module path & signature of a foundational construction (`UU`, `Σ`, `＝`, `is-equiv`, `is-trunc`, univalence, …) | `references/foundational-api.md` |
 | Decode an Agda error, especially under `--without-K` / `--exact-split` | `references/error-triage.md` |
+| Follow homotopy type theory formalization practice, especially for concrete groups and native homotopical definitions | `references/hott-skills.md` |
 
 Read the whole relevant file when you start a task in its area — they're short and the cross-cutting
 context matters. For a one-off lookup, jump to the named section.

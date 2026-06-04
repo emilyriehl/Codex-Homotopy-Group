@@ -295,3 +295,37 @@ Actions:
 Related commit:
 
 - This commit — Add running chat log.
+
+### Native concrete-group exactness
+
+Request: add a HoTT formalization-practices note to the agda-unimath reference
+skill and refactor concrete-group exactness to be native to concrete groups
+rather than a direct reinterpretation of group exactness.
+
+Actions:
+
+- Added `.codex/skills/agda-unimath-reference/references/hott-skills.md`.
+- Updated `.codex/skills/agda-unimath-reference/SKILL.md` so the new reference
+  file is discoverable.
+- In `src/group-theory/exact-sequences-groups.lagda.md`:
+  - renamed the ordinary-group reinterpretation to
+    `is-algebraically-exact-hom-Concrete-Group`,
+  - redefined `is-exact-hom-Concrete-Group` as
+    `is-fiber-sequence-Pointed-Type f g`,
+  - added the type of the desired logical equivalence between the native
+    concrete-group exactness and algebraic exactness.
+
+Verification:
+
+```sh
+./check.sh src/group-theory/exact-sequences-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+both passed.
+
+Status:
+
+- The native concrete-group definition is in place.
+- The logical equivalence with ordinary group exactness is not yet proved; the
+  comparison target is formalized as a typechecked definition.
