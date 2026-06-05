@@ -584,3 +584,54 @@ Verification:
 Related commit:
 
 - This commit — Add repository-local Agda workflow skill.
+
+### Conditional exactness reductions for the homotopy LES
+
+Request: try to complete the proof that the long exact sequence of homotopy
+groups of a fibration of pointed types is exact, update the status report as
+progress is made, and commit/push progress for review on another computer.
+
+Model context:
+
+- Date: 2026-06-05.
+- Agent-visible model identity: Codex, described in the current system context
+  as GPT-5-based.
+- User-reported current model context: `gpt-5.5` with reasoning effort
+  `xhigh`.
+- Exact served model identity is not exposed directly in the chat context.
+
+Actions:
+
+- Inspected the current fiber-sequence, concrete-group exactness, and homotopy
+  LES modules.
+- Identified the remaining bridge: a pointed fiber sequence
+  `F -> E -> B` does not yet supply, through the available APIs, pointed
+  fiber-sequence witnesses for the adjacent concrete homotopy group maps in
+  the LES.
+- In
+  `src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md`,
+  added exactness conditions at the total-space, base, and fiber terms.
+- Proved each exactness condition from the corresponding pointed
+  fiber-sequence witness by applying
+  `is-exact-is-fiber-sequence-hom-Concrete-Group`.
+- Updated `STATUS-REPORT.md` to record this progress and sharpen the remaining
+  proof obligation.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+passed.
+
+Status:
+
+- Conditional exactness reductions are now formalized and typecheck.
+- The full long exactness proof remains open: the missing work is constructing
+  the pointed fiber-sequence witnesses for the adjacent concrete homotopy group
+  maps, or proving the exactness statements directly.
+
+Related commit:
+
+- This commit — Add conditional LES exactness reductions.

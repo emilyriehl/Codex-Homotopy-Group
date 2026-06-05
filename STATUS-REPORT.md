@@ -21,14 +21,19 @@ calculation:
 - Ordinary group exactness has been defined.
 - A fiber sequence of concrete-group classifying maps has been shown to imply
   ordinary exactness of the induced underlying group homomorphisms.
+- The homotopy long exact sequence module now names the exactness conditions
+  at the fiber, total-space, and base terms and proves each one from the
+  corresponding pointed fiber-sequence witness between concrete homotopy
+  groups.
 - The circle facts needed for vanishing higher homotopy groups have been
   formalized: the loop space of the circle and the 1-sphere is equivalent to
   the integers, the circle and 1-sphere are 1-types, and positive concrete
   homotopy groups of 1-types are trivial.
 
 The final theorem `pi_3(S^2) = Z` is not yet formalized. The Hopf fibration,
-the exactness theorem for the homotopy long exact sequence, Freudenthal,
-sphere stability, and the diagonal sphere theorem remain to be done.
+the missing fiber-sequence witnesses needed for the homotopy long exact
+sequence exactness proof, Freudenthal, sphere stability, and the diagonal
+sphere theorem remain to be done.
 
 ## Implemented Agda code
 
@@ -39,7 +44,7 @@ sphere stability, and the diagonal sphere theorem remain to be done.
 | Homotopy automorphism functoriality | [`src/group-theory/functoriality-homotopy-automorphism-groups.lagda.md`](src/group-theory/functoriality-homotopy-automorphism-groups.lagda.md) | Defines classifying pointed maps and induced homomorphisms of concrete homotopy automorphism groups. |
 | Homotopy group functoriality | [`src/synthetic-homotopy-theory/functoriality-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/functoriality-homotopy-groups.lagda.md) | Defines `hom-concrete-homotopy-group`, the homomorphism induced by a pointed map on concrete homotopy groups. |
 | Exactness of group homomorphisms | [`src/group-theory/exact-sequences-groups.lagda.md`](src/group-theory/exact-sequences-groups.lagda.md) | Defines `is-exact-hom-Group` and proves `is-exact-is-fiber-sequence-hom-Concrete-Group`, the forward implication from a fiber sequence of concrete-group classifying maps to exactness of the induced ordinary group homomorphisms. |
-| Boundary maps for fiber sequences | [`src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md) | Defines the boundary pointed map, induced maps on homotopy groups of a fiber sequence, recursive boundary pointed maps, and boundary homomorphisms. This is not yet a proof of long exactness. |
+| Boundary maps and conditional LES exactness | [`src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md) | Defines the boundary pointed map, induced maps on homotopy groups of a fiber sequence, recursive boundary pointed maps, boundary homomorphisms, the exactness conditions at the fiber/total/base terms, and reductions proving those exactness conditions from the corresponding pointed fiber-sequence witnesses. The witnesses themselves are not yet constructed. |
 | Higher homotopy groups of 1-types | [`src/synthetic-homotopy-theory/higher-homotopy-groups-truncated-types.lagda.md`](src/synthetic-homotopy-theory/higher-homotopy-groups-truncated-types.lagda.md) | Proves that positive concrete homotopy groups of pointed 1-types are trivial. |
 | Circle and 1-sphere homotopy facts | [`src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md`](src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md) | Proves the loop-space equivalences for the circle and 1-sphere, the 1-type facts, and triviality of their positive concrete homotopy groups. |
 
@@ -49,7 +54,7 @@ sphere stability, and the diagonal sphere theorem remain to be done.
 |---|---|---|
 | General pointed fiber sequences | Done | Implemented in [`src/structured-types/fiber-sequences.lagda.md`](src/structured-types/fiber-sequences.lagda.md). |
 | Induced maps on homotopy groups | Done | Implemented via iterated loop functoriality and concrete homotopy group functoriality. |
-| Long exact sequence of homotopy groups | Partial | Boundary maps and induced homomorphisms are formalized, but the exactness theorem itself is not yet proved. |
+| Long exact sequence of homotopy groups | Partial | Boundary maps, induced homomorphisms, the three adjacent exactness conditions, and conditional exactness reductions are formalized. The remaining proof obligation is to construct the pointed fiber-sequence witnesses for those adjacent concrete homotopy group maps, or to prove the same exactness statements directly. |
 | Exactness-to-isomorphism with zero endpoints | Not started | Needed to extract isomorphisms from exact segments. |
 | Higher homotopy groups of the circle vanish | Mostly done | Positive concrete homotopy groups of the circle and 1-sphere are trivial. Further packaging may be needed for the exact Hopf LES endpoints. |
 | Loop space of the circle is the integers | Partial | The loop-space equivalence is formalized. A group-level final packaging against the target theorem may still be needed. |
@@ -65,8 +70,10 @@ sphere stability, and the diagonal sphere theorem remain to be done.
    indexing convention from [the plan](FORMALIZATION-PLAN.md).
 2. Package the loop-space computation of the circle as whatever group-level
    statement is needed for the final target.
-3. Prove the exactness part of the homotopy long exact sequence for fiber
-   sequences, at least for the segments needed by the Hopf application.
+3. Prove the missing pointed fiber-sequence witnesses for the adjacent concrete
+   homotopy group maps in the homotopy long exact sequence, or prove the same
+   exactness statements directly, at least for the segments needed by the Hopf
+   application.
 4. Prove or port the exactness-to-isomorphism lemma for exact segments with
    zero endpoints.
 5. Formalize the circle as the connected H-space needed for the Hopf
