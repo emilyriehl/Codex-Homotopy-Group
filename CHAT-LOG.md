@@ -324,6 +324,29 @@ Verification:
 
 both passed.
 
+### Model context tracking
+
+Request: record that the reasoning level of the model was just changed, and
+make model/reasoning tracking a standing skill rule for the research record.
+
+Actions:
+
+- Noted this user-reported model reasoning-level change in the summary log.
+  The exact reasoning-level value is not exposed to the agent in the chat
+  context, so it is recorded as user-reported rather than agent-observed.
+- Updated `.codex/skills/agda-unimath-reference/SKILL.md` with a standing rule:
+  future summary-log updates should include the model identity and
+  reasoning-level/effort when visible, or explicitly say when those values are
+  not exposed, and should record future user-reported model/reasoning changes.
+
+Current model context:
+
+- Date: 2026-06-04.
+- Agent-visible model identity: Codex, described in system context as
+  GPT-5-based.
+- Reasoning level: changed immediately before this note, user-reported; exact
+  value not exposed to the agent.
+
 ### Decompose exactness comparison implications
 
 Request: record the convention that theorem formalization means proving the
@@ -384,3 +407,78 @@ Verification:
 ```
 
 both passed.
+
+### Exactness comparison forward direction
+
+Request: proceed with proving the logical equivalence between native concrete
+exactness and algebraic exactness.
+
+Model context:
+
+- Date: 2026-06-04.
+- Agent-visible model identity: Codex, described in system context as
+  GPT-5-based.
+- Reasoning level: exact value not exposed to the agent in the chat context;
+  latest visible change remains the user-reported reasoning-level change noted
+  earlier in this log.
+
+Actions:
+
+- Proved the forward implication
+  `is-algebraically-exact-is-exact-hom-Concrete-Group`.
+- Added helper lemmas turning a concrete exactness witness into a packaged
+  pointed fiber sequence and its null composite.
+- Proved `image f ⊆ kernel g` by eliminating the truncated image witness and
+  applying loops to the null composite.
+- Proved `kernel g ⊆ image f` by converting a kernel proof into a loop in the
+  pointed fiber of `g`, pulling it back along the loop equivalence supplied by
+  the fiber sequence, and using triangle coherence to identify its image under
+  `f`.
+
+Verification:
+
+```sh
+./check.sh src/group-theory/exact-sequences-groups.lagda.md
+```
+
+now fails only because of the remaining explicit converse hole:
+`is-exact-is-algebraically-exact-hom-Concrete-Group`.
+
+Status:
+
+- The forward direction is proved.
+- The converse direction is blocked as stated: ordinary algebraic exactness at
+  `H` identifies only the image of `f` with the kernel of `g`, while native
+  fiber-sequence exactness identifies the whole concrete group `G` with the
+  pointed fiber of `g`. A valid converse would need extra data such as `f`
+  presenting the kernel concrete group, not just equality of image and kernel
+  subgroups.
+
+### Codex billing-project and model-context check
+
+Request: determine whether the session is using credits from the user's
+`astral` project linked to `e.m.rijke@gmail.com`.
+
+Model context:
+
+- Date: 2026-06-05.
+- Agent-visible runtime identity: Codex; exact served model identity is not
+  exposed directly in the chat context.
+- Local Codex config visible at `~/.codex/config.toml` sets
+  `model = "gpt-5.5"` and `model_reasoning_effort = "xhigh"`.
+
+Actions:
+
+- Checked non-secret local environment variables. No `OPENAI_PROJECT`,
+  `OPENAI_ORG_ID`, or project-scoped API configuration was visible.
+- Checked non-token auth metadata. `~/.codex/auth.json` reports
+  `auth_mode = "chatgpt"`.
+- Checked local Codex config. The current repository is marked trusted, but no
+  OpenAI billing project or organization is configured there.
+
+Status:
+
+- This local session does not expose evidence that it is explicitly using the
+  `astral` OpenAI platform project or its credits.
+- The visible configuration indicates ChatGPT-authenticated Codex usage rather
+  than an API-key/project-scoped run.

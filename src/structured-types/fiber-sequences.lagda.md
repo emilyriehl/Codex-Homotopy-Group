@@ -7,16 +7,20 @@ module structured-types.fiber-sequences where
 <details><summary>Imports</summary>
 
 ```agda
+open import foundation.action-on-identifications-functions
 open import foundation.dependent-pair-types
+open import foundation.constant-maps
 open import foundation.identity-types
 open import foundation.universe-levels
 
 open import structured-types.commuting-triangles-of-pointed-maps
+open import structured-types.constant-pointed-maps
 open import structured-types.fibers-of-pointed-maps
 open import structured-types.pointed-equivalences
 open import structured-types.pointed-homotopies
 open import structured-types.pointed-maps
 open import structured-types.pointed-types
+open import structured-types.whiskering-pointed-homotopies-composition
 ```
 
 </details>
@@ -62,6 +66,36 @@ module _
   pr1 inclusion-fiber-Pointed-Type = map-inclusion-fiber-Pointed-Type
   pr2 inclusion-fiber-Pointed-Type =
     preserves-point-inclusion-fiber-Pointed-Type
+
+  null-htpy-comp-fibration-inclusion-fiber-Pointed-Type :
+    (g ∘∗ inclusion-fiber-Pointed-Type) ~∗
+    constant-pointed-map (fiber-Pointed-Type g) B
+  pr1 null-htpy-comp-fibration-inclusion-fiber-Pointed-Type x =
+    pr2 x
+  pr2 null-htpy-comp-fibration-inclusion-fiber-Pointed-Type =
+    inv right-unit
+```
+
+### Composing constant pointed maps on the right
+
+```agda
+module _
+  {l1 l2 l3 : Level}
+  {A : Pointed-Type l1} {B : Pointed-Type l2} {C : Pointed-Type l3}
+  (f : A →∗ B)
+  where
+
+  right-whisker-constant-pointed-map :
+    (constant-pointed-map B C ∘∗ f) ~∗ constant-pointed-map A C
+  pr1 right-whisker-constant-pointed-map x =
+    refl
+  pr2 right-whisker-constant-pointed-map =
+    ( ap
+      ( λ q → q ∙ refl)
+      ( ap-const
+        ( point-Pointed-Type C)
+        ( preserves-point-pointed-map f))) ∙
+    right-unit
 ```
 
 ### Fiber sequences of pointed types
@@ -172,4 +206,63 @@ module _
     fiber-inclusion-fiber-sequence-Pointed-Type
   pointed-htpy-inclusion-fiber-fiber-sequence-Pointed-Type =
     inv-pointed-htpy pointed-htpy-fiber-inclusion-fiber-sequence-Pointed-Type
+
+  null-htpy-comp-fibration-fiber-inclusion-fiber-sequence-Pointed-Type :
+    ( fibration-fiber-sequence-Pointed-Type ∘∗
+      fiber-inclusion-fiber-sequence-Pointed-Type) ~∗
+    constant-pointed-map
+      ( fiber-fiber-sequence-Pointed-Type)
+      ( base-fiber-sequence-Pointed-Type)
+  null-htpy-comp-fibration-fiber-inclusion-fiber-sequence-Pointed-Type =
+    concat-pointed-htpy
+      ( left-whisker-comp-pointed-htpy
+        ( fibration-fiber-sequence-Pointed-Type)
+        ( fiber-inclusion-fiber-sequence-Pointed-Type)
+        ( inclusion-fiber-Pointed-Type fibration-fiber-sequence-Pointed-Type ∘∗
+          pointed-map-fiber-fiber-sequence-Pointed-Type)
+        ( pointed-htpy-fiber-inclusion-fiber-sequence-Pointed-Type))
+      ( concat-pointed-htpy
+        ( inv-associative-comp-pointed-map
+          ( fibration-fiber-sequence-Pointed-Type)
+          ( inclusion-fiber-Pointed-Type fibration-fiber-sequence-Pointed-Type)
+          ( pointed-map-fiber-fiber-sequence-Pointed-Type))
+        ( concat-pointed-htpy
+          ( right-whisker-comp-pointed-htpy
+            ( fibration-fiber-sequence-Pointed-Type ∘∗
+              inclusion-fiber-Pointed-Type fibration-fiber-sequence-Pointed-Type)
+            ( constant-pointed-map
+              ( fiber-Pointed-Type fibration-fiber-sequence-Pointed-Type)
+              ( base-fiber-sequence-Pointed-Type))
+            ( null-htpy-comp-fibration-inclusion-fiber-Pointed-Type
+              ( fibration-fiber-sequence-Pointed-Type))
+            ( pointed-map-fiber-fiber-sequence-Pointed-Type))
+          ( right-whisker-constant-pointed-map
+            ( pointed-map-fiber-fiber-sequence-Pointed-Type))))
+```
+
+### The canonical fiber sequence of a pointed map
+
+```agda
+module _
+  {l1 l2 : Level} {E : Pointed-Type l1} {B : Pointed-Type l2}
+  (g : E →∗ B)
+  where
+
+  fiber-sequence-fiber-Pointed-Type :
+    fiber-sequence-Pointed-Type (l1 ⊔ l2) l1 l2
+  pr1 fiber-sequence-fiber-Pointed-Type =
+    fiber-Pointed-Type g
+  pr1 (pr2 fiber-sequence-fiber-Pointed-Type) =
+    E
+  pr1 (pr2 (pr2 fiber-sequence-fiber-Pointed-Type)) =
+    B
+  pr1 (pr2 (pr2 (pr2 fiber-sequence-fiber-Pointed-Type))) =
+    inclusion-fiber-Pointed-Type g
+  pr1 (pr2 (pr2 (pr2 (pr2 fiber-sequence-fiber-Pointed-Type)))) =
+    g
+  pr1 (pr2 (pr2 (pr2 (pr2 (pr2 fiber-sequence-fiber-Pointed-Type))))) =
+    id-pointed-equiv
+  pr2 (pr2 (pr2 (pr2 (pr2 (pr2 fiber-sequence-fiber-Pointed-Type))))) =
+    inv-pointed-htpy
+      ( right-unit-law-comp-pointed-map (inclusion-fiber-Pointed-Type g))
 ```

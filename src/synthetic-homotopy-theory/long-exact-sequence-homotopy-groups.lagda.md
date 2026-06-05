@@ -15,7 +15,6 @@ open import foundation.identity-types
 open import foundation.universe-levels
 
 open import group-theory.concrete-groups
-open import group-theory.exact-sequences-groups
 open import group-theory.functoriality-homotopy-automorphism-groups
 open import group-theory.homomorphisms-concrete-groups
 
@@ -145,96 +144,21 @@ module _
       ( pointed-map-iterated-boundary-fiber-sequence n)
 ```
 
-### Boundary homomorphisms for the long exact sequence
+### The canonical boundary homomorphism of a pointed map
 
 ```agda
-  boundary-family-long-exact-sequence-homotopy-groups : UU (l1 ⊔ l3)
-  boundary-family-long-exact-sequence-homotopy-groups =
+module _
+  {l1 l2 : Level} {E : Pointed-Type l1} {B : Pointed-Type l2}
+  (g : E →∗ B)
+  where
+
+  canonical-boundary-hom-concrete-homotopy-group-Pointed-Type :
     (n : ℕ) →
     hom-Concrete-Group
-      ( concrete-homotopy-group
-        ( succ-ℕ n)
-        ( base-fiber-sequence-Pointed-Type S))
-      ( concrete-homotopy-group
-        ( n)
-        ( fiber-fiber-sequence-Pointed-Type S))
-
-  boundary-family-fiber-sequence :
-    boundary-family-long-exact-sequence-homotopy-groups
-  boundary-family-fiber-sequence =
+      ( concrete-homotopy-group (succ-ℕ n) B)
+      ( concrete-homotopy-group n (fiber-Pointed-Type g))
+  canonical-boundary-hom-concrete-homotopy-group-Pointed-Type n =
     boundary-hom-concrete-homotopy-group-fiber-sequence
-```
-
-### Exactness of the long homotopy sequence
-
-```agda
-  is-exact-at-fiber-long-exact-sequence-homotopy-groups :
-    boundary-family-long-exact-sequence-homotopy-groups → (n : ℕ) →
-    UU (l1 ⊔ l2 ⊔ l3)
-  is-exact-at-fiber-long-exact-sequence-homotopy-groups ∂ n =
-    is-exact-hom-Concrete-Group
-      ( concrete-homotopy-group
-        ( succ-ℕ n)
-        ( base-fiber-sequence-Pointed-Type S))
-      ( concrete-homotopy-group
-        ( n)
-        ( fiber-fiber-sequence-Pointed-Type S))
-      ( concrete-homotopy-group
-        ( n)
-        ( total-space-fiber-sequence-Pointed-Type S))
-      ( ∂ n)
-      ( hom-fiber-inclusion-concrete-homotopy-group-fiber-sequence n)
-
-  is-exact-at-total-space-long-exact-sequence-homotopy-groups :
-    (n : ℕ) → UU (l1 ⊔ l2 ⊔ l3)
-  is-exact-at-total-space-long-exact-sequence-homotopy-groups n =
-    is-exact-hom-Concrete-Group
-      ( concrete-homotopy-group
-        ( n)
-        ( fiber-fiber-sequence-Pointed-Type S))
-      ( concrete-homotopy-group
-        ( n)
-        ( total-space-fiber-sequence-Pointed-Type S))
-      ( concrete-homotopy-group
-        ( n)
-        ( base-fiber-sequence-Pointed-Type S))
-      ( hom-fiber-inclusion-concrete-homotopy-group-fiber-sequence n)
-      ( hom-fibration-concrete-homotopy-group-fiber-sequence n)
-
-  is-exact-at-base-long-exact-sequence-homotopy-groups :
-    boundary-family-long-exact-sequence-homotopy-groups → (n : ℕ) →
-    UU (l1 ⊔ l2 ⊔ l3)
-  is-exact-at-base-long-exact-sequence-homotopy-groups ∂ n =
-    is-exact-hom-Concrete-Group
-      ( concrete-homotopy-group
-        ( succ-ℕ n)
-        ( total-space-fiber-sequence-Pointed-Type S))
-      ( concrete-homotopy-group
-        ( succ-ℕ n)
-        ( base-fiber-sequence-Pointed-Type S))
-      ( concrete-homotopy-group
-        ( n)
-        ( fiber-fiber-sequence-Pointed-Type S))
-      ( hom-fibration-concrete-homotopy-group-fiber-sequence (succ-ℕ n))
-      ( ∂ n)
-
-  is-long-exact-sequence-homotopy-groups-fiber-sequence :
-    boundary-family-long-exact-sequence-homotopy-groups →
-    UU (l1 ⊔ l2 ⊔ l3)
-  is-long-exact-sequence-homotopy-groups-fiber-sequence ∂ =
-    (n : ℕ) →
-    Σ ( is-exact-at-fiber-long-exact-sequence-homotopy-groups ∂ n)
-      ( λ _ →
-        Σ ( is-exact-at-total-space-long-exact-sequence-homotopy-groups n)
-          ( λ _ →
-            is-exact-at-base-long-exact-sequence-homotopy-groups ∂ n))
-```
-
-### The packaged long exact homotopy sequence of a fiber sequence
-
-```agda
-  long-exact-sequence-homotopy-groups-fiber-sequence : UU (l1 ⊔ l2 ⊔ l3)
-  long-exact-sequence-homotopy-groups-fiber-sequence =
-    Σ ( boundary-family-long-exact-sequence-homotopy-groups)
-      ( is-long-exact-sequence-homotopy-groups-fiber-sequence)
+      ( fiber-sequence-fiber-Pointed-Type g)
+      ( n)
 ```

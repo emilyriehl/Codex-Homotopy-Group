@@ -16,6 +16,15 @@ specifics from memory — load the relevant file and quote it.** The library is 
 name, path, and signature should be confirmed against the file (and ultimately against the source
 clone) rather than guessed.
 
+## Research context tracking
+
+Always track the model context used for each substantive formalization run as part of the research
+record. When updating `CHAT-LOG.md` or any summary log, include the model identity and reasoning
+level/effort if they are visible to the agent. If the exact value is not exposed, record that fact
+explicitly, and record any user-reported model or reasoning-level changes with date, source, and
+scope. Continue noting future model or reasoning-level changes because comparisons across models are
+part of the experiment.
+
 ## When to load which reference
 
 | You need to… | Load |
