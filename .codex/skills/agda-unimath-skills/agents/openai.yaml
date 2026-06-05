@@ -1,0 +1,4 @@
+interface:
+  display_name: "Agda UniMath Skills"
+  short_description: "Project workflows for Agda and agda-unimath formalization"
+  default_prompt: "Use $agda-unimath-skills for this agda-unimath formalization task."

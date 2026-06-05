@@ -544,3 +544,43 @@ both passed.
 Related commit:
 
 - This commit — Remove concrete exactness wrappers.
+
+### Repository-local Agda skill and status report
+
+Request: make the repository-local `agda-unimath-skills` skill the master
+workflow skill for this shared repository, compare it with the user-global
+copy, and create `STATUS-REPORT.md` to summarize current formalization status.
+
+Model context:
+
+- Date: 2026-06-05.
+- Agent-visible model identity: Codex, described in the current system context
+  as GPT-5-based.
+- User-reported current model context: `gpt-5.5` with reasoning effort
+  `xhigh`.
+- Exact served model identity is not exposed directly in the chat context.
+
+Actions:
+
+- Added `.codex/skills/agda-unimath-skills/` as the repository-local master
+  workflow skill, with bundled workflow reference and OpenAI UI metadata.
+- Added a standing workflow rule to maintain `STATUS-REPORT.md` when
+  significant formalization progress is made.
+- Updated `.codex/skills/agda-unimath-reference/SKILL.md` so it refers to the
+  repository-local `agda-unimath-skills` workflow skill.
+- Created `STATUS-REPORT.md`, linked to `FORMALIZATION-PLAN.md`, summarizing
+  implemented Agda modules, current plan status, remaining tasks, and the most
+  recent verification commands.
+
+Verification:
+
+- Manually checked both repository-local skill `SKILL.md` files for required
+  frontmatter, required names/descriptions, and bundled workflow/UI metadata.
+- Attempted the `skill-creator` quick validator, but it could not run in this
+  environment because Python module `yaml` is not installed.
+- Previously checked all project-owned Agda modules listed in
+  `STATUS-REPORT.md`; all passed.
+
+Related commit:
+
+- This commit — Add repository-local Agda workflow skill.

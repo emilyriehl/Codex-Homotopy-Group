@@ -1,6 +1,6 @@
 ---
 name: agda-unimath-reference
-description: Reference handbook for the agda-unimath library — house style/conventions, the src/ namespace & discovery map, a foundational API cheatsheet (UU, Σ, identity types ＝, equivalences, truncation, univalence), and an Agda error/flag triage table. Use this whenever writing, reading, reviewing, or porting agda-unimath `.lagda.md` code; when you need the module path or signature of a foundational construction; when deciding where a definition lives or how to search for an existing lemma before re-proving it; or when decoding an Agda error under `--without-K --exact-split`. Reach for it even if the user only says "agda-unimath", "unimath", "HoTT in Agda", "literate Agda proof", or names a construction like is-equiv / dependent-pair-types / synthetic-homotopy-theory without asking for "reference" explicitly. Complements (does not replace) the agda-unimath-formalization workflow skill.
+description: Reference handbook for the agda-unimath library — house style/conventions, the src/ namespace & discovery map, a foundational API cheatsheet (UU, Σ, identity types ＝, equivalences, truncation, univalence), and an Agda error/flag triage table. Use this whenever writing, reading, reviewing, or porting agda-unimath `.lagda.md` code; when you need the module path or signature of a foundational construction; when deciding where a definition lives or how to search for an existing lemma before re-proving it; or when decoding an Agda error under `--without-K --exact-split`. Reach for it even if the user only says "agda-unimath", "unimath", "HoTT in Agda", "literate Agda proof", or names a construction like is-equiv / dependent-pair-types / synthetic-homotopy-theory without asking for "reference" explicitly. Complements (does not replace) the repository-local agda-unimath-skills workflow skill.
 ---
 
 # agda-unimath reference handbook
@@ -8,7 +8,7 @@ description: Reference handbook for the agda-unimath library — house style/con
 A look-up layer for working in the [agda-unimath](https://github.com/UniMath/agda-unimath) library:
 the largest library of formalized univalent mathematics in Agda (~3000+ literate `.lagda.md` files
 under `src/`, organized one concept per file by mathematical subject). This skill is the **reference**
-half of the agda-unimath toolkit; the `agda-unimath-formalization` skill covers the *workflow*
+half of the agda-unimath toolkit; the `agda-unimath-skills` skill covers the *workflow*
 (the type-check loop, porting prerequisites, PR/merge norms). Use them together.
 
 The substance lives in five reference files under `references/`. **Don't try to recall agda-unimath
