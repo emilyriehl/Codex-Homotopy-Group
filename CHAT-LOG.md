@@ -635,3 +635,64 @@ Status:
 Related commit:
 
 - This commit — Add conditional LES exactness reductions.
+
+### Pointed-set exactness step for the homotopy LES
+
+Request: remove the newly added conditional exactness section in
+`long-exact-sequence-homotopy-groups.lagda.md`, because it only defined new
+types, and instead follow the proof of HoTT book Theorem 8.4.6 via fiber
+sequences of pointed maps, Lemma 8.4.4, and long exact sequences of pointed
+sets.
+
+Model context:
+
+- Date: 2026-06-05.
+- Agent-visible model identity: Codex, described in the current system context
+  as GPT-5-based.
+- User-reported current model context: `gpt-5.5` with reasoning effort
+  `xhigh`.
+- Exact served model identity is not exposed directly in the chat context.
+
+Actions:
+
+- Removed the conditional concrete-homotopy-group exactness section that had
+  been added to
+  `src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md`.
+- Consulted the HoTT book proof of Theorem 8.4.6: the proof first shows that
+  applying `0`-truncation to any canonical fiber-projection triple
+  `fiber g -> E -> B` gives an exact sequence of pointed sets.
+- Added
+  `src/structured-types/exact-sequences-pointed-sets.lagda.md`, defining
+  pointed sets, pointed-set maps, set truncation as a pointed set, images,
+  kernels, and exactness of pointed-set maps.
+- Proved
+  `is-exact-trunc-fiber-inclusion-Pointed-Type`, the pointed-set exactness of
+  the set truncation of the canonical fiber sequence of a pointed map.
+- Added a proof-backed property in the homotopy LES module,
+  `is-exact-set-truncation-fiber-sequence-Pointed-Type`, delegating to that
+  pointed-set theorem.
+- Updated `STATUS-REPORT.md` to record this as a first substantive step toward
+  HoTT book Theorem 8.4.6 and to list the remaining tasks: formalizing the
+  iterated fiber sequence of a pointed map, proving Lemma 8.4.4-style
+  identifications, and transporting exactness to the homotopy-group maps.
+
+Verification:
+
+```sh
+./check.sh src/structured-types/exact-sequences-pointed-sets.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+both passed.
+
+Status:
+
+- The previous type-only conditional exactness section has been removed.
+- A real exactness theorem for pointed sets is now formalized and typechecks.
+- The full HoTT book Theorem 8.4.6 is still incomplete; the next technical
+  target is the iterated fiber sequence of a pointed map and the formal
+  Lemma 8.4.4 identifications.
+
+Related commit:
+
+- This commit — Add pointed-set exactness for fiber sequences.
