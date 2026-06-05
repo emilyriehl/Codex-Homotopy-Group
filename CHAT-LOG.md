@@ -696,3 +696,50 @@ Status:
 Related commit:
 
 - This commit — Add pointed-set exactness for fiber sequences.
+
+### First fiber-of-the-fiber sequence for the homotopy LES
+
+Request: attempt the next formal steps toward HoTT book Theorem 8.4.6 after
+the pointed-set exactness step.
+
+Model context:
+
+- Date: 2026-06-05.
+- Agent-visible model identity: Codex, described in the current system context
+  as GPT-5-based.
+- User-reported current model context: `gpt-5.5` with reasoning effort
+  `xhigh`.
+- Exact served model identity is not exposed directly in the chat context.
+
+Actions:
+
+- Reused the repository-local `agda-unimath-skills` and
+  `agda-unimath-reference` instructions.
+- In
+  `src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md`,
+  proved the first HoTT Book Lemma 8.4.4-style identification:
+  `Ω B` is pointed equivalent to the fiber of
+  `fiber g ->* E`.
+- Packaged the sequence `Ω B ->* fiber g ->* E` as a pointed fiber sequence
+  via `is-fiber-sequence-boundary-fiber-Pointed-Type` and
+  `fiber-sequence-boundary-fiber-Pointed-Type`.
+- Updated `STATUS-REPORT.md` to record this progress and clarify that the
+  remaining task is to generalize the construction to the full iterated fiber
+  sequence and transport pointed-set exactness to the homotopy-group maps.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+passed.
+
+Status:
+
+- The first iterated fiber sequence is now formalized and typechecks.
+- The full long exact sequence theorem remains incomplete.
+
+Related commit:
+
+- This commit — Add first iterated fiber sequence step.
