@@ -482,3 +482,65 @@ Status:
   `astral` OpenAI platform project or its credits.
 - The visible configuration indicates ChatGPT-authenticated Codex usage rather
   than an API-key/project-scoped run.
+
+### Current model-change note
+
+Request: record the latest change of model in `CHAT-LOG.md`.
+
+Model context:
+
+- Date: 2026-06-05.
+- Agent-visible model identity: Codex, described in the current system context
+  as GPT-5-based.
+- User-reported change: Emily changed the model to `gpt-5.5` with reasoning
+  effort `xhigh`.
+- Exact served model identity and the immediately previous model identity are
+  not exposed directly in the chat context, so this note records only the
+  agent-visible current model context.
+
+Actions:
+
+- Appended this note to `CHAT-LOG.md` after the user pointed out that the prior
+  response had not actually written to the file.
+
+### Concrete exactness API cleanup
+
+Request: cut the concrete-group exactness wrappers from
+`src/group-theory/exact-sequences-groups.lagda.md`, use
+`is-fiber-sequence-Pointed-Type` and `is-exact-hom-Group` directly, then cut
+the remainder of the file after the forward implication and commit/push the
+result.
+
+Model context:
+
+- Date: 2026-06-05.
+- Agent-visible model identity: Codex, described in the current system context
+  as GPT-5-based.
+- User-reported current model context: `gpt-5.5` with reasoning effort
+  `xhigh`.
+- Exact served model identity is not exposed directly in the chat context.
+
+Actions:
+
+- Removed the concrete-group wrapper `is-exact-hom-Concrete-Group`.
+- Removed the concrete-group wrapper
+  `is-algebraically-exact-hom-Concrete-Group`.
+- Replaced those wrappers by direct uses of `is-fiber-sequence-Pointed-Type`
+  and `is-exact-hom-Group` on the underlying group homomorphisms.
+- Renamed the forward theorem to
+  `is-exact-is-fiber-sequence-hom-Concrete-Group`.
+- Cut the trailing converse and logical-equivalence sections, eliminating the
+  remaining explicit Agda hole.
+
+Verification:
+
+```sh
+./check.sh src/group-theory/exact-sequences-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+both passed.
+
+Related commit:
+
+- This commit — Remove concrete exactness wrappers.

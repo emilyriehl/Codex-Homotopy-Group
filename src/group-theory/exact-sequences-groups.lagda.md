@@ -44,10 +44,11 @@ open import synthetic-homotopy-theory.loop-spaces
 A pair of composable group homomorphisms is exact when the image of the first
 homomorphism is the kernel of the second.
 
-For [concrete groups](group-theory.concrete-groups.md), exactness is a native
-homotopical condition: the two classifying pointed maps form a
+For [concrete groups](group-theory.concrete-groups.md), we use the native
+homotopical condition directly: the two classifying pointed maps form a
 [fiber sequence](structured-types.fiber-sequences.md). The corresponding
-ordinary group condition is kept as a separate algebraic comparison definition.
+ordinary group condition is `is-exact-hom-Group` applied to the underlying
+group homomorphisms.
 
 ## Definitions
 
@@ -65,39 +66,6 @@ module _
       ( H)
       ( image-hom-Group G H f)
       ( subgroup-kernel-hom-Group H K g)
-```
-
-### Algebraic exactness of a pair of concrete group homomorphisms
-
-```agda
-module _
-  {l1 l2 l3 : Level}
-  (G : Concrete-Group l1) (H : Concrete-Group l2) (K : Concrete-Group l3)
-  (f : hom-Concrete-Group G H) (g : hom-Concrete-Group H K)
-  where
-
-  is-algebraically-exact-hom-Concrete-Group : UU (l1 ⊔ l2 ⊔ l3)
-  is-algebraically-exact-hom-Concrete-Group =
-    is-exact-hom-Group
-      ( group-Concrete-Group G)
-      ( group-Concrete-Group H)
-      ( group-Concrete-Group K)
-      ( hom-group-hom-Concrete-Group G H f)
-      ( hom-group-hom-Concrete-Group H K g)
-```
-
-### Exactness of a pair of concrete group homomorphisms
-
-```agda
-module _
-  {l1 l2 l3 : Level}
-  (G : Concrete-Group l1) (H : Concrete-Group l2) (K : Concrete-Group l3)
-  (f : hom-Concrete-Group G H) (g : hom-Concrete-Group H K)
-  where
-
-  is-exact-hom-Concrete-Group : UU (l1 ⊔ l2 ⊔ l3)
-  is-exact-hom-Concrete-Group =
-    is-fiber-sequence-Pointed-Type f g
 ```
 
 ## Properties
@@ -143,7 +111,7 @@ module _
         map-Ω-constant-pointed-map x)
 ```
 
-### From concrete exactness to algebraic exactness
+### From fiber sequences to exactness
 
 The forward implication should follow from applying loops to the fiber sequence
 and identifying loops in the fiber of the classifying map of `g` with the
@@ -202,34 +170,30 @@ module _
   (f : hom-Concrete-Group G H) (g : hom-Concrete-Group H K)
   where
 
-  fiber-sequence-is-exact-hom-Concrete-Group :
-    is-exact-hom-Concrete-Group G H K f g →
+  fiber-sequence-is-fiber-sequence-hom-Concrete-Group :
+    is-fiber-sequence-Pointed-Type f g →
     fiber-sequence-Pointed-Type l1 l2 l3
-  pr1 (fiber-sequence-is-exact-hom-Concrete-Group S) =
-    classifying-pointed-type-Concrete-Group G
-  pr1 (pr2 (fiber-sequence-is-exact-hom-Concrete-Group S)) =
-    classifying-pointed-type-Concrete-Group H
-  pr1 (pr2 (pr2 (fiber-sequence-is-exact-hom-Concrete-Group S))) =
-    classifying-pointed-type-Concrete-Group K
-  pr1 (pr2 (pr2 (pr2 (fiber-sequence-is-exact-hom-Concrete-Group S)))) =
-    f
-  pr1 (pr2 (pr2 (pr2 (pr2 (fiber-sequence-is-exact-hom-Concrete-Group S))))) =
-    g
-  pr2 (pr2 (pr2 (pr2 (pr2 (fiber-sequence-is-exact-hom-Concrete-Group S))))) =
-    S
+  fiber-sequence-is-fiber-sequence-hom-Concrete-Group S =
+    pair
+      ( classifying-pointed-type-Concrete-Group G)
+      ( pair
+        ( classifying-pointed-type-Concrete-Group H)
+        ( pair
+          ( classifying-pointed-type-Concrete-Group K)
+          ( pair f (pair g S))))
 
-  null-htpy-comp-is-exact-hom-Concrete-Group :
-    (S : is-exact-hom-Concrete-Group G H K f g) →
+  null-htpy-comp-is-fiber-sequence-hom-Concrete-Group :
+    (S : is-fiber-sequence-Pointed-Type f g) →
     (g ∘∗ f) ~∗
     constant-pointed-map
       ( classifying-pointed-type-Concrete-Group G)
       ( classifying-pointed-type-Concrete-Group K)
-  null-htpy-comp-is-exact-hom-Concrete-Group S =
+  null-htpy-comp-is-fiber-sequence-hom-Concrete-Group S =
     null-htpy-comp-fibration-fiber-inclusion-fiber-sequence-Pointed-Type
-      ( fiber-sequence-is-exact-hom-Concrete-Group S)
+      ( fiber-sequence-is-fiber-sequence-hom-Concrete-Group S)
 
-  leq-kernel-image-is-exact-hom-Concrete-Group :
-    is-exact-hom-Concrete-Group G H K f g →
+  leq-kernel-image-is-fiber-sequence-hom-Concrete-Group :
+    is-fiber-sequence-Pointed-Type f g →
     leq-Subgroup
       ( group-Concrete-Group H)
       ( image-hom-Group
@@ -240,7 +204,7 @@ module _
         ( group-Concrete-Group H)
         ( group-Concrete-Group K)
         ( hom-group-hom-Concrete-Group H K g))
-  leq-kernel-image-is-exact-hom-Concrete-Group S y u =
+  leq-kernel-image-is-fiber-sequence-hom-Concrete-Group S y u =
     apply-universal-property-trunc-Prop u
       ( subset-kernel-hom-Group
         ( group-Concrete-Group H)
@@ -251,12 +215,12 @@ module _
         (x , refl) →
           ( is-in-kernel-hom-group-null-htpy-hom-Concrete-Group G K
             ( comp-hom-Concrete-Group G H K g f)
-            ( null-htpy-comp-is-exact-hom-Concrete-Group S)
+            ( null-htpy-comp-is-fiber-sequence-hom-Concrete-Group S)
             ( x)) ∙
           ( preserves-comp-map-Ω g f x))
 
-  leq-image-kernel-is-exact-hom-Concrete-Group :
-    is-exact-hom-Concrete-Group G H K f g →
+  leq-image-kernel-is-fiber-sequence-hom-Concrete-Group :
+    is-fiber-sequence-Pointed-Type f g →
     leq-Subgroup
       ( group-Concrete-Group H)
       ( subgroup-kernel-hom-Group
@@ -267,91 +231,53 @@ module _
         ( group-Concrete-Group G)
         ( group-Concrete-Group H)
         ( hom-group-hom-Concrete-Group G H f))
-  leq-image-kernel-is-exact-hom-Concrete-Group S y H =
+  leq-image-kernel-is-fiber-sequence-hom-Concrete-Group S y H =
     unit-trunc-Prop
       ( map-inv-equiv
         ( equiv-Ω-pointed-equiv
           ( pointed-equiv-fiber-fiber-sequence-Pointed-Type
-            ( fiber-sequence-is-exact-hom-Concrete-Group S)))
+            ( fiber-sequence-is-fiber-sequence-hom-Concrete-Group S)))
         ( loop-fiber-is-in-kernel-map-Ω g y H) ,
         ( htpy-map-Ω
           ( f)
           ( inclusion-fiber-Pointed-Type g ∘∗
             pointed-map-fiber-fiber-sequence-Pointed-Type
-              ( fiber-sequence-is-exact-hom-Concrete-Group S))
+              ( fiber-sequence-is-fiber-sequence-hom-Concrete-Group S))
           ( pointed-htpy-fiber-inclusion-fiber-sequence-Pointed-Type
-            ( fiber-sequence-is-exact-hom-Concrete-Group S))
+            ( fiber-sequence-is-fiber-sequence-hom-Concrete-Group S))
           ( map-inv-equiv
             ( equiv-Ω-pointed-equiv
               ( pointed-equiv-fiber-fiber-sequence-Pointed-Type
-                ( fiber-sequence-is-exact-hom-Concrete-Group S)))
+                ( fiber-sequence-is-fiber-sequence-hom-Concrete-Group S)))
             ( loop-fiber-is-in-kernel-map-Ω g y H))) ∙
         ( preserves-comp-map-Ω
           ( inclusion-fiber-Pointed-Type g)
           ( pointed-map-fiber-fiber-sequence-Pointed-Type
-            ( fiber-sequence-is-exact-hom-Concrete-Group S))
+            ( fiber-sequence-is-fiber-sequence-hom-Concrete-Group S))
           ( map-inv-equiv
             ( equiv-Ω-pointed-equiv
               ( pointed-equiv-fiber-fiber-sequence-Pointed-Type
-                ( fiber-sequence-is-exact-hom-Concrete-Group S)))
+                ( fiber-sequence-is-fiber-sequence-hom-Concrete-Group S)))
             ( loop-fiber-is-in-kernel-map-Ω g y H))) ∙
         ( ap
           ( map-Ω (inclusion-fiber-Pointed-Type g))
           ( is-section-map-inv-equiv
             ( equiv-Ω-pointed-equiv
               ( pointed-equiv-fiber-fiber-sequence-Pointed-Type
-                ( fiber-sequence-is-exact-hom-Concrete-Group S)))
+                ( fiber-sequence-is-fiber-sequence-hom-Concrete-Group S)))
             ( loop-fiber-is-in-kernel-map-Ω g y H))) ∙
         ( map-Ω-inclusion-loop-fiber-is-in-kernel-map-Ω g y H))
 
-  is-algebraically-exact-is-exact-hom-Concrete-Group :
-    is-exact-hom-Concrete-Group G H K f g →
-    is-algebraically-exact-hom-Concrete-Group G H K f g
-  pr1 (is-algebraically-exact-is-exact-hom-Concrete-Group S y) =
-    leq-kernel-image-is-exact-hom-Concrete-Group S y
-  pr2 (is-algebraically-exact-is-exact-hom-Concrete-Group S y) =
-    leq-image-kernel-is-exact-hom-Concrete-Group S y
-```
-
-### From algebraic exactness to concrete exactness
-
-The converse direction requires more data than ordinary exactness at `H`: the
-fiber-sequence condition identifies `G` with the kernel concrete group of `g`,
-while ordinary exactness only identifies the image of `f` with the kernel of
-`g`. Thus an arbitrary surjection onto the kernel is algebraically exact at
-`H`, but need not be a fiber sequence.
-
-```agda
-module _
-  {l1 l2 l3 : Level}
-  (G : Concrete-Group l1) (H : Concrete-Group l2) (K : Concrete-Group l3)
-  (f : hom-Concrete-Group G H) (g : hom-Concrete-Group H K)
-  where
-
-  is-exact-is-algebraically-exact-hom-Concrete-Group :
-    is-algebraically-exact-hom-Concrete-Group G H K f g →
-    is-exact-hom-Concrete-Group G H K f g
-  is-exact-is-algebraically-exact-hom-Concrete-Group H =
-    {!!}
-```
-
-### The logical equivalence of concrete and algebraic exactness
-
-To prove this logical equivalence, one combines the two separately named
-implications.
-
-```agda
-module _
-  {l1 l2 l3 : Level}
-  (G : Concrete-Group l1) (H : Concrete-Group l2) (K : Concrete-Group l3)
-  (f : hom-Concrete-Group G H) (g : hom-Concrete-Group H K)
-  where
-
-  logical-equivalence-is-exact-is-algebraically-exact-hom-Concrete-Group :
-    is-exact-hom-Concrete-Group G H K f g ↔
-    is-algebraically-exact-hom-Concrete-Group G H K f g
-  logical-equivalence-is-exact-is-algebraically-exact-hom-Concrete-Group =
-    pair
-      ( is-algebraically-exact-is-exact-hom-Concrete-Group G H K f g)
-      ( is-exact-is-algebraically-exact-hom-Concrete-Group G H K f g)
+  is-exact-is-fiber-sequence-hom-Concrete-Group :
+    is-fiber-sequence-Pointed-Type f g →
+    is-exact-hom-Group
+      ( group-Concrete-Group G)
+      ( group-Concrete-Group H)
+      ( group-Concrete-Group K)
+      ( hom-group-hom-Concrete-Group G H f)
+      ( hom-group-hom-Concrete-Group H K g)
+  pr1 (is-exact-is-fiber-sequence-hom-Concrete-Group S y) =
+    leq-kernel-image-is-fiber-sequence-hom-Concrete-Group S y
+  pr2 (is-exact-is-fiber-sequence-hom-Concrete-Group S y) =
+    leq-image-kernel-is-fiber-sequence-hom-Concrete-Group S y
 ```
