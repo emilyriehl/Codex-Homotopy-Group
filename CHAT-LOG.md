@@ -743,3 +743,60 @@ Status:
 Related commit:
 
 - This commit — Add first iterated fiber sequence step.
+
+### Model switch and second pointed-set LES exactness step
+
+Request: record that Emily has just switched the model to `gpt-5.5` with
+reasoning effort `xhigh`; reread
+`src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md`;
+update `STATUS-REPORT.md`; and, using the HoTT book as reference, attempt to
+complete the exactness proof for the long exact sequence of homotopy groups
+constructed from a fibration of pointed types.
+
+Model context:
+
+- Date: 2026-06-09.
+- User-reported current model context: Emily has just switched the model to
+  `gpt-5.5` with reasoning effort `xhigh`.
+- Agent-visible runtime identity: Codex; exact served model identity is not
+  exposed directly in the chat context.
+
+Actions:
+
+- Read the formalization plan, current status report, chat log, and
+  `long-exact-sequence-homotopy-groups.lagda.md`.
+- Used the HoTT-book route for Theorem 8.4.6: prove exactness of
+  set-truncated adjacent fiber-sequence triples, then later transport the
+  resulting family to homotopy-group maps.
+- Added a proof-backed second adjacent pointed-set exactness step in
+  `src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md`:
+  the set truncation of
+  `Ω B ->* fiber g ->* E` is exact. The proof compares images of the
+  set-truncated boundary map and the canonical fiber-inclusion map using the
+  previously formalized pointed equivalence
+  `Ω B ≃* fiber (fiber g ->* E)`, then delegates kernel exactness to the
+  canonical pointed-set exactness theorem.
+- Updated `STATUS-REPORT.md` to record this progress and to sharpen the
+  remaining work: uniform iterated fiber-sequence construction, remaining
+  HoTT Book Lemma 8.4.4 identifications, and transport to the concrete
+  homotopy-group maps.
+
+Verification:
+
+```sh
+./check.sh src/structured-types/pointed-sets.lagda.md
+./check.sh src/structured-types/exact-sequences-pointed-sets.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+all passed.
+
+Status:
+
+- The full long exact sequence exactness theorem is still incomplete.
+- A new nontrivial adjacent exactness step toward the HoTT-book proof is now
+  formalized and typechecks.
+
+Related commit:
+
+- This commit — Add second pointed-set LES exactness step.

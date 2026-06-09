@@ -7,7 +7,7 @@ Update this file whenever significant progress is made, for example when a
 new theorem is proved, an important definition is formalized, a planned module
 is added, or a major blocked item is resolved or re-scoped.
 
-Last updated: 2026-06-05.
+Last updated: 2026-06-09.
 
 ## Current summary
 
@@ -25,9 +25,12 @@ calculation:
 - Ordinary group exactness has been defined.
 - A fiber sequence of concrete-group classifying maps has been shown to imply
   ordinary exactness of the induced underlying group homomorphisms.
-- Pointed sets, exactness of pointed-set maps, and the HoTT-book theorem that
-  the set truncation of a canonical pointed fiber sequence is exact have been
-  formalized.
+- Pointed sets and pointed maps of pointed sets have been separated into
+  their own structured-types module. Exactness of pointed-set maps and the
+  HoTT-book theorem that the set truncation of a canonical pointed fiber
+  sequence is exact have been formalized. This now includes the next adjacent
+  set-truncated triple `Ω B ->* fiber g ->* E`, by comparison with the
+  canonical fiber sequence of `fiber g ->* E`.
 - The circle facts needed for vanishing higher homotopy groups have been
   formalized: the loop space of the circle and the 1-sphere is equivalent to
   the integers, the circle and 1-sphere are 1-types, and positive concrete
@@ -46,8 +49,9 @@ stability, and the diagonal sphere theorem remain to be done.
 | Homotopy automorphism functoriality | [`src/group-theory/functoriality-homotopy-automorphism-groups.lagda.md`](src/group-theory/functoriality-homotopy-automorphism-groups.lagda.md) | Defines classifying pointed maps and induced homomorphisms of concrete homotopy automorphism groups. |
 | Homotopy group functoriality | [`src/synthetic-homotopy-theory/functoriality-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/functoriality-homotopy-groups.lagda.md) | Defines `hom-concrete-homotopy-group`, the homomorphism induced by a pointed map on concrete homotopy groups. |
 | Exactness of group homomorphisms | [`src/group-theory/exact-sequences-groups.lagda.md`](src/group-theory/exact-sequences-groups.lagda.md) | Defines `is-exact-hom-Group` and proves `is-exact-is-fiber-sequence-hom-Concrete-Group`, the forward implication from a fiber sequence of concrete-group classifying maps to exactness of the induced ordinary group homomorphisms. |
-| Exactness of pointed sets | [`src/structured-types/exact-sequences-pointed-sets.lagda.md`](src/structured-types/exact-sequences-pointed-sets.lagda.md) | Defines pointed sets, pointed maps of pointed sets, set truncation as a pointed set, images, kernels, exactness of pointed-set maps, and proves that the set truncation of the canonical fiber sequence `fiber g -> E -> B` is exact. |
-| Boundary maps and first LES exactness step | [`src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md) | Defines the boundary pointed map, induced maps on homotopy groups of a fiber sequence, recursive boundary pointed maps, and boundary homomorphisms. It now proves the first fiber-of-the-fiber identification, packages `Ω B ->* fiber g ->* E` as a pointed fiber sequence, and records the proof-backed pointed-set exactness theorem for the set truncation of the canonical fiber sequence of a pointed map. These are steps toward, not yet the full proof of, Theorem 8.4.6 of the HoTT book. |
+| Pointed sets | [`src/structured-types/pointed-sets.lagda.md`](src/structured-types/pointed-sets.lagda.md) | Defines pointed sets, pointed maps of pointed sets, and set truncation as a pointed set and as a pointed map. |
+| Exactness of pointed sets | [`src/structured-types/exact-sequences-pointed-sets.lagda.md`](src/structured-types/exact-sequences-pointed-sets.lagda.md) | Defines images, kernels, exactness of pointed-set maps, and proves that the set truncation of the canonical fiber sequence `fiber g -> E -> B` is exact. |
+| Boundary maps and LES exactness steps | [`src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md) | Defines the boundary pointed map, induced maps on homotopy groups of a fiber sequence, recursive boundary pointed maps, and boundary homomorphisms. It proves the first fiber-of-the-fiber identification, packages `Ω B ->* fiber g ->* E` as a pointed fiber sequence, records pointed-set exactness for `fiber g ->* E ->* B`, and now proves pointed-set exactness for the next adjacent triple `Ω B ->* fiber g ->* E`. These are steps toward, not yet the full proof of, Theorem 8.4.6 of the HoTT book. |
 | Higher homotopy groups of 1-types | [`src/synthetic-homotopy-theory/higher-homotopy-groups-truncated-types.lagda.md`](src/synthetic-homotopy-theory/higher-homotopy-groups-truncated-types.lagda.md) | Proves that positive concrete homotopy groups of pointed 1-types are trivial. |
 | Circle and 1-sphere homotopy facts | [`src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md`](src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md) | Proves the loop-space equivalences for the circle and 1-sphere, the 1-type facts, and triviality of their positive concrete homotopy groups. |
 
@@ -57,7 +61,7 @@ stability, and the diagonal sphere theorem remain to be done.
 |---|---|---|
 | General pointed fiber sequences | Done | Implemented in [`src/structured-types/fiber-sequences.lagda.md`](src/structured-types/fiber-sequences.lagda.md). |
 | Induced maps on homotopy groups | Done | Implemented via iterated loop functoriality and concrete homotopy group functoriality. |
-| Long exact sequence of homotopy groups | Partial | Boundary maps, induced homomorphisms, pointed-set exactness, exactness of the set truncation of a canonical fiber sequence, and the first fiber-of-the-fiber identification `Ω B ≃* fiber (fiber g -> E)` are formalized. The remaining proof obligation is to generalize this to the full iterated fiber sequence, prove the remaining HoTT-book fiber-of-the-fiber identifications, and transport the pointed-set exactness theorem along those identifications to the homotopy-group maps. |
+| Long exact sequence of homotopy groups | Partial | Boundary maps, induced homomorphisms, pointed-set exactness, exactness of the set truncation of a canonical fiber sequence, the first fiber-of-the-fiber identification `Ω B ≃* fiber (fiber g -> E)`, and pointed-set exactness of `Ω B ->* fiber g ->* E` are formalized. The remaining proof obligation is to generalize this to the full iterated fiber sequence, prove the remaining HoTT-book fiber-of-the-fiber identifications uniformly, and transport pointed-set exactness to the concrete homotopy-group maps. |
 | Exactness-to-isomorphism with zero endpoints | Not started | Needed to extract isomorphisms from exact segments. |
 | Higher homotopy groups of the circle vanish | Mostly done | Positive concrete homotopy groups of the circle and 1-sphere are trivial. Further packaging may be needed for the exact Hopf LES endpoints. |
 | Loop space of the circle is the integers | Partial | The loop-space equivalence is formalized. A group-level final packaging against the target theorem may still be needed. |
@@ -74,13 +78,13 @@ stability, and the diagonal sphere theorem remain to be done.
 2. Package the loop-space computation of the circle as whatever group-level
    statement is needed for the final target.
 3. Generalize the first proved iterated fiber sequence
-   `Ω B ->* fiber g ->* E` to the full iterated fiber sequence of a pointed map
-   and prove the remaining fiber-of-the-fiber identifications from HoTT book
-   Lemma 8.4.4.
-4. Use pointed-set exactness of set-truncated canonical fiber sequences to
-   prove the long exact sequence of pointed sets from HoTT book Theorem 8.4.6,
-   then identify the group-level maps with the existing homotopy-group maps up
-   to the sign conventions in the book.
+   `Ω B ->* fiber g ->* E` and its set-truncated exactness proof to the full
+   iterated fiber sequence of a pointed map, proving the remaining
+   fiber-of-the-fiber identifications from HoTT book Lemma 8.4.4 uniformly.
+4. Use the resulting family of pointed-set exactness proofs to prove the long
+   exact sequence of pointed sets from HoTT book Theorem 8.4.6, then identify
+   the group-level maps with the existing homotopy-group maps up to the sign
+   conventions in the book.
 5. Prove or port the exactness-to-isomorphism lemma for exact segments with
    zero endpoints.
 6. Formalize the circle as the connected H-space needed for the Hopf
@@ -97,19 +101,14 @@ stability, and the diagonal sphere theorem remain to be done.
 
 ## Current verification
 
-The following project-owned Agda modules were checked on 2026-06-05:
+The following refactor-relevant Agda modules were checked on 2026-06-09:
 
 ```sh
-./check.sh src/structured-types/fiber-sequences.lagda.md
+./check.sh src/structured-types/pointed-sets.lagda.md
 ./check.sh src/structured-types/exact-sequences-pointed-sets.lagda.md
-./check.sh src/group-theory/exact-sequences-groups.lagda.md
-./check.sh src/group-theory/functoriality-homotopy-automorphism-groups.lagda.md
-./check.sh src/synthetic-homotopy-theory/functoriality-iterated-loop-spaces.lagda.md
-./check.sh src/synthetic-homotopy-theory/functoriality-homotopy-groups.lagda.md
 ./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
-./check.sh src/synthetic-homotopy-theory/higher-homotopy-groups-truncated-types.lagda.md
-./check.sh src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md
 ```
 
-All passed. A source search found no explicit Agda holes in project-owned
+All passed after adding the pointed-set exactness proof for
+`Ω B ->* fiber g ->* E`. A source search found no explicit Agda holes in project-owned
 `.lagda.md` files under `src/`.

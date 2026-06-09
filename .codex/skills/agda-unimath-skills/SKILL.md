@@ -46,6 +46,9 @@ commands, library navigation, or typechecking strategy.
 3. Make narrow edits.
    - Keep theorem names, statement shape, and universe levels consistent with
      surrounding code.
+   - Follow the agda-unimath convention of one concept per file, organized by
+     mathematical subject. If a module starts accumulating separable concepts,
+     split them into descriptive files and import them where needed.
    - Avoid broad rewrites unless the user asked for a refactor.
    - Leave holes only when the user explicitly asks for partial progress or
      exploration.

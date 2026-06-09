@@ -2,6 +2,8 @@
 
 ```agda
 module structured-types.exact-sequences-pointed-sets where
+
+open import structured-types.pointed-sets public
 ```
 
 <details><summary>Imports</summary>
@@ -32,82 +34,13 @@ open import structured-types.pointed-types
 
 An **exact sequence of pointed sets** is a sequence of pointed sets and pointed
 maps whose image at each middle term is equal to the kernel of the following
-map. This is the pointed-set version used in the proof of the
+map. This uses [pointed sets](structured-types.pointed-sets.md) as the
+ambient structure. It is the pointed-set version used in the proof of the
 [long exact sequence of homotopy groups](synthetic-homotopy-theory.long-exact-sequence-homotopy-groups.md):
 first apply set truncation to the fiber sequence of a pointed map, then prove
 that each adjacent triple is exact.
 
 ## Definitions
-
-### Pointed sets
-
-```agda
-Pointed-Set : (l : Level) → UU (lsuc l)
-Pointed-Set l = Σ (Set l) (type-Set)
-
-module _
-  {l : Level} (A : Pointed-Set l)
-  where
-
-  set-Pointed-Set : Set l
-  set-Pointed-Set = pr1 A
-
-  type-Pointed-Set : UU l
-  type-Pointed-Set = type-Set set-Pointed-Set
-
-  is-set-type-Pointed-Set : is-set type-Pointed-Set
-  is-set-type-Pointed-Set = is-set-type-Set set-Pointed-Set
-
-  point-Pointed-Set : type-Pointed-Set
-  point-Pointed-Set = pr2 A
-
-  pointed-type-Pointed-Set : Pointed-Type l
-  pr1 pointed-type-Pointed-Set = type-Pointed-Set
-  pr2 pointed-type-Pointed-Set = point-Pointed-Set
-```
-
-### Pointed maps of pointed sets
-
-```agda
-module _
-  {l1 l2 : Level} (A : Pointed-Set l1) (B : Pointed-Set l2)
-  where
-
-  hom-Pointed-Set : UU (l1 ⊔ l2)
-  hom-Pointed-Set =
-    pointed-type-Pointed-Set A →∗ pointed-type-Pointed-Set B
-```
-
-### Set truncation as a pointed set
-
-```agda
-module _
-  {l : Level} (A : Pointed-Type l)
-  where
-
-  trunc-Pointed-Set : Pointed-Set l
-  pr1 trunc-Pointed-Set = trunc-Set (type-Pointed-Type A)
-  pr2 trunc-Pointed-Set = unit-trunc-Set (point-Pointed-Type A)
-```
-
-### Set truncation of a pointed map
-
-```agda
-module _
-  {l1 l2 : Level} {A : Pointed-Type l1} {B : Pointed-Type l2}
-  (f : A →∗ B)
-  where
-
-  hom-trunc-Pointed-Set :
-    hom-Pointed-Set (trunc-Pointed-Set A) (trunc-Pointed-Set B)
-  pr1 hom-trunc-Pointed-Set =
-    map-trunc-Set (map-pointed-map f)
-  pr2 hom-trunc-Pointed-Set =
-    ( naturality-unit-trunc-Set
-      ( map-pointed-map f)
-      ( point-Pointed-Type A)) ∙
-    ( ap unit-trunc-Set (preserves-point-pointed-map f))
-```
 
 ### Images and kernels of pointed maps of pointed sets
 
