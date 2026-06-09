@@ -800,3 +800,60 @@ Status:
 Related commit:
 
 - This commit — Add second pointed-set LES exactness step.
+
+
+### Loop-boundary pointed-set LES exactness step
+
+Request: after committing the previous work, continue formalizing the exactness
+proof for the long exact sequence of homotopy groups constructed from a
+fibration of pointed types.
+
+Model context:
+
+- Date: 2026-06-09.
+- User-reported current model context from the prior request: Emily switched
+  the model to `gpt-5.5` with reasoning effort `xhigh`.
+- Agent-visible runtime identity: Codex; exact served model identity is not
+  exposed directly in the chat context.
+
+Actions:
+
+- Committed the previous pointed-set split and second adjacent exactness step
+  as `ccd55cf` (`Add pointed-set LES exactness step`).
+- Continued the HoTT-book exactness route by proving comparison data between
+  `Ω E` and the fiber of the boundary map `Ω B ->* fiber g`.
+- Added the projection law showing that a point in the fiber of the boundary
+  map determines a loop in `E` whose image under `Ω g` is the original loop in
+  `B`.
+- Used that projection law to prove pointed-set exactness of the next adjacent
+  set-truncated triple `Ω E ->* Ω B ->* fiber g`, by comparison with the
+  canonical pointed fiber sequence of the boundary map.
+- Updated `STATUS-REPORT.md` to record the new exactness step and the remaining
+  need for a uniform iterated fiber-sequence construction and transport to
+  concrete homotopy-group maps.
+
+Verification:
+
+```sh
+./check.sh src/structured-types/pointed-sets.lagda.md
+./check.sh src/structured-types/exact-sequences-pointed-sets.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+git diff --check
+rg <Agda hole/unsupported declaration pattern> src CHAT-LOG.md STATUS-REPORT.md
+```
+
+All three Agda checks passed, `git diff --check` passed, and the search found
+no holes or unsupported declarations.
+
+Status:
+
+- Pointed-set exactness is now formalized for the adjacent triples
+  `fiber g ->* E ->* B`, `Ω B ->* fiber g ->* E`, and
+  `Ω E ->* Ω B ->* fiber g`.
+- The full long exact sequence exactness theorem is still incomplete; the next
+  main target is the uniform iterated version and identification with the
+  concrete homotopy-group homomorphisms.
+
+Related commit:
+
+- This commit — Add loop-boundary LES exactness step.
