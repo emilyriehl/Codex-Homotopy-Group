@@ -161,3 +161,44 @@ Modules: `foundation-core.fibers-of-maps` / `foundation.fibers-of-maps`, `elemen
 - `ℤ : UU lzero` — `ℤ = ℕ + (unit + ℕ)`.
 - `zero-ℤ : ℤ` (`inr (inl star)`); `neg-one-ℤ : ℤ`; `in-neg-ℤ : ℕ → ℤ`.
 - `int-ℕ : ℕ → ℤ` — inclusion of naturals (in `elementary-number-theory.integers`).
+
+## 12. Equality In Fibers Of Maps
+
+Module: `foundation.equality-fibers-of-maps`.
+
+Use this file when a proof concerns equality between elements of a fiber
+`fiber f b`. It avoids K-like direct pattern matching and gives the path data
+needed to move between equality of fiber elements and equality under `ap f`.
+
+Key names:
+
+- `fiber-ap-eq-fiber f s t : s ＝ t → fiber (ap f) (pr2 s ∙ inv (pr2 t))`
+- `equiv-fiber-ap-eq-fiber f s t : (s ＝ t) ≃ fiber (ap f) (pr2 s ∙ inv (pr2 t))`
+- `map-inv-fiber-ap-eq-fiber f s t : fiber (ap f) (pr2 s ∙ inv (pr2 t)) → s ＝ t`
+- `ap-pr1-map-inv-fiber-ap-eq-fiber f s t v : ap pr1 (map-inv-fiber-ap-eq-fiber f s t v) ＝ pr1 v`
+- `triangle-fiber-ap-eq-fiber f s t` relates `fiber-ap-eq-fiber` to the `pair-eq-Σ` characterization of equality in a dependent pair.
+
+The last two are especially useful in HoTT fiber-sequence work: the inverse map
+constructs the equality in the fiber, while the projection coherence lets you
+recover the underlying path needed for loop-space or image-comparison
+arguments. If Agda says `pr1 (fiber-ap-eq-fiber ...) != ap pr1 α`, use
+`triangle-fiber-ap-eq-fiber` to bridge that propositional equality.
+
+## 13. Set-Truncation Helpers For Image Comparisons
+
+Modules: `foundation.set-truncations`, `foundation.functoriality-set-truncation`,
+`foundation.propositional-truncations`, and `foundation.propositions`.
+
+Useful names for exactness proofs after set truncation:
+
+- `unit-trunc-Set : A → type-trunc-Set A`
+- `map-trunc-Set f : type-trunc-Set A → type-trunc-Set B`
+- `naturality-unit-trunc-Set f : map-trunc-Set f ∘ unit-trunc-Set ~ unit-trunc-Set ∘ f`
+- `apply-dependent-universal-property-trunc-Set'` for eliminating from a set truncation into a `Set`
+- `apply-universal-property-trunc-Prop` for eliminating image witnesses, which are propositional truncations
+
+A common exactness proof compares image predicates. Eliminate the outer image
+witness into the target image proposition, eliminate the set-truncated preimage
+into a function set, then build the new witness with `unit-trunc-Prop`. The
+path component usually chains `naturality-unit-trunc-Set`, `ap unit-trunc-Set`
+of an untruncated homotopy/projection law, and the old image-witness equality.

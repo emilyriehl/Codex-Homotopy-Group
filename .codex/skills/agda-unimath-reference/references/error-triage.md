@@ -39,6 +39,11 @@ not a variable (failed "generalizing over the index").
   `rg 'equiv-tr'`) rather than hand-rolling a match.
 - When you genuinely need "two paths are equal," that's a truncation/`is-set` statement — find or use
   `is-set`/`is-prop` machinery, don't try to match.
+- For equality in a fiber `fiber f b`, direct clauses like `(q , refl) = ...`
+  can be rejected when the motive depends on the proof. Search
+  `foundation.equality-fibers-of-maps` first. In particular,
+  `map-inv-fiber-ap-eq-fiber`, `ap-pr1-map-inv-fiber-ap-eq-fiber`, and
+  `triangle-fiber-ap-eq-fiber` often replace the forbidden path induction.
 
 ### `--exact-split` — every clause must hold definitionally
 

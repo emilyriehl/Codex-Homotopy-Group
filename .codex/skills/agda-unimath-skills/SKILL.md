@@ -89,6 +89,11 @@ commands, library navigation, or typechecking strategy.
   commented-out failed attempts in final code.
 - Use the repository-local reference skill for conventions, namespace lookup,
   foundational APIs, Agda error triage, and HoTT-specific practice.
+- For HoTT exactness proofs, especially fiber-sequence and long-exact-sequence
+  work, prove the smallest reusable adjacent exactness or comparison lemma
+  first. A set-truncated image comparison against a canonical fiber sequence is
+  often easier and more robust than trying to package the full iterated theorem
+  in one step.
 
 ## Common Task Patterns
 

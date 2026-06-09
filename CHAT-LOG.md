@@ -857,3 +857,47 @@ Status:
 Related commit:
 
 - This commit — Add loop-boundary LES exactness step.
+
+
+### Agda proof workflow tips from LES formalization
+
+Request: update the general skills and reference documents with tips learned
+while working on the long-exact-sequence exactness proof, then commit and push
+the documentation changes.
+
+Model context:
+
+- Date: 2026-06-09.
+- User-reported current model context from the prior request: Emily switched
+  the model to `gpt-5.5` with reasoning effort `xhigh`.
+- Agent-visible runtime identity: Codex; exact served model identity is not
+  exposed directly in the chat context.
+
+Actions:
+
+- Updated the repository-local Agda workflow skill with a staged exactness
+  heuristic for HoTT fiber-sequence and long-exact-sequence proofs.
+- Added workflow reference notes for searching equality-in-fibers APIs,
+  set-truncation image-comparison APIs, and loop-map path-algebra APIs.
+- Added HoTT reference notes describing the canonical-fiber-sequence route to
+  long exact sequence exactness and when projection/image-comparison laws are a
+  better intermediate target than a full equivalence package.
+- Added foundational API notes for `foundation.equality-fibers-of-maps` and
+  set-truncation helpers used in pointed-set exactness comparisons.
+- Added an error-triage warning about equality in fibers under `--without-K`.
+
+Verification:
+
+```sh
+git diff --check
+```
+
+passed.
+
+Status:
+
+- Documentation-only update; no Agda source files changed.
+
+Related commit:
+
+- This commit — Update Agda proof workflow tips.
