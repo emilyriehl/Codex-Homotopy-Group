@@ -901,3 +901,57 @@ Status:
 Related commit:
 
 - This commit — Update Agda proof workflow tips.
+
+
+### Packaged fiber-sequence pointed-set exactness
+
+Request: reread the long exact sequence module, update the status report, and
+continue the HoTT-book exactness proof for the long exact sequence of homotopy
+groups; then commit and continue working.
+
+Model context:
+
+- Date: 2026-06-09.
+- User-reported current model context from the prior request: Emily switched
+  the model to `gpt-5.5` with reasoning effort `xhigh`.
+- Agent-visible runtime identity: Codex; exact served model identity is not
+  exposed directly in the chat context.
+
+Actions:
+
+- Used HoTT Book section 8.4 as the reference point: exactness of the
+  `0`-truncation of adjacent fiber-sequence triples is the first layer of the
+  long exact sequence proof.
+- Added `is-exact-set-truncation-fiber-sequence`, proving that any packaged
+  pointed fiber sequence `F ->* E ->* B` is exact after set truncation.
+- Proved the packaged theorem by comparing the image of the packaged fiber
+  inclusion with the image of the canonical fiber inclusion using the pointed
+  equivalence stored in the fiber-sequence data, then reusing canonical
+  pointed-set exactness.
+- Updated `STATUS-REPORT.md` to distinguish this completed pointed-set layer
+  from the remaining full iterated LES and concrete homotopy-group transport.
+
+Verification:
+
+```sh
+./check.sh src/structured-types/pointed-sets.lagda.md
+./check.sh src/structured-types/exact-sequences-pointed-sets.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+git diff --check
+rg <Agda hole/unsupported declaration pattern> src STATUS-REPORT.md
+```
+
+All three Agda checks passed, `git diff --check` passed, and the search found
+no holes or unsupported declarations.
+
+Status:
+
+- The set-truncated exactness theorem now applies to arbitrary packaged
+  pointed fiber sequences.
+- The full HoTT Book Theorem 8.4.6 package remains incomplete; the next step is
+  to extend the same packaged-sequence comparison to the boundary segment and
+  then organize the uniform iterated sequence.
+
+Related commit:
+
+- This commit — Add packaged fiber-sequence exactness.
