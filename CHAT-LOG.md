@@ -1061,3 +1061,54 @@ Status:
 Related commit:
 
 - This commit — Add packaged loop-boundary exactness.
+
+
+### Looped packaged fiber-sequence pointed-set exactness
+
+Request: continue working after pushing the previous packaged exactness commits.
+
+Model context:
+
+- Date: 2026-06-09.
+- User-reported current model context from the prior request: Emily switched
+  the model to `gpt-5.5` with reasoning effort `xhigh`.
+- Agent-visible runtime identity: Codex; exact served model identity is not
+  exposed directly in the chat context.
+
+Actions:
+
+- Added a small helper showing that the loop map of a constant pointed map is
+  constant at the reflexivity loop.
+- Imported the existing loop-kernel helpers from group exactness and used them
+  as point-level witnesses for the pointed-set proof.
+- Proved `is-exact-set-truncation-loop-fiber-sequence`: for any packaged
+  pointed fiber sequence `F ->* E ->* B`, the set-truncated adjacent triple
+  `Ω F ->* Ω E ->* Ω B` is exact as a sequence of pointed sets.
+- Updated `STATUS-REPORT.md` to record that the first four adjacent packaged
+  pointed-set triples are now exact.
+
+Verification:
+
+```sh
+./check.sh src/structured-types/pointed-sets.lagda.md
+./check.sh src/structured-types/exact-sequences-pointed-sets.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+git diff --check
+rg <Agda hole/unsupported declaration pattern> src STATUS-REPORT.md CHAT-LOG.md
+```
+
+All three Agda checks passed, `git diff --check` passed, and the search found
+no holes or unsupported declarations.
+
+Status:
+
+- The set-truncated exactness layer now covers the first four adjacent packaged
+  triples: `F ->* E ->* B`, `Ω B ->* F ->* E`, `Ω E ->* Ω B ->* F`, and
+  `Ω F ->* Ω E ->* Ω B`.
+- The full long exact sequence theorem remains incomplete; the next target is
+  a uniform iterated package for all adjacent triples and then transport to
+  concrete homotopy-group homomorphisms.
+
+Related commit:
+
+- This commit — Add looped packaged exactness.
