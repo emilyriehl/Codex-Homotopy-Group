@@ -955,3 +955,57 @@ Status:
 Related commit:
 
 - This commit — Add packaged fiber-sequence exactness.
+
+
+### Packaged boundary-segment pointed-set exactness
+
+Request: commit the previous work and continue the HoTT-book long exact
+sequence exactness proof.
+
+Model context:
+
+- Date: 2026-06-09.
+- User-reported current model context from the prior request: Emily switched
+  the model to `gpt-5.5` with reasoning effort `xhigh`.
+- Agent-visible runtime identity: Codex; exact served model identity is not
+  exposed directly in the chat context.
+
+Actions:
+
+- Committed the preceding packaged fiber-sequence exactness work as `64c41b2`.
+- Added set-truncated maps for the boundary segment of an arbitrary packaged
+  pointed fiber sequence.
+- Proved `is-exact-set-truncation-boundary-fiber-sequence`: for any packaged
+  pointed fiber sequence `F ->* E ->* B`, the set-truncated boundary triple
+  `Ω B ->* F ->* E` is exact as a sequence of pointed sets.
+- Reused the canonical exactness proof for `Ω B ->* fiber g ->* E` by
+  transporting image and kernel data across the pointed equivalence
+  `F ≃* fiber g` stored in the fiber-sequence package.
+- Updated `STATUS-REPORT.md` to record this as progress toward the HoTT Book
+  Theorem 8.4.6-style long exact sequence, while leaving the full iterated LES
+  and concrete homotopy-group transport as remaining work.
+
+Verification:
+
+```sh
+./check.sh src/structured-types/pointed-sets.lagda.md
+./check.sh src/structured-types/exact-sequences-pointed-sets.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+git diff --check
+rg <Agda hole/unsupported declaration pattern> src STATUS-REPORT.md CHAT-LOG.md
+```
+
+All three Agda checks passed, `git diff --check` passed, and the search found
+no holes or unsupported declarations.
+
+Status:
+
+- The set-truncated exactness layer now covers the packaged base triple
+  `F ->* E ->* B` and packaged boundary triple `Ω B ->* F ->* E`.
+- The full long exact sequence theorem remains incomplete; the next target is
+  a uniform iterated package and identification with concrete homotopy-group
+  homomorphisms.
+
+Related commit:
+
+- This commit — Add packaged boundary exactness.
