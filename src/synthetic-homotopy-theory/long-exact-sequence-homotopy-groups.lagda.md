@@ -1717,3 +1717,52 @@ transporting it back across the pointed equivalence with the chosen fiber.
   pr2 (is-exact-set-truncation-loop-fiber-sequence x) =
     is-in-image-trunc-loop-fiber-inclusion-is-in-kernel-trunc-loop-fibration-fiber-sequence x
 ```
+
+
+### Initial set-truncated long exact sequence segments are exact
+
+The preceding four exactness theorems assemble the first four adjacent triples of
+the long exact sequence associated to a packaged pointed fiber sequence.
+
+```agda
+  initial-segment-is-exact-set-truncation-fiber-sequence :
+    Σ ( is-exact-hom-Pointed-Set
+        ( trunc-Pointed-Set (fiber-fiber-sequence-Pointed-Type S))
+        ( trunc-Pointed-Set (total-space-fiber-sequence-Pointed-Type S))
+        ( trunc-Pointed-Set (base-fiber-sequence-Pointed-Type S))
+        ( hom-trunc-fiber-inclusion-fiber-sequence-Pointed-Type S)
+        ( hom-trunc-fibration-fiber-sequence-Pointed-Type S))
+      ( λ _ →
+        Σ ( is-exact-hom-Pointed-Set
+            ( trunc-Pointed-Set (Ω (base-fiber-sequence-Pointed-Type S)))
+            ( trunc-Pointed-Set (fiber-fiber-sequence-Pointed-Type S))
+            ( trunc-Pointed-Set (total-space-fiber-sequence-Pointed-Type S))
+            ( hom-trunc-boundary-fiber-sequence-Pointed-Type)
+            ( hom-trunc-fiber-inclusion-fiber-sequence-Pointed-Type S))
+          ( λ _ →
+            Σ ( is-exact-hom-Pointed-Set
+                ( trunc-Pointed-Set
+                  ( Ω (total-space-fiber-sequence-Pointed-Type S)))
+                ( trunc-Pointed-Set (Ω (base-fiber-sequence-Pointed-Type S)))
+                ( trunc-Pointed-Set (fiber-fiber-sequence-Pointed-Type S))
+                ( hom-trunc-loop-fibration-fiber-sequence-Pointed-Type)
+                ( hom-trunc-boundary-fiber-sequence-Pointed-Type))
+              ( λ _ →
+                is-exact-hom-Pointed-Set
+                  ( trunc-Pointed-Set
+                    ( Ω (fiber-fiber-sequence-Pointed-Type S)))
+                  ( trunc-Pointed-Set
+                    ( Ω (total-space-fiber-sequence-Pointed-Type S)))
+                  ( trunc-Pointed-Set
+                    ( Ω (base-fiber-sequence-Pointed-Type S)))
+                  ( hom-trunc-loop-fiber-inclusion-fiber-sequence-Pointed-Type)
+                  ( hom-trunc-loop-fibration-fiber-sequence-Pointed-Type))))
+  pr1 initial-segment-is-exact-set-truncation-fiber-sequence =
+    is-exact-set-truncation-fiber-sequence S
+  pr1 (pr2 initial-segment-is-exact-set-truncation-fiber-sequence) =
+    is-exact-set-truncation-boundary-fiber-sequence
+  pr1 (pr2 (pr2 initial-segment-is-exact-set-truncation-fiber-sequence)) =
+    is-exact-set-truncation-loop-boundary-fiber-sequence
+  pr2 (pr2 (pr2 initial-segment-is-exact-set-truncation-fiber-sequence)) =
+    is-exact-set-truncation-loop-fiber-sequence
+```

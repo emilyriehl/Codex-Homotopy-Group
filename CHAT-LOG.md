@@ -1112,3 +1112,54 @@ Status:
 Related commit:
 
 - This commit — Add looped packaged exactness.
+
+
+### Initial set-truncated LES exactness segment
+
+Request: commit the current progress after updating the long exact sequence
+status report and attempting the next proof step.
+
+Model context:
+
+- Date: 2026-06-10.
+- User-reported model context from earlier in the thread: Emily switched the
+  model to `gpt-5.5` with reasoning effort `xhigh`.
+- Agent-visible runtime identity: Codex; exact served model identity is not
+  exposed directly in the chat context.
+
+Actions:
+
+- Read `src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md`
+  and compared the current LES infrastructure with `FORMALIZATION-PLAN.md`.
+- Added `initial-segment-is-exact-set-truncation-fiber-sequence`, bundling the
+  first four adjacent packaged pointed-set exactness proofs into one finite
+  set-truncated LES segment.
+- Updated `STATUS-REPORT.md` to record that this initial four-triple segment is
+  formalized, while the full HoTT Book-style LES still needs the uniform
+  iterated fiber-of-the-fiber package and transport to concrete homotopy-group
+  homomorphisms.
+
+Verification:
+
+```sh
+./check.sh src/structured-types/pointed-sets.lagda.md
+./check.sh src/structured-types/exact-sequences-pointed-sets.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+git diff --check
+rg <Agda hole/unsupported declaration pattern> src STATUS-REPORT.md CHAT-LOG.md
+```
+
+All three Agda checks passed, `git diff --check` passed, and the search found
+no holes or unsupported declarations.
+
+Status:
+
+- The first four adjacent pointed-set exactness proofs are now also bundled as
+  a finite initial set-truncated LES segment.
+- The full long exact sequence theorem remains incomplete; the next target is
+  the uniform iterated fiber sequence and the concrete homotopy-group exactness
+  bridge.
+
+Related commit:
+
+- This commit — Bundle initial LES exactness segment.

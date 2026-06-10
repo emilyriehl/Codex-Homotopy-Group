@@ -7,7 +7,7 @@ Update this file whenever significant progress is made, for example when a
 new theorem is proved, an important definition is formalized, a planned module
 is added, or a major blocked item is resolved or re-scoped.
 
-Last updated: 2026-06-09.
+Last updated: 2026-06-10.
 
 ## Current summary
 
@@ -18,7 +18,8 @@ calculation:
   truncations of the first four adjacent triples in any packaged pointed fiber
   sequence, `F ->* E ->* B`, `Ω B ->* F ->* E`,
   `Ω E ->* Ω B ->* F`, and `Ω F ->* Ω E ->* Ω B`, are now proved
-  exact as sequences of pointed sets.
+  exact as sequences of pointed sets. These proofs are bundled as an initial
+  set-truncated long-exact-sequence segment.
 - Functoriality for iterated loop spaces and concrete homotopy groups has been
   added.
 - Boundary maps associated to a fiber sequence have been formalized.
@@ -38,8 +39,10 @@ calculation:
   `Ω B ->* F ->* E`, the packaged loop-boundary segment
   `Ω E ->* Ω B ->* F`, and the looped packaged segment
   `Ω F ->* Ω E ->* Ω B` are also exact after set truncation. The code
-  additionally includes the canonical adjacent triples `Ω B ->* fiber g ->* E` and
-  `Ω E ->* Ω B ->* fiber g`, by comparison with canonical fiber sequences.
+  additionally includes the canonical adjacent triples
+  `Ω B ->* fiber g ->* E` and `Ω E ->* Ω B ->* fiber g`, by comparison with
+  canonical fiber sequences, and packages the first four exactness proofs into
+  a single initial segment.
 - The circle facts needed for vanishing higher homotopy groups have been
   formalized: the loop space of the circle and the 1-sphere is equivalent to
   the integers, the circle and 1-sphere are 1-types, and positive concrete
@@ -60,7 +63,7 @@ stability, and the diagonal sphere theorem remain to be done.
 | Exactness of group homomorphisms | [`src/group-theory/exact-sequences-groups.lagda.md`](src/group-theory/exact-sequences-groups.lagda.md) | Defines `is-exact-hom-Group` and proves `is-exact-is-fiber-sequence-hom-Concrete-Group`, the forward implication from a fiber sequence of concrete-group classifying maps to exactness of the induced ordinary group homomorphisms. |
 | Pointed sets | [`src/structured-types/pointed-sets.lagda.md`](src/structured-types/pointed-sets.lagda.md) | Defines pointed sets, pointed maps of pointed sets, and set truncation as a pointed set and as a pointed map. |
 | Exactness of pointed sets | [`src/structured-types/exact-sequences-pointed-sets.lagda.md`](src/structured-types/exact-sequences-pointed-sets.lagda.md) | Defines images, kernels, exactness of pointed-set maps, and proves that the set truncation of the canonical fiber sequence `fiber g -> E -> B` is exact. |
-| Boundary maps and LES exactness steps | [`src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md) | Defines the boundary pointed map, induced maps on homotopy groups of a fiber sequence, recursive boundary pointed maps, and boundary homomorphisms. It proves the first fiber-of-the-fiber identification, packages `Ω B ->* fiber g ->* E` as a pointed fiber sequence, proves pointed-set exactness for canonical and packaged `F ->* E ->* B` fiber sequences, proves pointed-set exactness for the packaged boundary segment `Ω B ->* F ->* E`, proves pointed-set exactness for the packaged loop-boundary segment `Ω E ->* Ω B ->* F`, proves pointed-set exactness for the looped packaged segment `Ω F ->* Ω E ->* Ω B`, and proves pointed-set exactness for the canonical adjacent triples `Ω B ->* fiber g ->* E` and `Ω E ->* Ω B ->* fiber g`. These are steps toward, not yet the full proof of, Theorem 8.4.6 of the HoTT book. |
+| Boundary maps and LES exactness steps | [`src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md) | Defines the boundary pointed map, induced maps on homotopy groups of a fiber sequence, recursive boundary pointed maps, and boundary homomorphisms. It proves the first fiber-of-the-fiber identification, packages `Ω B ->* fiber g ->* E` as a pointed fiber sequence, proves pointed-set exactness for canonical and packaged `F ->* E ->* B` fiber sequences, proves pointed-set exactness for the packaged boundary segment `Ω B ->* F ->* E`, proves pointed-set exactness for the packaged loop-boundary segment `Ω E ->* Ω B ->* F`, proves pointed-set exactness for the looped packaged segment `Ω F ->* Ω E ->* Ω B`, proves pointed-set exactness for the canonical adjacent triples `Ω B ->* fiber g ->* E` and `Ω E ->* Ω B ->* fiber g`, and bundles the first four packaged exactness proofs as an initial set-truncated LES segment. These are steps toward, not yet the full proof of, Theorem 8.4.6 of the HoTT book. |
 | Higher homotopy groups of 1-types | [`src/synthetic-homotopy-theory/higher-homotopy-groups-truncated-types.lagda.md`](src/synthetic-homotopy-theory/higher-homotopy-groups-truncated-types.lagda.md) | Proves that positive concrete homotopy groups of pointed 1-types are trivial. |
 | Circle and 1-sphere homotopy facts | [`src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md`](src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md) | Proves the loop-space equivalences for the circle and 1-sphere, the 1-type facts, and triviality of their positive concrete homotopy groups. |
 
@@ -70,7 +73,7 @@ stability, and the diagonal sphere theorem remain to be done.
 |---|---|---|
 | General pointed fiber sequences | Done | Implemented in [`src/structured-types/fiber-sequences.lagda.md`](src/structured-types/fiber-sequences.lagda.md). |
 | Induced maps on homotopy groups | Done | Implemented via iterated loop functoriality and concrete homotopy group functoriality. |
-| Long exact sequence of homotopy groups | Partial | Boundary maps, induced homomorphisms, pointed-set exactness, exactness of the set truncation of canonical and packaged `F ->* E ->* B` triples, exactness of the packaged boundary triple `Ω B ->* F ->* E`, exactness of the packaged loop-boundary triple `Ω E ->* Ω B ->* F`, exactness of the looped packaged triple `Ω F ->* Ω E ->* Ω B`, the first fiber-of-the-fiber identification `Ω B ≃* fiber (fiber g -> E)`, and pointed-set exactness of the canonical triples `Ω B ->* fiber g ->* E` and `Ω E ->* Ω B ->* fiber g` are formalized. The remaining proof obligation is to organize these into the full iterated fiber sequence, prove the remaining HoTT-book fiber-of-the-fiber identifications uniformly, and transport pointed-set exactness to the concrete homotopy-group maps. |
+| Long exact sequence of homotopy groups | Partial | Boundary maps, induced homomorphisms, pointed-set exactness, exactness of the set truncation of canonical and packaged `F ->* E ->* B` triples, exactness of the packaged boundary triple `Ω B ->* F ->* E`, exactness of the packaged loop-boundary triple `Ω E ->* Ω B ->* F`, exactness of the looped packaged triple `Ω F ->* Ω E ->* Ω B`, the first fiber-of-the-fiber identification `Ω B ≃* fiber (fiber g -> E)`, pointed-set exactness of the canonical triples `Ω B ->* fiber g ->* E` and `Ω E ->* Ω B ->* fiber g`, and a bundled initial four-triple set-truncated LES segment are formalized. The remaining proof obligation is to organize these into the full iterated fiber sequence, prove the remaining HoTT-book fiber-of-the-fiber identifications uniformly, and transport pointed-set exactness to the concrete homotopy-group maps. |
 | Exactness-to-isomorphism with zero endpoints | Not started | Needed to extract isomorphisms from exact segments. |
 | Higher homotopy groups of the circle vanish | Mostly done | Positive concrete homotopy groups of the circle and 1-sphere are trivial. Further packaging may be needed for the exact Hopf LES endpoints. |
 | Loop space of the circle is the integers | Partial | The loop-space equivalence is formalized. A group-level final packaging against the target theorem may still be needed. |
@@ -89,11 +92,10 @@ stability, and the diagonal sphere theorem remain to be done.
 3. Package the full iterated fiber sequence of a pointed map. The
    pointed-set exactness layer now covers arbitrary packaged triples
    `F ->* E ->* B`, `Ω B ->* F ->* E`, `Ω E ->* Ω B ->* F`,
-   and `Ω F ->* Ω E ->* Ω B`.
-   The remaining adjacent triples still need
-   the uniform HoTT book Lemma 8.4.4 fiber-of-the-fiber identifications and the
-   associated map identifications, including the sign conventions for iterated
-   loops.
+   and `Ω F ->* Ω E ->* Ω B`, and bundles these as a finite initial segment.
+   The remaining adjacent triples still need the uniform HoTT book Lemma
+   8.4.4 fiber-of-the-fiber identifications and the associated map
+   identifications, including the sign conventions for iterated loops.
 4. Use the resulting family of pointed-set exactness proofs to prove the long
    exact sequence of pointed sets from HoTT book Theorem 8.4.6, then identify
    the group-level maps with the existing homotopy-group maps up to the sign
@@ -114,7 +116,7 @@ stability, and the diagonal sphere theorem remain to be done.
 
 ## Current verification
 
-The following refactor-relevant Agda modules were checked on 2026-06-09:
+The following refactor-relevant Agda modules were checked on 2026-06-10:
 
 ```sh
 ./check.sh src/structured-types/pointed-sets.lagda.md
@@ -125,6 +127,7 @@ The following refactor-relevant Agda modules were checked on 2026-06-09:
 All passed after adding pointed-set exactness for arbitrary packaged fiber
 sequences, the packaged boundary segment `Ω B ->* F ->* E`, the packaged
 loop-boundary segment `Ω E ->* Ω B ->* F`, the looped packaged segment
-`Ω F ->* Ω E ->* Ω B`, and the canonical adjacent exactness proofs for
-`Ω B ->* fiber g ->* E` and `Ω E ->* Ω B ->* fiber g`. A source search found no explicit Agda holes in
-project-owned `.lagda.md` files under `src/`.
+`Ω F ->* Ω E ->* Ω B`, the canonical adjacent exactness proofs for
+`Ω B ->* fiber g ->* E` and `Ω E ->* Ω B ->* fiber g`, and the bundled
+initial four-triple set-truncated LES segment. A source search found no
+explicit Agda holes in project-owned `.lagda.md` files under `src/`.
