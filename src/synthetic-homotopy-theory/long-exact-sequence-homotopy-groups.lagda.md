@@ -1766,3 +1766,45 @@ the long exact sequence associated to a packaged pointed fiber sequence.
   pr2 (pr2 (pr2 initial-segment-is-exact-set-truncation-fiber-sequence)) =
     is-exact-set-truncation-loop-fiber-sequence
 ```
+
+
+
+### Set-truncated looped boundary fiber sequences are exact
+
+Applying the looped packaged exactness theorem to the boundary fiber sequence of
+`g` gives the next canonical adjacent exact triple, with middle term the loop
+space of the canonical fiber of `g`.
+
+```agda
+module _
+  {l1 l2 : Level} {E : Pointed-Type l1} {B : Pointed-Type l2}
+  (g : E →∗ B)
+  where
+
+  hom-trunc-loop-boundary-boundary-fiber-Pointed-Type :
+    hom-Pointed-Set
+      ( trunc-Pointed-Set (Ω (Ω B)))
+      ( trunc-Pointed-Set (Ω (fiber-Pointed-Type g)))
+  hom-trunc-loop-boundary-boundary-fiber-Pointed-Type =
+    hom-trunc-loop-fiber-inclusion-fiber-sequence-Pointed-Type
+      ( fiber-sequence-boundary-fiber-Pointed-Type g)
+
+  hom-trunc-loop-inclusion-fiber-Pointed-Type :
+    hom-Pointed-Set
+      ( trunc-Pointed-Set (Ω (fiber-Pointed-Type g)))
+      ( trunc-Pointed-Set (Ω E))
+  hom-trunc-loop-inclusion-fiber-Pointed-Type =
+    hom-trunc-loop-fibration-fiber-sequence-Pointed-Type
+      ( fiber-sequence-boundary-fiber-Pointed-Type g)
+
+  is-exact-set-truncation-loop-boundary-boundary-fiber-sequence-Pointed-Type :
+    is-exact-hom-Pointed-Set
+      ( trunc-Pointed-Set (Ω (Ω B)))
+      ( trunc-Pointed-Set (Ω (fiber-Pointed-Type g)))
+      ( trunc-Pointed-Set (Ω E))
+      ( hom-trunc-loop-boundary-boundary-fiber-Pointed-Type)
+      ( hom-trunc-loop-inclusion-fiber-Pointed-Type)
+  is-exact-set-truncation-loop-boundary-boundary-fiber-sequence-Pointed-Type =
+    is-exact-set-truncation-loop-fiber-sequence
+      ( fiber-sequence-boundary-fiber-Pointed-Type g)
+```

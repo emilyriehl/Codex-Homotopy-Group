@@ -1163,3 +1163,52 @@ Status:
 Related commit:
 
 - This commit — Bundle initial LES exactness segment.
+
+
+### Looped boundary-fiber exactness segment
+
+Request: continue the long exact sequence proof work, then commit and push the
+result while updating the status report and chat log.
+
+Model context:
+
+- Date: 2026-06-10.
+- User-reported model context from earlier in the thread: Emily switched the
+  model to `gpt-5.5` with reasoning effort `xhigh`.
+- Agent-visible runtime identity: Codex; exact served model identity is not
+  exposed directly in the chat context.
+
+Actions:
+
+- Continued from the bundled initial set-truncated LES segment.
+- Added the canonical looped boundary-fiber exactness theorem
+  `is-exact-set-truncation-loop-boundary-boundary-fiber-sequence-Pointed-Type`,
+  proving exactness of `Ω² B ->* Ω (fiber g) ->* Ω E` after set truncation.
+- Updated `STATUS-REPORT.md` to record this canonical iterated progress and to
+  distinguish it from the remaining uniform packaged-fiber iteration and
+  concrete homotopy-group exactness bridge.
+
+Verification:
+
+```sh
+./check.sh src/structured-types/pointed-sets.lagda.md
+./check.sh src/structured-types/exact-sequences-pointed-sets.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+git diff --check
+rg <Agda hole/unsupported declaration pattern> src STATUS-REPORT.md CHAT-LOG.md
+```
+
+All three Agda checks passed, `git diff --check` passed, and the search found
+no holes or unsupported declarations.
+
+Status:
+
+- The canonical exactness layer now includes
+  `Ω² B ->* Ω (fiber g) ->* Ω E` after set truncation.
+- The full long exact sequence theorem remains incomplete; the next target is
+  the uniform HoTT Book Lemma 8.4.4 iteration for arbitrary packaged fibers and
+  transport to concrete homotopy-group maps.
+
+Related commit:
+
+- This commit — Add looped boundary exactness.
