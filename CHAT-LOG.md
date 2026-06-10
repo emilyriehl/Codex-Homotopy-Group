@@ -1212,3 +1212,117 @@ Status:
 Related commit:
 
 - This commit — Add looped boundary exactness.
+
+
+### Agda MCP server setup and smoke test
+
+Request: set up and test the optional Agda MCP server, then record setup
+instructions for future users and agents. Emily clarified that the MCP setup
+suggestion should be attributed to Emily, not Andrej.
+
+Model context:
+
+- Date: 2026-06-10.
+- User-reported model context from earlier in the thread: Emily switched the
+  model to `gpt-5.5` with reasoning effort `xhigh`.
+- Agent-visible runtime identity: Codex; exact served model identity is not
+  exposed directly in the chat context.
+
+Actions:
+
+- Added the npm Agda MCP server to the local Codex configuration:
+
+  ```sh
+  codex mcp add agda \
+    --env AGDA_MCP_ROOT=/home/eriehl/Math/Formalization/Codex-Homotopy-Group \
+    -- npx -y agda-mcp-server@0.6.7
+  ```
+
+- Verified that Codex listed the `agda` MCP server as enabled and that
+  `npx -y agda-mcp-server@0.6.7 --version` returned `0.6.7`.
+- After Codex was restarted, tested the MCP server through the agent. The server
+  reported Agda `2.8.0`, loaded
+  `src/structured-types/pointed-sets.lagda.md` as `ok-complete`, picked up the
+  project `.agda-lib` flags including `--without-K`, `--exact-split`, and
+  `-l Codex-Homotopy-Group`, and typechecked
+  `src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md`
+  as `ok-complete`.
+- Confirmed the same two files with the repository verification script:
+
+  ```sh
+  ./check.sh src/structured-types/pointed-sets.lagda.md
+  ./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+  ```
+
+- Recorded repository-propagating setup guidance in `MCP-SETUP.md` and updated
+  `AGENTS.md` and `.codex/skills/agda-unimath-skills/SKILL.md` so future agents
+  alert users to the optional Agda MCP setup when MCP tools are not visible.
+
+Findings:
+
+- The MCP server is usable for interactive Agda support in this repository:
+  version queries, loading/typechecking files, reading literate Agda code,
+  postulate checks, and scope queries worked.
+- The MCP `agda_search_definitions` tool currently assumes an `agda/` directory
+  layout, while this repository uses `src/`, so ordinary `rg` search remains
+  the reliable repository-wide definition search path.
+- MCP should be treated as proof-development assistance, not as the acceptance
+  criterion. Final proof verification remains `./check.sh <file>`.
+
+Related commit:
+
+- This commit — Document Agda MCP setup.
+
+
+### Top-level theorem scaffold and next-level stubs
+
+Request: record a top formalization target for `π₃(S²) ≅ ℤ`, then add the
+next-level statements that should feed into it. Emily corrected the direction
+of the Hopf comparison so that the stated isomorphism runs from `π₃(S³)` to
+`π₃(S²)`. Emily then asked Codex to commit the accumulated changes and push
+them to the remote.
+
+Model context:
+
+- Date: 2026-06-10.
+- User-reported model context from earlier in the thread: Emily switched the
+  model to `gpt-5.5` with reasoning effort `xhigh`.
+- Agent-visible runtime identity: Codex; exact served model identity is not
+  exposed directly in the chat context.
+
+Actions:
+
+- Added `src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md`
+  as the pinned top-level theorem target.
+- Added the next-level unfinished statement
+  `iso-third-homotopy-group-sphere-3-sphere-2` in
+  `src/synthetic-homotopy-theory/hopf-fibration-third-homotopy-groups.lagda.md`.
+- Added the next-level unfinished statement
+  `iso-third-homotopy-group-sphere-3-ℤ` in
+  `src/synthetic-homotopy-theory/third-homotopy-group-sphere-3.lagda.md`.
+- Assembled `iso-third-homotopy-group-sphere-2-ℤ` by composing the inverse of
+  the Hopf comparison with the `π₃(S³) ≅ ℤ` stub.
+- Updated `FORMALIZATION-PLAN.md` to treat Coq-HoTT as comparative proof
+  architecture guidance rather than a source to port literally.
+- Updated `STATUS-REPORT.md` to describe the scaffold status and the two
+  remaining imported proof holes.
+- Recorded repository instructions for commit-message session descriptions and
+  optional Agda MCP setup guidance in `AGENTS.md`, `MCP-SETUP.md`, `README.md`,
+  and the local Agda workflow skill.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/hopf-fibration-third-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/third-homotopy-group-sphere-3.lagda.md
+./check.sh src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md
+git diff --check
+```
+
+All checks passed. The two next-level modules are intentionally marked with
+`--allow-unsolved-metas`, so this verifies the development scaffold rather than
+the completed theorem.
+
+Related commit:
+
+- This commit — Scaffold third homotopy group target.

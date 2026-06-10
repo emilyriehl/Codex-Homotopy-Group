@@ -18,6 +18,12 @@ If you already cloned the repository, initialize the submodule with:
 git submodule update --init --depth 1
 ```
 
+## Optional Agda MCP server
+
+Agents can optionally use an Agda MCP server for interactive proof development,
+such as inspecting goals and local contexts. See `MCP-SETUP.md` for setup and
+smoke-test instructions. Final verification should still use `./check.sh`.
+
 ## Checking a file
 
 The local Agda library file `Codex-Homotopy-Group.agda-lib` includes both this

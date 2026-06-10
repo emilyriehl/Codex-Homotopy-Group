@@ -95,13 +95,41 @@ Primary mathematical references:
   `theorems/homotopy/IterSuspensionStable.agda`,
   `theorems/homotopy/PinSn.agda`.
 
+## Comparative formalization references
+
+Coq-HoTT is a useful reference for proof architecture, but this project should
+not mechanically port Coq proof scripts or preserve Coq-specific abstractions.
+Use Coq-HoTT as a comparative formalization guide: identify the mathematical
+decomposition, dependency order, and useful intermediate concepts, then write
+native agda-unimath proofs using local APIs, local naming conventions, and the
+one-concept-per-file organization.
+
+Relevant Coq-HoTT files to consult for inspiration:
+
+- `theories/Homotopy/ExactSequence.v` suggests the decomposition around
+  `IsExact`, fiber sequences, iterated loop exactness, connecting maps, and the
+  long exact sequence on homotopy groups.
+- `theories/Homotopy/Hopf.v` suggests the main Hopf-construction milestones:
+  the total-space join equivalence, Hopf retraction, H-space consequences, and
+  the use of Freudenthal for the Licata-Finster calculation.
+- `theories/Homotopy/HSpaceS1.v` suggests how the circle H-space structure is
+  separated from the Hopf fibration proof.
+- `theories/Homotopy/BlakersMassey.v` suggests a Freudenthal route via
+  Blakers-Massey rather than a standalone theorem.
+- `theories/Homotopy/PinSn.v` suggests the dependency order for the diagonal
+  theorem `pi_n(S^n) ~= Z`.
+
+When using these references, search agda-unimath first and implement the result
+with agda-unimath definitions. Do not copy Coq proof terms, tactic scripts, or
+module structure unless that structure independently fits agda-unimath style.
+
 ## Dependency inventory
 
 Inventory status was checked with `rg` over `src/`. `EXISTS` means a concrete
 agda-unimath module was found. `MISSING` means no corresponding agda-unimath
 module/theorem was found by search.
 
-| # | Prerequisite | Status | agda-unimath module path or port source | Notes |
+| # | Prerequisite | Status | agda-unimath module path or proof guide | Notes |
 |---|---|---|---|---|
 | 1 | Pointed types and pointed maps | EXISTS | `structured-types.pointed-types`, `structured-types.pointed-maps` | Basic pointed infrastructure for loop spaces, fibers, and maps. |
 | 2 | Fibers of pointed maps | EXISTS | `structured-types.fibers-of-pointed-maps` | Needed for pointed fibers in a fibration/fiber sequence. |
@@ -127,16 +155,16 @@ module/theorem was found by search.
 | 22 | Codiagonals/fiberwise suspension | EXISTS | `synthetic-homotopy-theory.codiagonals-of-maps` | Likely useful for fiberwise suspension/joins. |
 | 23 | Double/triple loop coherence and Eckmann-Hilton | EXISTS | `synthetic-homotopy-theory.double-loop-spaces`, `synthetic-homotopy-theory.triple-loop-spaces`, `synthetic-homotopy-theory.eckmann-hilton-argument` | The book points to Eckmann-Hilton as underlying the Hopf phenomenon. |
 | 24 | Cofibers of pointed maps | EXISTS | `synthetic-homotopy-theory.cofibers-of-pointed-maps` | Not central to the main route, but adjacent sequence infrastructure exists. |
-| 25 | General pointed fiber sequences | MISSING | Port/design from HoTT book `homotopy.tex` lines 108-119; older HoTT-Agda may have pieces around Hopf modules, but no direct agda-unimath module found. | Needed before the LES can be stated uniformly. |
-| 26 | Long exact sequence of homotopy groups | MISSING | Port from HoTT book `homotopy.tex` lines 119-133. HoTT-Agda search found cohomology LES modules but not a direct homotopy LES module. | Major prerequisite; includes maps on homotopy groups and exactness. |
-| 27 | Exactness-to-isomorphism lemma with zero endpoints | MISSING | Port from HoTT book lemma `thm:ses` in `homotopy.tex` lines 134-135, adapting to agda-unimath `Group`/`Ab`. | Needed to extract `pi_3(S^3) ~= pi_3(S^2)` from the Hopf LES. |
-| 28 | Hopf construction for connected H-spaces | MISSING | Port from HoTT book `sec:hopf`; older HoTT-Agda `theorems/homotopy/HopfConstruction.agda`. | Produces fibration over `suspension A` with fiber `A` and total space `A * A`. |
-| 29 | Circle as connected H-space | MISSING | Port from HoTT book `lem:hspace-S1`; older HoTT-Agda `theorems/homotopy/HopfJunior.agda`/`Hopf.agda`. | The circle exists, but this packaged H-space structure was not found. |
-| 30 | Hopf fibration `S^1 -> S^3 -> S^2` and total-space equivalence | MISSING | Port from HoTT book `thm:hopf-fibration`; older HoTT-Agda `theorems/homotopy/Hopf.agda`, `HopfJunior.agda`, `HopfConstruction.agda`. | Includes proving `S^1 * S^1 ~= S^3`. |
-| 31 | Higher homotopy groups of `S^1` vanish | MISSING | Derive from existing `compute-loop-space-circle` plus truncation/set facts; HoTT book `cor:pi1s1`. | The base equivalence exists, but the packaged group-level vanishing theorem was not found. |
-| 32 | Freudenthal suspension theorem | MISSING | Port from HoTT book `thm:freudenthal`/`cor:freudenthal-equiv`; older HoTT-Agda `theorems/homotopy/Freudenthal.agda`. | High risk, proof-heavy encode-decode development. |
-| 33 | Stability of homotopy groups of spheres | MISSING | Port from HoTT book `cor:stability-spheres`; older HoTT-Agda `theorems/homotopy/IterSuspensionStable.agda`. | Depends on Freudenthal and connectedness of spheres. |
-| 34 | Diagonal theorem `pi_n(S^n) ~= Z` | MISSING | Port from HoTT book `thm:pinsn`; older HoTT-Agda `theorems/homotopy/PinSn.agda`. | Needed at instance `n = 3`. |
+| 25 | General pointed fiber sequences | MISSING | Develop natively from HoTT book `homotopy.tex` lines 108-119, guided by Coq-HoTT `ExactSequence.v` for decomposition only. | Needed before the LES can be stated uniformly. |
+| 26 | Long exact sequence of homotopy groups | MISSING | Develop natively from HoTT book `homotopy.tex` lines 119-133, using Coq-HoTT `ExactSequence.v` only as proof-architecture guidance. | Major prerequisite; includes maps on homotopy groups and exactness. |
+| 27 | Exactness-to-isomorphism lemma with zero endpoints | MISSING | Prove natively from HoTT book lemma `thm:ses` in `homotopy.tex` lines 134-135, adapting to agda-unimath `Group`/`Ab`. | Needed to extract `pi_3(S^3) ~= pi_3(S^2)` from the Hopf LES. |
+| 28 | Hopf construction for connected H-spaces | MISSING | Develop natively from HoTT book `sec:hopf`, using Coq-HoTT `Hopf.v` and older HoTT-Agda only for decomposition and lemma order. | Produces fibration over `suspension A` with fiber `A` and total space `A * A`. |
+| 29 | Circle as connected H-space | MISSING | Develop natively from HoTT book `lem:hspace-S1`, guided by Coq-HoTT `HSpaceS1.v` for statement separation. | The circle exists, but this packaged H-space structure was not found. |
+| 30 | Hopf fibration `S^1 -> S^3 -> S^2` and total-space equivalence | MISSING | Develop natively from HoTT book `thm:hopf-fibration`, using Coq-HoTT `Hopf.v` only to identify conceptual milestones. | Includes proving `S^1 * S^1 ~= S^3`. |
+| 31 | Higher homotopy groups of `S^1` vanish | MISSING | Derive from existing `compute-loop-space-circle` plus truncation/set facts; HoTT book `cor:pi1s1`. | The base equivalence exists; packaged group-level vanishing has partial local infrastructure and may need final Hopf-facing packaging. |
+| 32 | Freudenthal suspension theorem | MISSING | Develop natively from HoTT book `thm:freudenthal`/`cor:freudenthal-equiv`; Coq-HoTT `BlakersMassey.v` suggests a Blakers-Massey route. | High risk, proof-heavy homotopy-theoretic development. |
+| 33 | Stability of homotopy groups of spheres | MISSING | Develop natively from HoTT book `cor:stability-spheres`, using Coq-HoTT `PinSn.v` and older HoTT-Agda only for dependency order. | Depends on Freudenthal and connectedness of spheres. |
+| 34 | Diagonal theorem `pi_n(S^n) ~= Z` | MISSING | Develop natively from HoTT book `thm:pinsn`; Coq-HoTT `PinSn.v` is a proof-architecture reference for the induction. | Needed at instance `n = 3`. |
 | 35 | Final theorem `pi_3(S^2) ~= Z` | MISSING | New agda-unimath assembly module after prerequisites land. | Should only compose established isomorphisms; do not prove directly. |
 
 Summary counts: `EXISTS = 24`, `MISSING = 11`.
@@ -155,6 +183,10 @@ rg -n 'Hopf|hopf|Freudenthal|freudenthal|long exact|fiber sequence|exact sequenc
 
 The last search found only prose mentions in existing agda-unimath modules, not
 formal Hopf/Freudenthal/LES/PinSn modules.
+
+A shallow Coq-HoTT clone was searched separately for comparative references.
+The findings are recorded above and should be treated as proof guidance, not
+port targets.
 
 ## New agda-unimath additions needed
 
@@ -215,8 +247,8 @@ Main risks:
   and proving the total space is `S^3` will stress pushout, join, and
   fiberwise-descent infrastructure.
 - **Freudenthal risk:** large encode-decode proof with high coherence cost.
-  Porting from older HoTT-Agda is likely more realistic than reproving from
-  scratch.
+  Coq-HoTT suggests a Blakers-Massey route; older HoTT-Agda and Coq-HoTT should
+  be used as proof-architecture references rather than code to port.
 - **Statement-shape risk:** the library's concrete homotopy-group indexing and
   concrete-group/group bridge must be fixed before any proof work starts.
 - **Cache risk:** touching `foundation` or umbrella modules too early will
@@ -252,22 +284,26 @@ should be checked with:
 3. **Define pointed fiber sequences and induced maps on homotopy groups.** Keep
    this generic but minimal: enough to state and use the LES for Hopf.
 
-4. **Port the long exact sequence of homotopy groups.** Prove the exact segment
-   needed for the Hopf application first, then generalize only as far as the
-   HoTT-book statement requires.
+4. **Develop the long exact sequence of homotopy groups.** Prove the exact
+   segment needed for the Hopf application first, then generalize only as far
+   as the HoTT-book statement requires. Use Coq-HoTT `ExactSequence.v` only for
+   decomposition guidance.
 
-5. **Port the Hopf construction and Hopf fibration.** Start with the circle
+5. **Develop the Hopf construction and Hopf fibration.** Start with the circle
    H-space structure, then the general Hopf construction, then specialize to
-   `S^1` and prove the total space equivalent to `S^3`.
+   `S^1` and prove the total space equivalent to `S^3`. Use Coq-HoTT
+   `Hopf.v`/`HSpaceS1.v` to identify milestones, not to translate code.
 
 6. **Extract `pi_3(S^3) ~= pi_3(S^2)`.** Use the Hopf LES and the vanishing of
    `pi_3(S^1)` and `pi_2(S^1)`.
 
-7. **Port Freudenthal and sphere stability.** Use older HoTT-Agda
-   `Freudenthal.agda` and `IterSuspensionStable.agda` as the main guide.
+7. **Develop Freudenthal and sphere stability.** Use the HoTT book as the
+   mathematical reference, and use Coq-HoTT `BlakersMassey.v` plus older
+   HoTT-Agda only for decomposition and dependency order.
 
-8. **Port/prove `pi_n(S^n) ~= Z`.** Use `PinSn.agda` and the HoTT-book
-   induction, then instantiate it at `n = 3`.
+8. **Develop `pi_n(S^n) ~= Z`.** Use the HoTT-book induction and consult
+   Coq-HoTT `PinSn.v` plus older HoTT-Agda only for proof architecture and
+   dependency order, then instantiate it at `n = 3`.
 
 9. **Assemble the final theorem.** The final module should be a short
    composition of:

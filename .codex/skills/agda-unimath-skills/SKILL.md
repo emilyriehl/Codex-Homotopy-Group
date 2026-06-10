@@ -26,6 +26,12 @@ For command details and search patterns, read
 [references/workflow.md](references/workflow.md) when you need project
 commands, library navigation, or typechecking strategy.
 
+This repository can optionally use an Agda MCP server for interactive proof
+work. At the start of Agda formalization work, if Agda MCP tools are not visible,
+alert the user to the setup instructions in `MCP-SETUP.md`. Use MCP for goal
+inspection and local feedback when available, but keep `./check.sh <file>` as
+the final verification gate.
+
 ## Core Workflow
 
 1. Inspect the local project before editing.
@@ -126,7 +132,9 @@ deliberate and validate every module touched by the rename or import change.
 When making substantive formalization progress, update `STATUS-REPORT.md`.
 When making a commit, also update `CHAT-LOG.md` with the request, actions,
 verification, model context when visible, and commit hash or "This commit"
-placeholder.
+placeholder. In every commit message, include the standard summary/body plus a
+short session description recording the development history: who did the
+prompting, which agent did the work, and the main request/action sequence.
 
 ## Reference
 
