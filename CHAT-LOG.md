@@ -1386,3 +1386,57 @@ proofs.
 Related commit:
 
 - This commit — Add one-level lower formalization scaffold.
+
+
+### Hopf LES algebra bridges and classifying fiber-sequence route
+
+Request: Emily asked Codex to continue the top-down formalization, then commit
+the resulting changes. The session incorporated Emily's point that the concrete
+group classifying maps should form a fiber sequence, so group exactness should
+be derived from the stronger theorem
+`is-exact-is-fiber-sequence-hom-Concrete-Group` rather than by direct
+set-level transport.
+
+Model context:
+
+- Date: 2026-06-11.
+- User-reported model context from earlier in the thread: Emily switched the
+  model to `gpt-5.5` with reasoning effort `xhigh`.
+- Agent-visible runtime identity: Codex; exact served model identity is not
+  exposed directly in the chat context.
+
+Actions:
+
+- Filled the trivial concrete-to-underlying-group bridge.
+- Filled the algebra theorem extracting an isomorphism from two adjacent exact
+  group triples with trivial outer groups.
+- Filled the Hopf LES comparison proof from the Hopf fibration homomorphism,
+  the two supplied exactness hypotheses, and the two trivial endpoint
+  hypotheses.
+- Added `classifying-fiber-sequences-homotopy-groups.lagda.md` to record the
+  stronger classifying-map fiber-sequence obligations for concrete homotopy
+  groups.
+- Refactored `exactness-homotopy-groups-fiber-sequences.lagda.md` so its
+  group-level exactness proofs are complete direct applications of
+  `is-exact-is-fiber-sequence-hom-Concrete-Group`.
+- Updated `FORMALIZATION-PLAN.md` and `STATUS-REPORT.md` to make the
+  classifying-map fiber-sequence bridge the next LES target.
+
+Verification:
+
+```sh
+./check.sh src/group-theory/trivial-underlying-groups-concrete-groups.lagda.md
+./check.sh src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/classifying-fiber-sequences-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+git diff --check
+```
+
+All checks passed. The new classifying-fiber-sequence file intentionally uses
+`--allow-unsolved-metas`; the exactness, algebra, triviality, and Hopf LES
+comparison files checked without direct holes.
+
+Related commit:
+
+- This commit — Prove Hopf LES algebra bridges.

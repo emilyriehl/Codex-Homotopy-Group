@@ -51,12 +51,16 @@ calculation:
 
 The final theorem `pi_3(S^2) = Z` is not yet proved. The top-level Agda file
 now assembles the final isomorphism through two next-level files that themselves
-compose one level further down. The Hopf comparison `π₃(S³) ≅ π₃(S²)` is reduced
-to a Hopf fiber-sequence scaffold, group-level LES exactness stubs, circle
-vanishing, and an exactness-to-isomorphism algebra stub. The `π₃(S³) ≅ ℤ`
-calculation is reduced to a stability comparison `π₂(S²) ≅ π₃(S³)`, a Hopf
-base computation `π₂(S²) ≅ π₁(S¹)`, and the group-level circle calculation
-`π₁(S¹) ≅ ℤ`. These are still intentionally unfinished scaffolds.
+compose one level further down. The Hopf comparison `π₃(S³) ≅ π₃(S²)` now has
+its algebraic exactness-to-isomorphism step, trivial concrete-to-group bridge,
+and Hopf LES packaging proved. The group-level LES exactness statements are
+now proved from the stronger, explicitly recorded obligation that the concrete
+homotopy-group classifying maps form fiber sequences. It remains dependent on
+the Hopf fiber-sequence scaffold and those classifying-fiber-sequence stubs.
+The `π₃(S³) ≅ ℤ` calculation is reduced to a stability comparison
+`π₂(S²) ≅ π₃(S³)`, a Hopf base computation `π₂(S²) ≅ π₁(S¹)`, and the
+group-level circle calculation `π₁(S¹) ≅ ℤ`. These are still intentionally
+unfinished scaffolds.
 
 ## Implemented Agda code
 
@@ -66,17 +70,18 @@ base computation `π₂(S²) ≅ π₁(S¹)`, and the group-level circle calcula
 | Iterated loop functoriality | [`src/synthetic-homotopy-theory/functoriality-iterated-loop-spaces.lagda.md`](src/synthetic-homotopy-theory/functoriality-iterated-loop-spaces.lagda.md) | Defines the pointed map induced by a pointed map on iterated loop spaces. |
 | Homotopy automorphism functoriality | [`src/group-theory/functoriality-homotopy-automorphism-groups.lagda.md`](src/group-theory/functoriality-homotopy-automorphism-groups.lagda.md) | Defines classifying pointed maps and induced homomorphisms of concrete homotopy automorphism groups. |
 | Homotopy group functoriality | [`src/synthetic-homotopy-theory/functoriality-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/functoriality-homotopy-groups.lagda.md) | Defines `hom-concrete-homotopy-group`, the homomorphism induced by a pointed map on concrete homotopy groups. |
+| Classifying fiber sequences of homotopy groups | [`src/synthetic-homotopy-theory/classifying-fiber-sequences-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/classifying-fiber-sequences-homotopy-groups.lagda.md) | Records the stronger unfinished fiber-sequence statements for the concrete homotopy-group classifying maps. These are the direct homotopical obligations needed to derive group exactness. |
 | Exactness of group homomorphisms | [`src/group-theory/exact-sequences-groups.lagda.md`](src/group-theory/exact-sequences-groups.lagda.md) | Defines `is-exact-hom-Group` and proves `is-exact-is-fiber-sequence-hom-Concrete-Group`, the forward implication from a fiber sequence of concrete-group classifying maps to exactness of the induced ordinary group homomorphisms. |
 | Pointed sets | [`src/structured-types/pointed-sets.lagda.md`](src/structured-types/pointed-sets.lagda.md) | Defines pointed sets, pointed maps of pointed sets, and set truncation as a pointed set and as a pointed map. |
 | Exactness of pointed sets | [`src/structured-types/exact-sequences-pointed-sets.lagda.md`](src/structured-types/exact-sequences-pointed-sets.lagda.md) | Defines images, kernels, exactness of pointed-set maps, and proves that the set truncation of the canonical fiber sequence `fiber g -> E -> B` is exact. |
 | Boundary maps and LES exactness steps | [`src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md) | Defines the boundary pointed map, induced maps on homotopy groups of a fiber sequence, recursive boundary pointed maps, and boundary homomorphisms. It proves the first fiber-of-the-fiber identification, packages `Ω B ->* fiber g ->* E` as a pointed fiber sequence, proves pointed-set exactness for canonical and packaged `F ->* E ->* B` fiber sequences, proves pointed-set exactness for the packaged boundary segment `Ω B ->* F ->* E`, proves pointed-set exactness for the packaged loop-boundary segment `Ω E ->* Ω B ->* F`, proves pointed-set exactness for the looped packaged segment `Ω F ->* Ω E ->* Ω B`, proves pointed-set exactness for the canonical adjacent triples `Ω B ->* fiber g ->* E`, `Ω E ->* Ω B ->* fiber g`, and `Ω² B ->* Ω (fiber g) ->* Ω E`, and bundles the first four packaged exactness proofs as an initial set-truncated LES segment. These are steps toward, not yet the full proof of, Theorem 8.4.6 of the HoTT book. |
 | Higher homotopy groups of 1-types | [`src/synthetic-homotopy-theory/higher-homotopy-groups-truncated-types.lagda.md`](src/synthetic-homotopy-theory/higher-homotopy-groups-truncated-types.lagda.md) | Proves that positive concrete homotopy groups of pointed 1-types are trivial. |
 | Circle and 1-sphere homotopy facts | [`src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md`](src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md) | Proves the loop-space equivalences for the circle and 1-sphere, the 1-type facts, and triviality of their positive concrete homotopy groups. |
-| Exactness-to-isomorphism algebra | [`src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md`](src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md) | Records the unfinished algebra lemma extracting an isomorphism from two exact adjacent group triples with trivial outer groups. |
-| Trivial concrete-to-group bridge | [`src/group-theory/trivial-underlying-groups-concrete-groups.lagda.md`](src/group-theory/trivial-underlying-groups-concrete-groups.lagda.md) | Records the unfinished bridge from `is-trivial-Concrete-Group G` to triviality of `group-Concrete-Group G`. |
-| Group exactness of homotopy groups | [`src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md) | Records the unfinished group-level exactness statements for the two adjacent LES triples needed by the Hopf comparison. |
+| Exactness-to-isomorphism algebra | [`src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md`](src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md) | Proves that two adjacent exact group triples with trivial outer groups make the middle homomorphism an isomorphism. |
+| Trivial concrete-to-group bridge | [`src/group-theory/trivial-underlying-groups-concrete-groups.lagda.md`](src/group-theory/trivial-underlying-groups-concrete-groups.lagda.md) | Proves the bridge from `is-trivial-Concrete-Group G` to triviality of `group-Concrete-Group G`. |
+| Group exactness of homotopy groups | [`src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md) | Proves the two adjacent group-level exactness statements needed by the Hopf comparison by applying `is-exact-is-fiber-sequence-hom-Concrete-Group` to the stronger classifying-fiber-sequence stubs. This file no longer has direct holes. |
 | Hopf fiber sequence | [`src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md`](src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md) | Records the unfinished packaged fiber sequence with fiber `S¹`, total space `S³`, and base `S²` fixed definitionally. |
-| Hopf LES comparison for third homotopy groups | [`src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md) | Assembles the Hopf comparison scaffold from the Hopf fiber sequence, group-level exactness stubs, circle vanishing, and the algebra/triviality bridges. |
+| Hopf LES comparison for third homotopy groups | [`src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md) | Builds the Hopf comparison isomorphism from the Hopf fibration homomorphism, two supplied group exactness hypotheses, and the two trivial endpoint hypotheses. |
 | Hopf comparison for third homotopy groups | [`src/synthetic-homotopy-theory/hopf-fibration-third-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/hopf-fibration-third-homotopy-groups.lagda.md) | Delegates `π₃(S³) ≅ π₃(S²)` to the Hopf LES comparison scaffold and has no direct proof hole. |
 | Stability comparison for `π₃(S³)` | [`src/synthetic-homotopy-theory/stability-third-homotopy-group-sphere-3.lagda.md`](src/synthetic-homotopy-theory/stability-third-homotopy-group-sphere-3.lagda.md) | Records the unfinished stability comparison `π₂(S²) ≅ π₃(S³)`. |
 | Second homotopy group of `S²` | [`src/synthetic-homotopy-theory/second-homotopy-group-sphere-2.lagda.md`](src/synthetic-homotopy-theory/second-homotopy-group-sphere-2.lagda.md) | Records the unfinished Hopf-derived comparison `π₂(S²) ≅ π₁(S¹)`. |
@@ -90,12 +95,12 @@ base computation `π₂(S²) ≅ π₁(S¹)`, and the group-level circle calcula
 |---|---|---|
 | General pointed fiber sequences | Done | Implemented in [`src/structured-types/fiber-sequences.lagda.md`](src/structured-types/fiber-sequences.lagda.md). |
 | Induced maps on homotopy groups | Done | Implemented via iterated loop functoriality and concrete homotopy group functoriality. |
-| Long exact sequence of homotopy groups | Partial | Boundary maps, induced homomorphisms, pointed-set exactness, exactness of the set truncation of canonical and packaged `F ->* E ->* B` triples, exactness of the packaged boundary triple `Ω B ->* F ->* E`, exactness of the packaged loop-boundary triple `Ω E ->* Ω B ->* F`, exactness of the looped packaged triple `Ω F ->* Ω E ->* Ω B`, the first fiber-of-the-fiber identification `Ω B ≃* fiber (fiber g -> E)`, pointed-set exactness of the canonical triples `Ω B ->* fiber g ->* E`, `Ω E ->* Ω B ->* fiber g`, and `Ω² B ->* Ω (fiber g) ->* Ω E`, and a bundled initial four-triple set-truncated LES segment are formalized. The remaining proof obligation is to organize these into the full iterated fiber sequence, prove the remaining HoTT-book fiber-of-the-fiber identifications uniformly, and transport pointed-set exactness to the concrete homotopy-group maps. |
-| Exactness-to-isomorphism with zero endpoints | Stubbed | The algebra extraction statement is recorded in [`src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md`](src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md). |
+| Long exact sequence of homotopy groups | Partial | Boundary maps, induced homomorphisms, pointed-set exactness, exactness of the set truncation of canonical and packaged `F ->* E ->* B` triples, exactness of the packaged boundary triple `Ω B ->* F ->* E`, exactness of the packaged loop-boundary triple `Ω E ->* Ω B ->* F`, exactness of the looped packaged triple `Ω F ->* Ω E ->* Ω B`, the first fiber-of-the-fiber identification `Ω B ≃* fiber (fiber g -> E)`, pointed-set exactness of the canonical triples `Ω B ->* fiber g ->* E`, `Ω E ->* Ω B ->* fiber g`, and `Ω² B ->* Ω (fiber g) ->* Ω E`, and a bundled initial four-triple set-truncated LES segment are formalized. The group-level exactness file is now complete conditional on the stronger classifying-map fiber-sequence bridge. The remaining proof obligation is to prove that bridge uniformly, using the set-truncated work only where it genuinely helps. |
+| Exactness-to-isomorphism with zero endpoints | Done | Proved in [`src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md`](src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md). |
 | Higher homotopy groups of the circle vanish | Mostly done | Positive concrete homotopy groups of the circle and 1-sphere are trivial. Further packaging may be needed for the exact Hopf LES endpoints. |
 | Loop space of the circle is the integers | Partial | The loop-space equivalence is formalized. A group-level final packaging against the target theorem may still be needed. |
 | Hopf construction and Hopf fibration | Stubbed | The packaged Hopf fiber sequence target `S^1 -> S^3 -> S^2` is recorded, but the construction, maps, and fiber-sequence proof remain holes. |
-| Hopf LES consequence `pi_3(S^3) = pi_3(S^2)` | Reduced to lower stubs | The comparison now delegates to the Hopf fiber sequence, group exactness, circle vanishing, and exactness-to-isomorphism scaffolds. |
+| Hopf LES consequence `pi_3(S^3) = pi_3(S^2)` | Partially proved | The exactness-to-isomorphism extraction, group-level LES exactness packaging, and Hopf LES packaging are proved; the comparison still depends on the Hopf fiber sequence and the classifying-fiber-sequence stubs. |
 | Freudenthal suspension theorem | Not started | Still a major missing theorem. |
 | Stability of homotopy groups of spheres | Instance stubbed | The needed comparison `π₂(S²) ≅ π₃(S³)` is recorded as an unfinished theorem depending on Freudenthal/stability. |
 | Diagonal theorem `pi_n(S^n) = Z` | Reduced to lower stubs | The `n = 3` file now composes the stability, `π₂(S²) ≅ π₁(S¹)`, and `π₁(S¹) ≅ ℤ` scaffolds. The general theorem remains unproved. |
@@ -103,23 +108,18 @@ base computation `π₂(S²) ≅ π₁(S¹)`, and the group-level circle calcula
 
 ## Remaining tasks
 
-1. Prove the algebra bridge extracting an isomorphism from two adjacent exact
-   group triples with trivial outer groups.
-2. Prove the bridge from trivial concrete groups to trivial underlying ordinary
-   groups, so the existing circle vanishing results can feed the algebra
-   bridge.
-3. Transport the existing set-truncated adjacent LES exactness proofs to the
-   group-level exactness statements for concrete homotopy groups.
-4. Formalize the Hopf fiber sequence `S^1 -> S^3 -> S^2`, including the actual
+1. Prove the classifying-map fiber-sequence bridge for concrete homotopy
+   groups of a pointed fiber sequence. This is now the direct route to
+   group-level exactness; use the set-truncated adjacent exactness work only
+   where it genuinely helps.
+2. Formalize the Hopf fiber sequence `S^1 -> S^3 -> S^2`, including the actual
    pointed maps and the fiber-sequence proof.
-5. Fill the Hopf LES comparison scaffold `π₃(S³) ≅ π₃(S²)` using the Hopf
-   fiber sequence, group exactness, circle vanishing, and the algebra bridge.
-6. Package the group-level computation `π₁(S¹) ≅ ℤ` from the existing loop-space
+3. Package the group-level computation `π₁(S¹) ≅ ℤ` from the existing loop-space
    equivalence of the 1-sphere with the integers.
-7. Fill the Hopf-derived comparison `π₂(S²) ≅ π₁(S¹)`.
-8. Prove the stability comparison `π₂(S²) ≅ π₃(S³)` from Freudenthal and sphere
+4. Fill the Hopf-derived comparison `π₂(S²) ≅ π₁(S¹)`.
+5. Prove the stability comparison `π₂(S²) ≅ π₃(S³)` from Freudenthal and sphere
    stability.
-9. Recheck `π₃(S³) ≅ ℤ` and `π₃(S²) ≅ ℤ` after their imported lower stubs are
+6. Recheck `π₃(S³) ≅ ℤ` and `π₃(S²) ≅ ℤ` after their imported lower stubs are
    proved; their proof bodies should remain short compositions.
 
 ## Current verification
@@ -175,3 +175,28 @@ All passed. The new lower-level modules are intentionally marked with
 `--allow-unsolved-metas`, so this verifies the scaffold shape rather than the
 completed proofs. The previous direct holes in the Hopf comparison and
 `π₃(S³) ≅ ℤ` files have been pushed one level lower.
+
+Later on 2026-06-11, the first three lower-level holes were filled and checked:
+
+```sh
+./check.sh src/group-theory/trivial-underlying-groups-concrete-groups.lagda.md
+./check.sh src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+git diff --check
+```
+
+All passed. These three modules no longer use `--allow-unsolved-metas`.
+
+Later on 2026-06-11, the group-level exactness file was refactored to use the
+stronger classifying-map fiber-sequence obligations and checked with:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/classifying-fiber-sequences-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+```
+
+Both passed. The exactness file no longer uses `--allow-unsolved-metas`; the
+new classifying-fiber-sequence file intentionally does. The remaining explicit
+holes are in the classifying-fiber-sequence bridge, the Hopf fiber sequence,
+the circle group-isomorphism packaging, the Hopf-derived `π₂(S²) ≅ π₁(S¹)`
+comparison, and the stability comparison `π₂(S²) ≅ π₃(S³)`.

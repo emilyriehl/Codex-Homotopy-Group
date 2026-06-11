@@ -1,7 +1,6 @@
 # The Hopf long exact sequence and third homotopy groups
 
 ```agda
-{-# OPTIONS --allow-unsolved-metas #-}
 module synthetic-homotopy-theory.hopf-long-exact-sequence-third-homotopy-groups where
 ```
 
@@ -10,9 +9,12 @@ module synthetic-homotopy-theory.hopf-long-exact-sequence-third-homotopy-groups 
 ```agda
 open import elementary-number-theory.natural-numbers
 
+open import foundation.dependent-pair-types
+
 open import group-theory.concrete-groups
 open import group-theory.exact-sequences-groups
 open import group-theory.homomorphisms-concrete-groups
+open import group-theory.isomorphisms-from-exact-sequences-groups
 open import group-theory.isomorphisms-groups
 open import group-theory.trivial-groups
 open import group-theory.trivial-underlying-groups-concrete-groups
@@ -149,7 +151,45 @@ iso-third-homotopy-group-is-exact-hopf-segment :
       ( concrete-homotopy-group 2 (sphere-Pointed-Type 3)))
     ( group-Concrete-Group
       ( concrete-homotopy-group 2 (sphere-Pointed-Type 2)))
-iso-third-homotopy-group-is-exact-hopf-segment = {!!}
+pr1 (iso-third-homotopy-group-is-exact-hopf-segment H1 H2 T1 T2) =
+  hom-group-hom-Concrete-Group
+    ( concrete-homotopy-group 2 (sphere-Pointed-Type 3))
+    ( concrete-homotopy-group 2 (sphere-Pointed-Type 2))
+    ( hom-fibration-concrete-homotopy-group-fiber-sequence
+      ( hopf-fiber-sequence-sphere-1-sphere-3-sphere-2)
+      ( 2))
+pr2 (iso-third-homotopy-group-is-exact-hopf-segment H1 H2 T1 T2) =
+  is-iso-is-exact-is-trivial-outer-groups
+    ( group-Concrete-Group
+      ( concrete-homotopy-group 2 (sphere-Pointed-Type 1)))
+    ( group-Concrete-Group
+      ( concrete-homotopy-group 2 (sphere-Pointed-Type 3)))
+    ( group-Concrete-Group
+      ( concrete-homotopy-group 2 (sphere-Pointed-Type 2)))
+    ( group-Concrete-Group
+      ( concrete-homotopy-group 1 (sphere-Pointed-Type 1)))
+    ( hom-group-hom-Concrete-Group
+      ( concrete-homotopy-group 2 (sphere-Pointed-Type 1))
+      ( concrete-homotopy-group 2 (sphere-Pointed-Type 3))
+      ( hom-fiber-inclusion-concrete-homotopy-group-fiber-sequence
+        ( hopf-fiber-sequence-sphere-1-sphere-3-sphere-2)
+        ( 2)))
+    ( hom-group-hom-Concrete-Group
+      ( concrete-homotopy-group 2 (sphere-Pointed-Type 3))
+      ( concrete-homotopy-group 2 (sphere-Pointed-Type 2))
+      ( hom-fibration-concrete-homotopy-group-fiber-sequence
+        ( hopf-fiber-sequence-sphere-1-sphere-3-sphere-2)
+        ( 2)))
+    ( hom-group-hom-Concrete-Group
+      ( concrete-homotopy-group 2 (sphere-Pointed-Type 2))
+      ( concrete-homotopy-group 1 (sphere-Pointed-Type 1))
+      ( boundary-hom-concrete-homotopy-group-fiber-sequence
+        ( hopf-fiber-sequence-sphere-1-sphere-3-sphere-2)
+        ( 1)))
+    ( T1)
+    ( T2)
+    ( H1)
+    ( H2)
 
 iso-third-homotopy-group-hopf-fiber-sequence :
   iso-Group

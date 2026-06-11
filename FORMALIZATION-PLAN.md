@@ -156,7 +156,7 @@ module/theorem was found by search.
 | 23 | Double/triple loop coherence and Eckmann-Hilton | EXISTS | `synthetic-homotopy-theory.double-loop-spaces`, `synthetic-homotopy-theory.triple-loop-spaces`, `synthetic-homotopy-theory.eckmann-hilton-argument` | The book points to Eckmann-Hilton as underlying the Hopf phenomenon. |
 | 24 | Cofibers of pointed maps | EXISTS | `synthetic-homotopy-theory.cofibers-of-pointed-maps` | Not central to the main route, but adjacent sequence infrastructure exists. |
 | 25 | General pointed fiber sequences | MISSING | Develop natively from HoTT book `homotopy.tex` lines 108-119, guided by Coq-HoTT `ExactSequence.v` for decomposition only. | Needed before the LES can be stated uniformly. |
-| 26 | Long exact sequence of homotopy groups | MISSING | Develop natively from HoTT book `homotopy.tex` lines 119-133, using Coq-HoTT `ExactSequence.v` only as proof-architecture guidance. | Major prerequisite; includes maps on homotopy groups and exactness. |
+| 26 | Long exact sequence of homotopy groups | MISSING | Develop natively from HoTT book `homotopy.tex` lines 119-133, using Coq-HoTT `ExactSequence.v` only as proof-architecture guidance. | Major prerequisite; includes maps on homotopy groups, classifying-map fiber-sequence bridges for concrete homotopy groups, and exactness. |
 | 27 | Exactness-to-isomorphism lemma with zero endpoints | MISSING | Prove natively from HoTT book lemma `thm:ses` in `homotopy.tex` lines 134-135, adapting to agda-unimath `Group`/`Ab`. | Needed to extract `pi_3(S^3) ~= pi_3(S^2)` from the Hopf LES. |
 | 28 | Hopf construction for connected H-spaces | MISSING | Develop natively from HoTT book `sec:hopf`, using Coq-HoTT `Hopf.v` and older HoTT-Agda only for decomposition and lemma order. | Produces fibration over `suspension A` with fiber `A` and total space `A * A`. |
 | 29 | Circle as connected H-space | MISSING | Develop natively from HoTT book `lem:hspace-S1`, guided by Coq-HoTT `HSpaceS1.v` for statement separation. | The circle exists, but this packaged H-space structure was not found. |
@@ -197,6 +197,7 @@ Likely new modules:
 
 - `src/synthetic-homotopy-theory/fiber-sequences.lagda.md`
 - `src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md`
+- `src/synthetic-homotopy-theory/classifying-fiber-sequences-homotopy-groups.lagda.md`
 - `src/synthetic-homotopy-theory/higher-homotopy-groups-truncated-types.lagda.md`
 - `src/synthetic-homotopy-theory/h-spaces.lagda.md` or a narrower
   `h-space-structure-circle.lagda.md`, depending on existing naming guidance
@@ -285,8 +286,10 @@ should be checked with:
    this generic but minimal: enough to state and use the LES for Hopf.
 
 4. **Develop the long exact sequence of homotopy groups.** Prove the exact
-   segment needed for the Hopf application first, then generalize only as far
-   as the HoTT-book statement requires. Use Coq-HoTT `ExactSequence.v` only for
+   segment needed for the Hopf application first, and route group-level
+   exactness through the stronger statement that the concrete homotopy-group
+   classifying maps form fiber sequences. Generalize only as far as the
+   HoTT-book statement requires. Use Coq-HoTT `ExactSequence.v` only for
    decomposition guidance.
 
 5. **Develop the Hopf construction and Hopf fibration.** Start with the circle

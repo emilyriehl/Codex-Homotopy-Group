@@ -1,7 +1,6 @@
 # Trivial underlying groups of trivial concrete groups
 
 ```agda
-{-# OPTIONS --allow-unsolved-metas #-}
 module group-theory.trivial-underlying-groups-concrete-groups where
 ```
 
@@ -35,5 +34,5 @@ is-trivial-group-is-trivial-Concrete-Group :
   {l : Level} (G : Concrete-Group l) →
   is-trivial-Concrete-Group G →
   is-trivial-Group (group-Concrete-Group G)
-is-trivial-group-is-trivial-Concrete-Group = {!!}
+is-trivial-group-is-trivial-Concrete-Group G H = H
 ```
