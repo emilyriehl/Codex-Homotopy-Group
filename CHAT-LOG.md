@@ -1489,4 +1489,46 @@ group-level LES bridge holes. `git diff --check` passed.
 
 Related commit:
 
-- Uncommitted at time of entry.
+- `e16361e` — Correct LES bridge route.
+
+
+### Underlying concrete homotopy-group comparison
+
+Request: After Emily asked Codex to commit, push, and continue working, Codex
+pushed the corrected LES bridge route and then continued with the direct
+group-level LES bridge.
+
+Model context:
+
+- Date: 2026-06-11.
+- User-reported model context from earlier in the thread: Emily switched the
+  model to `gpt-5.5` with reasoning effort `xhigh`.
+- Agent-visible runtime identity: Codex; exact served model identity is not
+  exposed directly in the chat context.
+
+Actions:
+
+- Committed the corrected LES bridge route as `e16361e` and pushed `main` to
+  `origin`.
+- Added `underlying-groups-concrete-homotopy-groups.lagda.md` as a separate
+  one-concept module.
+- Proved that the ordinary underlying type of `concrete-homotopy-group n A` is
+  equivalent to `type-homotopy-group (succ-ℕ n) A`, using extensionality for
+  connected components of automorphism ∞-groups and effectiveness of
+  truncation, and named the induced forward and inverse maps.
+- Updated `STATUS-REPORT.md` to record this bridge and narrow the remaining
+  group-level LES work to map compatibility, image/kernel transport, and
+  iterated-loop exactness packaging.
+
+Verification:
+
+```sh
+git push origin main
+./check.sh src/synthetic-homotopy-theory/underlying-groups-concrete-homotopy-groups.lagda.md
+```
+
+The push succeeded, and the new Agda module checked without holes.
+
+Related commit:
+
+- This commit — Add underlying concrete homotopy-group comparison.

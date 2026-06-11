@@ -48,6 +48,10 @@ calculation:
   formalized: the loop space of the circle and the 1-sphere is equivalent to
   the integers, the circle and 1-sphere are 1-types, and positive concrete
   homotopy groups of 1-types are trivial.
+- The ordinary underlying type of `concrete-homotopy-group n A` has been
+  identified with `type-homotopy-group (succ-ℕ n) A`, i.e. with the set
+  truncation of the next iterated loop space. This removes the indexing and
+  truncation mismatch from the group-level LES bridge.
 
 The final theorem `pi_3(S^2) = Z` is not yet proved. The top-level Agda file
 now assembles the final isomorphism through two next-level files that themselves
@@ -80,6 +84,7 @@ unfinished scaffolds.
 | Circle and 1-sphere homotopy facts | [`src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md`](src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md) | Proves the loop-space equivalences for the circle and 1-sphere, the 1-type facts, and triviality of their positive concrete homotopy groups. |
 | Exactness-to-isomorphism algebra | [`src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md`](src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md) | Proves that two adjacent exact group triples with trivial outer groups make the middle homomorphism an isomorphism. |
 | Trivial concrete-to-group bridge | [`src/group-theory/trivial-underlying-groups-concrete-groups.lagda.md`](src/group-theory/trivial-underlying-groups-concrete-groups.lagda.md) | Proves the bridge from `is-trivial-Concrete-Group G` to triviality of `group-Concrete-Group G`. |
+| Underlying types of concrete homotopy groups | [`src/synthetic-homotopy-theory/underlying-groups-concrete-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/underlying-groups-concrete-homotopy-groups.lagda.md) | Proves that the ordinary underlying type of `concrete-homotopy-group n A` is equivalent to `type-homotopy-group (succ-ℕ n) A`, using connected-component extensionality and effectiveness of truncation, and names the induced forward and inverse maps. |
 | Group exactness of homotopy groups | [`src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md) | Records the two adjacent group-level exactness statements needed by the Hopf comparison. These are now the direct bridge obligations from set-truncated LES exactness to ordinary group exactness and remain intentionally unfinished. |
 | Hopf fiber sequence | [`src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md`](src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md) | Records the unfinished packaged fiber sequence with fiber `S¹`, total space `S³`, and base `S²` fixed definitionally. |
 | Hopf LES comparison for third homotopy groups | [`src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md) | Builds the Hopf comparison isomorphism from the Hopf fibration homomorphism, two supplied group exactness hypotheses, and the two trivial endpoint hypotheses. |
@@ -110,10 +115,11 @@ unfinished scaffolds.
 ## Remaining tasks
 
 1. Prove the two direct group-level LES exactness bridge statements for
-   concrete homotopy groups by comparing the existing set-truncated adjacent
-   exactness proofs with the ordinary groups underlying concrete homotopy
-   groups. If useful, add a separate one-concept module identifying those
-   underlying groups with set-truncated iterated loop spaces.
+   concrete homotopy groups. The underlying-type comparison with
+   set-truncated iterated loop spaces is now proved; the remaining bridge work
+   is to prove map compatibility for the induced homomorphisms, transport
+   image/kernel membership across that comparison, and package the needed
+   iterated-loop exactness statements.
 2. Formalize the Hopf fiber sequence `S^1 -> S^3 -> S^2`, including the actual
    pointed maps and the fiber-sequence proof.
 3. Package the group-level computation `π₁(S¹) ≅ ℤ` from the existing loop-space
@@ -207,3 +213,16 @@ no theorem statements and no holes. The exactness file intentionally uses
 holes. The other remaining explicit holes are in the Hopf fiber sequence, the circle group-isomorphism
 packaging, the Hopf-derived `π₂(S²) ≅ π₁(S¹)` comparison, and the stability
 comparison `π₂(S²) ≅ π₃(S³)`.
+
+
+Later on 2026-06-11, the underlying-type comparison for concrete homotopy
+groups was added and checked with:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/underlying-groups-concrete-homotopy-groups.lagda.md
+```
+
+The check passed. This module has no holes and proves the equivalence from the
+ordinary underlying type of `concrete-homotopy-group n A` to
+`type-homotopy-group (succ-ℕ n) A`, together with named forward and inverse
+maps.
