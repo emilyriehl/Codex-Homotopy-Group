@@ -1,0 +1,120 @@
+# Underlying maps of concrete homotopy groups
+
+```agda
+module synthetic-homotopy-theory.underlying-maps-concrete-homotopy-groups where
+```
+
+<details><summary>Imports</summary>
+
+```agda
+open import elementary-number-theory.natural-numbers
+
+open import foundation.functoriality-set-truncation
+open import foundation.identity-types
+open import foundation.set-truncations
+open import foundation.universe-levels
+
+open import group-theory.concrete-groups
+open import group-theory.functoriality-homotopy-automorphism-groups
+open import group-theory.homomorphisms-concrete-groups
+open import group-theory.homotopy-automorphism-groups
+
+open import structured-types.pointed-maps
+open import structured-types.pointed-types
+
+open import synthetic-homotopy-theory.functoriality-homotopy-groups
+open import synthetic-homotopy-theory.functoriality-iterated-loop-spaces
+open import synthetic-homotopy-theory.functoriality-loop-spaces
+open import synthetic-homotopy-theory.homotopy-groups
+open import synthetic-homotopy-theory.iterated-loop-spaces
+open import synthetic-homotopy-theory.loop-spaces
+open import synthetic-homotopy-theory.underlying-groups-concrete-homotopy-groups
+```
+
+</details>
+
+## Idea
+
+The equivalence from the ordinary underlying type of a concrete homotopy group
+to the set truncation of the next iterated loop space should be natural in
+pointed maps. The full naturality proof is the next coherence step. This file
+records the two maps whose compatibility must be proved: the ordinary
+underlying map of the concrete-group homomorphism and the set-truncated loop
+map.
+
+## Definitions for pointed types
+
+```agda
+module _
+  {l1 l2 : Level} {A : Pointed-Type l1} {B : Pointed-Type l2}
+  (f : A →∗ B)
+  where
+
+  map-underlying-hom-concrete-group-Pointed-Type :
+    type-Concrete-Group (concrete-group-Pointed-Type A) →
+    type-Concrete-Group (concrete-group-Pointed-Type B)
+  map-underlying-hom-concrete-group-Pointed-Type =
+    map-hom-Concrete-Group
+      ( concrete-group-Pointed-Type A)
+      ( concrete-group-Pointed-Type B)
+      ( hom-concrete-group-Pointed-Type f)
+
+  map-set-trunc-loop-map-Pointed-Type :
+    type-trunc-Set (type-Ω A) → type-trunc-Set (type-Ω B)
+  map-set-trunc-loop-map-Pointed-Type =
+    map-trunc-Set (map-Ω f)
+
+  coherence-square-map-underlying-type-concrete-group-Pointed-Type :
+    UU (l1 ⊔ l2)
+  coherence-square-map-underlying-type-concrete-group-Pointed-Type =
+    (x : type-Concrete-Group (concrete-group-Pointed-Type A)) →
+    map-underlying-type-concrete-group-Pointed-Type B
+      ( map-underlying-hom-concrete-group-Pointed-Type x) ＝
+    map-set-trunc-loop-map-Pointed-Type
+      ( map-underlying-type-concrete-group-Pointed-Type A x)
+
+  coherence-square-map-inv-underlying-type-concrete-group-Pointed-Type :
+    UU (l1 ⊔ l2)
+  coherence-square-map-inv-underlying-type-concrete-group-Pointed-Type =
+    (x : type-trunc-Set (type-Ω A)) →
+    map-underlying-hom-concrete-group-Pointed-Type
+      ( map-inv-underlying-type-concrete-group-Pointed-Type A x) ＝
+    map-inv-underlying-type-concrete-group-Pointed-Type B
+      ( map-set-trunc-loop-map-Pointed-Type x)
+```
+
+## Definitions for homotopy groups
+
+```agda
+module _
+  {l1 l2 : Level} {A : Pointed-Type l1} {B : Pointed-Type l2}
+  (n : ℕ) (f : A →∗ B)
+  where
+
+  map-underlying-hom-concrete-homotopy-group :
+    type-Concrete-Group (concrete-homotopy-group n A) →
+    type-Concrete-Group (concrete-homotopy-group n B)
+  map-underlying-hom-concrete-homotopy-group =
+    map-hom-Concrete-Group
+      ( concrete-homotopy-group n A)
+      ( concrete-homotopy-group n B)
+      ( hom-concrete-homotopy-group n f)
+
+  map-set-trunc-loop-map-concrete-homotopy-group :
+    type-homotopy-group (succ-ℕ n) A →
+    type-homotopy-group (succ-ℕ n) B
+  map-set-trunc-loop-map-concrete-homotopy-group =
+    map-trunc-Set (map-Ω (pointed-map-iterated-loop-space n f))
+
+  coherence-square-map-underlying-type-concrete-homotopy-group :
+    UU (l1 ⊔ l2)
+  coherence-square-map-underlying-type-concrete-homotopy-group =
+    coherence-square-map-underlying-type-concrete-group-Pointed-Type
+      ( pointed-map-iterated-loop-space n f)
+
+  coherence-square-map-inv-underlying-type-concrete-homotopy-group :
+    UU (l1 ⊔ l2)
+  coherence-square-map-inv-underlying-type-concrete-homotopy-group =
+    coherence-square-map-inv-underlying-type-concrete-group-Pointed-Type
+      ( pointed-map-iterated-loop-space n f)
+```

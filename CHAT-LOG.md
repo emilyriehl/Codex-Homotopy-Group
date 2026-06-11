@@ -1532,3 +1532,46 @@ The push succeeded, and the new Agda module checked without holes.
 Related commit:
 
 - This commit — Add underlying concrete homotopy-group comparison.
+
+
+### Underlying map compatibility targets
+
+Request: Emily asked Codex to commit the current work and continue developing
+the group-level LES bridge.
+
+Model context:
+
+- Date: 2026-06-11.
+- User-reported model context from earlier in the thread: Emily switched the
+  model to `gpt-5.5` with reasoning effort `xhigh`.
+- Agent-visible runtime identity: Codex; exact served model identity is not
+  exposed directly in the chat context.
+
+Actions:
+
+- Committed the underlying concrete homotopy-group comparison as `4f87b72`.
+- Continued with a new one-concept module for underlying maps of concrete
+  homotopy groups.
+- Added the ordinary underlying map of a concrete homotopy-group homomorphism,
+  the corresponding set-truncated loop map, and the forward and inverse
+  coherence-square target types.
+- Attempted the inverse coherence proof by set-truncation induction. The proof
+  reduced to the generator loop case, but `refl` failed because the
+  concrete-group side maps through the classifying map and basepoint transport,
+  while the set-truncated side maps through effectiveness of truncation.
+- Updated `STATUS-REPORT.md` to record that the next missing lemma is a
+  naturality/coherence theorem for the effectiveness-extensionality comparison.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md
+rg -n "\{!!\}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md
+```
+
+The Agda check passed, and the source search found no holes, postulates, or
+`--allow-unsolved-metas` in the new module.
+
+Related commit:
+
+- This commit — Add underlying map compatibility targets.

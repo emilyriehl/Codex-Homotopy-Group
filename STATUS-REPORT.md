@@ -116,10 +116,11 @@ unfinished scaffolds.
 
 1. Prove the two direct group-level LES exactness bridge statements for
    concrete homotopy groups. The underlying-type comparison with
-   set-truncated iterated loop spaces is now proved; the remaining bridge work
-   is to prove map compatibility for the induced homomorphisms, transport
-   image/kernel membership across that comparison, and package the needed
-   iterated-loop exactness statements.
+   set-truncated iterated loop spaces is now proved, and the underlying-map
+   comparison targets are now formalized. The remaining bridge work is to prove
+   the non-definitional map-compatibility coherence, transport image/kernel
+   membership across that comparison, and package the needed iterated-loop
+   exactness statements.
 2. Formalize the Hopf fiber sequence `S^1 -> S^3 -> S^2`, including the actual
    pointed maps and the fiber-sequence proof.
 3. Package the group-level computation `π₁(S¹) ≅ ℤ` from the existing loop-space
@@ -226,3 +227,22 @@ The check passed. This module has no holes and proves the equivalence from the
 ordinary underlying type of `concrete-homotopy-group n A` to
 `type-homotopy-group (succ-ℕ n) A`, together with named forward and inverse
 maps.
+
+Later on 2026-06-11, the underlying-map comparison target for concrete
+homotopy groups was added and checked with:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md
+rg -n "\{!!\}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md
+```
+
+The Agda check passed, and the source search found no holes, postulates, or
+`--allow-unsolved-metas` in the new module. The module records the ordinary
+underlying map of a concrete homotopy-group homomorphism, the corresponding
+set-truncated loop map, and the forward and inverse coherence-square target
+types. An attempted proof of the inverse square reduced by set-truncation
+induction to the generator loop case, but `refl` failed: the concrete-group
+side maps through the classifying map and basepoint transport, while the
+set-truncated loop side maps through effectiveness of truncation. The next
+missing lemma is therefore a naturality/coherence theorem for this
+effectiveness-extensionality comparison, not a definitional equality.
