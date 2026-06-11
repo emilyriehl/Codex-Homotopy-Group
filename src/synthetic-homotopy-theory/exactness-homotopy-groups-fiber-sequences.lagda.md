@@ -1,6 +1,7 @@
 # Group exactness of homotopy groups of fiber sequences
 
 ```agda
+{-# OPTIONS --allow-unsolved-metas #-}
 module synthetic-homotopy-theory.exactness-homotopy-groups-fiber-sequences where
 ```
 
@@ -17,7 +18,6 @@ open import group-theory.homomorphisms-concrete-groups
 
 open import structured-types.fiber-sequences
 
-open import synthetic-homotopy-theory.classifying-fiber-sequences-homotopy-groups
 open import synthetic-homotopy-theory.homotopy-groups
 open import synthetic-homotopy-theory.long-exact-sequence-homotopy-groups
 ```
@@ -27,10 +27,14 @@ open import synthetic-homotopy-theory.long-exact-sequence-homotopy-groups
 ## Idea
 
 The current long-exact-sequence development proves adjacent exactness for
-set-truncated pointed sets. The stronger homotopical route proves that the
-corresponding classifying pointed maps of concrete homotopy groups form fiber
-sequences, then applies the general concrete-group theorem that classifying
-fiber sequences induce exact ordinary group homomorphisms.
+set-truncated pointed sets. To extract Hopf-fibration isomorphisms, those
+adjacent exactness statements must be compared with exactness of the ordinary
+groups underlying concrete homotopy groups.
+
+The tempting route through fiber sequences of concrete-group classifying maps
+is too strong in general: such a fiber sequence would impose short-exact-style
+conditions, while the homotopy long exact sequence only gives adjacent
+exactness, with the next boundary map measuring the cokernel.
 
 This file records the group-level exactness statements for the two adjacent
 triples needed by the Hopf comparison.
@@ -76,22 +80,8 @@ module _
           ( n)
           ( base-fiber-sequence-Pointed-Type S))
         ( hom-fibration-concrete-homotopy-group-fiber-sequence S n))
-  is-exact-hom-fiber-inclusion-fibration-concrete-homotopy-group-fiber-sequence n =
-    is-exact-is-fiber-sequence-hom-Concrete-Group
-      ( concrete-homotopy-group
-        ( n)
-        ( fiber-fiber-sequence-Pointed-Type S))
-      ( concrete-homotopy-group
-        ( n)
-        ( total-space-fiber-sequence-Pointed-Type S))
-      ( concrete-homotopy-group
-        ( n)
-        ( base-fiber-sequence-Pointed-Type S))
-      ( hom-fiber-inclusion-concrete-homotopy-group-fiber-sequence S n)
-      ( hom-fibration-concrete-homotopy-group-fiber-sequence S n)
-      ( is-fiber-sequence-hom-fiber-inclusion-fibration-concrete-homotopy-group-fiber-sequence
-        ( S)
-        ( n))
+  is-exact-hom-fiber-inclusion-fibration-concrete-homotopy-group-fiber-sequence =
+    {!!}
 ```
 
 ### Exactness at the base homotopy group
@@ -128,20 +118,6 @@ module _
           ( n)
           ( fiber-fiber-sequence-Pointed-Type S))
         ( boundary-hom-concrete-homotopy-group-fiber-sequence S n))
-  is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence n =
-    is-exact-is-fiber-sequence-hom-Concrete-Group
-      ( concrete-homotopy-group
-        ( succ-ℕ n)
-        ( total-space-fiber-sequence-Pointed-Type S))
-      ( concrete-homotopy-group
-        ( succ-ℕ n)
-        ( base-fiber-sequence-Pointed-Type S))
-      ( concrete-homotopy-group
-        ( n)
-        ( fiber-fiber-sequence-Pointed-Type S))
-      ( hom-fibration-concrete-homotopy-group-fiber-sequence S (succ-ℕ n))
-      ( boundary-hom-concrete-homotopy-group-fiber-sequence S n)
-      ( is-fiber-sequence-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence
-        ( S)
-        ( n))
+  is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence =
+    {!!}
 ```

@@ -1,7 +1,6 @@
-# Classifying fiber sequences of homotopy groups of fiber sequences
+# The classifying fiber-sequence route for homotopy groups
 
 ```agda
-{-# OPTIONS --allow-unsolved-metas #-}
 module synthetic-homotopy-theory.classifying-fiber-sequences-homotopy-groups where
 ```
 
@@ -23,41 +22,19 @@ open import synthetic-homotopy-theory.long-exact-sequence-homotopy-groups
 ## Idea
 
 The concrete homotopy group `π(n+1) X` is represented as the concrete group of
-the pointed type `Ωⁿ X`. Therefore exactness of the homotopy-group maps can be
-deduced from the stronger statement that the corresponding classifying pointed
-maps of concrete groups form fiber sequences.
+the pointed type `Ωⁿ X`. It is tempting to try to prove adjacent exactness in
+the homotopy long exact sequence by showing that the corresponding classifying
+pointed maps of concrete groups form fiber sequences.
 
-This file records those stronger HoTT-book fiber-sequence obligations. They are
-the homotopical bridge needed before the existing concrete-group theorem
-`is-exact-is-fiber-sequence-hom-Concrete-Group` can be applied.
+This route is too strong in general. A fiber sequence of classifying spaces of
+groups imposes short-exact-style information: the third group is controlled as
+the quotient of the middle group by the image of the first. In the homotopy long
+exact sequence, an adjacent triple only gives exactness at the middle term; the
+next boundary homomorphism measures the cokernel.
 
-## Theorems
+Consequently, the correct next target is not a classifying-map fiber sequence.
+The group-level LES proof should instead compare the already-proved
+set-truncated exactness statements with the ordinary groups underlying concrete
+homotopy groups.
 
-### The fiber-inclusion/fibration classifying sequence
-
-```agda
-module _
-  {l1 l2 l3 : Level}
-  (S : fiber-sequence-Pointed-Type l1 l2 l3)
-  where
-
-  is-fiber-sequence-hom-fiber-inclusion-fibration-concrete-homotopy-group-fiber-sequence :
-    (n : ℕ) →
-    is-fiber-sequence-Pointed-Type
-      ( hom-fiber-inclusion-concrete-homotopy-group-fiber-sequence S n)
-      ( hom-fibration-concrete-homotopy-group-fiber-sequence S n)
-  is-fiber-sequence-hom-fiber-inclusion-fibration-concrete-homotopy-group-fiber-sequence =
-    {!!}
-```
-
-### The fibration/boundary classifying sequence
-
-```agda
-  is-fiber-sequence-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence :
-    (n : ℕ) →
-    is-fiber-sequence-Pointed-Type
-      ( hom-fibration-concrete-homotopy-group-fiber-sequence S (succ-ℕ n))
-      ( boundary-hom-concrete-homotopy-group-fiber-sequence S n)
-  is-fiber-sequence-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence =
-    {!!}
-```
+This module deliberately contains no theorem statements.

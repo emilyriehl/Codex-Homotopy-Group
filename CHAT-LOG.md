@@ -1440,3 +1440,53 @@ comparison files checked without direct holes.
 Related commit:
 
 - This commit — Prove Hopf LES algebra bridges.
+
+
+### Corrected group-level LES bridge route
+
+Request: Emily corrected the attribution for the previous suggestion, noting that
+the suggestions were made by Emily and not by Peter, then asked Codex to
+implement the plan.
+
+Model context:
+
+- Date: 2026-06-11.
+- User-reported model context from earlier in the thread: Emily switched the
+  model to `gpt-5.5` with reasoning effort `xhigh`.
+- Agent-visible runtime identity: Codex; exact served model identity is not
+  exposed directly in the chat context.
+
+Actions:
+
+- Corrected the repository record so the suggestion is attributed to Emily, not
+  Peter.
+- Rechecked the proposed classifying-map fiber-sequence route for concrete
+  homotopy groups and rejected it as too strong in general: such a fiber
+  sequence would impose short-exact-style information, while an adjacent long
+  exact sequence triple only asserts exactness at the middle group.
+- Reworked `classifying-fiber-sequences-homotopy-groups.lagda.md` into a
+  no-hole note documenting why that route should not be pursued as the next
+  theorem target.
+- Restored `exactness-homotopy-groups-fiber-sequences.lagda.md` as the direct
+  group-level LES bridge scaffold with two intentional holes, to be proved by
+  comparing set-truncated adjacent exactness with ordinary group exactness of
+  concrete homotopy groups.
+- Updated `FORMALIZATION-PLAN.md` and `STATUS-REPORT.md` to make the corrected
+  direct bridge route explicit.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/classifying-fiber-sequences-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+rg -n '\{!!\}|allow-unsolved-metas' src/synthetic-homotopy-theory src/group-theory
+git diff --check
+```
+
+Both Agda checks passed. The source search shows that the classifying-route
+module has no holes, while the exactness file intentionally has the two
+group-level LES bridge holes. `git diff --check` passed.
+
+Related commit:
+
+- Uncommitted at time of entry.
