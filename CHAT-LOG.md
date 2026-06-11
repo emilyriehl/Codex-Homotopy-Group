@@ -1326,3 +1326,63 @@ the completed theorem.
 Related commit:
 
 - This commit — Scaffold third homotopy group target.
+
+
+### One-level-lower top-down scaffold
+
+Request: Emily asked Codex to implement the plan to continue the top-down
+formalization one level further by proposing and recording formal statements
+that could solve the current open goals.
+
+Model context:
+
+- Date: 2026-06-11.
+- User-reported model context from earlier in the thread: Emily switched the
+  model to `gpt-5.5` with reasoning effort `xhigh`.
+- Agent-visible runtime identity: Codex; exact served model identity is not
+  exposed directly in the chat context.
+
+Actions:
+
+- Added an algebra scaffold extracting an isomorphism from exact group segments
+  with trivial outer groups.
+- Added a bridge scaffold from trivial concrete groups to trivial underlying
+  ordinary groups.
+- Added group-level LES exactness stubs for the adjacent concrete homotopy-group
+  triples needed by the Hopf comparison.
+- Added a Hopf fiber-sequence scaffold with the fiber, total space, and base
+  fields fixed definitionally to `S¹`, `S³`, and `S²`.
+- Added a Hopf LES comparison scaffold that reduces `π₃(S³) ≅ π₃(S²)` to the
+  Hopf fiber sequence, group exactness, circle vanishing, and the algebra
+  bridge.
+- Added lower stubs for the `π₃(S³) ≅ ℤ` branch: stability
+  `π₂(S²) ≅ π₃(S³)`, Hopf-derived `π₂(S²) ≅ π₁(S¹)`, and the group-level
+  circle computation `π₁(S¹) ≅ ℤ`.
+- Updated the previous Hopf comparison and `π₃(S³) ≅ ℤ` files so they no longer
+  contain direct holes and instead compose the new one-level-lower statements.
+- Updated `STATUS-REPORT.md` with the new decomposition and verification
+  results.
+
+Verification:
+
+```sh
+./check.sh src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md
+./check.sh src/group-theory/trivial-underlying-groups-concrete-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/stability-third-homotopy-group-sphere-3.lagda.md
+./check.sh src/synthetic-homotopy-theory/second-homotopy-group-sphere-2.lagda.md
+./check.sh src/synthetic-homotopy-theory/fundamental-group-sphere-1.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-fibration-third-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/third-homotopy-group-sphere-3.lagda.md
+./check.sh src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md
+```
+
+All checks passed. The new lower-level files intentionally use
+`--allow-unsolved-metas`, so this verifies the scaffold rather than completed
+proofs.
+
+Related commit:
+
+- This commit — Add one-level lower formalization scaffold.
