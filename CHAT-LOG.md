@@ -1575,3 +1575,49 @@ The Agda check passed, and the source search found no holes, postulates, or
 Related commit:
 
 - This commit — Add underlying map compatibility targets.
+
+
+### Explicit inverse comparison for underlying concrete homotopy groups
+
+Request: Emily asked Codex to implement the next plan for the direct
+underlying-map comparison work, then resumed the session after interruption.
+
+Model context:
+
+- Date: 2026-06-13.
+- User-reported model context from earlier in the thread: Emily switched the
+  model to `gpt-5.5` with reasoning effort `xhigh`.
+- Agent-visible runtime identity: Codex; exact served model identity is not
+  exposed directly in the chat context.
+
+Actions:
+
+- Continued the group-level LES bridge work in the underlying concrete
+  homotopy-group comparison modules.
+- Replaced the abstract inverse-of-equivalence definition of
+  `map-inv-underlying-type-concrete-group-Pointed-Type` with the explicit path
+  obtained from component extensionality and `map-effectiveness-trunc`.
+- Updated `map-inv-underlying-type-concrete-homotopy-group` to delegate to that
+  explicit pointed-type inverse for the iterated loop space.
+- Rechecked the dependent underlying-map target module after the change.
+- Attempted to push further on the inverse naturality square. The proof still
+  needs a small naturality theorem for effectiveness of truncation under a
+  pointed map, including the basepoint transport inserted by `map-Ω`; expanded
+  computation terms were too expensive for real Agda checking, so they were not
+  kept in checked source.
+- Updated `STATUS-REPORT.md` with the new checked progress and the narrowed
+  next target.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/underlying-groups-concrete-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md
+git diff --check
+```
+
+Both Agda checks passed, and `git diff --check` passed.
+
+Related commit:
+
+- Uncommitted at the time of this entry.

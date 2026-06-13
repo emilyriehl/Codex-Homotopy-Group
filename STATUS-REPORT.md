@@ -246,3 +246,24 @@ side maps through the classifying map and basepoint transport, while the
 set-truncated loop side maps through effectiveness of truncation. The next
 missing lemma is therefore a naturality/coherence theorem for this
 effectiveness-extensionality comparison, not a definitional equality.
+
+Later on 2026-06-13, the inverse comparison map was made more explicit and
+rechecked:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/underlying-groups-concrete-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md
+```
+
+Both checks passed. The pointed-type inverse
+`map-inv-underlying-type-concrete-group-Pointed-Type` is now defined directly by
+component extensionality and `map-effectiveness-trunc`, and the homotopy-group
+inverse wrapper delegates to that explicit map. This gives downstream
+naturality goals the right definitional shape without unfolding the inverse of
+the composite equivalence. The attempted inverse coherence square is still not
+completed: the remaining missing ingredient is a cheap naturality theorem for
+effectiveness of truncation under a pointed map, including the basepoint
+transport inserted by `map-Ω`. Earlier expanded computations of that theorem
+were too expensive for real Agda checking, so the next proof step should isolate
+that naturality as a small one-concept lemma before using it in the underlying
+map square.

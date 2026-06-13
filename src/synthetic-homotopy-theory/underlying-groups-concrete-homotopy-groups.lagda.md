@@ -73,8 +73,18 @@ module _
   map-inv-underlying-type-concrete-group-Pointed-Type :
     type-trunc-Set (type-Ω A) →
     type-Concrete-Group (concrete-group-Pointed-Type A)
-  map-inv-underlying-type-concrete-group-Pointed-Type =
-    map-inv-equiv equiv-underlying-type-concrete-group-Pointed-Type
+  map-inv-underlying-type-concrete-group-Pointed-Type x =
+    eq-Eq-classifying-type-Automorphism-∞-Group
+      ( unit-trunc (point-Pointed-Type A))
+      ( shape-Automorphism-∞-Group
+        ( unit-trunc (point-Pointed-Type A)))
+      ( shape-Automorphism-∞-Group
+        ( unit-trunc (point-Pointed-Type A)))
+      ( map-effectiveness-trunc
+        ( zero-𝕋)
+        ( point-Pointed-Type A)
+        ( point-Pointed-Type A)
+        ( x))
 
 module _
   {l : Level} (n : ℕ) (A : Pointed-Type l)
@@ -96,5 +106,6 @@ module _
     type-homotopy-group (succ-ℕ n) A →
     type-Concrete-Group (concrete-homotopy-group n A)
   map-inv-underlying-type-concrete-homotopy-group =
-    map-inv-equiv equiv-underlying-type-concrete-homotopy-group
+    map-inv-underlying-type-concrete-group-Pointed-Type
+      ( iterated-loop-space n A)
 ```
