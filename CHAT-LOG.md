@@ -1620,4 +1620,54 @@ Both Agda checks passed, and `git diff --check` passed.
 
 Related commit:
 
-- Uncommitted at the time of this entry.
+- `1fa1231` — Make underlying inverse comparison explicit.
+
+
+### Naturality of effectiveness of truncation
+
+Request: Emily asked Codex to commit and push the explicit inverse comparison,
+then continue working on the next proof target.
+
+Model context:
+
+- Date: 2026-06-13.
+- User-reported model context from earlier in the thread: Emily switched the
+  model to `gpt-5.5` with reasoning effort `xhigh`.
+- Agent-visible runtime identity: Codex; exact served model identity is not
+  exposed directly in the chat context.
+
+Actions:
+
+- Committed the explicit inverse comparison as `1fa1231` and pushed `main` to
+  `origin`.
+- Added `src/foundation/naturality-effectiveness-truncation.lagda.md` as a new
+  one-concept module.
+- Proved `compute-map-effectiveness-trunc-unit-trunc`, showing that effectiveness on a unit-truncated path computes to `ap unit-trunc`, and proved `naturality-map-effectiveness-trunc`, showing that applying a
+  truncated map to an effectiveness path agrees with first truncating `ap f`
+  and then using effectiveness in the codomain, up to the naturality paths of
+  the truncation unit.
+- Tried to use this lemma in the inverse underlying-map square. Component
+  extensionality reduced the generator case to a lower path computation, but
+  the remaining proof still needs a separate computation for `map-Ω` on the
+  classifying map of connected components, including the basepoint transport
+  `tr-type-Ω` inserted by pointed maps. The exploratory hole was removed from
+  checked source.
+- Updated `STATUS-REPORT.md` with the new checked lemma and refined next
+  target.
+
+Verification:
+
+```sh
+git push origin main
+./check.sh src/foundation/naturality-effectiveness-truncation.lagda.md
+./check.sh src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md
+rg -n '{!!}|allow-unsolved-metas|postulate' src/foundation/naturality-effectiveness-truncation.lagda.md src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md
+```
+
+The push succeeded. Both Agda checks passed, and the source search found no
+holes, postulates, or `--allow-unsolved-metas` in the new lemma or the
+underlying-map target module.
+
+Related commit:
+
+- This commit — Add naturality of effectiveness of truncation.

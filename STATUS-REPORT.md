@@ -7,7 +7,7 @@ Update this file whenever significant progress is made, for example when a
 new theorem is proved, an important definition is formalized, a planned module
 is added, or a major blocked item is resolved or re-scoped.
 
-Last updated: 2026-06-11.
+Last updated: 2026-06-13.
 
 ## Current summary
 
@@ -52,6 +52,10 @@ calculation:
   identified with `type-homotopy-group (succ-ℕ n) A`, i.e. with the set
   truncation of the next iterated loop space. This removes the indexing and
   truncation mismatch from the group-level LES bridge.
+- Foundation-level computation and naturality lemmas for effectiveness of
+  truncation have been proved: applying a truncated map to an effectiveness path agrees with first
+  truncating `ap f` and then using effectiveness in the codomain, up to the
+  naturality paths of the truncation unit.
 
 The final theorem `pi_3(S^2) = Z` is not yet proved. The top-level Agda file
 now assembles the final isomorphism through two next-level files that themselves
@@ -85,6 +89,7 @@ unfinished scaffolds.
 | Exactness-to-isomorphism algebra | [`src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md`](src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md) | Proves that two adjacent exact group triples with trivial outer groups make the middle homomorphism an isomorphism. |
 | Trivial concrete-to-group bridge | [`src/group-theory/trivial-underlying-groups-concrete-groups.lagda.md`](src/group-theory/trivial-underlying-groups-concrete-groups.lagda.md) | Proves the bridge from `is-trivial-Concrete-Group G` to triviality of `group-Concrete-Group G`. |
 | Underlying types of concrete homotopy groups | [`src/synthetic-homotopy-theory/underlying-groups-concrete-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/underlying-groups-concrete-homotopy-groups.lagda.md) | Proves that the ordinary underlying type of `concrete-homotopy-group n A` is equivalent to `type-homotopy-group (succ-ℕ n) A`, using connected-component extensionality and effectiveness of truncation, and names the induced forward and inverse maps. |
+| Naturality of effectiveness of truncation | [`src/foundation/naturality-effectiveness-truncation.lagda.md`](src/foundation/naturality-effectiveness-truncation.lagda.md) | Proves that effectiveness on a unit-truncated path computes to `ap unit-trunc`, and that effectiveness of truncation is natural in maps, up to the naturality paths of the truncation unit. This is the reusable foundation lemma needed by the underlying-map comparison for concrete homotopy groups. |
 | Group exactness of homotopy groups | [`src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md) | Records the two adjacent group-level exactness statements needed by the Hopf comparison. These are now the direct bridge obligations from set-truncated LES exactness to ordinary group exactness and remain intentionally unfinished. |
 | Hopf fiber sequence | [`src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md`](src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md) | Records the unfinished packaged fiber sequence with fiber `S¹`, total space `S³`, and base `S²` fixed definitionally. |
 | Hopf LES comparison for third homotopy groups | [`src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md) | Builds the Hopf comparison isomorphism from the Hopf fibration homomorphism, two supplied group exactness hypotheses, and the two trivial endpoint hypotheses. |
@@ -267,3 +272,22 @@ transport inserted by `map-Ω`. Earlier expanded computations of that theorem
 were too expensive for real Agda checking, so the next proof step should isolate
 that naturality as a small one-concept lemma before using it in the underlying
 map square.
+
+
+Later on 2026-06-13, a one-concept foundation lemma for naturality of
+effectiveness of truncation was added and checked:
+
+```sh
+./check.sh src/foundation/naturality-effectiveness-truncation.lagda.md
+./check.sh src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md
+rg -n '{!!}|allow-unsolved-metas|postulate' src/foundation/naturality-effectiveness-truncation.lagda.md src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md
+```
+
+Both Agda checks passed, and the source search found no holes, postulates, or
+`--allow-unsolved-metas` in the new lemma or the underlying-map target module.
+The new file proves that effectiveness on a unit-truncated path computes to `ap unit-trunc`, and that effectiveness of truncation is natural with respect
+to a map `f`, up to the naturality paths of the truncation unit. Applying
+component extensionality to the inverse underlying-map square now reduces the
+remaining proof to a further computation: how `map-Ω` on the classifying map of
+connected components is seen after component extensionality, including the
+basepoint transport `tr-type-Ω` introduced by pointed maps.
