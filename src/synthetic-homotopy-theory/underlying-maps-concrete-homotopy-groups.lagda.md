@@ -9,15 +9,27 @@ module synthetic-homotopy-theory.underlying-maps-concrete-homotopy-groups where
 ```agda
 open import elementary-number-theory.natural-numbers
 
+open import foundation.action-on-identifications-functions
+open import foundation.dependent-pair-types
+open import foundation.equivalences
+open import foundation.functoriality-truncation
 open import foundation.functoriality-set-truncation
 open import foundation.identity-types
+open import foundation.injective-maps
 open import foundation.set-truncations
+open import foundation.sets
+open import foundation.truncation-levels
+open import foundation.truncations
 open import foundation.universe-levels
 
+open import group-theory.computing-loop-space-functoriality-homotopy-automorphism-groups
 open import group-theory.concrete-groups
 open import group-theory.functoriality-homotopy-automorphism-groups
 open import group-theory.homomorphisms-concrete-groups
 open import group-theory.homotopy-automorphism-groups
+
+open import higher-group-theory.automorphism-groups
+open import higher-group-theory.computing-identity-types-automorphism-infinity-groups
 
 open import structured-types.pointed-maps
 open import structured-types.pointed-types
@@ -28,6 +40,7 @@ open import synthetic-homotopy-theory.functoriality-loop-spaces
 open import synthetic-homotopy-theory.homotopy-groups
 open import synthetic-homotopy-theory.iterated-loop-spaces
 open import synthetic-homotopy-theory.loop-spaces
+open import synthetic-homotopy-theory.naturality-effectiveness-loop-spaces
 open import synthetic-homotopy-theory.underlying-groups-concrete-homotopy-groups
 ```
 
@@ -81,6 +94,152 @@ module _
       ( map-inv-underlying-type-concrete-group-Pointed-Type A x) ＝
     map-inv-underlying-type-concrete-group-Pointed-Type B
       ( map-set-trunc-loop-map-Pointed-Type x)
+```
+
+## Inverse laws for pointed types
+
+```agda
+module _
+  {l : Level} (A : Pointed-Type l)
+  where
+
+  is-section-map-inv-underlying-type-concrete-group-Pointed-Type :
+    (x : type-trunc-Set (type-Ω A)) →
+    map-underlying-type-concrete-group-Pointed-Type A
+      ( map-inv-underlying-type-concrete-group-Pointed-Type A x) ＝ x
+  is-section-map-inv-underlying-type-concrete-group-Pointed-Type x =
+    ( ap
+      ( map-inv-equiv
+        ( effectiveness-trunc
+          ( zero-𝕋)
+          ( point-Pointed-Type A)
+          ( point-Pointed-Type A)))
+      ( compute-Eq-eq-eq-Eq-classifying-type-Automorphism-∞-Group
+        ( unit-trunc (point-Pointed-Type A))
+        ( shape-Automorphism-∞-Group
+          ( unit-trunc (point-Pointed-Type A)))
+        ( shape-Automorphism-∞-Group
+          ( unit-trunc (point-Pointed-Type A)))
+        ( map-effectiveness-trunc
+          ( zero-𝕋)
+          ( point-Pointed-Type A)
+          ( point-Pointed-Type A)
+          ( x)))) ∙
+    ( is-retraction-map-inv-equiv
+      ( effectiveness-trunc
+        ( zero-𝕋)
+        ( point-Pointed-Type A)
+        ( point-Pointed-Type A))
+      ( x))
+
+  is-retraction-map-inv-underlying-type-concrete-group-Pointed-Type :
+    (x : type-Concrete-Group (concrete-group-Pointed-Type A)) →
+    map-inv-underlying-type-concrete-group-Pointed-Type A
+      ( map-underlying-type-concrete-group-Pointed-Type A x) ＝ x
+  is-retraction-map-inv-underlying-type-concrete-group-Pointed-Type x =
+    is-injective-equiv
+      ( extensionality-classifying-type-Automorphism-∞-Group
+        ( unit-trunc (point-Pointed-Type A))
+        ( shape-Automorphism-∞-Group
+          ( unit-trunc (point-Pointed-Type A)))
+        ( shape-Automorphism-∞-Group
+          ( unit-trunc (point-Pointed-Type A))))
+      ( ( compute-Eq-eq-eq-Eq-classifying-type-Automorphism-∞-Group
+          ( unit-trunc (point-Pointed-Type A))
+          ( shape-Automorphism-∞-Group
+            ( unit-trunc (point-Pointed-Type A)))
+          ( shape-Automorphism-∞-Group
+            ( unit-trunc (point-Pointed-Type A)))
+          ( map-effectiveness-trunc
+            ( zero-𝕋)
+            ( point-Pointed-Type A)
+            ( point-Pointed-Type A)
+            ( map-underlying-type-concrete-group-Pointed-Type A x))) ∙
+        ( is-section-map-inv-equiv
+          ( effectiveness-trunc
+            ( zero-𝕋)
+            ( point-Pointed-Type A)
+            ( point-Pointed-Type A))
+          ( Eq-eq-classifying-type-Automorphism-∞-Group
+            ( unit-trunc (point-Pointed-Type A))
+            ( shape-Automorphism-∞-Group
+              ( unit-trunc (point-Pointed-Type A)))
+            ( shape-Automorphism-∞-Group
+              ( unit-trunc (point-Pointed-Type A)))
+            ( x))))
+```
+
+## Properties for pointed types
+
+```agda
+module _
+  {l1 l2 : Level} {A : Pointed-Type l1} {B : Pointed-Type l2}
+  where
+
+  naturality-map-inv-underlying-type-concrete-group-Pointed-Type :
+    (f : A →∗ B) →
+    coherence-square-map-inv-underlying-type-concrete-group-Pointed-Type f
+  naturality-map-inv-underlying-type-concrete-group-Pointed-Type
+    (pair f' refl) =
+    apply-dependent-universal-property-trunc-Set'
+      ( λ x →
+        set-Prop
+          ( Id-Prop
+            ( set-Concrete-Group (concrete-group-Pointed-Type B))
+            ( map-underlying-hom-concrete-group-Pointed-Type
+              ( pair f' refl)
+              ( map-inv-underlying-type-concrete-group-Pointed-Type A x))
+            ( map-inv-underlying-type-concrete-group-Pointed-Type B
+              ( map-set-trunc-loop-map-Pointed-Type (pair f' refl) x))))
+      ( λ p →
+        is-injective-equiv
+          ( extensionality-classifying-type-Automorphism-∞-Group
+            ( unit-trunc (point-Pointed-Type B))
+            ( shape-Automorphism-∞-Group
+              ( unit-trunc (point-Pointed-Type B)))
+            ( shape-Automorphism-∞-Group
+              ( unit-trunc (point-Pointed-Type B))))
+          ( ( compute-Eq-eq-map-Ω-classifying-pointed-map-concrete-group-Pointed-Type
+              ( pair f' refl)
+              ( map-effectiveness-trunc
+                ( zero-𝕋)
+                ( point-Pointed-Type A)
+                ( point-Pointed-Type A)
+                ( unit-trunc p))) ∙
+            ( tr-naturality-map-effectiveness-trunc
+              ( zero-𝕋)
+              ( f')
+              ( unit-trunc p)) ∙
+            ( inv
+              ( compute-Eq-eq-eq-Eq-classifying-type-Automorphism-∞-Group
+                ( unit-trunc (point-Pointed-Type B))
+                ( shape-Automorphism-∞-Group
+                  ( unit-trunc (point-Pointed-Type B)))
+                ( shape-Automorphism-∞-Group
+                  ( unit-trunc (point-Pointed-Type B)))
+                ( map-effectiveness-trunc
+                  ( zero-𝕋)
+                  ( point-Pointed-Type B)
+                  ( point-Pointed-Type B)
+                  ( map-trunc zero-𝕋 (ap f') (unit-trunc p)))))))
+
+  naturality-map-underlying-type-concrete-group-Pointed-Type :
+    (f : A →∗ B) →
+    coherence-square-map-underlying-type-concrete-group-Pointed-Type f
+  naturality-map-underlying-type-concrete-group-Pointed-Type f x =
+    ( ap
+      ( λ y →
+        map-underlying-type-concrete-group-Pointed-Type B
+          ( map-underlying-hom-concrete-group-Pointed-Type f y))
+      ( inv
+        ( is-retraction-map-inv-underlying-type-concrete-group-Pointed-Type A x))) ∙
+    ( ap
+      ( map-underlying-type-concrete-group-Pointed-Type B)
+      ( naturality-map-inv-underlying-type-concrete-group-Pointed-Type f
+        ( map-underlying-type-concrete-group-Pointed-Type A x))) ∙
+    ( is-section-map-inv-underlying-type-concrete-group-Pointed-Type B
+      ( map-set-trunc-loop-map-Pointed-Type f
+        ( map-underlying-type-concrete-group-Pointed-Type A x)))
 ```
 
 ## Definitions for homotopy groups

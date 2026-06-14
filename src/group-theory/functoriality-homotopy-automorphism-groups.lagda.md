@@ -25,6 +25,8 @@ open import group-theory.concrete-groups
 open import group-theory.homomorphisms-concrete-groups
 open import group-theory.homotopy-automorphism-groups
 
+open import higher-group-theory.automorphism-groups
+
 open import structured-types.pointed-maps
 open import structured-types.pointed-types
 ```
@@ -79,8 +81,11 @@ module _
       ( shape-Concrete-Group (concrete-group-Pointed-Type A)) ＝
     shape-Concrete-Group (concrete-group-Pointed-Type B)
   preserves-point-map-classifying-type-concrete-group-Pointed-Type =
-    eq-type-subtype
-      ( λ y → mere-eq-Prop y (unit-trunc (point-Pointed-Type B)))
+    eq-Eq-classifying-type-Automorphism-∞-Group
+      ( unit-trunc (point-Pointed-Type B))
+      ( map-classifying-type-concrete-group-Pointed-Type
+        ( shape-Concrete-Group (concrete-group-Pointed-Type A)))
+      ( shape-Concrete-Group (concrete-group-Pointed-Type B))
       ( ( coherence-square-map-trunc
           ( one-𝕋)
           ( map-pointed-map f)

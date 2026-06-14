@@ -1671,3 +1671,77 @@ underlying-map target module.
 Related commit:
 
 - This commit — Add naturality of effectiveness of truncation.
+
+
+### Transported naturality for loop-space effectiveness
+
+Request: Emily asked Codex to implement the next plan for the underlying-map comparison toward the group-level long exact sequence bridge.
+
+Model context:
+
+- Date: 2026-06-13.
+- User-reported model context from earlier in the thread: Emily switched the model to `gpt-5.5` with reasoning effort `xhigh`.
+- Agent-visible runtime identity: Codex; exact served model identity is not exposed directly in the chat context.
+
+Actions:
+
+- Added `src/synthetic-homotopy-theory/naturality-effectiveness-loop-spaces.lagda.md` as a one-concept module.
+- Proved a loop-space transport algebra helper for `tr-type-Ω (p ∙ refl) ((p ∙ q) ∙ inv p)`.
+- Proved `tr-naturality-map-effectiveness-trunc`, transporting the naturality of effectiveness of truncation along the truncation-unit naturality path so it becomes a based loop equality.
+- Tried to use the helper to complete the inverse underlying-map square in `underlying-maps-concrete-homotopy-groups.lagda.md`. This exposed the next missing component-computation lemma: after component extensionality, `map-Ω` of the classifying map of connected components must compute to the transported truncation-effectiveness path.
+- Removed the unfinished expanded inverse-square proof from checked source; `underlying-maps-concrete-homotopy-groups.lagda.md` remains checked as the target module.
+- Updated `STATUS-REPORT.md` with the checked progress and narrowed next target.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/naturality-effectiveness-loop-spaces.lagda.md
+./check.sh src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md
+rg -n "\{!!\}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/naturality-effectiveness-loop-spaces.lagda.md src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md
+```
+
+Both Agda checks passed, and the source search found no holes, postulates, or `--allow-unsolved-metas` in the checked files.
+
+Related commit:
+
+- This commit — Add transported naturality for effectiveness.
+
+
+### Pointed underlying-map squares
+
+Request: Emily asked Codex to continue the top-down Agda formalization work toward the group-level long exact sequence bridge.
+
+Model context:
+
+- Date: 2026-06-13.
+- User-reported model context from earlier in the thread: Emily switched the model to `gpt-5.5` with reasoning effort `xhigh`.
+- Agent-visible runtime identity: Codex; exact served model identity is not exposed directly in the chat context.
+
+Actions:
+
+- Added `src/foundation/computing-identity-types-subtypes.lagda.md` to prove the first-component computation rule for subtype extensionality.
+- Added `src/higher-group-theory/computing-identity-types-automorphism-infinity-groups.lagda.md` to prove section, concatenation, inverse, and loop-transport computations for paths in automorphism-infinity classifying types.
+- Adjusted `src/group-theory/functoriality-homotopy-automorphism-groups.lagda.md` so the classifying pointed-map basepoint path is built through automorphism-infinity extensionality.
+- Added `src/group-theory/computing-loop-space-functoriality-homotopy-automorphism-groups.lagda.md` to compute `map-Ω` on the classifying pointed map of connected components after automorphism-infinity extensionality.
+- Used the existing loop-space naturality of effectiveness lemma to complete `naturality-map-inv-underlying-type-concrete-group-Pointed-Type` in `src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md`.
+- Added explicit section and retraction laws for the underlying-type comparison, then used them to prove `naturality-map-underlying-type-concrete-group-Pointed-Type` by cancellation from the inverse square.
+- Tried a direct named homotopy-group wrapper for the inverse square. Real Agda checking became expensive, so the wrapper was removed while keeping the homotopy-group square types as the downstream interfaces.
+- Updated `STATUS-REPORT.md` to describe the proved pointed-type forward and inverse squares, the supporting one-concept helper modules, and the remaining bridge work.
+
+Verification:
+
+```sh
+./check.sh src/foundation/computing-identity-types-subtypes.lagda.md
+./check.sh src/higher-group-theory/computing-identity-types-automorphism-infinity-groups.lagda.md
+./check.sh src/group-theory/functoriality-homotopy-automorphism-groups.lagda.md
+./check.sh src/group-theory/computing-loop-space-functoriality-homotopy-automorphism-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/naturality-effectiveness-loop-spaces.lagda.md
+./check.sh src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md
+rg -n "\{!!\}|allow-unsolved-metas|postulate" src/foundation/computing-identity-types-subtypes.lagda.md src/higher-group-theory/computing-identity-types-automorphism-infinity-groups.lagda.md src/group-theory/computing-loop-space-functoriality-homotopy-automorphism-groups.lagda.md src/synthetic-homotopy-theory/naturality-effectiveness-loop-spaces.lagda.md src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md
+```
+
+The Agda checks passed, and the source search found no holes, postulates, or `--allow-unsolved-metas` in the checked proof modules.
+
+Related commit:
+
+- Not yet committed.

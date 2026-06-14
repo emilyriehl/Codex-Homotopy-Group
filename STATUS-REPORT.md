@@ -52,10 +52,18 @@ calculation:
   identified with `type-homotopy-group (succ-ℕ n) A`, i.e. with the set
   truncation of the next iterated loop space. This removes the indexing and
   truncation mismatch from the group-level LES bridge.
-- Foundation-level computation and naturality lemmas for effectiveness of
-  truncation have been proved: applying a truncated map to an effectiveness path agrees with first
-  truncating `ap f` and then using effectiveness in the codomain, up to the
-  naturality paths of the truncation unit.
+- Foundation and loop-space computation lemmas now relate subtype path
+  extensionality, automorphism-infinity path computations, `map-Ω` on
+  classifying maps, and naturality of effectiveness of truncation. Together
+  these prove the forward and inverse underlying-map coherence squares for
+  concrete groups coming from pointed types. Homotopy-group wrapper proofs are
+  recorded as target interfaces but not yet kept as named theorems, because the
+  direct inverse wrapper caused expensive checking.
+- The underlying-map comparison for concrete homotopy groups has advanced from
+  target definitions to proved pointed-type forward and inverse squares. The
+  remaining bridge work is the cheap homotopy-group instantiation of these
+  squares and the image/kernel transport needed to turn set-truncated pointed-set
+  exactness into ordinary group exactness.
 
 The final theorem `pi_3(S^2) = Z` is not yet proved. The top-level Agda file
 now assembles the final isomorphism through two next-level files that themselves
@@ -89,6 +97,11 @@ unfinished scaffolds.
 | Exactness-to-isomorphism algebra | [`src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md`](src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md) | Proves that two adjacent exact group triples with trivial outer groups make the middle homomorphism an isomorphism. |
 | Trivial concrete-to-group bridge | [`src/group-theory/trivial-underlying-groups-concrete-groups.lagda.md`](src/group-theory/trivial-underlying-groups-concrete-groups.lagda.md) | Proves the bridge from `is-trivial-Concrete-Group G` to triviality of `group-Concrete-Group G`. |
 | Underlying types of concrete homotopy groups | [`src/synthetic-homotopy-theory/underlying-groups-concrete-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/underlying-groups-concrete-homotopy-groups.lagda.md) | Proves that the ordinary underlying type of `concrete-homotopy-group n A` is equivalent to `type-homotopy-group (succ-ℕ n) A`, using connected-component extensionality and effectiveness of truncation, and names the induced forward and inverse maps. |
+| Underlying maps of concrete homotopy groups | [`src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md) | Defines the ordinary underlying map of a concrete homotopy-group homomorphism and its set-truncated loop comparison squares. The forward and inverse coherence squares are proved for concrete groups coming from pointed types; the homotopy-group square types are kept as interfaces while named wrapper proofs are deferred until they check cheaply. |
+| Computing identity types of subtypes | [`src/foundation/computing-identity-types-subtypes.lagda.md`](src/foundation/computing-identity-types-subtypes.lagda.md) | Proves the computation rule for the first component of subtype extensionality, used to control connected-component path calculations. |
+| Computing identity types of automorphism-infinity groups | [`src/higher-group-theory/computing-identity-types-automorphism-infinity-groups.lagda.md`](src/higher-group-theory/computing-identity-types-automorphism-infinity-groups.lagda.md) | Proves section, concatenation, inverse, and loop-transport computation rules for paths in automorphism-infinity classifying types. |
+| Loop-space classifying-map computations | [`src/group-theory/computing-loop-space-functoriality-homotopy-automorphism-groups.lagda.md`](src/group-theory/computing-loop-space-functoriality-homotopy-automorphism-groups.lagda.md) | Computes `map-Ω` on the classifying pointed map of connected components after automorphism-infinity extensionality. |
+| Loop-space naturality of effectiveness | [`src/synthetic-homotopy-theory/naturality-effectiveness-loop-spaces.lagda.md`](src/synthetic-homotopy-theory/naturality-effectiveness-loop-spaces.lagda.md) | Transports naturality of effectiveness of truncation into the based-loop form required by the inverse underlying-map square. |
 | Naturality of effectiveness of truncation | [`src/foundation/naturality-effectiveness-truncation.lagda.md`](src/foundation/naturality-effectiveness-truncation.lagda.md) | Proves that effectiveness on a unit-truncated path computes to `ap unit-trunc`, and that effectiveness of truncation is natural in maps, up to the naturality paths of the truncation unit. This is the reusable foundation lemma needed by the underlying-map comparison for concrete homotopy groups. |
 | Group exactness of homotopy groups | [`src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md) | Records the two adjacent group-level exactness statements needed by the Hopf comparison. These are now the direct bridge obligations from set-truncated LES exactness to ordinary group exactness and remain intentionally unfinished. |
 | Hopf fiber sequence | [`src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md`](src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md) | Records the unfinished packaged fiber sequence with fiber `S¹`, total space `S³`, and base `S²` fixed definitionally. |
@@ -121,11 +134,11 @@ unfinished scaffolds.
 
 1. Prove the two direct group-level LES exactness bridge statements for
    concrete homotopy groups. The underlying-type comparison with
-   set-truncated iterated loop spaces is now proved, and the underlying-map
-   comparison targets are now formalized. The remaining bridge work is to prove
-   the non-definitional map-compatibility coherence, transport image/kernel
-   membership across that comparison, and package the needed iterated-loop
-   exactness statements.
+   set-truncated iterated loop spaces is proved, and the forward and inverse
+   underlying-map coherence squares are proved at the pointed-type level. The
+   remaining bridge work is to add Agda-cheap homotopy-group wrappers for these
+   squares, transport image/kernel membership across the comparisons, and
+   package the needed iterated-loop exactness statements.
 2. Formalize the Hopf fiber sequence `S^1 -> S^3 -> S^2`, including the actual
    pointed maps and the fiber-sequence proof.
 3. Package the group-level computation `π₁(S¹) ≅ ℤ` from the existing loop-space
@@ -291,3 +304,51 @@ component extensionality to the inverse underlying-map square now reduces the
 remaining proof to a further computation: how `map-Ω` on the classifying map of
 connected components is seen after component extensionality, including the
 basepoint transport `tr-type-Ω` introduced by pointed maps.
+
+Later on 2026-06-13, a one-concept loop-space form of the naturality theorem
+was added and checked:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/naturality-effectiveness-loop-spaces.lagda.md
+./check.sh src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md
+rg -n "\{!!\}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/naturality-effectiveness-loop-spaces.lagda.md src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md
+```
+
+Both Agda checks passed, and the source search found no holes, postulates, or
+`--allow-unsolved-metas` in the checked files. The new helper proves that after
+transporting along the truncation-unit naturality path, the naturality of
+effectiveness becomes a based loop equality. An attempted use of this helper in
+the inverse underlying-map square exposed the next missing one-concept lemma:
+component extensionality for the connected-component subtype must compute the
+first component of `map-Ω` on the classifying map to the transported
+truncation-effectiveness path. The unfinished expanded proof was removed from
+`underlying-maps-concrete-homotopy-groups.lagda.md`, which remains a checked
+target-only module.
+
+
+Later on 2026-06-13, the component-computation and equivalence-cancellation route for the pointed-type underlying-map squares was completed and checked with:
+
+```sh
+./check.sh src/foundation/computing-identity-types-subtypes.lagda.md
+./check.sh src/higher-group-theory/computing-identity-types-automorphism-infinity-groups.lagda.md
+./check.sh src/group-theory/functoriality-homotopy-automorphism-groups.lagda.md
+./check.sh src/group-theory/computing-loop-space-functoriality-homotopy-automorphism-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/naturality-effectiveness-loop-spaces.lagda.md
+./check.sh src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md
+rg -n "\{!!\}|allow-unsolved-metas|postulate" src/foundation/computing-identity-types-subtypes.lagda.md src/higher-group-theory/computing-identity-types-automorphism-infinity-groups.lagda.md src/group-theory/computing-loop-space-functoriality-homotopy-automorphism-groups.lagda.md src/synthetic-homotopy-theory/naturality-effectiveness-loop-spaces.lagda.md src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md
+```
+
+The Agda checks passed, and the source search found no holes, postulates, or
+`--allow-unsolved-metas` in the checked proof modules. The new computation
+lemmas prove the first-component computation for subtype extensionality, path
+algebra and transport computations for automorphism-infinity classifying types,
+and the `map-Ω` computation for the classifying pointed map of connected
+components. These results complete
+`naturality-map-inv-underlying-type-concrete-group-Pointed-Type`. The explicit
+section and retraction laws for the underlying-type comparison then give
+`naturality-map-underlying-type-concrete-group-Pointed-Type` by cancellation. A
+direct named homotopy-group wrapper of the inverse theorem was tried, but real
+Agda checking became expensive enough that the wrapper was removed; the
+homotopy-group square types remain as interfaces, and the checked pointed-type
+theorems can still be instantiated manually at
+`pointed-map-iterated-loop-space n f` when needed.
