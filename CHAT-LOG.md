@@ -1745,3 +1745,39 @@ The Agda checks passed, and the source search found no holes, postulates, or `--
 Related commit:
 
 - Not yet committed.
+
+
+### Iterated LES bridge split
+
+Request: Emily asked Codex to implement the next plan, focusing on progress toward the big-picture `π₃(S²) ≅ ℤ` target without getting sidetracked.
+
+Model context:
+
+- Date: 2026-06-15.
+- User-reported model context from earlier in the thread: Emily switched the model to `gpt-5.5` with reasoning effort `xhigh`.
+- Agent-visible runtime identity: Codex; exact served model identity is not exposed directly in the chat context.
+
+Actions:
+
+- Tried to add named low-index homotopy-group naturality wrappers at indices `1` and `2` in `underlying-maps-concrete-homotopy-groups.lagda.md`. Real Agda checking stayed expensive, so the experimental block was removed and the original module was rechecked successfully.
+- Added `src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md` as a one-concept target for the set-truncated iterated LES exactness needed by the group bridge. It proves the `n = 0` total-space case from the existing looped packaged exactness and leaves the recursive iterated total-space and fibration-boundary cases as explicit stubs.
+- Added `src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md` as a one-concept target for the image/kernel transport from set-truncated pointed-set exactness to ordinary group exactness of concrete homotopy groups.
+- Updated `src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md` so it has no local holes and no `--allow-unsolved-metas`; its two bridge theorems now compose the set-level iterated exactness target with the group-exactness transport target.
+- Updated `STATUS-REPORT.md` with the new split, the remaining four lower-level bridge obligations, and the wrapper-performance lesson.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+rg -n "{!!}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md
+git diff --check
+```
+
+All Agda checks passed, and `git diff --check` passed. The source search reports only the intended stubs in the two new lower-level target files.
+
+Related commit:
+
+- This commit — Split iterated LES bridge targets.
