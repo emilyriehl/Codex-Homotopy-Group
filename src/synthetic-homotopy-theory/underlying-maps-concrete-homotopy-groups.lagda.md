@@ -167,6 +167,39 @@ module _
             ( shape-Automorphism-∞-Group
               ( unit-trunc (point-Pointed-Type A)))
             ( x))))
+
+  compute-map-inv-underlying-type-concrete-group-unit-Pointed-Type :
+    map-inv-underlying-type-concrete-group-Pointed-Type A
+      ( unit-trunc-Set refl) ＝
+    unit-Concrete-Group (concrete-group-Pointed-Type A)
+  compute-map-inv-underlying-type-concrete-group-unit-Pointed-Type =
+    ( ap
+      ( eq-Eq-classifying-type-Automorphism-∞-Group
+        ( unit-trunc (point-Pointed-Type A))
+        ( shape-Automorphism-∞-Group
+          ( unit-trunc (point-Pointed-Type A)))
+        ( shape-Automorphism-∞-Group
+          ( unit-trunc (point-Pointed-Type A))))
+      ( refl-effectiveness-trunc zero-𝕋 (point-Pointed-Type A))) ∙
+    ( is-retraction-map-inv-equiv
+      ( extensionality-classifying-type-Automorphism-∞-Group
+        ( unit-trunc (point-Pointed-Type A))
+        ( shape-Automorphism-∞-Group
+          ( unit-trunc (point-Pointed-Type A)))
+        ( shape-Automorphism-∞-Group
+          ( unit-trunc (point-Pointed-Type A))))
+      ( refl))
+
+  preserves-unit-map-underlying-type-concrete-group-Pointed-Type :
+    map-underlying-type-concrete-group-Pointed-Type A
+      ( unit-Concrete-Group (concrete-group-Pointed-Type A)) ＝
+    unit-trunc-Set refl
+  preserves-unit-map-underlying-type-concrete-group-Pointed-Type =
+    ( ap
+      ( map-underlying-type-concrete-group-Pointed-Type A)
+      ( inv compute-map-inv-underlying-type-concrete-group-unit-Pointed-Type)) ∙
+    ( is-section-map-inv-underlying-type-concrete-group-Pointed-Type
+      ( unit-trunc-Set refl))
 ```
 
 ## Properties for pointed types

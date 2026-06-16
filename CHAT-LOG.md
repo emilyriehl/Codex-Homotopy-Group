@@ -1781,3 +1781,37 @@ All Agda checks passed, and `git diff --check` passed. The source search reports
 Related commit:
 
 - This commit — Split iterated LES bridge targets.
+
+
+### Complete group exactness transport bridge
+
+Request: Emily asked Codex to consult the formalization plan and status report, design next steps with the big picture in mind, compare the obstruction with external HoTT long-exact-sequence formalizations, explain how the new plan interacts with the existing set-level exactness code, implement the plan, continue the work, and then commit and push the result.
+
+Model context:
+
+- Date: 2026-06-16.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+
+Actions:
+
+- Added a pointed-set exactness adapter in `src/structured-types/exact-sequences-pointed-sets.lagda.md`, exposing preimage and mere-preimage formulations and wrappers from the existing image/kernel exactness code.
+- Added checked unit-compatibility lemmas for the underlying concrete homotopy-group comparison in `src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md`, using the inverse comparison and its section law to avoid the previous forward-composite normalization trap.
+- Completed `src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md` by removing `--allow-unsolved-metas`, proving the generic group exactness transport from pointed-set exactness, adding the pointed-type loop-truncation wrapper, and filling the two LES-specific group exactness bridge theorems.
+- Updated `STATUS-REPORT.md` to record that the group transport layer is complete and that the remaining bridge work is now concentrated in the two set-level iterated exactness stubs.
+
+Verification:
+
+```sh
+./check.sh src/structured-types/exact-sequences-pointed-sets.lagda.md
+./check.sh src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+rg -n "\{!!\}|allow-unsolved-metas|postulate" src/structured-types/exact-sequences-pointed-sets.lagda.md src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+git diff --check
+```
+
+The Agda checks passed, and `git diff --check` passed. The source search reports only the remaining intended `--allow-unsolved-metas` and holes in `src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md`.
+
+Related commit:
+
+- This commit — Complete group exactness transport bridge.

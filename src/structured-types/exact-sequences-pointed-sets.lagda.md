@@ -92,6 +92,62 @@ module _
 
 ## Properties
 
+### The image of a pointed map as a mere preimage
+
+```agda
+module _
+  {l1 l2 : Level} {A : Pointed-Set l1} {B : Pointed-Set l2}
+  (f : hom-Pointed-Set A B)
+  where
+
+  preimage-hom-Pointed-Set : type-Pointed-Set B → UU (l1 ⊔ l2)
+  preimage-hom-Pointed-Set x = fiber (map-pointed-map f) x
+
+  mere-preimage-hom-Pointed-Set : type-Pointed-Set B → UU (l1 ⊔ l2)
+  mere-preimage-hom-Pointed-Set x =
+    type-trunc-Prop (preimage-hom-Pointed-Set x)
+
+  mere-preimage-is-in-image-hom-Pointed-Set :
+    (x : type-Pointed-Set B) →
+    is-in-image-hom-Pointed-Set {A = A} {B = B} f x →
+    mere-preimage-hom-Pointed-Set x
+  mere-preimage-is-in-image-hom-Pointed-Set x H = H
+
+  is-in-image-mere-preimage-hom-Pointed-Set :
+    (x : type-Pointed-Set B) →
+    mere-preimage-hom-Pointed-Set x →
+    is-in-image-hom-Pointed-Set {A = A} {B = B} f x
+  is-in-image-mere-preimage-hom-Pointed-Set x H = H
+```
+
+### Exactness of pointed sets in mere-preimage form
+
+```agda
+module _
+  {l1 l2 l3 : Level}
+  (A : Pointed-Set l1) (B : Pointed-Set l2) (C : Pointed-Set l3)
+  (f : hom-Pointed-Set A B) (g : hom-Pointed-Set B C)
+  where
+
+  is-in-kernel-mere-preimage-is-exact-hom-Pointed-Set :
+    is-exact-hom-Pointed-Set A B C f g →
+    (x : type-Pointed-Set B) →
+    mere-preimage-hom-Pointed-Set {A = A} {B = B} f x →
+    is-in-kernel-hom-Pointed-Set {A = B} {B = C} g x
+  is-in-kernel-mere-preimage-is-exact-hom-Pointed-Set H x K =
+    forward-implication (H x)
+      ( is-in-image-mere-preimage-hom-Pointed-Set {A = A} {B = B} f x K)
+
+  mere-preimage-is-in-kernel-is-exact-hom-Pointed-Set :
+    is-exact-hom-Pointed-Set A B C f g →
+    (x : type-Pointed-Set B) →
+    is-in-kernel-hom-Pointed-Set {A = B} {B = C} g x →
+    mere-preimage-hom-Pointed-Set {A = A} {B = B} f x
+  mere-preimage-is-in-kernel-is-exact-hom-Pointed-Set H x K =
+    mere-preimage-is-in-image-hom-Pointed-Set {A = A} {B = B} f x
+      ( backward-implication (H x) K)
+```
+
 ### The set truncation of a canonical fiber sequence is exact
 
 ```agda

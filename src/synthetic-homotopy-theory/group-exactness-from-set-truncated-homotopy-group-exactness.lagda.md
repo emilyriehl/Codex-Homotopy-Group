@@ -1,7 +1,6 @@
 # Group exactness from set-truncated homotopy-group exactness
 
 ```agda
-{-# OPTIONS --allow-unsolved-metas #-}
 module synthetic-homotopy-theory.group-exactness-from-set-truncated-homotopy-group-exactness where
 ```
 
@@ -10,20 +9,39 @@ module synthetic-homotopy-theory.group-exactness-from-set-truncated-homotopy-gro
 ```agda
 open import elementary-number-theory.natural-numbers
 
+open import foundation.action-on-identifications-functions
+open import foundation.dependent-pair-types
+open import foundation.equivalences
+open import foundation.identity-types
+open import foundation.injective-maps
+open import foundation.propositional-truncations
 open import foundation.universe-levels
 
 open import group-theory.concrete-groups
 open import group-theory.exact-sequences-groups
+open import group-theory.functoriality-homotopy-automorphism-groups
+open import group-theory.groups
+open import group-theory.homotopy-automorphism-groups
 open import group-theory.homomorphisms-concrete-groups
+open import group-theory.homomorphisms-groups
+open import group-theory.images-of-group-homomorphisms
+open import group-theory.kernels-homomorphisms-groups
 
 open import structured-types.exact-sequences-pointed-sets
 open import structured-types.fiber-sequences
+open import structured-types.pointed-maps
+open import structured-types.pointed-sets
+open import structured-types.pointed-types
 
+open import synthetic-homotopy-theory.functoriality-iterated-loop-spaces
+open import synthetic-homotopy-theory.functoriality-loop-spaces
 open import synthetic-homotopy-theory.homotopy-groups
 open import synthetic-homotopy-theory.iterated-loop-spaces
 open import synthetic-homotopy-theory.long-exact-sequence-homotopy-groups
 open import synthetic-homotopy-theory.loop-spaces
 open import synthetic-homotopy-theory.set-truncated-iterated-exactness-homotopy-groups-fiber-sequences
+open import synthetic-homotopy-theory.underlying-groups-concrete-homotopy-groups
+open import synthetic-homotopy-theory.underlying-maps-concrete-homotopy-groups
 ```
 
 </details>
@@ -43,6 +61,133 @@ image and kernel membership between the two exactness formulations.
 ## Theorems
 
 ```agda
+module _
+  {l1 l2 l3 l4 l5 l6 : Level}
+  (A : Pointed-Set l1) (B : Pointed-Set l2) (C : Pointed-Set l3)
+  (G : Group l4) (H : Group l5) (K : Group l6)
+  (f-set : hom-Pointed-Set A B) (g-set : hom-Pointed-Set B C)
+  (f-group : hom-Group G H) (g-group : hom-Group H K)
+  (eA : type-Group G → type-Pointed-Set A)
+  (dA : type-Pointed-Set A → type-Group G)
+  (eB : type-Group H → type-Pointed-Set B)
+  (eC : type-Group K → type-Pointed-Set C)
+  (is-injective-eB : is-injective eB)
+  (is-injective-eC : is-injective eC)
+  (is-section-dA : (x : type-Pointed-Set A) → eA (dA x) ＝ x)
+  (preserves-unit-eC : eC (unit-Group K) ＝ point-Pointed-Set C)
+  (coherence-f :
+    (x : type-Group G) →
+    eB (map-hom-Group G H f-group x) ＝
+    map-pointed-map f-set (eA x))
+  (coherence-g :
+    (x : type-Group H) →
+    eC (map-hom-Group H K g-group x) ＝
+    map-pointed-map g-set (eB x))
+  where
+
+  is-exact-hom-Group-is-exact-hom-Pointed-Set :
+    is-exact-hom-Pointed-Set A B C f-set g-set →
+    is-exact-hom-Group G H K f-group g-group
+  pr1 (is-exact-hom-Group-is-exact-hom-Pointed-Set E y) I =
+    apply-universal-property-trunc-Prop I
+      ( subset-kernel-hom-Group H K g-group y)
+      ( λ where
+        (x , p) →
+          inv
+            ( is-injective-eC
+              ( ( coherence-g y) ∙
+                ( is-in-kernel-mere-preimage-is-exact-hom-Pointed-Set
+                  ( A)
+                  ( B)
+                  ( C)
+                  ( f-set)
+                  ( g-set)
+                  ( E)
+                  ( eB y)
+                  ( unit-trunc-Prop
+                    ( eA x ,
+                      ( inv (coherence-f x)) ∙
+                      ( ap eB p)))) ∙
+                ( inv preserves-unit-eC))))
+  pr2 (is-exact-hom-Group-is-exact-hom-Pointed-Set E y) K' =
+    apply-universal-property-trunc-Prop
+      ( mere-preimage-is-in-kernel-is-exact-hom-Pointed-Set
+        ( A)
+        ( B)
+        ( C)
+        ( f-set)
+        ( g-set)
+        ( E)
+        ( eB y)
+        ( ( inv (coherence-g y)) ∙
+          ( inv (ap eC K')) ∙
+          ( preserves-unit-eC)))
+      ( subset-image-hom-Group G H f-group y)
+      ( λ where
+        (x , p) →
+          unit-trunc-Prop
+            ( dA x ,
+              is-injective-eB
+                ( ( coherence-f (dA x)) ∙
+                  ( ap (map-pointed-map f-set) (is-section-dA x)) ∙
+                  ( p))))
+
+module _
+  {l1 l2 l3 : Level}
+  (A : Pointed-Type l1) (B : Pointed-Type l2) (C : Pointed-Type l3)
+  (f : A →∗ B) (g : B →∗ C)
+  where
+
+  is-exact-hom-Group-is-exact-loop-truncation-hom-Pointed-Type :
+    is-exact-hom-Pointed-Set
+      ( trunc-Pointed-Set (Ω A))
+      ( trunc-Pointed-Set (Ω B))
+      ( trunc-Pointed-Set (Ω C))
+      ( hom-trunc-Pointed-Set (pointed-map-Ω f))
+      ( hom-trunc-Pointed-Set (pointed-map-Ω g)) →
+    is-exact-hom-Group
+      ( group-Concrete-Group (concrete-group-Pointed-Type A))
+      ( group-Concrete-Group (concrete-group-Pointed-Type B))
+      ( group-Concrete-Group (concrete-group-Pointed-Type C))
+      ( hom-group-hom-Concrete-Group
+        ( concrete-group-Pointed-Type A)
+        ( concrete-group-Pointed-Type B)
+        ( hom-concrete-group-Pointed-Type f))
+      ( hom-group-hom-Concrete-Group
+        ( concrete-group-Pointed-Type B)
+        ( concrete-group-Pointed-Type C)
+        ( hom-concrete-group-Pointed-Type g))
+  is-exact-hom-Group-is-exact-loop-truncation-hom-Pointed-Type =
+    is-exact-hom-Group-is-exact-hom-Pointed-Set
+      ( trunc-Pointed-Set (Ω A))
+      ( trunc-Pointed-Set (Ω B))
+      ( trunc-Pointed-Set (Ω C))
+      ( group-Concrete-Group (concrete-group-Pointed-Type A))
+      ( group-Concrete-Group (concrete-group-Pointed-Type B))
+      ( group-Concrete-Group (concrete-group-Pointed-Type C))
+      ( hom-trunc-Pointed-Set (pointed-map-Ω f))
+      ( hom-trunc-Pointed-Set (pointed-map-Ω g))
+      ( hom-group-hom-Concrete-Group
+        ( concrete-group-Pointed-Type A)
+        ( concrete-group-Pointed-Type B)
+        ( hom-concrete-group-Pointed-Type f))
+      ( hom-group-hom-Concrete-Group
+        ( concrete-group-Pointed-Type B)
+        ( concrete-group-Pointed-Type C)
+        ( hom-concrete-group-Pointed-Type g))
+      ( map-underlying-type-concrete-group-Pointed-Type A)
+      ( map-inv-underlying-type-concrete-group-Pointed-Type A)
+      ( map-underlying-type-concrete-group-Pointed-Type B)
+      ( map-underlying-type-concrete-group-Pointed-Type C)
+      ( is-injective-equiv
+        ( equiv-underlying-type-concrete-group-Pointed-Type B))
+      ( is-injective-equiv
+        ( equiv-underlying-type-concrete-group-Pointed-Type C))
+      ( is-section-map-inv-underlying-type-concrete-group-Pointed-Type A)
+      ( preserves-unit-map-underlying-type-concrete-group-Pointed-Type C)
+      ( naturality-map-underlying-type-concrete-group-Pointed-Type f)
+      ( naturality-map-underlying-type-concrete-group-Pointed-Type g)
+
 module _
   {l1 l2 l3 : Level}
   (S : fiber-sequence-Pointed-Type l1 l2 l3)
@@ -97,8 +242,23 @@ module _
           ( n)
           ( base-fiber-sequence-Pointed-Type S))
         ( hom-fibration-concrete-homotopy-group-fiber-sequence S n))
-  is-exact-hom-Group-is-exact-set-truncation-iterated-loop-fiber-sequence =
-    {!!}
+  is-exact-hom-Group-is-exact-set-truncation-iterated-loop-fiber-sequence n =
+    is-exact-hom-Group-is-exact-loop-truncation-hom-Pointed-Type
+      ( iterated-loop-space
+        ( n)
+        ( fiber-fiber-sequence-Pointed-Type S))
+      ( iterated-loop-space
+        ( n)
+        ( total-space-fiber-sequence-Pointed-Type S))
+      ( iterated-loop-space
+        ( n)
+        ( base-fiber-sequence-Pointed-Type S))
+      ( pointed-map-iterated-loop-space
+        ( n)
+        ( fiber-inclusion-fiber-sequence-Pointed-Type S))
+      ( pointed-map-iterated-loop-space
+        ( n)
+        ( fibration-fiber-sequence-Pointed-Type S))
 
   is-exact-hom-Group-is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence :
     (n : ℕ) →
@@ -149,6 +309,19 @@ module _
           ( n)
           ( fiber-fiber-sequence-Pointed-Type S))
         ( boundary-hom-concrete-homotopy-group-fiber-sequence S n))
-  is-exact-hom-Group-is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence =
-    {!!}
+  is-exact-hom-Group-is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence n =
+    is-exact-hom-Group-is-exact-loop-truncation-hom-Pointed-Type
+      ( iterated-loop-space
+        ( succ-ℕ n)
+        ( total-space-fiber-sequence-Pointed-Type S))
+      ( iterated-loop-space
+        ( succ-ℕ n)
+        ( base-fiber-sequence-Pointed-Type S))
+      ( iterated-loop-space
+        ( n)
+        ( fiber-fiber-sequence-Pointed-Type S))
+      ( pointed-map-iterated-loop-space
+        ( succ-ℕ n)
+        ( fibration-fiber-sequence-Pointed-Type S))
+      ( pointed-map-iterated-boundary-fiber-sequence S n)
 ```
