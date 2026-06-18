@@ -1,7 +1,6 @@
 # Set-truncated iterated exactness of homotopy groups of fiber sequences
 
 ```agda
-{-# OPTIONS --allow-unsolved-metas #-}
 module synthetic-homotopy-theory.set-truncated-iterated-exactness-homotopy-groups-fiber-sequences where
 ```
 
@@ -39,14 +38,17 @@ For a fiber sequence `F ->* E ->* B`, the first target says that the maps
   Ω Ω^n F ->* Ω Ω^n E ->* Ω Ω^n B
 ```
 
-are exact after set truncation. The second target says that the maps
+are exact after set truncation. The second checked target says that the maps
 
 ```text
   Ω Ω^(n+1) E ->* Ω Ω^(n+1) B ->* Ω Ω^n F
 ```
 
-are exact after set truncation. These are the set-level inputs needed for the
-two adjacent group-level LES statements used by the Hopf comparison.
+are exact after set truncation when the final map is the canonical shifted
+boundary map of the iterated loop fiber sequence. The recursive looped
+boundary map is retained separately because it is the map classifying the
+concrete homotopy-group homomorphism; comparing these two boundary maps is the
+remaining bridge from this set-level theorem to the group-level LES statement.
 
 ## Definitions
 
@@ -112,6 +114,23 @@ module _
   hom-trunc-iterated-loop-boundary-fiber-sequence n =
     hom-trunc-Pointed-Set
       ( pointed-map-Ω (pointed-map-iterated-boundary-fiber-sequence S n))
+
+  hom-trunc-canonical-iterated-loop-boundary-fiber-sequence :
+    (n : ℕ) →
+    hom-Pointed-Set
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( succ-ℕ n)
+            ( base-fiber-sequence-Pointed-Type S))))
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( n)
+            ( fiber-fiber-sequence-Pointed-Type S))))
+  hom-trunc-canonical-iterated-loop-boundary-fiber-sequence n =
+    hom-trunc-boundary-fiber-sequence-Pointed-Type
+      ( iterated-loop-fiber-sequence S (succ-ℕ n))
 ```
 
 ## Theorems
@@ -140,9 +159,10 @@ module _
   is-exact-set-truncation-iterated-loop-fiber-sequence zero-ℕ =
     is-exact-set-truncation-loop-fiber-sequence S
   is-exact-set-truncation-iterated-loop-fiber-sequence (succ-ℕ n) =
-    {!!}
+    is-exact-set-truncation-loop-fiber-sequence
+      ( iterated-loop-fiber-sequence S (succ-ℕ n))
 
-  is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence :
+  is-exact-set-truncation-canonical-iterated-loop-fibration-boundary-fiber-sequence :
     (n : ℕ) →
     is-exact-hom-Pointed-Set
       ( trunc-Pointed-Set
@@ -161,7 +181,8 @@ module _
             ( n)
             ( fiber-fiber-sequence-Pointed-Type S))))
       ( hom-trunc-iterated-loop-fibration-fiber-sequence (succ-ℕ n))
-      ( hom-trunc-iterated-loop-boundary-fiber-sequence n)
-  is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence =
-    {!!}
+      ( hom-trunc-canonical-iterated-loop-boundary-fiber-sequence n)
+  is-exact-set-truncation-canonical-iterated-loop-fibration-boundary-fiber-sequence n =
+    is-exact-set-truncation-loop-boundary-fiber-sequence
+      ( iterated-loop-fiber-sequence S (succ-ℕ n))
 ```

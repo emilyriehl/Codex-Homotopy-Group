@@ -77,6 +77,29 @@ The reliable proof shape is to map image witnesses between two maps, eliminate
 truncations only into propositions or sets, and use naturality of the
 set-truncation unit to relate the maps after truncation.
 
+### Iterated connecting maps
+
+When comparing with Coq-HoTT exact-sequence formalizations, note that
+`loops_les` does not build the long exact sequence by proving a definitional
+equality between the loop of one connecting map and the next connecting map.
+Instead, at degree `n` it uses the fresh connecting map of the iterated-loop
+fiber sequence. This is a useful guide for agda-unimath:
+
+- define the canonical shifted boundary map separately when it gives the
+  set-truncated exactness theorem directly;
+- keep any recursive looped boundary map separately when it is the pointed map
+  classifying a concrete homotopy-group homomorphism;
+- bridge these maps only by a named comparison theorem, an image/kernel
+  transport theorem, or a packaged `connect_fiberseq` analogue.
+
+A good next target after proving canonical set-level exactness is often the
+pointed fiber sequence `Ω E ->* Ω B ->* F`, where the comparison equivalence is
+`Ω E ≃* fiber (boundary : Ω B ->* F)`. Proving only the first projection of
+this equivalence can be enough for set-truncated image arguments, but the
+full package needs the second-component coherence in the fiber of the boundary
+map. Avoid treating target-loop inversion or sign changes as definitional;
+exactness survives such changes only after an explicit transport proof.
+
 ## Loop-Map Path Algebra
 
 Remember that `map-Ω f p` is defined by transporting `ap (map-pointed-map f) p`

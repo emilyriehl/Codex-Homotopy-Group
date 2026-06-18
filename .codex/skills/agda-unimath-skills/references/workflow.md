@@ -72,6 +72,7 @@ before writing path algebra by hand:
 rg "fiber-ap-eq-fiber|map-inv-fiber-ap-eq-fiber|triangle-fiber-ap-eq-fiber"
 rg "naturality-unit-trunc-Set|apply-dependent-universal-property-trunc-Set'"
 rg "tr-type-Ω|eq-conjugation-tr-type-Ω|pointed-map-Ω"
+rg "connecting_map|connect_fiberseq|loops_les|isexact_connect_R"
 ```
 
 ## Proof Patterns
@@ -93,6 +94,29 @@ then eliminate truncated preimages with
 `apply-dependent-universal-property-trunc-Set'`. The path between set-truncated
 maps is usually assembled from `naturality-unit-trunc-Set`, `ap unit-trunc-Set`,
 and the relevant pointed homotopy or projection law.
+
+### Iterated LES boundary maps
+
+In iterated long-exact-sequence work, do not assume that the canonical shifted
+boundary map is definitionally equal to the loop of a previously chosen
+boundary map. The Coq-HoTT `loops_les` pattern defines each connecting map
+freshly at each iterated-loop degree:
+
+- the canonical shifted boundary is usually the right map for set-truncated
+  exactness;
+- the recursive looped boundary is often the right classifying pointed map for
+  a concrete homotopy-group homomorphism;
+- the bridge between them should be a named comparison or transport theorem,
+  not a forced definitional equality.
+
+If a group-level transport theorem expects maps of the form
+`hom-trunc-Pointed-Set (pointed-map-Ω f)`, keep the recursive classifying map
+available, but prove set-level exactness against the canonical boundary first.
+Then either package the Coq-HoTT-style exact triple `Ω E ->* Ω B ->* F` as a
+pointed fiber sequence, or prove an image/kernel transport lemma comparing the
+canonical and recursive boundary maps. Do not insert target-loop inversion or
+similar sign fixes unless there is an explicit theorem transporting exactness
+across that equivalence.
 
 ### Equality in fibers under `--without-K`
 

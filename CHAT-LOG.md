@@ -1815,3 +1815,37 @@ The Agda checks passed, and `git diff --check` passed. The source search reports
 Related commit:
 
 - This commit — Complete group exactness transport bridge.
+
+
+### Canonical iterated LES boundary handoff
+
+Request: Emily asked Codex to continue the long exact sequence implementation, record what was learned in the local Agda skills/reference documents, update the status report so another agent knows what to do next, then commit and push the result.
+
+Model context:
+
+- Date: 2026-06-18.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+
+Actions:
+
+- Added loop-fiber and iterated-loop fiber-sequence infrastructure in `src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md`, including the pointed equivalence between the loop of a fiber and the fiber of the loop map, and the iterated loop fiber-sequence package.
+- Removed `--allow-unsolved-metas` from `src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md`, filled the total-space iterated exactness theorem for all `n`, and added the checked canonical shifted fibration-boundary exactness theorem.
+- Updated `src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md` to consume the canonical shifted theorem, exposing the remaining comparison problem against the recursive looped boundary homomorphism used by the concrete-group classifying map.
+- Updated `STATUS-REPORT.md` with a next-agent handoff that names the expected passing checks, the expected `UnequalTerms` failure, and the two viable bridge routes.
+- Updated `.codex/skills/agda-unimath-skills/references/workflow.md` and `.codex/skills/agda-unimath-reference/references/hott-skills.md` with the canonical-vs-recursive boundary lesson from the Coq-HoTT/Rocq-style long exact sequence formalization pattern.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+rg -n "\{!!\}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+git diff --check
+```
+
+The `long-exact-sequence` and `set-truncated-iterated-exactness` checks passed, the source search found no holes/postulates/`--allow-unsolved-metas` in the touched Agda files, and `git diff --check` passed. The `exactness-homotopy-groups-fiber-sequences` check is expected to fail until the bridge is proved; the current failure is `UnequalTerms`, comparing the canonical shifted boundary from `iterated-loop-fiber-sequence S (succ-ℕ n)` with the looped recursive boundary `pointed-map-Ω (pointed-map-iterated-boundary-fiber-sequence S n)`.
+
+Related commit:
+
+- This commit — Add canonical iterated LES boundary handoff.

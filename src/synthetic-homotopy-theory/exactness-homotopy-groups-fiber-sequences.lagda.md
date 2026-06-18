@@ -126,7 +126,7 @@ module _
     is-exact-hom-Group-is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence
       ( S)
       ( n)
-      ( is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence
+      ( is-exact-set-truncation-canonical-iterated-loop-fibration-boundary-fiber-sequence
         ( S)
         ( n))
 ```

@@ -15,6 +15,7 @@ open import foundation.dependent-pair-types
 open import foundation.equality-dependent-pair-types
 open import foundation.equality-fibers-of-maps
 open import foundation.equivalences
+open import foundation.fibers-of-maps
 open import foundation.functoriality-set-truncation
 open import foundation.identity-types
 open import foundation.propositional-truncations
@@ -36,8 +37,10 @@ open import structured-types.pointed-equivalences
 open import structured-types.pointed-homotopies
 open import structured-types.pointed-maps
 open import structured-types.pointed-types
+open import structured-types.whiskering-pointed-homotopies-composition
 
 open import synthetic-homotopy-theory.functoriality-homotopy-groups
+open import synthetic-homotopy-theory.functoriality-iterated-loop-spaces
 open import synthetic-homotopy-theory.functoriality-loop-spaces
 open import synthetic-homotopy-theory.homotopy-groups
 open import synthetic-homotopy-theory.iterated-loop-spaces
@@ -81,6 +84,104 @@ module _
     map-Ω (constant-pointed-map A B) x ＝ refl
   eq-map-Ω-constant-pointed-map-Pointed-Type x =
     ap-const (point-Pointed-Type B) x
+```
+
+### The loop space of the fiber of a pointed map
+
+```agda
+module _
+  {l1 l2 : Level} {E : Pointed-Type l1} {B : Pointed-Type l2}
+  where
+
+  map-loop-fiber-Pointed-Type :
+    (g : E →∗ B) →
+    type-Ω (fiber-Pointed-Type g) →
+    type-Pointed-Type (fiber-Pointed-Type (pointed-map-Ω g))
+  map-loop-fiber-Pointed-Type (g , refl) x =
+    fiber-ap-eq-fiber
+      ( g)
+      ( point-Pointed-Type (fiber-Pointed-Type (g , refl)))
+      ( point-Pointed-Type (fiber-Pointed-Type (g , refl)))
+      ( x)
+
+  map-inv-loop-fiber-Pointed-Type :
+    (g : E →∗ B) →
+    type-Pointed-Type (fiber-Pointed-Type (pointed-map-Ω g)) →
+    type-Ω (fiber-Pointed-Type g)
+  map-inv-loop-fiber-Pointed-Type (g , refl) =
+    map-inv-equiv
+      ( equiv-fiber-ap-eq-fiber
+        ( g)
+        ( point-Pointed-Type (fiber-Pointed-Type (g , refl)))
+        ( point-Pointed-Type (fiber-Pointed-Type (g , refl))))
+
+  is-section-map-inv-loop-fiber-Pointed-Type :
+    (g : E →∗ B) →
+    (x : type-Pointed-Type (fiber-Pointed-Type (pointed-map-Ω g))) →
+    map-loop-fiber-Pointed-Type g (map-inv-loop-fiber-Pointed-Type g x) ＝ x
+  is-section-map-inv-loop-fiber-Pointed-Type (g , refl) =
+    is-section-map-inv-equiv
+      ( equiv-fiber-ap-eq-fiber
+        ( g)
+        ( point-Pointed-Type (fiber-Pointed-Type (g , refl)))
+        ( point-Pointed-Type (fiber-Pointed-Type (g , refl))))
+
+  is-retraction-map-inv-loop-fiber-Pointed-Type :
+    (g : E →∗ B) →
+    (x : type-Ω (fiber-Pointed-Type g)) →
+    map-inv-loop-fiber-Pointed-Type g (map-loop-fiber-Pointed-Type g x) ＝ x
+  is-retraction-map-inv-loop-fiber-Pointed-Type (g , refl) =
+    is-retraction-map-inv-equiv
+      ( equiv-fiber-ap-eq-fiber
+        ( g)
+        ( point-Pointed-Type (fiber-Pointed-Type (g , refl)))
+        ( point-Pointed-Type (fiber-Pointed-Type (g , refl))))
+
+  is-equiv-map-loop-fiber-Pointed-Type :
+    (g : E →∗ B) → is-equiv (map-loop-fiber-Pointed-Type g)
+  is-equiv-map-loop-fiber-Pointed-Type g =
+    is-equiv-is-invertible
+      ( map-inv-loop-fiber-Pointed-Type g)
+      ( is-section-map-inv-loop-fiber-Pointed-Type g)
+      ( is-retraction-map-inv-loop-fiber-Pointed-Type g)
+
+  equiv-loop-fiber-Pointed-Type :
+    (g : E →∗ B) →
+    type-Ω (fiber-Pointed-Type g) ≃
+    type-Pointed-Type (fiber-Pointed-Type (pointed-map-Ω g))
+  pr1 (equiv-loop-fiber-Pointed-Type g) = map-loop-fiber-Pointed-Type g
+  pr2 (equiv-loop-fiber-Pointed-Type g) = is-equiv-map-loop-fiber-Pointed-Type g
+
+  preserves-point-map-loop-fiber-Pointed-Type :
+    (g : E →∗ B) →
+    map-equiv (equiv-loop-fiber-Pointed-Type g) refl ＝
+    point-Pointed-Type (fiber-Pointed-Type (pointed-map-Ω g))
+  preserves-point-map-loop-fiber-Pointed-Type (g , refl) =
+    refl
+
+  pointed-equiv-loop-fiber-Pointed-Type :
+    (g : E →∗ B) →
+    Ω (fiber-Pointed-Type g) ≃∗ fiber-Pointed-Type (pointed-map-Ω g)
+  pr1 (pointed-equiv-loop-fiber-Pointed-Type g) = equiv-loop-fiber-Pointed-Type g
+  pr2 (pointed-equiv-loop-fiber-Pointed-Type g) =
+    preserves-point-map-loop-fiber-Pointed-Type g
+
+  pointed-htpy-loop-fiber-inclusion-Pointed-Type :
+    (g : E →∗ B) →
+    pointed-map-Ω (inclusion-fiber-Pointed-Type g) ~∗
+    ( inclusion-fiber-Pointed-Type (pointed-map-Ω g) ∘∗
+      pointed-map-pointed-equiv (pointed-equiv-loop-fiber-Pointed-Type g))
+  pr1 (pointed-htpy-loop-fiber-inclusion-Pointed-Type (g , refl)) x =
+    inv
+      ( ap pr1
+        ( triangle-fiber-ap-eq-fiber
+          ( g)
+          ( point-Pointed-Type (fiber-Pointed-Type (g , refl)))
+          ( point-Pointed-Type (fiber-Pointed-Type (g , refl)))
+          ( x)))
+  pr2 (pointed-htpy-loop-fiber-inclusion-Pointed-Type (g , refl)) =
+    refl
+
 ```
 
 ### The boundary pointed map of a pointed map
@@ -244,6 +345,7 @@ module _
     ( eq-tr-type-Ω-concat-inv-Pointed-Type
       ( preserves-point-pointed-map g)
       ( q))
+
 ```
 
 ### The fiber sequence after taking the fiber of a pointed map
@@ -433,6 +535,107 @@ module _
     hom-concrete-homotopy-group
       ( n)
       ( fibration-fiber-sequence-Pointed-Type S)
+```
+
+### Iterated loop fiber sequences of a fiber sequence
+
+```agda
+  pointed-equiv-iterated-loop-fiber-fiber-sequence :
+    (n : ℕ) →
+    iterated-loop-space n (fiber-fiber-sequence-Pointed-Type S) ≃∗
+    fiber-Pointed-Type
+      ( pointed-map-iterated-loop-space n
+        ( fibration-fiber-sequence-Pointed-Type S))
+  pointed-equiv-iterated-loop-fiber-fiber-sequence zero-ℕ =
+    pointed-equiv-fiber-fiber-sequence-Pointed-Type S
+  pointed-equiv-iterated-loop-fiber-fiber-sequence (succ-ℕ n) =
+    comp-pointed-equiv
+      ( pointed-equiv-loop-fiber-Pointed-Type
+        ( pointed-map-iterated-loop-space n
+          ( fibration-fiber-sequence-Pointed-Type S)))
+      ( pointed-equiv-Ω-pointed-equiv
+        ( pointed-equiv-iterated-loop-fiber-fiber-sequence n))
+
+  pointed-htpy-iterated-loop-fiber-inclusion-fiber-sequence :
+    (n : ℕ) →
+    pointed-map-iterated-loop-space n
+      ( fiber-inclusion-fiber-sequence-Pointed-Type S) ~∗
+    ( inclusion-fiber-Pointed-Type
+      ( pointed-map-iterated-loop-space n
+        ( fibration-fiber-sequence-Pointed-Type S)) ∘∗
+      pointed-map-pointed-equiv
+        ( pointed-equiv-iterated-loop-fiber-fiber-sequence n))
+  pointed-htpy-iterated-loop-fiber-inclusion-fiber-sequence zero-ℕ =
+    pointed-htpy-fiber-inclusion-fiber-sequence-Pointed-Type S
+  pointed-htpy-iterated-loop-fiber-inclusion-fiber-sequence (succ-ℕ n) =
+    concat-pointed-htpy
+      ( pointed-htpy-Ω
+        ( pointed-map-iterated-loop-space n
+          ( fiber-inclusion-fiber-sequence-Pointed-Type S))
+        ( inclusion-fiber-Pointed-Type
+          ( pointed-map-iterated-loop-space n
+            ( fibration-fiber-sequence-Pointed-Type S)) ∘∗
+          pointed-map-pointed-equiv
+            ( pointed-equiv-iterated-loop-fiber-fiber-sequence n))
+        ( pointed-htpy-iterated-loop-fiber-inclusion-fiber-sequence n))
+      ( concat-pointed-htpy
+        ( preserves-comp-pointed-map-Ω
+          ( inclusion-fiber-Pointed-Type
+            ( pointed-map-iterated-loop-space n
+              ( fibration-fiber-sequence-Pointed-Type S)))
+          ( pointed-map-pointed-equiv
+            ( pointed-equiv-iterated-loop-fiber-fiber-sequence n)))
+        ( concat-pointed-htpy
+          ( right-whisker-comp-pointed-htpy
+            ( pointed-map-Ω
+              ( inclusion-fiber-Pointed-Type
+                ( pointed-map-iterated-loop-space n
+                  ( fibration-fiber-sequence-Pointed-Type S))))
+            ( inclusion-fiber-Pointed-Type
+              ( pointed-map-Ω
+                ( pointed-map-iterated-loop-space n
+                  ( fibration-fiber-sequence-Pointed-Type S))) ∘∗
+              pointed-map-pointed-equiv
+                ( pointed-equiv-loop-fiber-Pointed-Type
+                  ( pointed-map-iterated-loop-space n
+                    ( fibration-fiber-sequence-Pointed-Type S))))
+            ( pointed-htpy-loop-fiber-inclusion-Pointed-Type
+              ( pointed-map-iterated-loop-space n
+                ( fibration-fiber-sequence-Pointed-Type S)))
+            ( pointed-map-Ω
+              ( pointed-map-pointed-equiv
+                ( pointed-equiv-iterated-loop-fiber-fiber-sequence n))))
+          ( associative-comp-pointed-map
+            ( inclusion-fiber-Pointed-Type
+              ( pointed-map-Ω
+                ( pointed-map-iterated-loop-space n
+                  ( fibration-fiber-sequence-Pointed-Type S))))
+            ( pointed-map-pointed-equiv
+              ( pointed-equiv-loop-fiber-Pointed-Type
+                ( pointed-map-iterated-loop-space n
+                  ( fibration-fiber-sequence-Pointed-Type S))))
+            ( pointed-map-Ω
+              ( pointed-map-pointed-equiv
+                ( pointed-equiv-iterated-loop-fiber-fiber-sequence n))))))
+
+  iterated-loop-fiber-sequence :
+    (n : ℕ) → fiber-sequence-Pointed-Type l1 l2 l3
+  pr1 (iterated-loop-fiber-sequence n) =
+    iterated-loop-space n (fiber-fiber-sequence-Pointed-Type S)
+  pr1 (pr2 (iterated-loop-fiber-sequence n)) =
+    iterated-loop-space n (total-space-fiber-sequence-Pointed-Type S)
+  pr1 (pr2 (pr2 (iterated-loop-fiber-sequence n))) =
+    iterated-loop-space n (base-fiber-sequence-Pointed-Type S)
+  pr1 (pr2 (pr2 (pr2 (iterated-loop-fiber-sequence n)))) =
+    pointed-map-iterated-loop-space n
+      ( fiber-inclusion-fiber-sequence-Pointed-Type S)
+  pr1 (pr2 (pr2 (pr2 (pr2 (iterated-loop-fiber-sequence n))))) =
+    pointed-map-iterated-loop-space n
+      ( fibration-fiber-sequence-Pointed-Type S)
+  pr1 (pr2 (pr2 (pr2 (pr2 (pr2 (iterated-loop-fiber-sequence n)))))) =
+    pointed-equiv-iterated-loop-fiber-fiber-sequence n
+  pr2 (pr2 (pr2 (pr2 (pr2 (pr2 (iterated-loop-fiber-sequence n)))))) =
+    pointed-htpy-iterated-loop-fiber-inclusion-fiber-sequence n
 ```
 
 ### The boundary map of a fiber sequence
@@ -1716,6 +1919,86 @@ transporting it back across the pointed equivalence with the chosen fiber.
     is-in-kernel-trunc-loop-fibration-is-in-image-trunc-loop-fiber-inclusion-fiber-sequence x
   pr2 (is-exact-set-truncation-loop-fiber-sequence x) =
     is-in-image-trunc-loop-fiber-inclusion-is-in-kernel-trunc-loop-fibration-fiber-sequence x
+
+  map-loop-fiber-sequence-Pointed-Type :
+    type-Ω (fiber-fiber-sequence-Pointed-Type S) →
+    type-Pointed-Type
+      ( fiber-Pointed-Type
+        ( pointed-map-Ω (fibration-fiber-sequence-Pointed-Type S)))
+  pr1 (map-loop-fiber-sequence-Pointed-Type x) =
+    map-Ω (fiber-inclusion-fiber-sequence-Pointed-Type S) x
+  pr2 (map-loop-fiber-sequence-Pointed-Type x) =
+    eq-map-Ω-fibration-map-Ω-fiber-inclusion-fiber-sequence-Pointed-Type x
+
+  pointed-map-loop-fiber-sequence-Pointed-Type :
+    Ω (fiber-fiber-sequence-Pointed-Type S) →∗
+    fiber-Pointed-Type
+      ( pointed-map-Ω (fibration-fiber-sequence-Pointed-Type S))
+  pr1 pointed-map-loop-fiber-sequence-Pointed-Type =
+    map-loop-fiber-sequence-Pointed-Type
+  pr2 pointed-map-loop-fiber-sequence-Pointed-Type =
+    eq-Eq-fiber
+      ( map-pointed-map (pointed-map-Ω (fibration-fiber-sequence-Pointed-Type S)))
+      ( point-Pointed-Type (Ω (base-fiber-sequence-Pointed-Type S)))
+      ( preserves-refl-map-Ω (fiber-inclusion-fiber-sequence-Pointed-Type S))
+      ( ( left-transpose-eq-concat
+          ( preserves-comp-map-Ω
+            ( fibration-fiber-sequence-Pointed-Type S)
+            ( fiber-inclusion-fiber-sequence-Pointed-Type S)
+            ( refl))
+          ( preserves-point-pointed-map
+            ( pointed-map-Ω (fibration-fiber-sequence-Pointed-Type S) ∘∗
+              pointed-map-Ω (fiber-inclusion-fiber-sequence-Pointed-Type S)))
+          ( preserves-refl-map-Ω
+            ( fibration-fiber-sequence-Pointed-Type S ∘∗
+              fiber-inclusion-fiber-sequence-Pointed-Type S))
+          ( inv
+            ( coherence-point-comp-map-Ω
+              ( fibration-fiber-sequence-Pointed-Type S)
+              ( fiber-inclusion-fiber-sequence-Pointed-Type S)))) ∙
+        ( ap
+          ( λ u →
+            inv
+              ( preserves-comp-map-Ω
+                ( fibration-fiber-sequence-Pointed-Type S)
+                ( fiber-inclusion-fiber-sequence-Pointed-Type S)
+                ( refl)) ∙
+            u)
+          ( coherence-point-htpy-map-Ω
+            ( fibration-fiber-sequence-Pointed-Type S ∘∗
+              fiber-inclusion-fiber-sequence-Pointed-Type S)
+            ( constant-pointed-map
+              ( fiber-fiber-sequence-Pointed-Type S)
+              ( base-fiber-sequence-Pointed-Type S))
+            ( null-htpy-comp-fibration-fiber-inclusion-fiber-sequence-Pointed-Type S))) ∙
+        ( inv
+          ( assoc
+            ( inv
+              ( preserves-comp-map-Ω
+                ( fibration-fiber-sequence-Pointed-Type S)
+                ( fiber-inclusion-fiber-sequence-Pointed-Type S)
+                ( refl)))
+            ( htpy-map-Ω
+              ( fibration-fiber-sequence-Pointed-Type S ∘∗
+                fiber-inclusion-fiber-sequence-Pointed-Type S)
+              ( constant-pointed-map
+                ( fiber-fiber-sequence-Pointed-Type S)
+                ( base-fiber-sequence-Pointed-Type S))
+              ( null-htpy-comp-fibration-fiber-inclusion-fiber-sequence-Pointed-Type S)
+              ( refl))
+            ( eq-map-Ω-constant-pointed-map-Pointed-Type
+              { A = fiber-fiber-sequence-Pointed-Type S}
+              { B = base-fiber-sequence-Pointed-Type S}
+              ( refl)))))
+
+  map-inv-loop-fiber-sequence-Pointed-Type :
+    type-Pointed-Type
+      ( fiber-Pointed-Type
+        ( pointed-map-Ω (fibration-fiber-sequence-Pointed-Type S))) →
+    type-Ω (fiber-fiber-sequence-Pointed-Type S)
+  map-inv-loop-fiber-sequence-Pointed-Type (x , H) =
+    loop-fiber-fiber-sequence-is-in-kernel-loop-fibration x H
+
 ```
 
 

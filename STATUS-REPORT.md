@@ -7,7 +7,7 @@ Update this file whenever significant progress is made, for example when a
 new theorem is proved, an important definition is formalized, a planned module
 is added, or a major blocked item is resolved or re-scoped.
 
-Last updated: 2026-06-16.
+Last updated: 2026-06-18.
 
 ## Current summary
 
@@ -69,12 +69,13 @@ calculation:
   coherence squares. A pointed-type wrapper instantiates this theorem using the
   checked underlying-map squares, and the two LES-specific concrete homotopy
   group transport targets are now proved.
-- The group-level LES bridge has been split one level lower. The file
-  `exactness-homotopy-groups-fiber-sequences` now has no local holes or
-  `--allow-unsolved-metas`; it composes separate targets for set-truncated
-  iterated LES exactness and for transporting that pointed-set exactness to
-  ordinary group exactness. The set-truncated target already proves the `n = 0`
-  total-space iterated-loop case from the existing looped packaged exactness.
+- The group-level LES bridge has been split one level lower. The
+  set-truncated iterated exactness file now checks without
+  `--allow-unsolved-metas`: it proves the total-space iterated-loop case for
+  all `n` and the Coq-HoTT-style canonical shifted boundary case. The remaining
+  bridge is no longer a set-truncated exactness stub; it is the comparison
+  between the canonical shifted boundary map and the loop of the recursive
+  concrete-group boundary map used by the group-level transport.
 
 The final theorem `pi_3(S^2) = Z` is not yet proved. The top-level Agda file
 now assembles the final isomorphism through two next-level files that themselves
@@ -84,8 +85,10 @@ and Hopf LES packaging proved. The attempted route through fiber sequences of
 concrete homotopy-group classifying maps has been rejected as too strong in
 general. The current group-level LES bridge is therefore explicitly reduced to
 comparing set-truncated adjacent exactness with ordinary group exactness of
-concrete homotopy groups, and now delegates only to the two set-truncated
-iterated exactness stubs. The
+concrete homotopy groups. The total-space set-truncated iterated exactness
+case and the canonical shifted boundary case now check; the outstanding bridge
+is the coherence identifying that canonical shifted boundary with the looped
+recursive boundary map expected by the concrete-group homomorphism. The
 `π₃(S³) ≅ ℤ` calculation is reduced to a stability comparison
 `π₂(S²) ≅ π₃(S³)`, a Hopf base computation `π₂(S²) ≅ π₁(S¹)`, and the
 group-level circle calculation `π₁(S¹) ≅ ℤ`. These are still intentionally
@@ -115,9 +118,9 @@ unfinished scaffolds.
 | Loop-space classifying-map computations | [`src/group-theory/computing-loop-space-functoriality-homotopy-automorphism-groups.lagda.md`](src/group-theory/computing-loop-space-functoriality-homotopy-automorphism-groups.lagda.md) | Computes `map-Ω` on the classifying pointed map of connected components after automorphism-infinity extensionality. |
 | Loop-space naturality of effectiveness | [`src/synthetic-homotopy-theory/naturality-effectiveness-loop-spaces.lagda.md`](src/synthetic-homotopy-theory/naturality-effectiveness-loop-spaces.lagda.md) | Transports naturality of effectiveness of truncation into the based-loop form required by the inverse underlying-map square. |
 | Naturality of effectiveness of truncation | [`src/foundation/naturality-effectiveness-truncation.lagda.md`](src/foundation/naturality-effectiveness-truncation.lagda.md) | Proves that effectiveness on a unit-truncated path computes to `ap unit-trunc`, and that effectiveness of truncation is natural in maps, up to the naturality paths of the truncation unit. This is the reusable foundation lemma needed by the underlying-map comparison for concrete homotopy groups. |
-| Set-truncated iterated LES exactness | [`src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md) | Defines the set-truncated maps on `Ω Ω^n F`, `Ω Ω^n E`, and `Ω Ω^n B`, plus the iterated fibration-boundary map. It proves the `n = 0` total-space case from the existing looped packaged exactness and records the remaining iterated set-level exactness stubs. |
+| Set-truncated iterated LES exactness | [`src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md) | Defines the set-truncated maps on `Ω Ω^n F`, `Ω Ω^n E`, and `Ω Ω^n B`, plus both the recursive boundary map used by the concrete-group homomorphism and the canonical shifted boundary map suggested by Coq-HoTT. It now checks without `--allow-unsolved-metas`, proving the total-space iterated case for all `n` and exactness for the canonical shifted fibration-boundary case. |
 | Group exactness transport for homotopy groups | [`src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md`](src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md) | Proves a generic transfer theorem from pointed-set exactness to ordinary group exactness using explicit comparison maps, injectivity, unit compatibility, and coherence squares; proves a pointed-type wrapper; and proves both LES-specific transport targets from set-truncated iterated exactness to ordinary group exactness of concrete homotopy groups. This file no longer uses `--allow-unsolved-metas`. |
-| Group exactness of homotopy groups | [`src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md) | Records the two adjacent group-level exactness statements needed by the Hopf comparison and proves them by composing the new set-truncated iterated LES target with the new group-exactness transport target. This file has no local holes and no `--allow-unsolved-metas`; the unfinished work is isolated in the two lower-level target files. |
+| Group exactness of homotopy groups | [`src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md) | Records the two adjacent group-level exactness statements needed by the Hopf comparison. The total-space statement still composes through the checked transport layer. The fibration-boundary statement now exposes the remaining comparison problem: the checked canonical shifted boundary exactness has the right carrier types but not the same map as the looped recursive boundary expected by the concrete-group transport theorem. |
 | Hopf fiber sequence | [`src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md`](src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md) | Records the unfinished packaged fiber sequence with fiber `S¹`, total space `S³`, and base `S²` fixed definitionally. |
 | Hopf LES comparison for third homotopy groups | [`src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md) | Builds the Hopf comparison isomorphism from the Hopf fibration homomorphism, two supplied group exactness hypotheses, and the two trivial endpoint hypotheses. |
 | Hopf comparison for third homotopy groups | [`src/synthetic-homotopy-theory/hopf-fibration-third-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/hopf-fibration-third-homotopy-groups.lagda.md) | Delegates `π₃(S³) ≅ π₃(S²)` to the Hopf LES comparison scaffold and has no direct proof hole. |
@@ -133,12 +136,12 @@ unfinished scaffolds.
 |---|---|---|
 | General pointed fiber sequences | Done | Implemented in [`src/structured-types/fiber-sequences.lagda.md`](src/structured-types/fiber-sequences.lagda.md). |
 | Induced maps on homotopy groups | Done | Implemented via iterated loop functoriality and concrete homotopy group functoriality. |
-| Long exact sequence of homotopy groups | Partial | Boundary maps, induced homomorphisms, pointed-set exactness, exactness of the set truncation of canonical and packaged `F ->* E ->* B` triples, exactness of the packaged boundary triple `Ω B ->* F ->* E`, exactness of the packaged loop-boundary triple `Ω E ->* Ω B ->* F`, exactness of the looped packaged triple `Ω F ->* Ω E ->* Ω B`, the first fiber-of-the-fiber identification `Ω B ≃* fiber (fiber g -> E)`, pointed-set exactness of the canonical triples `Ω B ->* fiber g ->* E`, `Ω E ->* Ω B ->* fiber g`, and `Ω² B ->* Ω (fiber g) ->* Ω E`, and a bundled initial four-triple set-truncated LES segment are formalized. The group-exactness transport layer is now complete; the remaining LES bridge work is the two set-truncated iterated exactness targets. The classifying-map fiber-sequence route is recorded as too strong in general. |
+| Long exact sequence of homotopy groups | Partial | Boundary maps, induced homomorphisms, pointed-set exactness, exactness of the set truncation of canonical and packaged `F ->* E ->* B` triples, exactness of the packaged boundary triple `Ω B ->* F ->* E`, exactness of the packaged loop-boundary triple `Ω E ->* Ω B ->* F`, exactness of the looped packaged triple `Ω F ->* Ω E ->* Ω B`, the first fiber-of-the-fiber identification `Ω B ≃* fiber (fiber g -> E)`, pointed-set exactness of the canonical triples `Ω B ->* fiber g ->* E`, `Ω E ->* Ω B ->* fiber g`, and `Ω² B ->* Ω (fiber g) ->* Ω E`, and a bundled initial four-triple set-truncated LES segment are formalized. The group-exactness transport layer is now complete. The set-truncated iterated total-space theorem and the canonical shifted boundary theorem are checked; the remaining LES bridge work is a comparison/transport theorem between the canonical shifted boundary and the loop of the recursive boundary map used to define the concrete-group homomorphism. The classifying-map fiber-sequence route is recorded as too strong in general. |
 | Exactness-to-isomorphism with zero endpoints | Done | Proved in [`src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md`](src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md). |
 | Higher homotopy groups of the circle vanish | Mostly done | Positive concrete homotopy groups of the circle and 1-sphere are trivial. Further packaging may be needed for the exact Hopf LES endpoints. |
 | Loop space of the circle is the integers | Partial | The loop-space equivalence is formalized. A group-level final packaging against the target theorem may still be needed. |
 | Hopf construction and Hopf fibration | Stubbed | The packaged Hopf fiber sequence target `S^1 -> S^3 -> S^2` is recorded, but the construction, maps, and fiber-sequence proof remain holes. |
-| Hopf LES consequence `pi_3(S^3) = pi_3(S^2)` | Partially proved | The exactness-to-isomorphism extraction and Hopf LES packaging are proved. The comparison still depends on the Hopf fiber sequence, the circle endpoint triviality inputs, and the two set-level iterated LES bridge obligations. |
+| Hopf LES consequence `pi_3(S^3) = pi_3(S^2)` | Partially proved | The exactness-to-isomorphism extraction and Hopf LES packaging are proved. The comparison still depends on the Hopf fiber sequence, the circle endpoint triviality inputs, and the remaining boundary-comparison bridge from canonical shifted set-level exactness to the looped recursive concrete-group boundary. |
 | Freudenthal suspension theorem | Not started | Still a major missing theorem. |
 | Stability of homotopy groups of spheres | Instance stubbed | The needed comparison `π₂(S²) ≅ π₃(S³)` is recorded as an unfinished theorem depending on Freudenthal/stability. |
 | Diagonal theorem `pi_n(S^n) = Z` | Reduced to lower stubs | The `n = 3` file now composes the stability, `π₂(S²) ≅ π₁(S¹)`, and `π₁(S¹) ≅ ℤ` scaffolds. The general theorem remains unproved. |
@@ -146,12 +149,15 @@ unfinished scaffolds.
 
 ## Remaining tasks
 
-1. Fill the two remaining lower-level LES bridge obligations: recursive
-   set-truncated iterated exactness for the total-space triples and
-   set-truncated iterated exactness for the fibration-boundary triples. The
-   pointed-set mere-preimage adapter, unit comparison, generic group-transfer
-   theorem, pointed-type wrapper, and both concrete homotopy-group transport
-   targets are checked.
+1. Fill the remaining lower-level LES bridge obligation: compare the checked
+   canonical shifted fibration-boundary map with the loop of the recursive
+   boundary map used by `boundary-hom-concrete-homotopy-group-fiber-sequence`,
+   or package the Coq-HoTT-style exact triple `Ω E ->* Ω B ->* F` as a pointed
+   fiber sequence and derive the recursive looped exactness from that. The
+   total-space set-truncated iterated exactness, canonical shifted boundary
+   exactness, pointed-set mere-preimage adapter, unit comparison, generic
+   group-transfer theorem, pointed-type wrapper, and concrete homotopy-group
+   transport layer are checked.
 2. Formalize the Hopf fiber sequence `S^1 -> S^3 -> S^2`, including the actual
    pointed maps and the fiber-sequence proof.
 3. Package the group-level computation `π₁(S¹) ≅ ℤ` from the existing loop-space
@@ -161,6 +167,36 @@ unfinished scaffolds.
    stability.
 6. Recheck `π₃(S³) ≅ ℤ` and `π₃(S²) ≅ ℤ` after their imported lower stubs are
    proved; their proof bodies should remain short compositions.
+
+## Next agent handoff
+
+The next agent should not try to prove the fibration-boundary group exactness by reducing the canonical shifted boundary to the looped recursive boundary by `refl`. The checked set-level theorem is `is-exact-set-truncation-canonical-iterated-loop-fibration-boundary-fiber-sequence` in `src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md`. It proves exactness for the canonical shifted boundary `hom-trunc-canonical-iterated-loop-boundary-fiber-sequence`. The group-level consumer in `src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md` still expects `hom-trunc-iterated-loop-boundary-fiber-sequence`, the loop of the recursive boundary map used by `boundary-hom-concrete-homotopy-group-fiber-sequence`.
+
+The next proof target is one of these two equivalent bridge routes:
+
+1. Package the Coq-HoTT-style connecting fiber sequence `Ω E ->* Ω B ->* F` for a packaged fiber sequence `F ->* E ->* B`, with comparison equivalence `Ω E ≃* fiber (boundary : Ω B ->* F)`, and derive recursive looped exactness from iterating that packaged fiber sequence.
+2. Prove an image/kernel transport lemma comparing the canonical shifted boundary hom on set truncations with the recursive looped boundary hom, and use it to feed the existing group-exactness transport theorem.
+
+Useful starting files and definitions:
+
+- `long-exact-sequence-homotopy-groups.lagda.md`: `map-fiber-boundary-map-Ω-Pointed-Type`, `map-inv-fiber-boundary-map-Ω-Pointed-Type`, `eq-map-Ω-map-inv-fiber-boundary-map-Ω-Pointed-Type`, and `iterated-loop-fiber-sequence`.
+- `set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md`: the checked canonical shifted boundary theorem and the recursive boundary hom.
+- `group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md`: the existing transport theorem that explains why the recursive classifying map is currently expected.
+
+Expected verification state before the bridge is solved:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+```
+
+Both should pass. This command is expected to fail until the bridge theorem is proved:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+```
+
+The expected error is `UnequalTerms`, comparing the canonical shifted boundary from `iterated-loop-fiber-sequence S (succ-ℕ n)` with the looped recursive boundary `pointed-map-Ω (pointed-map-iterated-boundary-fiber-sequence S n)`.
 
 ## Current verification
 
@@ -412,3 +448,28 @@ holes only in
 `set-truncated-iterated-exactness-homotopy-groups-fiber-sequences`: the
 remaining total-space recursive iterated exactness target and the remaining
 iterated fibration-boundary exactness target.
+
+On 2026-06-18, the iterated set-truncated LES target was revised following the
+Coq-HoTT `loops_les` architecture: the file now keeps the recursive boundary
+map used by the concrete-group homomorphism, adds the canonical shifted
+boundary map, proves total-space iterated exactness for all `n`, and proves
+exactness for the canonical shifted fibration-boundary case. The temporary
+route through target-loop inversion was removed. The checked commands were:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+```
+
+Both checks passed. Rechecking
+`src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md`
+then failed for the expected remaining bridge reason: the checked canonical
+shifted boundary map has the right source and target pointed sets, but Agda
+rightly does not identify it with
+`hom-trunc-iterated-loop-boundary-fiber-sequence`, i.e. the loop of the
+recursive boundary map used by the concrete-group homomorphism. An attempted
+stronger fix, packaging `Ω E ->* Ω B ->* F` as a pointed fiber sequence, reduced
+to the missing section/coherence proof for the equivalence
+`Ω E ≃* fiber (boundary : Ω B ->* F)`. The next focused theorem should be that
+Coq-HoTT-style `connect_fiberseq` package, or an image/kernel transport lemma
+that avoids strict equality of the two boundary formulas.
