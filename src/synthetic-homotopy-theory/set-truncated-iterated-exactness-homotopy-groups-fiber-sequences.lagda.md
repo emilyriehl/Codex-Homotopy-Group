@@ -9,6 +9,8 @@ module synthetic-homotopy-theory.set-truncated-iterated-exactness-homotopy-group
 ```agda
 open import elementary-number-theory.natural-numbers
 
+open import foundation.identity-types
+open import foundation.logical-equivalences
 open import foundation.universe-levels
 
 open import structured-types.exact-sequences-pointed-sets
@@ -185,4 +187,141 @@ module _
   is-exact-set-truncation-canonical-iterated-loop-fibration-boundary-fiber-sequence n =
     is-exact-set-truncation-loop-boundary-fiber-sequence
       ( iterated-loop-fiber-sequence S (succ-ℕ n))
+
+  is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence-kernel :
+    (n : ℕ) →
+    ((x :
+      type-Pointed-Set
+        ( trunc-Pointed-Set
+          ( Ω
+            ( iterated-loop-space
+              ( succ-ℕ n)
+              ( base-fiber-sequence-Pointed-Type S))))) →
+      is-in-kernel-hom-Pointed-Set
+        { A =
+          trunc-Pointed-Set
+            ( Ω
+              ( iterated-loop-space
+                ( succ-ℕ n)
+                ( base-fiber-sequence-Pointed-Type S)))}
+        { B =
+          trunc-Pointed-Set
+            ( Ω
+              ( iterated-loop-space
+                ( n)
+                ( fiber-fiber-sequence-Pointed-Type S)))}
+        ( hom-trunc-iterated-loop-boundary-fiber-sequence n)
+        ( x) ↔
+      is-in-kernel-hom-Pointed-Set
+        { A =
+          trunc-Pointed-Set
+            ( Ω
+              ( iterated-loop-space
+                ( succ-ℕ n)
+                ( base-fiber-sequence-Pointed-Type S)))}
+        { B =
+          trunc-Pointed-Set
+            ( Ω
+              ( iterated-loop-space
+                ( n)
+                ( fiber-fiber-sequence-Pointed-Type S)))}
+        ( hom-trunc-canonical-iterated-loop-boundary-fiber-sequence n)
+        ( x)) →
+    is-exact-hom-Pointed-Set
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( succ-ℕ n)
+            ( total-space-fiber-sequence-Pointed-Type S))))
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( succ-ℕ n)
+            ( base-fiber-sequence-Pointed-Type S))))
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( n)
+            ( fiber-fiber-sequence-Pointed-Type S))))
+      ( hom-trunc-iterated-loop-fibration-fiber-sequence (succ-ℕ n))
+      ( hom-trunc-iterated-loop-boundary-fiber-sequence n)
+  is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence-kernel
+    n K =
+    is-exact-hom-Pointed-Set-iff-kernel-right
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( succ-ℕ n)
+            ( total-space-fiber-sequence-Pointed-Type S))))
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( succ-ℕ n)
+            ( base-fiber-sequence-Pointed-Type S))))
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( n)
+            ( fiber-fiber-sequence-Pointed-Type S))))
+      ( hom-trunc-iterated-loop-fibration-fiber-sequence (succ-ℕ n))
+      ( hom-trunc-canonical-iterated-loop-boundary-fiber-sequence n)
+      ( hom-trunc-iterated-loop-boundary-fiber-sequence n)
+      ( K)
+      ( is-exact-set-truncation-canonical-iterated-loop-fibration-boundary-fiber-sequence
+        ( n))
+
+  is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence :
+    (n : ℕ) →
+    ((x :
+      type-Pointed-Set
+        ( trunc-Pointed-Set
+          ( Ω
+            ( iterated-loop-space
+              ( succ-ℕ n)
+              ( base-fiber-sequence-Pointed-Type S))))) →
+      map-pointed-map (hom-trunc-iterated-loop-boundary-fiber-sequence n) x ＝
+      map-pointed-map
+        ( hom-trunc-canonical-iterated-loop-boundary-fiber-sequence n)
+        ( x)) →
+    is-exact-hom-Pointed-Set
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( succ-ℕ n)
+            ( total-space-fiber-sequence-Pointed-Type S))))
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( succ-ℕ n)
+            ( base-fiber-sequence-Pointed-Type S))))
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( n)
+            ( fiber-fiber-sequence-Pointed-Type S))))
+      ( hom-trunc-iterated-loop-fibration-fiber-sequence (succ-ℕ n))
+      ( hom-trunc-iterated-loop-boundary-fiber-sequence n)
+  is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence n H =
+    is-exact-hom-Pointed-Set-htpy-right
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( succ-ℕ n)
+            ( total-space-fiber-sequence-Pointed-Type S))))
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( succ-ℕ n)
+            ( base-fiber-sequence-Pointed-Type S))))
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( n)
+            ( fiber-fiber-sequence-Pointed-Type S))))
+      ( hom-trunc-iterated-loop-fibration-fiber-sequence (succ-ℕ n))
+      ( hom-trunc-canonical-iterated-loop-boundary-fiber-sequence n)
+      ( hom-trunc-iterated-loop-boundary-fiber-sequence n)
+      ( H)
+      ( is-exact-set-truncation-canonical-iterated-loop-fibration-boundary-fiber-sequence
+        ( n))
 ```

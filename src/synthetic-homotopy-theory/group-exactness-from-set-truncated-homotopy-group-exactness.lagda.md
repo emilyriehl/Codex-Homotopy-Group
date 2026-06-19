@@ -10,8 +10,10 @@ module synthetic-homotopy-theory.group-exactness-from-set-truncated-homotopy-gro
 open import elementary-number-theory.natural-numbers
 
 open import foundation.action-on-identifications-functions
+open import foundation.contractible-types
 open import foundation.dependent-pair-types
 open import foundation.equivalences
+open import foundation.equivalences-contractible-types
 open import foundation.identity-types
 open import foundation.injective-maps
 open import foundation.propositional-truncations
@@ -133,6 +135,55 @@ module _
                   ( p))))
 
 module _
+  {l1 l2 l3 l4 l5 l6 : Level}
+  (A : Pointed-Set l1) (B : Pointed-Set l2) (C : Pointed-Set l3)
+  (G : Group l4) (H : Group l5) (K : Group l6)
+  (f-set : hom-Pointed-Set A B) (g-set : hom-Pointed-Set B C)
+  (f-group : hom-Group G H) (g-group : hom-Group H K)
+  (eA : type-Group G → type-Pointed-Set A)
+  (dA : type-Pointed-Set A → type-Group G)
+  (eB : type-Group H → type-Pointed-Set B)
+  (is-injective-eB : is-injective eB)
+  (is-section-dA : (x : type-Pointed-Set A) → eA (dA x) ＝ x)
+  (is-contr-K : is-contr (type-Group K))
+  (is-contr-C : is-contr (type-Pointed-Set C))
+  (coherence-f :
+    (x : type-Group G) →
+    eB (map-hom-Group G H f-group x) ＝
+    map-pointed-map f-set (eA x))
+  where
+
+  is-exact-hom-Group-is-exact-hom-Pointed-Set-is-trivial-codomain :
+    is-exact-hom-Pointed-Set A B C f-set g-set →
+    is-exact-hom-Group G H K f-group g-group
+  pr1
+    ( is-exact-hom-Group-is-exact-hom-Pointed-Set-is-trivial-codomain E y)
+    I =
+    eq-is-contr is-contr-K
+  pr2
+    ( is-exact-hom-Group-is-exact-hom-Pointed-Set-is-trivial-codomain E y)
+    K' =
+    apply-universal-property-trunc-Prop
+      ( mere-preimage-is-in-kernel-is-exact-hom-Pointed-Set
+        ( A)
+        ( B)
+        ( C)
+        ( f-set)
+        ( g-set)
+        ( E)
+        ( eB y)
+        ( eq-is-contr is-contr-C))
+      ( subset-image-hom-Group G H f-group y)
+      ( λ where
+        (x , p) →
+          unit-trunc-Prop
+            ( dA x ,
+              is-injective-eB
+                ( ( coherence-f (dA x)) ∙
+                  ( ap (map-pointed-map f-set) (is-section-dA x)) ∙
+                  ( p))))
+
+module _
   {l1 l2 l3 : Level}
   (A : Pointed-Type l1) (B : Pointed-Type l2) (C : Pointed-Type l3)
   (f : A →∗ B) (g : B →∗ C)
@@ -187,6 +238,62 @@ module _
       ( preserves-unit-map-underlying-type-concrete-group-Pointed-Type C)
       ( naturality-map-underlying-type-concrete-group-Pointed-Type f)
       ( naturality-map-underlying-type-concrete-group-Pointed-Type g)
+
+  is-exact-hom-Group-is-exact-loop-truncation-hom-Pointed-Type-is-trivial-codomain :
+    (g-set :
+      hom-Pointed-Set
+        ( trunc-Pointed-Set (Ω B))
+        ( trunc-Pointed-Set (Ω C))) →
+    (g-group :
+      hom-Group
+        ( group-Concrete-Group (concrete-group-Pointed-Type B))
+        ( group-Concrete-Group (concrete-group-Pointed-Type C))) →
+    is-contr
+      ( type-Group
+        ( group-Concrete-Group (concrete-group-Pointed-Type C))) →
+    is-exact-hom-Pointed-Set
+      ( trunc-Pointed-Set (Ω A))
+      ( trunc-Pointed-Set (Ω B))
+      ( trunc-Pointed-Set (Ω C))
+      ( hom-trunc-Pointed-Set (pointed-map-Ω f))
+      ( g-set) →
+    is-exact-hom-Group
+      ( group-Concrete-Group (concrete-group-Pointed-Type A))
+      ( group-Concrete-Group (concrete-group-Pointed-Type B))
+      ( group-Concrete-Group (concrete-group-Pointed-Type C))
+      ( hom-group-hom-Concrete-Group
+        ( concrete-group-Pointed-Type A)
+        ( concrete-group-Pointed-Type B)
+        ( hom-concrete-group-Pointed-Type f))
+      ( g-group)
+  is-exact-hom-Group-is-exact-loop-truncation-hom-Pointed-Type-is-trivial-codomain
+    g-set g-group is-contr-target =
+    is-exact-hom-Group-is-exact-hom-Pointed-Set-is-trivial-codomain
+      ( trunc-Pointed-Set (Ω A))
+      ( trunc-Pointed-Set (Ω B))
+      ( trunc-Pointed-Set (Ω C))
+      ( group-Concrete-Group (concrete-group-Pointed-Type A))
+      ( group-Concrete-Group (concrete-group-Pointed-Type B))
+      ( group-Concrete-Group (concrete-group-Pointed-Type C))
+      ( hom-trunc-Pointed-Set (pointed-map-Ω f))
+      ( g-set)
+      ( hom-group-hom-Concrete-Group
+        ( concrete-group-Pointed-Type A)
+        ( concrete-group-Pointed-Type B)
+        ( hom-concrete-group-Pointed-Type f))
+      ( g-group)
+      ( map-underlying-type-concrete-group-Pointed-Type A)
+      ( map-inv-underlying-type-concrete-group-Pointed-Type A)
+      ( map-underlying-type-concrete-group-Pointed-Type B)
+      ( is-injective-equiv
+        ( equiv-underlying-type-concrete-group-Pointed-Type B))
+      ( is-section-map-inv-underlying-type-concrete-group-Pointed-Type A)
+      ( is-contr-target)
+      ( is-contr-equiv'
+        ( type-Concrete-Group (concrete-group-Pointed-Type C))
+        ( equiv-underlying-type-concrete-group-Pointed-Type C)
+        ( is-contr-target))
+      ( naturality-map-underlying-type-concrete-group-Pointed-Type f)
 
 module _
   {l1 l2 l3 : Level}
@@ -324,4 +431,5 @@ module _
         ( succ-ℕ n)
         ( fibration-fiber-sequence-Pointed-Type S))
       ( pointed-map-iterated-boundary-fiber-sequence S n)
+
 ```

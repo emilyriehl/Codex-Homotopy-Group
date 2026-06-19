@@ -91,9 +91,12 @@ is-exact-third-homotopy-hopf-fibration-boundary :
         ( hopf-fiber-sequence-sphere-1-sphere-3-sphere-2)
         ( 1)))
 is-exact-third-homotopy-hopf-fibration-boundary =
-  is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence
+  is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-is-trivial-codomain
     ( hopf-fiber-sequence-sphere-1-sphere-3-sphere-2)
     ( 1)
+    ( is-trivial-group-is-trivial-Concrete-Group
+      ( concrete-homotopy-group 1 (sphere-Pointed-Type 1))
+      ( is-trivial-positive-concrete-homotopy-group-sphere-1 0))
 ```
 
 ## Theorem

@@ -1849,3 +1849,75 @@ The `long-exact-sequence` and `set-truncated-iterated-exactness` checks passed, 
 Related commit:
 
 - This commit — Add canonical iterated LES boundary handoff.
+
+
+### Route Hopf LES boundary through trivial codomain
+
+Request: Emily asked Codex whether Agda MCP tools were visible, whether they
+would help with the formalization plan, to make a plan for filling holes using
+LES results and Coq-HoTT guidance, to add a local Coq-HoTT clone to the plan,
+then to implement the plan and commit and push the result.
+
+Model context:
+
+- Date: 2026-06-19.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible in the session. Final proof acceptance was still
+  checked with `./check.sh <file>`.
+
+Actions:
+
+- Used the local Coq-HoTT reference clone at `/private/tmp/Coq-HoTT` and the
+  `loops_les` pattern to keep canonical shifted boundary maps separate from
+  recursive looped boundary maps.
+- Added pointed-set exactness transport lemmas in
+  `src/structured-types/exact-sequences-pointed-sets.lagda.md`, including
+  transport along pointwise replacement of the second map and along kernel
+  equivalence of the second map.
+- Added recursive-boundary transport theorems in
+  `src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md`,
+  reducing recursive fibration-boundary exactness to either a kernel
+  equivalence or a pointwise comparison with the canonical shifted boundary.
+- Added a generic trivial-codomain transport from pointed-set exactness to
+  group exactness in
+  `src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md`,
+  plus a pointed-type wrapper that avoids comparing the second maps when the
+  target group and target pointed set are contractible.
+- Changed
+  `src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md`
+  to prove the fibration-boundary group exactness theorem under
+  contractibility of the target homotopy group, using canonical shifted
+  set-level exactness and the trivial-codomain transport.
+- Updated
+  `src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md`
+  so the Hopf `π₃(S³) ≅ π₃(S²)` LES segment uses the checked
+  trivial-codomain fibration-boundary theorem. The unrestricted
+  canonical-vs-recursive boundary comparison remains open for nontrivial
+  targets.
+- Updated `STATUS-REPORT.md` with the new verification state, remaining tasks,
+  and next-agent handoff.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+./check.sh src/structured-types/exact-sequences-pointed-sets.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-fibration-third-homotopy-groups.lagda.md
+rg -n "\{!!\}|postulate|allow-unsolved-metas" src/structured-types/exact-sequences-pointed-sets.lagda.md src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md src/synthetic-homotopy-theory/hopf-fibration-third-homotopy-groups.lagda.md src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+git diff --check
+```
+
+All Agda checks passed, the source search found no holes, postulates, or
+`--allow-unsolved-metas` in the checked files, and `git diff --check` passed.
+The Hopf comparison still depends on the unfinished Hopf fiber sequence
+scaffold.
+
+Related commit:
+
+- This commit — Route Hopf LES boundary through trivial codomain.

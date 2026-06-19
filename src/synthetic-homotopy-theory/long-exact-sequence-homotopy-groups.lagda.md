@@ -22,6 +22,7 @@ open import foundation.propositional-truncations
 open import foundation.propositions
 open import foundation.set-truncations
 open import foundation.sets
+open import foundation.transport-along-identifications
 open import foundation.universe-levels
 
 open import group-theory.concrete-groups
@@ -84,6 +85,26 @@ module _
     map-Ω (constant-pointed-map A B) x ＝ refl
   eq-map-Ω-constant-pointed-map-Pointed-Type x =
     ap-const (point-Pointed-Type B) x
+```
+
+### Computing `fiber-ap-eq-fiber` on fiberwise paths
+
+```agda
+module _
+  {l1 l2 : Level} {A : UU l1} {B : UU l2}
+  (f : A → B) {b : B}
+  where
+
+  compute-fiber-ap-eq-fiber-ap-pair :
+    (x : A) (p r : f x ＝ b) (q : p ＝ r) →
+    fiber-ap-eq-fiber f (x , p) (x , r) (ap (pair x) q) ＝
+    ( refl ,
+      tr
+        ( λ u → refl ＝ p ∙ inv u)
+        ( q)
+        ( inv (right-inv p)))
+  compute-fiber-ap-eq-fiber-ap-pair x p .p refl =
+    refl
 ```
 
 ### The loop space of the fiber of a pointed map
@@ -498,6 +519,31 @@ base. This is the first instance of HoTT Book Lemma 8.4.4.
     inclusion-fiber-Pointed-Type g
   pr2 (pr2 (pr2 (pr2 (pr2 fiber-sequence-boundary-fiber-Pointed-Type)))) =
     is-fiber-sequence-boundary-fiber-Pointed-Type
+```
+
+### First projection of the looped boundary comparison
+
+```agda
+eq-pr1-map-loop-fiber-map-Ω-boundary-fiber-Pointed-Type :
+  {l1 l2 : Level} {E : Pointed-Type l1} {B : Pointed-Type l2}
+  (g : E →∗ B) (q : type-Ω (Ω B)) →
+  pr1
+    ( map-loop-fiber-Pointed-Type g
+      ( map-Ω (boundary-fiber-Pointed-Type g) q)) ＝
+  refl
+eq-pr1-map-loop-fiber-map-Ω-boundary-fiber-Pointed-Type (h , refl) q =
+  ( inv
+    ( pr1
+      ( pointed-htpy-loop-fiber-inclusion-Pointed-Type
+        ( h , refl))
+      ( map-Ω (boundary-fiber-Pointed-Type (h , refl)) q))) ∙
+  ( inv
+    ( preserves-comp-map-Ω
+      ( inclusion-fiber-Pointed-Type (h , refl))
+      ( boundary-fiber-Pointed-Type (h , refl))
+      ( q))) ∙
+  ( eq-map-Ω-constant-pointed-map-Pointed-Type q)
+
 ```
 
 ### Induced maps on the homotopy groups of a fiber sequence

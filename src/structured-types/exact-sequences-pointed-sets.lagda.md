@@ -92,6 +92,64 @@ module _
 
 ## Properties
 
+### Homotopies of set-truncated pointed maps
+
+```agda
+module _
+  {l1 l2 : Level} {A : Pointed-Type l1} {B : Pointed-Type l2}
+  {f g : A →∗ B}
+  where
+
+  htpy-hom-trunc-Pointed-Set :
+    ((x : type-Pointed-Type A) →
+      map-pointed-map f x ＝ map-pointed-map g x) →
+    (t : type-Pointed-Set (trunc-Pointed-Set A)) →
+    map-pointed-map (hom-trunc-Pointed-Set f) t ＝
+    map-pointed-map (hom-trunc-Pointed-Set g) t
+  htpy-hom-trunc-Pointed-Set H = htpy-trunc-Set H
+```
+
+### Exactness is invariant under homotopy of the second map
+
+```agda
+module _
+  {l1 l2 l3 : Level}
+  (A : Pointed-Set l1) (B : Pointed-Set l2) (C : Pointed-Set l3)
+  (f : hom-Pointed-Set A B) (g h : hom-Pointed-Set B C)
+  where
+
+  is-exact-hom-Pointed-Set-htpy-right :
+    ((x : type-Pointed-Set B) →
+      map-pointed-map h x ＝ map-pointed-map g x) →
+    is-exact-hom-Pointed-Set A B C f g →
+    is-exact-hom-Pointed-Set A B C f h
+  pr1 (is-exact-hom-Pointed-Set-htpy-right K E x) I =
+    ( K x) ∙ (pr1 (E x) I)
+  pr2 (is-exact-hom-Pointed-Set-htpy-right K E x) H =
+    pr2 (E x) ((inv (K x)) ∙ H)
+```
+
+### Exactness is invariant under kernel equivalence of the second map
+
+```agda
+module _
+  {l1 l2 l3 : Level}
+  (A : Pointed-Set l1) (B : Pointed-Set l2) (C : Pointed-Set l3)
+  (f : hom-Pointed-Set A B) (g h : hom-Pointed-Set B C)
+  where
+
+  is-exact-hom-Pointed-Set-iff-kernel-right :
+    ((x : type-Pointed-Set B) →
+      is-in-kernel-hom-Pointed-Set {A = B} {B = C} h x ↔
+      is-in-kernel-hom-Pointed-Set {A = B} {B = C} g x) →
+    is-exact-hom-Pointed-Set A B C f g →
+    is-exact-hom-Pointed-Set A B C f h
+  pr1 (is-exact-hom-Pointed-Set-iff-kernel-right K E x) I =
+    backward-implication (K x) (pr1 (E x) I)
+  pr2 (is-exact-hom-Pointed-Set-iff-kernel-right K E x) H =
+    pr2 (E x) (forward-implication (K x) H)
+```
+
 ### The image of a pointed map as a mere preimage
 
 ```agda

@@ -9,16 +9,20 @@ module synthetic-homotopy-theory.exactness-homotopy-groups-fiber-sequences where
 ```agda
 open import elementary-number-theory.natural-numbers
 
+open import foundation.contractible-types
 open import foundation.universe-levels
 
 open import group-theory.concrete-groups
 open import group-theory.exact-sequences-groups
+open import group-theory.groups
 open import group-theory.homomorphisms-concrete-groups
 
 open import structured-types.fiber-sequences
 
 open import synthetic-homotopy-theory.group-exactness-from-set-truncated-homotopy-group-exactness
 open import synthetic-homotopy-theory.homotopy-groups
+open import synthetic-homotopy-theory.functoriality-iterated-loop-spaces
+open import synthetic-homotopy-theory.iterated-loop-spaces
 open import synthetic-homotopy-theory.long-exact-sequence-homotopy-groups
 open import synthetic-homotopy-theory.set-truncated-iterated-exactness-homotopy-groups-fiber-sequences
 ```
@@ -88,11 +92,17 @@ module _
       ( is-exact-set-truncation-iterated-loop-fiber-sequence S n)
 ```
 
-### Exactness at the base homotopy group
+### Exactness at the base homotopy group with trivial target
 
 ```agda
-  is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence :
+  is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-is-trivial-codomain :
     (n : ℕ) →
+    is-contr
+      ( type-Group
+        ( group-Concrete-Group
+          ( concrete-homotopy-group
+            ( n)
+            ( fiber-fiber-sequence-Pointed-Type S)))) →
     is-exact-hom-Group
       ( group-Concrete-Group
         ( concrete-homotopy-group
@@ -122,10 +132,32 @@ module _
           ( n)
           ( fiber-fiber-sequence-Pointed-Type S))
         ( boundary-hom-concrete-homotopy-group-fiber-sequence S n))
-  is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence n =
-    is-exact-hom-Group-is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence
-      ( S)
-      ( n)
+  is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-is-trivial-codomain
+    n is-trivial-target =
+    is-exact-hom-Group-is-exact-loop-truncation-hom-Pointed-Type-is-trivial-codomain
+      ( iterated-loop-space
+        ( succ-ℕ n)
+        ( total-space-fiber-sequence-Pointed-Type S))
+      ( iterated-loop-space
+        ( succ-ℕ n)
+        ( base-fiber-sequence-Pointed-Type S))
+      ( iterated-loop-space
+        ( n)
+        ( fiber-fiber-sequence-Pointed-Type S))
+      ( pointed-map-iterated-loop-space
+        ( succ-ℕ n)
+        ( fibration-fiber-sequence-Pointed-Type S))
+      ( pointed-map-iterated-boundary-fiber-sequence S n)
+      ( hom-trunc-canonical-iterated-loop-boundary-fiber-sequence S n)
+      ( hom-group-hom-Concrete-Group
+        ( concrete-homotopy-group
+          ( succ-ℕ n)
+          ( base-fiber-sequence-Pointed-Type S))
+        ( concrete-homotopy-group
+          ( n)
+          ( fiber-fiber-sequence-Pointed-Type S))
+        ( boundary-hom-concrete-homotopy-group-fiber-sequence S n))
+      ( is-trivial-target)
       ( is-exact-set-truncation-canonical-iterated-loop-fibration-boundary-fiber-sequence
         ( S)
         ( n))
