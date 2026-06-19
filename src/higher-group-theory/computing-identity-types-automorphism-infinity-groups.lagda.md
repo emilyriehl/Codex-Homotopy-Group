@@ -7,8 +7,10 @@ module higher-group-theory.computing-identity-types-automorphism-infinity-groups
 <details><summary>Imports</summary>
 
 ```agda
+open import foundation.action-on-identifications-binary-functions
 open import foundation.equivalences
 open import foundation.identity-types
+open import foundation.injective-maps
 open import foundation.universe-levels
 
 open import higher-group-theory.automorphism-groups
@@ -53,6 +55,36 @@ module _
     ( Eq-eq-classifying-type-Automorphism-∞-Group a Y Z q)
   preserves-concat-Eq-eq-classifying-type-Automorphism-∞-Group refl refl =
     refl
+
+  preserves-concat-eq-Eq-classifying-type-Automorphism-∞-Group :
+    {X Y Z : classifying-type-Automorphism-∞-Group a}
+    (p : Eq-classifying-type-Automorphism-∞-Group a X Y)
+    (q : Eq-classifying-type-Automorphism-∞-Group a Y Z) →
+    eq-Eq-classifying-type-Automorphism-∞-Group a X Z (p ∙ q) ＝
+    ( eq-Eq-classifying-type-Automorphism-∞-Group a X Y p) ∙
+    ( eq-Eq-classifying-type-Automorphism-∞-Group a Y Z q)
+  preserves-concat-eq-Eq-classifying-type-Automorphism-∞-Group
+    {X} {Y} {Z} p q =
+    is-injective-equiv
+      ( extensionality-classifying-type-Automorphism-∞-Group a X Z)
+      ( ( compute-Eq-eq-eq-Eq-classifying-type-Automorphism-∞-Group
+          ( X)
+          ( Z)
+          ( p ∙ q)) ∙
+        ( inv
+          ( ( preserves-concat-Eq-eq-classifying-type-Automorphism-∞-Group
+              ( eq-Eq-classifying-type-Automorphism-∞-Group a X Y p)
+              ( eq-Eq-classifying-type-Automorphism-∞-Group a Y Z q)) ∙
+            ( ap-binary
+              ( _∙_)
+              ( compute-Eq-eq-eq-Eq-classifying-type-Automorphism-∞-Group
+                ( X)
+                ( Y)
+                ( p))
+              ( compute-Eq-eq-eq-Eq-classifying-type-Automorphism-∞-Group
+                ( Y)
+                ( Z)
+                ( q))))))
 
   preserves-inv-Eq-eq-classifying-type-Automorphism-∞-Group :
     {X Y : classifying-type-Automorphism-∞-Group a} (p : X ＝ Y) →

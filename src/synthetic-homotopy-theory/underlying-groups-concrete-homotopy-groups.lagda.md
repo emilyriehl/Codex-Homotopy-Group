@@ -9,8 +9,14 @@ module synthetic-homotopy-theory.underlying-groups-concrete-homotopy-groups wher
 ```agda
 open import elementary-number-theory.natural-numbers
 
+open import foundation.action-on-identifications-functions
+open import foundation.computing-binary-functoriality-set-truncation
 open import foundation.equivalences
+open import foundation.functoriality-set-truncation
+open import foundation.identity-types
+open import foundation.naturality-effectiveness-truncation
 open import foundation.set-truncations
+open import foundation.sets
 open import foundation.truncation-levels
 open import foundation.truncations
 open import foundation.universe-levels
@@ -19,6 +25,7 @@ open import group-theory.concrete-groups
 open import group-theory.homotopy-automorphism-groups
 
 open import higher-group-theory.automorphism-groups
+open import higher-group-theory.computing-identity-types-automorphism-infinity-groups
 
 open import structured-types.pointed-types
 
@@ -86,6 +93,70 @@ module _
         ( point-Pointed-Type A)
         ( x))
 
+  compute-mul-map-inv-underlying-type-concrete-group-unit-trunc-Pointed-Type :
+    (p q : type-Ω A) →
+    map-inv-underlying-type-concrete-group-Pointed-Type
+      ( unit-trunc-Set (mul-Ω A p q)) ＝
+    mul-Concrete-Group (concrete-group-Pointed-Type A)
+      ( map-inv-underlying-type-concrete-group-Pointed-Type
+        ( unit-trunc-Set p))
+      ( map-inv-underlying-type-concrete-group-Pointed-Type
+        ( unit-trunc-Set q))
+  compute-mul-map-inv-underlying-type-concrete-group-unit-trunc-Pointed-Type
+    p q =
+    ( ap
+      ( eq-Eq-classifying-type-Automorphism-∞-Group
+        ( unit-trunc (point-Pointed-Type A))
+        ( shape-Automorphism-∞-Group
+          ( unit-trunc (point-Pointed-Type A)))
+        ( shape-Automorphism-∞-Group
+          ( unit-trunc (point-Pointed-Type A))))
+      ( preserves-concat-map-effectiveness-trunc-unit-trunc
+        ( zero-𝕋)
+        ( p)
+        ( q))) ∙
+    ( preserves-concat-eq-Eq-classifying-type-Automorphism-∞-Group
+      ( unit-trunc (point-Pointed-Type A))
+      ( map-effectiveness-trunc
+        ( zero-𝕋)
+        ( point-Pointed-Type A)
+        ( point-Pointed-Type A)
+        ( unit-trunc-Set p))
+      ( map-effectiveness-trunc
+        ( zero-𝕋)
+        ( point-Pointed-Type A)
+        ( point-Pointed-Type A)
+        ( unit-trunc-Set q)))
+
+  preserves-mul-map-inv-underlying-type-concrete-group-Pointed-Type :
+    (x y : type-trunc-Set (type-Ω A)) →
+    map-inv-underlying-type-concrete-group-Pointed-Type
+      ( binary-map-trunc-Set (mul-Ω A) x y) ＝
+    mul-Concrete-Group (concrete-group-Pointed-Type A)
+      ( map-inv-underlying-type-concrete-group-Pointed-Type x)
+      ( map-inv-underlying-type-concrete-group-Pointed-Type y)
+  preserves-mul-map-inv-underlying-type-concrete-group-Pointed-Type =
+    apply-twice-dependent-universal-property-trunc-Set'
+      ( λ x y →
+        set-Prop
+          ( Id-Prop
+            ( set-Concrete-Group (concrete-group-Pointed-Type A))
+            ( map-inv-underlying-type-concrete-group-Pointed-Type
+              ( binary-map-trunc-Set (mul-Ω A) x y))
+            ( mul-Concrete-Group (concrete-group-Pointed-Type A)
+              ( map-inv-underlying-type-concrete-group-Pointed-Type x)
+              ( map-inv-underlying-type-concrete-group-Pointed-Type y))))
+      ( λ p q →
+        ( ap
+          ( map-inv-underlying-type-concrete-group-Pointed-Type)
+          ( compute-binary-map-trunc-Set-unit-trunc-Set
+            ( mul-Ω A)
+            ( p)
+            ( q))) ∙
+        ( compute-mul-map-inv-underlying-type-concrete-group-unit-trunc-Pointed-Type
+          ( p)
+          ( q)))
+
 module _
   {l : Level} (n : ℕ) (A : Pointed-Type l)
   where
@@ -107,5 +178,16 @@ module _
     type-Concrete-Group (concrete-homotopy-group n A)
   map-inv-underlying-type-concrete-homotopy-group =
     map-inv-underlying-type-concrete-group-Pointed-Type
+      ( iterated-loop-space n A)
+
+  preserves-mul-map-inv-underlying-type-concrete-homotopy-group :
+    (x y : type-homotopy-group (succ-ℕ n) A) →
+    map-inv-underlying-type-concrete-homotopy-group
+      ( binary-map-trunc-Set (mul-Ω (iterated-loop-space n A)) x y) ＝
+    mul-Concrete-Group (concrete-homotopy-group n A)
+      ( map-inv-underlying-type-concrete-homotopy-group x)
+      ( map-inv-underlying-type-concrete-homotopy-group y)
+  preserves-mul-map-inv-underlying-type-concrete-homotopy-group =
+    preserves-mul-map-inv-underlying-type-concrete-group-Pointed-Type
       ( iterated-loop-space n A)
 ```

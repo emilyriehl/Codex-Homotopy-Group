@@ -7,6 +7,7 @@ module foundation.naturality-effectiveness-truncation where
 <details><summary>Imports</summary>
 
 ```agda
+open import foundation.action-on-identifications-binary-functions
 open import foundation.action-on-identifications-functions
 open import foundation.functoriality-truncation
 open import foundation.identity-types
@@ -39,6 +40,23 @@ module _
     ap unit-trunc q
   compute-map-effectiveness-trunc-unit-trunc refl =
     refl-effectiveness-trunc k a
+
+module _
+  {l : Level} (k : 𝕋) {A : UU l} {a : A}
+  where
+
+  preserves-concat-map-effectiveness-trunc-unit-trunc :
+    (p q : a ＝ a) →
+    map-effectiveness-trunc k a a (unit-trunc (p ∙ q)) ＝
+    ( map-effectiveness-trunc k a a (unit-trunc p)) ∙
+    ( map-effectiveness-trunc k a a (unit-trunc q))
+  preserves-concat-map-effectiveness-trunc-unit-trunc p q =
+    ( compute-map-effectiveness-trunc-unit-trunc k (p ∙ q)) ∙
+    ( ap-concat (unit-trunc {k = succ-𝕋 k}) p q) ∙
+    ( ap-binary
+      ( λ r s → r ∙ s)
+      ( inv (compute-map-effectiveness-trunc-unit-trunc k p))
+      ( inv (compute-map-effectiveness-trunc-unit-trunc k q)))
 
 module _
   {l1 l2 : Level} (k : 𝕋) {A : UU l1} {B : UU l2} (f : A → B)

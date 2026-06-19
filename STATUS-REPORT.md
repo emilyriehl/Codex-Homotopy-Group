@@ -48,6 +48,13 @@ calculation:
   formalized: the loop space of the circle and the 1-sphere is equivalent to
   the integers, the circle and 1-sphere are 1-types, and positive concrete
   homotopy groups of 1-types are trivial.
+- The concrete fundamental group of the 1-sphere has now been proved
+  isomorphic to the additive group of integers. The checked carrier
+  equivalence factors through the general concrete-homotopy-group
+  underlying-type comparison, removes the redundant set truncation using the
+  1-sphere loop-space set structure, proves the universal-cover loop-space
+  computation is additive, transfers additivity from the circle to the
+  1-sphere, and packages the result as an `iso-Group`.
 - The ordinary underlying type of `concrete-homotopy-group n A` has been
   identified with `type-homotopy-group (succ-ℕ n) A`, i.e. with the set
   truncation of the next iterated loop space. This removes the indexing and
@@ -59,7 +66,10 @@ calculation:
   concrete groups coming from pointed types. The same layer now also proves
   that the inverse comparison sends the set-truncated base loop to the concrete
   unit, and consequently that the forward comparison sends the concrete unit to
-  the set-truncated base loop.
+  the set-truncated base loop. It additionally proves that the forward and
+  inverse underlying-type comparisons preserve multiplication. The remaining
+  additivity step for the loop-space computation `ΩS¹ ≃ ℤ` is now also
+  checked via integer loop powers and the universal cover.
 - Pointed-set exactness now has a derived mere-preimage/fiber interface. This
   keeps `is-exact-hom-Pointed-Set` as the source theorem while giving the
   group-level bridge a lower-level Coq-HoTT-style map-to-fiber form to consume.
@@ -98,8 +108,8 @@ bridge is the coherence identifying the canonical shifted boundary with the
 looped recursive boundary map expected by the concrete-group homomorphism. The
 `π₃(S³) ≅ ℤ` calculation is reduced to a stability comparison
 `π₂(S²) ≅ π₃(S³)`, a Hopf base computation `π₂(S²) ≅ π₁(S¹)`, and the
-group-level circle calculation `π₁(S¹) ≅ ℤ`. These are still intentionally
-unfinished scaffolds.
+checked group-level circle calculation `π₁(S¹) ≅ ℤ`. The remaining two
+comparisons are still intentionally unfinished scaffolds.
 
 ## Implemented Agda code
 
@@ -116,15 +126,19 @@ unfinished scaffolds.
 | Boundary maps and LES exactness steps | [`src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md) | Defines the boundary pointed map, induced maps on homotopy groups of a fiber sequence, recursive boundary pointed maps, and boundary homomorphisms. It proves the first fiber-of-the-fiber identification, packages `Ω B ->* fiber g ->* E` as a pointed fiber sequence, proves pointed-set exactness for canonical and packaged `F ->* E ->* B` fiber sequences, proves pointed-set exactness for the packaged boundary segment `Ω B ->* F ->* E`, proves pointed-set exactness for the packaged loop-boundary segment `Ω E ->* Ω B ->* F`, proves pointed-set exactness for the looped packaged segment `Ω F ->* Ω E ->* Ω B`, proves pointed-set exactness for the canonical adjacent triples `Ω B ->* fiber g ->* E`, `Ω E ->* Ω B ->* fiber g`, and `Ω² B ->* Ω (fiber g) ->* Ω E`, and bundles the first four packaged exactness proofs as an initial set-truncated LES segment. These are steps toward, not yet the full proof of, Theorem 8.4.6 of the HoTT book. |
 | Higher homotopy groups of 1-types | [`src/synthetic-homotopy-theory/higher-homotopy-groups-truncated-types.lagda.md`](src/synthetic-homotopy-theory/higher-homotopy-groups-truncated-types.lagda.md) | Proves that positive concrete homotopy groups of pointed 1-types are trivial. |
 | Circle and 1-sphere homotopy facts | [`src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md`](src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md) | Proves the loop-space equivalences for the circle and 1-sphere, the 1-type facts, and triviality of their positive concrete homotopy groups. |
+| Integer powers of loops | [`src/synthetic-homotopy-theory/computing-integer-powers-of-loops.lagda.md`](src/synthetic-homotopy-theory/computing-integer-powers-of-loops.lagda.md) | Proves successor, predecessor, and automorphism-iteration addition computations for integer powers of loops. |
+| Computing the loop space of the circle | [`src/synthetic-homotopy-theory/computing-loop-space-circle.lagda.md`](src/synthetic-homotopy-theory/computing-loop-space-circle.lagda.md) | Proves the universal-cover encoder concatenation computation, generator and inverse-generator integer-code computations, that integer powers of the circle loop encode to their exponents, and that `compute-loop-space-𝕊¹` sends loop concatenation to integer addition. |
+| Underlying type of `π₁(S¹)` | [`src/synthetic-homotopy-theory/underlying-type-fundamental-group-sphere-1.lagda.md`](src/synthetic-homotopy-theory/underlying-type-fundamental-group-sphere-1.lagda.md) | Proves a no-hole carrier equivalence from the ordinary underlying type of `concrete-homotopy-group 0 (sphere-Pointed-Type 1)` to `ℤ`, proves the intermediate equivalence to `ΩS¹` preserves multiplication, proves that the loop-space computation sends both `refl` and the set-truncated reflexivity class to `zero-ℤ`, and transfers circle additivity to `compute-loop-space-sphere-1`. |
 | Exactness-to-isomorphism algebra | [`src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md`](src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md) | Proves that two adjacent exact group triples with trivial outer groups make the middle homomorphism an isomorphism. |
 | Trivial concrete-to-group bridge | [`src/group-theory/trivial-underlying-groups-concrete-groups.lagda.md`](src/group-theory/trivial-underlying-groups-concrete-groups.lagda.md) | Proves the bridge from `is-trivial-Concrete-Group G` to triviality of `group-Concrete-Group G`. |
-| Underlying types of concrete homotopy groups | [`src/synthetic-homotopy-theory/underlying-groups-concrete-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/underlying-groups-concrete-homotopy-groups.lagda.md) | Proves that the ordinary underlying type of `concrete-homotopy-group n A` is equivalent to `type-homotopy-group (succ-ℕ n) A`, using connected-component extensionality and effectiveness of truncation, and names the induced forward and inverse maps. |
-| Underlying maps of concrete homotopy groups | [`src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md) | Defines the ordinary underlying map of a concrete homotopy-group homomorphism and its set-truncated loop comparison squares. The forward and inverse coherence squares are proved for concrete groups coming from pointed types, as are the unit comparison lemmas needed by group exactness transport. |
+| Underlying types of concrete homotopy groups | [`src/synthetic-homotopy-theory/underlying-groups-concrete-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/underlying-groups-concrete-homotopy-groups.lagda.md) | Proves that the ordinary underlying type of `concrete-homotopy-group n A` is equivalent to `type-homotopy-group (succ-ℕ n) A`, using connected-component extensionality and effectiveness of truncation, names the induced forward and inverse maps, and proves that the inverse map preserves the set-truncated loop multiplication. |
+| Underlying maps of concrete homotopy groups | [`src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md) | Defines the ordinary underlying map of a concrete homotopy-group homomorphism and its set-truncated loop comparison squares. The forward and inverse coherence squares are proved for concrete groups coming from pointed types, as are the unit comparison lemmas needed by group exactness transport and the forward multiplication-preservation theorem for the underlying-type comparison. |
 | Computing identity types of subtypes | [`src/foundation/computing-identity-types-subtypes.lagda.md`](src/foundation/computing-identity-types-subtypes.lagda.md) | Proves the computation rule for the first component of subtype extensionality, used to control connected-component path calculations. |
 | Computing identity types of automorphism-infinity groups | [`src/higher-group-theory/computing-identity-types-automorphism-infinity-groups.lagda.md`](src/higher-group-theory/computing-identity-types-automorphism-infinity-groups.lagda.md) | Proves section, concatenation, inverse, and loop-transport computation rules for paths in automorphism-infinity classifying types. |
+| Computing binary functoriality of set truncation | [`src/foundation/computing-binary-functoriality-set-truncation.lagda.md`](src/foundation/computing-binary-functoriality-set-truncation.lagda.md) | Proves that `binary-map-trunc-Set` computes on two set-truncation units, and that the inverse of `equiv-unit-trunc-Set` for set types preserves any binary operation lifted by `binary-map-trunc-Set`. |
 | Loop-space classifying-map computations | [`src/group-theory/computing-loop-space-functoriality-homotopy-automorphism-groups.lagda.md`](src/group-theory/computing-loop-space-functoriality-homotopy-automorphism-groups.lagda.md) | Computes `map-Ω` on the classifying pointed map of connected components after automorphism-infinity extensionality. |
 | Loop-space naturality of effectiveness | [`src/synthetic-homotopy-theory/naturality-effectiveness-loop-spaces.lagda.md`](src/synthetic-homotopy-theory/naturality-effectiveness-loop-spaces.lagda.md) | Transports naturality of effectiveness of truncation into the based-loop form required by the inverse underlying-map square. |
-| Naturality of effectiveness of truncation | [`src/foundation/naturality-effectiveness-truncation.lagda.md`](src/foundation/naturality-effectiveness-truncation.lagda.md) | Proves that effectiveness on a unit-truncated path computes to `ap unit-trunc`, and that effectiveness of truncation is natural in maps, up to the naturality paths of the truncation unit. This is the reusable foundation lemma needed by the underlying-map comparison for concrete homotopy groups. |
+| Naturality of effectiveness of truncation | [`src/foundation/naturality-effectiveness-truncation.lagda.md`](src/foundation/naturality-effectiveness-truncation.lagda.md) | Proves that effectiveness on a unit-truncated path computes to `ap unit-trunc`, that it preserves concatenation on truncation-unit loop representatives, and that effectiveness of truncation is natural in maps, up to the naturality paths of the truncation unit. These are reusable foundation lemmas needed by the underlying-map and multiplication comparisons for concrete homotopy groups. |
 | Set-truncated iterated LES exactness | [`src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md) | Defines the set-truncated maps on `Ω Ω^n F`, `Ω Ω^n E`, and `Ω Ω^n B`, plus both the recursive boundary map used by the concrete-group homomorphism and the canonical shifted boundary map suggested by Coq-HoTT. It now checks without `--allow-unsolved-metas`, proving the total-space iterated case for all `n`, exactness for the canonical shifted fibration-boundary case, and transport theorems that turn either a kernel equivalence or a pointwise canonical-vs-recursive boundary comparison into recursive boundary exactness. |
 | Group exactness transport for homotopy groups | [`src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md`](src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md) | Proves a generic transfer theorem from pointed-set exactness to ordinary group exactness using explicit comparison maps, injectivity, unit compatibility, and coherence squares; proves a pointed-type wrapper; proves a trivial-codomain pointed-type wrapper that avoids comparing the second maps; and proves the total-space LES-specific transport target from set-truncated iterated exactness to ordinary group exactness of concrete homotopy groups. This file no longer uses `--allow-unsolved-metas`. |
 | Group exactness of homotopy groups | [`src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md) | Records the adjacent group-level exactness statements needed by the Hopf comparison. The total-space statement composes through the checked transport layer. The fibration-boundary statement is proved under the hypothesis that the target homotopy group is contractible, using canonical shifted boundary exactness and the trivial-codomain transport. The unrestricted nontrivial-target boundary statement still requires the canonical-vs-recursive boundary comparison. |
@@ -133,7 +147,7 @@ unfinished scaffolds.
 | Hopf comparison for third homotopy groups | [`src/synthetic-homotopy-theory/hopf-fibration-third-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/hopf-fibration-third-homotopy-groups.lagda.md) | Delegates `π₃(S³) ≅ π₃(S²)` to the Hopf LES comparison scaffold and has no direct proof hole. |
 | Stability comparison for `π₃(S³)` | [`src/synthetic-homotopy-theory/stability-third-homotopy-group-sphere-3.lagda.md`](src/synthetic-homotopy-theory/stability-third-homotopy-group-sphere-3.lagda.md) | Records the unfinished stability comparison `π₂(S²) ≅ π₃(S³)`. |
 | Second homotopy group of `S²` | [`src/synthetic-homotopy-theory/second-homotopy-group-sphere-2.lagda.md`](src/synthetic-homotopy-theory/second-homotopy-group-sphere-2.lagda.md) | Records the unfinished Hopf-derived comparison `π₂(S²) ≅ π₁(S¹)`. |
-| Fundamental group of `S¹` | [`src/synthetic-homotopy-theory/fundamental-group-sphere-1.lagda.md`](src/synthetic-homotopy-theory/fundamental-group-sphere-1.lagda.md) | Records the unfinished group-level packaging `π₁(S¹) ≅ ℤ`. |
+| Fundamental group of `S¹` | [`src/synthetic-homotopy-theory/fundamental-group-sphere-1.lagda.md`](src/synthetic-homotopy-theory/fundamental-group-sphere-1.lagda.md) | Proves the checked group isomorphism from the concrete fundamental group of `S¹` to `ℤ-Group`, with no unsolved metas or scaffold holes. |
 | Third homotopy group of the 3-sphere | [`src/synthetic-homotopy-theory/third-homotopy-group-sphere-3.lagda.md`](src/synthetic-homotopy-theory/third-homotopy-group-sphere-3.lagda.md) | Delegates `π₃(S³) ≅ ℤ` to the stability comparison, the `π₂(S²) ≅ π₁(S¹)` comparison, and the `π₁(S¹) ≅ ℤ` scaffold, and has no direct proof hole. |
 | Final theorem target | [`src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md`](src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md) | Records the pinned top-level statement `π₃(S²) ≅ ℤ` and proves it formally from the inverse Hopf-comparison stub and the `π₃(S³) ≅ ℤ` stub. The proof is therefore structurally assembled but depends on unfinished imported stubs. |
 
@@ -146,7 +160,7 @@ unfinished scaffolds.
 | Long exact sequence of homotopy groups | Partial | Boundary maps, induced homomorphisms, pointed-set exactness, exactness of the set truncation of canonical and packaged `F ->* E ->* B` triples, exactness of the packaged boundary triple `Ω B ->* F ->* E`, exactness of the packaged loop-boundary triple `Ω E ->* Ω B ->* F`, exactness of the looped packaged triple `Ω F ->* Ω E ->* Ω B`, the first fiber-of-the-fiber identification `Ω B ≃* fiber (fiber g -> E)`, pointed-set exactness of the canonical triples `Ω B ->* fiber g ->* E`, `Ω E ->* Ω B ->* fiber g`, and `Ω² B ->* Ω (fiber g) ->* Ω E`, and a bundled initial four-triple set-truncated LES segment are formalized. The group-exactness transport layer is checked for the total-space case and for fibration-boundary targets whose codomain group is contractible. The set-truncated iterated total-space theorem and the canonical shifted boundary theorem are checked; the remaining unrestricted LES bridge work is a comparison/transport theorem between the canonical shifted boundary and the loop of the recursive boundary map used to define the concrete-group homomorphism. The classifying-map fiber-sequence route is recorded as too strong in general. |
 | Exactness-to-isomorphism with zero endpoints | Done | Proved in [`src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md`](src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md). |
 | Higher homotopy groups of the circle vanish | Mostly done | Positive concrete homotopy groups of the circle and 1-sphere are trivial. Further packaging may be needed for the exact Hopf LES endpoints. |
-| Loop space of the circle is the integers | Partial | The loop-space equivalence is formalized. A group-level final packaging against the target theorem may still be needed. |
+| Loop space of the circle is the integers | Done | The loop-space equivalence is formalized, the universal-cover encoder is proved additive on loop concatenation, the result is transferred to the 1-sphere, and the concrete group isomorphism `π₁(S¹) ≅ ℤ` is checked. |
 | Hopf construction and Hopf fibration | Stubbed | The packaged Hopf fiber sequence target `S^1 -> S^3 -> S^2` is recorded, but the construction, maps, and fiber-sequence proof remain holes. |
 | Hopf LES consequence `pi_3(S^3) = pi_3(S^2)` | Partially proved | The exactness-to-isomorphism extraction and Hopf LES packaging are proved, and the fibration-boundary exactness uses the checked trivial-codomain bridge. The comparison still depends on the unfinished Hopf fiber sequence scaffold. |
 | Freudenthal suspension theorem | Not started | Still a major missing theorem. |
@@ -171,12 +185,10 @@ unfinished scaffolds.
    recursive-boundary transport theorem are checked.
 2. Formalize the Hopf fiber sequence `S^1 -> S^3 -> S^2`, including the actual
    pointed maps and the fiber-sequence proof.
-3. Package the group-level computation `π₁(S¹) ≅ ℤ` from the existing loop-space
-   equivalence of the 1-sphere with the integers.
-4. Fill the Hopf-derived comparison `π₂(S²) ≅ π₁(S¹)`.
-5. Prove the stability comparison `π₂(S²) ≅ π₃(S³)` from Freudenthal and sphere
+3. Fill the Hopf-derived comparison `π₂(S²) ≅ π₁(S¹)`.
+4. Prove the stability comparison `π₂(S²) ≅ π₃(S³)` from Freudenthal and sphere
    stability.
-6. Recheck `π₃(S³) ≅ ℤ` and `π₃(S²) ≅ ℤ` after their imported lower stubs are
+5. Recheck `π₃(S³) ≅ ℤ` and `π₃(S²) ≅ ℤ` after their imported lower stubs are
    proved; their proof bodies should remain short compositions.
 
 ## Next agent handoff
@@ -525,3 +537,67 @@ comparison remains open for nontrivial targets. The checked commands were:
 All checks passed. The edited LES and Hopf comparison files have no new holes
 or postulates, and `git diff --check` passed. The Hopf comparison still depends
 on the unfinished Hopf fiber sequence scaffold.
+
+Later on 2026-06-19, the `π₁(S¹) ≅ ℤ` scaffold was narrowed. A new
+underlying-type module proves the carrier equivalence from the ordinary
+underlying type of `concrete-homotopy-group 0 (sphere-Pointed-Type 1)` to `ℤ`,
+and records checked computations that the circle and 1-sphere loop-space
+computations send `refl`, and the set-truncated reflexivity loop, to
+`zero-ℤ`. The group-isomorphism scaffold now uses this carrier equivalence via
+`iso-equiv-Group`; its remaining hole is exactly the multiplication/additivity
+preservation proof for that equivalence. The checked commands were:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/underlying-type-fundamental-group-sphere-1.lagda.md
+./check.sh src/synthetic-homotopy-theory/fundamental-group-sphere-1.lagda.md
+```
+
+Both checks passed. The new underlying-type module has no holes, no postulates,
+and no `--allow-unsolved-metas`; the `fundamental-group-sphere-1` file retains
+one intentional scaffold hole under `--allow-unsolved-metas`.
+
+Later on 2026-06-19, the multiplicativity infrastructure for the `π₁(S¹)`
+carrier comparison was completed one layer further. New checked foundation
+lemmas prove that effectiveness of truncation preserves concatenation on
+truncation-unit loop representatives, that `binary-map-trunc-Set` computes on
+two set-truncation units, and that the inverse of `equiv-unit-trunc-Set` for
+sets preserves lifted binary operations. These feed the concrete homotopy-group
+comparison: the inverse underlying-type map now preserves set-truncated loop
+multiplication, the forward underlying-type map preserves concrete-group
+multiplication, and the `S¹` carrier equivalence to the actual loop space is
+proved multiplicative. The checked commands were:
+
+```sh
+./check.sh src/foundation/naturality-effectiveness-truncation.lagda.md
+./check.sh src/foundation/computing-binary-functoriality-set-truncation.lagda.md
+./check.sh src/higher-group-theory/computing-identity-types-automorphism-infinity-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/underlying-groups-concrete-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/underlying-type-fundamental-group-sphere-1.lagda.md
+```
+
+All checks passed. At that point, the remaining `fundamental-group-sphere-1`
+hole was only the additivity of `compute-loop-space-sphere-1`, i.e. the proof
+that the existing loop-space equivalence `ΩS¹ ≃ ℤ` sends loop concatenation to
+integer addition.
+
+Later on 2026-06-19, the `π₁(S¹) ≅ ℤ` group computation was completed. New
+checked modules formalize integer powers of loops and the universal-cover
+encoder calculations for the circle: right concatenation by the generating
+loop increments the integer code, right concatenation by its inverse decrements
+the code, integer powers of the generating loop encode to their exponents, and
+`compute-loop-space-𝕊¹` preserves loop multiplication as integer addition. This
+additivity was transferred across the pointed equivalence between the circle
+and the 1-sphere, and the final `iso-fundamental-group-sphere-1-ℤ` proof was
+closed with no `--allow-unsolved-metas`. The checked commands were:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/computing-integer-powers-of-loops.lagda.md
+./check.sh src/synthetic-homotopy-theory/computing-loop-space-circle.lagda.md
+./check.sh src/synthetic-homotopy-theory/underlying-type-fundamental-group-sphere-1.lagda.md
+./check.sh src/synthetic-homotopy-theory/fundamental-group-sphere-1.lagda.md
+```
+
+All checks passed. The next direct target for the final theorem is now the
+Hopf-derived comparison `π₂(S²) ≅ π₁(S¹)` or the Hopf fiber sequence itself;
+the circle endpoint is checked.

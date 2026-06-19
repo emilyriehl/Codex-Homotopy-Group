@@ -9,6 +9,7 @@ module synthetic-homotopy-theory.underlying-maps-concrete-homotopy-groups where
 ```agda
 open import elementary-number-theory.natural-numbers
 
+open import foundation.action-on-identifications-binary-functions
 open import foundation.action-on-identifications-functions
 open import foundation.dependent-pair-types
 open import foundation.equivalences
@@ -200,6 +201,41 @@ module _
       ( inv compute-map-inv-underlying-type-concrete-group-unit-Pointed-Type)) ∙
     ( is-section-map-inv-underlying-type-concrete-group-Pointed-Type
       ( unit-trunc-Set refl))
+
+  equiv-map-inv-underlying-type-concrete-group-Pointed-Type :
+    type-trunc-Set (type-Ω A) ≃
+    type-Concrete-Group (concrete-group-Pointed-Type A)
+  pr1 equiv-map-inv-underlying-type-concrete-group-Pointed-Type =
+    map-inv-underlying-type-concrete-group-Pointed-Type A
+  pr2 equiv-map-inv-underlying-type-concrete-group-Pointed-Type =
+    is-equiv-is-invertible
+      ( map-underlying-type-concrete-group-Pointed-Type A)
+      ( is-retraction-map-inv-underlying-type-concrete-group-Pointed-Type)
+      ( is-section-map-inv-underlying-type-concrete-group-Pointed-Type)
+
+  preserves-mul-map-underlying-type-concrete-group-Pointed-Type :
+    (x y : type-Concrete-Group (concrete-group-Pointed-Type A)) →
+    map-underlying-type-concrete-group-Pointed-Type A
+      ( mul-Concrete-Group (concrete-group-Pointed-Type A) x y) ＝
+    binary-map-trunc-Set (mul-Ω A)
+      ( map-underlying-type-concrete-group-Pointed-Type A x)
+      ( map-underlying-type-concrete-group-Pointed-Type A y)
+  preserves-mul-map-underlying-type-concrete-group-Pointed-Type x y =
+    is-injective-equiv
+      ( equiv-map-inv-underlying-type-concrete-group-Pointed-Type)
+      ( ( is-retraction-map-inv-underlying-type-concrete-group-Pointed-Type
+          ( mul-Concrete-Group (concrete-group-Pointed-Type A) x y)) ∙
+        ( inv
+          ( ( preserves-mul-map-inv-underlying-type-concrete-group-Pointed-Type
+              ( A)
+              ( map-underlying-type-concrete-group-Pointed-Type A x)
+              ( map-underlying-type-concrete-group-Pointed-Type A y)) ∙
+            ( ap-binary
+              ( mul-Concrete-Group (concrete-group-Pointed-Type A))
+              ( is-retraction-map-inv-underlying-type-concrete-group-Pointed-Type
+                ( x))
+              ( is-retraction-map-inv-underlying-type-concrete-group-Pointed-Type
+                ( y))))))
 ```
 
 ## Properties for pointed types
@@ -309,4 +345,23 @@ module _
   coherence-square-map-inv-underlying-type-concrete-homotopy-group =
     coherence-square-map-inv-underlying-type-concrete-group-Pointed-Type
       ( pointed-map-iterated-loop-space n f)
+```
+
+## Properties for homotopy groups
+
+```agda
+module _
+  {l : Level} (n : ℕ) (A : Pointed-Type l)
+  where
+
+  preserves-mul-map-underlying-type-concrete-homotopy-group :
+    (x y : type-Concrete-Group (concrete-homotopy-group n A)) →
+    map-underlying-type-concrete-homotopy-group n A
+      ( mul-Concrete-Group (concrete-homotopy-group n A) x y) ＝
+    binary-map-trunc-Set (mul-Ω (iterated-loop-space n A))
+      ( map-underlying-type-concrete-homotopy-group n A x)
+      ( map-underlying-type-concrete-homotopy-group n A y)
+  preserves-mul-map-underlying-type-concrete-homotopy-group =
+    preserves-mul-map-underlying-type-concrete-group-Pointed-Type
+      ( iterated-loop-space n A)
 ```
