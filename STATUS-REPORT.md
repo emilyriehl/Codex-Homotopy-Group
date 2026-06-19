@@ -194,15 +194,20 @@ and trivial outer groups checked.
 
 ## Remaining tasks
 
-1. Fill the remaining unrestricted lower-level LES bridge obligation: compare
-   the checked canonical shifted fibration-boundary map with the loop of the
-   recursive boundary map used by
-   `boundary-hom-concrete-homotopy-group-fiber-sequence`, allowing for the
-   loop-inversion/sign discrepancy exposed by goal reduction, or package the
-   Coq-HoTT-style exact triple `Ω E ->* Ω B ->* F` as a pointed fiber sequence
-   and derive the recursive looped exactness from that. This is no longer
-   needed for the current Hopf `π₃(S³) ≅ π₃(S²)` segment because its right
-   endpoint is trivial, but it is still needed for the unrestricted LES. The
+1. Fill the remaining unrestricted lower-level LES bridge obligation by the
+   upstream-quality structural route: package the Coq-HoTT-style
+   `connect_fiberseq` analogue `Ω E ->* Ω B ->* F` as a pointed fiber sequence
+   for any packaged fiber sequence `F ->* E ->* B`, with comparison equivalence
+   `Ω E ≃* fiber (boundary : Ω B ->* F)`, and derive recursive looped exactness
+   from that package. This is preferred over closing the local target by a bare
+   image/kernel transport, because it exposes the reusable homotopy-theoretic
+   structure that should ultimately be upstreamed. The image/kernel comparison
+   between the checked canonical shifted fibration-boundary map and the loop of
+   the recursive boundary map remains useful as a diagnostic or fallback,
+   especially for the loop-inversion/sign discrepancy exposed by goal
+   reduction. This bridge is no longer needed for the current Hopf
+   `π₃(S³) ≅ π₃(S²)` segment because its right endpoint is trivial, but it is
+   still needed for the unrestricted LES and the lower Hopf comparison. The
    total-space set-truncated iterated exactness, canonical shifted boundary
    exactness, pointed-set mere-preimage adapter, pointed-set exactness
    transports for image replacement, compatible middle self-map shifts,
@@ -225,9 +230,28 @@ and trivial outer groups checked.
 
 ## Next agent handoff
 
-The next agent should not try to prove unrestricted fibration-boundary group exactness by reducing the canonical shifted boundary to the looped recursive boundary by `refl`. A direct pointwise attempt at degree zero exposed a loop-inversion/sign discrepancy rather than a definitional equality. The checked set-level theorem is `is-exact-set-truncation-canonical-iterated-loop-fibration-boundary-fiber-sequence` in `src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md`. It proves exactness for the canonical shifted boundary `hom-trunc-canonical-iterated-loop-boundary-fiber-sequence`. The current Hopf fibration-boundary consumer in `src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md` avoids the comparison by assuming the target group is contractible and using the checked trivial-codomain transport. A future unrestricted consumer will still need to compare this canonical shifted map with `hom-trunc-iterated-loop-boundary-fiber-sequence`, the loop of the recursive boundary map used by `boundary-hom-concrete-homotopy-group-fiber-sequence`, using an explicit image/kernel transport across loop inversion or a packaged `Ω E ->* Ω B ->* F` fiber sequence.
+The next agent should prioritize the structural `connect_fiberseq` route for
+unrestricted fibration-boundary group exactness. Do not try to reduce the
+canonical shifted boundary to the looped recursive boundary by `refl`: a direct
+pointwise attempt at degree zero exposed a loop-inversion/sign discrepancy
+rather than a definitional equality. The checked set-level theorem is
+`is-exact-set-truncation-canonical-iterated-loop-fibration-boundary-fiber-sequence`
+in `src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md`.
+It proves exactness for the canonical shifted boundary
+`hom-trunc-canonical-iterated-loop-boundary-fiber-sequence`. The current Hopf
+fibration-boundary consumer in
+`src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md`
+avoids the comparison by assuming the target group is contractible and using
+the checked trivial-codomain transport. A future unrestricted consumer should
+first package the connecting pointed fiber sequence `Ω E ->* Ω B ->* F`, with
+comparison equivalence `Ω E ≃* fiber (boundary : Ω B ->* F)`, then derive the
+recursive looped exactness from that reusable package. An explicit
+image/kernel transport across loop inversion remains a fallback or diagnostic
+bridge, not the preferred final proof.
 
-The next proof target is one of these two equivalent bridge routes:
+The next proof target is the first of these bridge routes; the second is a
+fallback if the structural route exposes a missing prerequisite that cannot be
+closed immediately:
 
 1. Package the Coq-HoTT-style connecting fiber sequence `Ω E ->* Ω B ->* F` for a packaged fiber sequence `F ->* E ->* B`, with comparison equivalence `Ω E ≃* fiber (boundary : Ω B ->* F)`, and derive recursive looped exactness from iterating that packaged fiber sequence.
 2. Prove an image/kernel comparison between the canonical shifted boundary hom on set truncations and the recursive looped boundary hom, allowing for loop inversion on the source, then feed it to `is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence-kernel`. The pointed-set transport lemmas `is-exact-hom-Pointed-Set-iff-image-left`, `iff-image-hom-Pointed-Set-middle-self-map`, and `is-exact-hom-Pointed-Set-image-kernel-shift-right` were added for this route.

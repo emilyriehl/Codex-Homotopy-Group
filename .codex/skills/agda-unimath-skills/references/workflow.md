@@ -87,6 +87,15 @@ into layers:
 3. Transport that exactness to the concrete homotopy-group maps only after the
    adjacent pointed-set theorem is stable.
 
+Prefer proofs that expose the native homotopy-theoretic structure expected in
+agda-unimath. If an adjacent triple should itself be a pointed fiber sequence,
+or should be obtained from a canonical one by a pointed equivalence, package
+that structural theorem first. Image and kernel transports are useful when
+extracting a consequence from a structural theorem, diagnosing a sign or
+orientation mismatch, or bridging to an existing consumer; they should not
+replace a canonical reusable construction merely because they close the current
+hole faster.
+
 For an adjacent triple that is not syntactically the canonical fiber sequence,
 compare its image predicate with the image predicate of a canonical fiber
 inclusion. Eliminate image witnesses with `apply-universal-property-trunc-Prop`,
@@ -112,11 +121,15 @@ freshly at each iterated-loop degree:
 If a group-level transport theorem expects maps of the form
 `hom-trunc-Pointed-Set (pointed-map-Ω f)`, keep the recursive classifying map
 available, but prove set-level exactness against the canonical boundary first.
-Then either package the Coq-HoTT-style exact triple `Ω E ->* Ω B ->* F` as a
-pointed fiber sequence, or prove an image/kernel transport lemma comparing the
-canonical and recursive boundary maps. Do not insert target-loop inversion or
-similar sign fixes unless there is an explicit theorem transporting exactness
-across that equivalence.
+The preferred upstreamable route is then to package the Coq-HoTT-style
+`connect_fiberseq` analogue: the pointed fiber sequence
+`Ω E ->* Ω B ->* F`, with comparison equivalence
+`Ω E ≃* fiber (∂ : Ω B ->* F)`. After this structure is checked, derive the
+recursive looped exactness from it. Use image/kernel transport between the
+canonical and recursive boundary maps only as a secondary bridge or diagnostic,
+for example to record an orientation or loop-inversion discrepancy. Do not
+insert target-loop inversion or similar sign fixes unless there is an explicit
+theorem transporting exactness across that equivalence.
 
 ### Equality in fibers under `--without-K`
 

@@ -20,7 +20,8 @@ reference material lives in `../agda-unimath-reference/references/`.
 
 Work like a careful Agda formalizer in agda-unimath-style projects. Prefer
 small, typechecking changes, library reuse, and explicit validation over
-speculative proof construction.
+speculative proof construction, while aiming for definitions and theorems that
+are elegant, reusable, and plausible upstream contributions to agda-unimath.
 
 For command details and search patterns, read
 [references/workflow.md](references/workflow.md) when you need project
@@ -87,7 +88,7 @@ the final verification gate.
 
 - Preserve universe-polymorphic generality unless nearby code specializes.
 - Prefer named intermediate definitions when they match surrounding
-  agda-unimath style or make goals reusable.
+  agda-unimath style or expose reusable mathematical structure.
 - Match local implicit argument conventions.
 - Treat import changes as part of the proof. If a name is unavailable, search
   for the correct module rather than duplicating definitions.
@@ -96,10 +97,11 @@ the final verification gate.
 - Use the repository-local reference skill for conventions, namespace lookup,
   foundational APIs, Agda error triage, and HoTT-specific practice.
 - For HoTT exactness proofs, especially fiber-sequence and long-exact-sequence
-  work, prove the smallest reusable adjacent exactness or comparison lemma
-  first. A set-truncated image comparison against a canonical fiber sequence is
-  often easier and more robust than trying to package the full iterated theorem
-  in one step.
+  work, prefer upstream-quality structural packages over one-off hole-closing
+  transports. In particular, when the natural proof is a new pointed fiber
+  sequence or pointed equivalence, make that structure explicit and reusable;
+  use set-truncated image/kernel comparisons mainly as diagnostics,
+  intermediate bridges, or fallback routes.
 
 ## Common Task Patterns
 
@@ -130,10 +132,14 @@ deliberate and validate every module touched by the rename or import change.
 ### Update Research Records
 
 When making substantive formalization progress, update `STATUS-REPORT.md`.
-When making a commit, also update `CHAT-LOG.md` with the request, actions,
-verification, model context when visible, and commit hash or "This commit"
-placeholder. In every commit message, include the standard summary/body plus a
-short session description recording the development history: who did the
+At the end of every run that changes tracked files, make a commit for the
+agent's intentional changes, staging only files changed for the current request.
+Push after commits that represent significant progress, including checked
+formalization results, resolved blockers, important status or instruction
+updates, or user-requested handoffs. When making a commit, also update
+`CHAT-LOG.md` with the request, actions, verification, model context when
+visible, and commit hash or "This commit" placeholder. In every commit message, include the standard summary/body plus
+a short session description recording the development history: who did the
 prompting, which agent did the work, and the main request/action sequence.
 
 ## Reference

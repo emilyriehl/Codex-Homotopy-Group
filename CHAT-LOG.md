@@ -1994,3 +1994,55 @@ recursive set-level exactness input in `second-homotopy-group-sphere-2.lagda.md`
 Related commit:
 
 - This commit — Advance lower Hopf LES exactness handoff.
+
+
+### Update agent formalization and commit policies
+
+Request: Emily asked Codex to update the repository instructions and local
+Agda/unimath guidance so future agents prioritize elegant, reusable proofs and
+constructions intended for eventual upstreaming to agda-unimath. Emily then
+asked Codex to also update the general instructions so agents commit changes
+after every run and push whenever there is significant progress.
+
+Model context:
+
+- Date: 2026-06-19.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible, but this run only changed documentation and
+  instruction files.
+
+Actions:
+
+- Added a formalization-priorities section to `AGENTS.md`, instructing agents
+  to prefer upstreamable structural HoTT/agda-unimath constructions over
+  one-off local hole-closing transports.
+- Updated the repository-local Agda workflow and HoTT reference skills to make
+  the `connect_fiberseq` route the preferred LES boundary strategy and to treat
+  image/kernel transport as fallback, diagnostic, or adapter infrastructure.
+- Updated `STATUS-REPORT.md` so the next-agent handoff prioritizes packaging
+  `Ω E ->* Ω B ->* F` via `Ω E ≃* fiber (boundary : Ω B ->* F)`.
+- Added the commit/push policy to `AGENTS.md` and mirrored it in the Agda
+  workflow skill: commit after every run with tracked-file changes, stage only
+  intentional current-request changes, and push commits that represent
+  significant progress or handoff-worthy updates.
+
+Verification:
+
+```sh
+git diff --check
+rg -n 'Formalization Priorities|upstream-quality|connect_fiberseq|image/kernel|fallback|diagnostic|upstreamed|plausible upstream|structural route' AGENTS.md .codex/skills/agda-unimath-skills .codex/skills/agda-unimath-reference STATUS-REPORT.md
+rg -n 'one of these two equivalent|or package the Coq-HoTT-style exact triple|or prove an image/kernel transport lemma' AGENTS.md .codex/skills/agda-unimath-skills .codex/skills/agda-unimath-reference STATUS-REPORT.md
+python3 /home/eriehl/.codex/skills/.system/skill-creator/scripts/quick_validate.py .codex/skills/agda-unimath-skills
+python3 /home/eriehl/.codex/skills/.system/skill-creator/scripts/quick_validate.py .codex/skills/agda-unimath-reference
+```
+
+`git diff --check` passed. Both edited skill folders validated. The consistency
+searches found the intended new policy text and no remaining old wording that
+treated the two LES routes as equivalent. No Agda checks were run because no
+Agda source files changed.
+
+Related commit:
+
+- This commit — Update agent formalization priorities.

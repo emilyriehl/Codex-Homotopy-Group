@@ -11,6 +11,13 @@ used. Avoid defining homotopical or higher-group-theoretic notions by
 immediately translating them into lower-level algebra unless the algebraic
 definition is the concept itself.
 
+For work intended to become part of agda-unimath, prefer the elegant
+structural theorem over the fastest local proof. A local transport, sign fix,
+or image/kernel comparison may be the right diagnostic or adapter, but it
+should not replace a reusable native construction such as a pointed
+equivalence, fiber sequence, universal property, or exactness package when that
+construction is the mathematical content of the result.
+
 In particular, constructions involving concrete groups should be native to
 concrete groups:
 
@@ -65,12 +72,13 @@ A practical pattern for a pointed map `g : E ->* B` is:
   truncation.
 - Package the first fiber-of-the-fiber identification, such as
   `Ω B ≃* fiber (fiber g ->* E)`, before proving the next exactness step.
-- For the next triples, it may be enough to prove projection or image
-  comparison laws, rather than a full pointed equivalence immediately. For
-  example, exactness of `Ω E ->* Ω B ->* fiber g` can be reduced to the
-  canonical fiber sequence of the boundary map once a point in the fiber of the
-  boundary map is shown to project to a loop whose image under `Ω g` is the
-  original loop.
+- For the next triples, prefer the full structural package when it is the
+  canonical theorem. In particular, for a fiber sequence `F ->* E ->* B`,
+  prioritize the `connect_fiberseq` analogue packaging
+  `Ω E ->* Ω B ->* F` as a pointed fiber sequence via
+  `Ω E ≃* fiber (boundary : Ω B ->* F)`. Projection or image comparison laws
+  are useful as intermediate calculations, but should feed the structural
+  theorem rather than replace it as the final proof.
 
 For set-truncated exactness proofs, work with pointed-set images and kernels.
 The reliable proof shape is to map image witnesses between two maps, eliminate
@@ -89,8 +97,10 @@ fiber sequence. This is a useful guide for agda-unimath:
   set-truncated exactness theorem directly;
 - keep any recursive looped boundary map separately when it is the pointed map
   classifying a concrete homotopy-group homomorphism;
-- bridge these maps only by a named comparison theorem, an image/kernel
-  transport theorem, or a packaged `connect_fiberseq` analogue.
+- prefer bridging these maps through a packaged `connect_fiberseq` analogue
+  when that is available; use named comparison theorems or image/kernel
+  transports as adapters, diagnostics, or fallbacks, not as substitutes for the
+  canonical fiber-sequence construction.
 
 A good next target after proving canonical set-level exactness is often the
 pointed fiber sequence `Ω E ->* Ω B ->* F`, where the comparison equivalence is
