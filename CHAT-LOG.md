@@ -1921,3 +1921,76 @@ scaffold.
 Related commit:
 
 - This commit — Route Hopf LES boundary through trivial codomain.
+
+
+### Advance lower Hopf LES exactness handoff
+
+Request: Emily asked Codex to continue making progress toward the formalization
+plan, to work harder on the remaining LES/Hopf obstacles, then to commit and
+push the resulting work so that a different agent can continue from the
+repository state.
+
+Model context:
+
+- Date: 2026-06-19.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible and were used for local proof-state inspection.
+  Final acceptance was still checked with `./check.sh <file>`.
+
+Actions:
+
+- Added `src/synthetic-homotopy-theory/homotopy-groups-sphere-3.lagda.md`,
+  proving low-dimensional connectivity/triviality facts for `S³`, including
+  triviality of `concrete-homotopy-group 0 (S³)` and
+  `concrete-homotopy-group 1 (S³)`.
+- Added
+  `src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md`,
+  proving the right-hand lower Hopf boundary/fiber-inclusion exactness and the
+  algebraic extraction reducing `π₂(S²) ≅ π₁(S¹)` to the remaining left
+  fibration-boundary exactness input.
+- Extended
+  `src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md`
+  with the checked packaged looped boundary/fiber-inclusion exactness segment
+  `Ω² B ->* Ω F ->* Ω E`.
+- Extended
+  `src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md`
+  with the corresponding group-level exactness theorem at `π₁(F)`.
+- Added pointed-set exactness transport lemmas in
+  `src/structured-types/exact-sequences-pointed-sets.lagda.md` for
+  image-equivalent replacement of the first map, compatible middle self-map
+  image invariance, and shifted-kernel transport of the second map. These are
+  intended for the remaining loop-inversion/sign discrepancy between canonical
+  shifted boundaries and recursive looped boundaries.
+- Narrowed the scaffold hole in
+  `src/synthetic-homotopy-theory/second-homotopy-group-sphere-2.lagda.md` so
+  the unfinished input is now exactly the recursive set-truncated exactness
+  statement for the lower Hopf segment, rather than the whole isomorphism.
+- Updated `STATUS-REPORT.md` with the new verification state and next-agent
+  handoff, explicitly warning not to pursue raw definitional equality between
+  canonical shifted and recursive looped boundary maps.
+
+Verification:
+
+```sh
+./check.sh src/structured-types/exact-sequences-pointed-sets.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/homotopy-groups-sphere-3.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/second-homotopy-group-sphere-2.lagda.md
+rg -n '\{!!\}|allow-unsolved-metas' src/synthetic-homotopy-theory src/group-theory src/structured-types
+git diff --check
+```
+
+All listed Agda checks passed. The source search showed only the known
+scaffolds in `hopf-fiber-sequence.lagda.md`,
+`stability-third-homotopy-group-sphere-3.lagda.md`, and the narrowed
+recursive set-level exactness input in `second-homotopy-group-sphere-2.lagda.md`.
+`git diff --check` passed.
+
+Related commit:
+
+- This commit — Advance lower Hopf LES exactness handoff.

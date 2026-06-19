@@ -15,6 +15,7 @@ open import foundation.fibers-of-maps
 open import foundation.functoriality-set-truncation
 open import foundation.images
 open import foundation.identity-types
+open import foundation.injective-maps
 open import foundation.logical-equivalences
 open import foundation.propositional-truncations
 open import foundation.set-truncations
@@ -148,6 +149,158 @@ module _
     backward-implication (K x) (pr1 (E x) I)
   pr2 (is-exact-hom-Pointed-Set-iff-kernel-right K E x) H =
     pr2 (E x) (forward-implication (K x) H)
+```
+
+### Exactness is invariant under image equivalence of the first map
+
+```agda
+module _
+  {l1 l1' l2 l3 : Level}
+  (A : Pointed-Set l1) (A' : Pointed-Set l1')
+  (B : Pointed-Set l2) (C : Pointed-Set l3)
+  (f : hom-Pointed-Set A B) (f' : hom-Pointed-Set A' B)
+  (g : hom-Pointed-Set B C)
+  where
+
+  is-exact-hom-Pointed-Set-iff-image-left :
+    ((x : type-Pointed-Set B) →
+      is-in-image-hom-Pointed-Set {A = A} {B = B} f x ↔
+      is-in-image-hom-Pointed-Set {A = A'} {B = B} f' x) →
+    is-exact-hom-Pointed-Set A' B C f' g →
+    is-exact-hom-Pointed-Set A B C f g
+  pr1 (is-exact-hom-Pointed-Set-iff-image-left I E x) H =
+    pr1 (E x) (forward-implication (I x) H)
+  pr2 (is-exact-hom-Pointed-Set-iff-image-left I E x) H =
+    backward-implication (I x) (pr2 (E x) H)
+```
+
+### Images are invariant under compatible middle self-maps
+
+```agda
+module _
+  {l1 l2 : Level} {A : Pointed-Set l1} {B : Pointed-Set l2}
+  (f : hom-Pointed-Set A B) (e d : hom-Pointed-Set B B)
+  where
+
+  iff-image-hom-Pointed-Set-middle-self-map :
+    (a dA : type-Pointed-Set A → type-Pointed-Set A) →
+    ((x : type-Pointed-Set A) →
+      map-pointed-map e (map-pointed-map f x) ＝
+      map-pointed-map f (a x)) →
+    ((x : type-Pointed-Set A) →
+      map-pointed-map d (map-pointed-map f x) ＝
+      map-pointed-map f (dA x)) →
+    ((y : type-Pointed-Set B) →
+      map-pointed-map d (map-pointed-map e y) ＝ y) →
+    (y : type-Pointed-Set B) →
+    is-in-image-hom-Pointed-Set {A = A} {B = B} f
+      ( map-pointed-map e y) ↔
+    is-in-image-hom-Pointed-Set {A = A} {B = B} f y
+  pr1 (iff-image-hom-Pointed-Set-middle-self-map a dA He Hd I y) H =
+    apply-universal-property-trunc-Prop H
+      ( subtype-image-hom-Pointed-Set {A = A} {B = B} f y)
+      ( λ (x , p) →
+        unit-trunc-Prop
+          ( dA x ,
+            ( inv (Hd x)) ∙
+            ( ap (map-pointed-map d) p) ∙
+            ( I y)))
+  pr2 (iff-image-hom-Pointed-Set-middle-self-map a dA He Hd I y) H =
+    apply-universal-property-trunc-Prop H
+      ( subtype-image-hom-Pointed-Set
+        {A = A}
+        {B = B}
+        ( f)
+        ( map-pointed-map e y))
+      ( λ (x , p) →
+        unit-trunc-Prop
+          ( a x ,
+            ( inv (He x)) ∙
+            ( ap (map-pointed-map e) p)))
+```
+
+### Exactness is invariant under compatible middle shifts of the second map
+
+```agda
+module _
+  {l1 l2 l3 : Level}
+  (A : Pointed-Set l1) (B : Pointed-Set l2) (C : Pointed-Set l3)
+  (f : hom-Pointed-Set A B) (g h : hom-Pointed-Set B C)
+  (e : hom-Pointed-Set B B)
+  where
+
+  is-exact-hom-Pointed-Set-image-kernel-shift-right :
+    ((x : type-Pointed-Set B) →
+      is-in-image-hom-Pointed-Set {A = A} {B = B} f
+        ( map-pointed-map e x) ↔
+      is-in-image-hom-Pointed-Set {A = A} {B = B} f x) →
+    ((x : type-Pointed-Set B) →
+      map-pointed-map h x ＝
+      map-pointed-map g (map-pointed-map e x)) →
+    is-exact-hom-Pointed-Set A B C f g →
+    is-exact-hom-Pointed-Set A B C f h
+  pr1
+    ( is-exact-hom-Pointed-Set-image-kernel-shift-right I H E x)
+    K =
+    ( H x) ∙
+    ( pr1
+      ( E (map-pointed-map e x))
+      ( backward-implication (I x) K))
+  pr2
+    ( is-exact-hom-Pointed-Set-image-kernel-shift-right I H E x)
+    K =
+    forward-implication
+      ( I x)
+      ( pr2
+        ( E (map-pointed-map e x))
+        ( ( inv (H x)) ∙ K))
+```
+
+### Exactness is invariant under injective comparison of the middle pointed set
+
+```agda
+module _
+  {l1 l2 l2' l3 : Level}
+  (A : Pointed-Set l1) (B : Pointed-Set l2) (B' : Pointed-Set l2')
+  (C : Pointed-Set l3)
+  (f : hom-Pointed-Set A B) (g : hom-Pointed-Set B C)
+  (f' : hom-Pointed-Set A B') (g' : hom-Pointed-Set B' C)
+  (h : hom-Pointed-Set B B')
+  where
+
+  is-exact-hom-Pointed-Set-injective-middle :
+    is-injective (map-pointed-map h) →
+    ((x : type-Pointed-Set A) →
+      map-pointed-map h (map-pointed-map f x) ＝ map-pointed-map f' x) →
+    ((y : type-Pointed-Set B) →
+      map-pointed-map g y ＝ map-pointed-map g' (map-pointed-map h y)) →
+    is-exact-hom-Pointed-Set A B' C f' g' →
+    is-exact-hom-Pointed-Set A B C f g
+  pr1
+    ( is-exact-hom-Pointed-Set-injective-middle I Hf Hg E y)
+    Hy =
+    apply-universal-property-trunc-Prop Hy
+      ( subtype-kernel-hom-Pointed-Set {A = B} {B = C} g y)
+      ( λ (x , p) →
+        ( Hg y) ∙
+        ( pr1
+          ( E (map-pointed-map h y))
+          ( unit-trunc-Prop
+            ( x ,
+              ( inv (Hf x)) ∙
+              ( ap (map-pointed-map h) p)))))
+  pr2
+    ( is-exact-hom-Pointed-Set-injective-middle I Hf Hg E y)
+    Ky =
+    apply-universal-property-trunc-Prop
+      ( pr2
+        ( E (map-pointed-map h y))
+        ( ( inv (Hg y)) ∙ Ky))
+      ( subtype-image-hom-Pointed-Set {A = A} {B = B} f y)
+      ( λ (x , p) →
+        unit-trunc-Prop
+          ( x ,
+            I ((Hf x) ∙ p)))
 ```
 
 ### The image of a pointed map as a mere preimage

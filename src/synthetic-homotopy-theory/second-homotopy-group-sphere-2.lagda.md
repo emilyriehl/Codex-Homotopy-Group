@@ -14,6 +14,7 @@ open import group-theory.concrete-groups
 open import group-theory.isomorphisms-groups
 
 open import synthetic-homotopy-theory.homotopy-groups
+open import synthetic-homotopy-theory.hopf-long-exact-sequence-second-homotopy-groups
 open import synthetic-homotopy-theory.spheres
 ```
 
@@ -35,5 +36,7 @@ iso-second-homotopy-group-sphere-2-fundamental-group-sphere-1 :
       ( concrete-homotopy-group 1 (sphere-Pointed-Type 2)))
     ( group-Concrete-Group
       ( concrete-homotopy-group 0 (sphere-Pointed-Type 1)))
-iso-second-homotopy-group-sphere-2-fundamental-group-sphere-1 = {!!}
+iso-second-homotopy-group-sphere-2-fundamental-group-sphere-1 =
+  iso-second-homotopy-group-is-exact-set-truncation-hopf-segment
+    ( {!!})
 ```
