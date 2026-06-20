@@ -769,3 +769,19 @@ boundary-pointed-map-fiber-sequence (iterated-loop-fiber-sequence S (succ-ℕ n)
 ```
 
 and for the lower Hopf segment specifically the case `S = hopf-fiber-sequence-sphere-1-sphere-3-sphere-2`, `n = 0`.
+
+
+Later on 2026-06-20, the recursive-vs-canonical boundary comparison work made checked infrastructure progress while avoiding a false shortcut. The long exact sequence file now records reusable pointed-equivalence algebra for loops of inverse pointed equivalences and inverses of composite pointed equivalences, and it defines the canonical shifted iterated boundary map
+
+```text
+canonical-pointed-map-iterated-boundary-fiber-sequence n
+  : Omega^(n+1) B ->* Omega^n F
+```
+
+as the boundary map of the iterated-loop fiber sequence transported back along the iterated fiber equivalence. A proposed raw pointed homotopy identifying the recursive looped boundary with this canonical shifted boundary was deliberately not kept: the real `./check.sh` gate reduced the comparison to a source-loop inversion obstruction of the form `ap (λ u → refl ∙ inv u) q = q`. This confirms that the upstreamable bridge must be an explicitly oriented comparison or the full `connect_fiberseq`-style pointed fiber sequence package, not a definitional or unproved sign fix. The checked command was:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+The check passed. The touched LES file contains no new holes, postulates, or `--allow-unsolved-metas`. The existing pointed-homotopy adapters downstream remain the correct consumers once the oriented boundary comparison is proved.

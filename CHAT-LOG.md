@@ -2137,3 +2137,34 @@ All checks passed. The remaining mathematical proof obligation is now stated as 
 Related commit:
 
 - This commit - Add pointed-homotopy boundary exactness adapters.
+
+
+### Record oriented boundary-comparison infrastructure
+
+Request: Emily asked Codex to implement the plan and keep prioritizing the harder upstreamable agda-unimath proof route for the main `pi3(S2) ~= Z` goal.
+
+Model context:
+
+- Date: 2026-06-20.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible in the environment, but `./check.sh` remained the authoritative verification command because earlier MCP feedback accepted code that the real checker rejected.
+
+Actions:
+
+- Re-read the repository-local Agda/unimath workflow and HoTT reference guidance from the active skills.
+- Investigated the recursive-vs-canonical boundary comparison rather than closing the downstream exactness goal by a local transport shortcut.
+- Preserved checked reusable pointed-equivalence algebra: loops of inverse pointed equivalences and the inverse of a composite pointed equivalence.
+- Added `canonical-pointed-map-iterated-boundary-fiber-sequence`, the canonical shifted boundary map obtained from the iterated-loop fiber sequence and the iterated fiber equivalence.
+- Removed the attempted raw looped-boundary homotopy and the no-argument downstream corollaries built from it after `./check.sh` exposed the source-loop inversion obstruction. This keeps the code aligned with the upstreamable target: an explicitly oriented comparison or the full `connect_fiberseq`-style pointed fiber sequence package.
+- Updated `STATUS-REPORT.md` with the checked progress and the remaining mathematical obligation.
+
+Verification:
+
+- ./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+- git diff --check
+
+The Agda check passed. `git diff --check` passed. The touched LES file contains no new holes, postulates, or allow-unsolved-metas.
+
+Related commit:
+
+- This commit - Record oriented boundary-comparison infrastructure.
