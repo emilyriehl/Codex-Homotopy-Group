@@ -733,3 +733,39 @@ as `pointed-equiv-fiber-boundary-map-Ω-Pointed-Type`. This removes the previous
 ```
 
 The check passed, and the touched LES file contains no holes, postulates, or `--allow-unsolved-metas`.
+
+
+Later on 2026-06-19, the recursive-vs-canonical boundary comparison target was reframed at the right level. The set-truncated iterated exactness module now includes
+
+```text
+is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence-pointed-htpy
+```
+
+which converts a pointed homotopy between the recursive looped boundary map and the canonical boundary map into the exactness statement needed for the fibration-boundary segment. The group exactness module lifts this to
+
+```text
+is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-pointed-htpy
+```
+
+and the lower Hopf module now exposes the direct endpoint
+
+```text
+iso-second-homotopy-group-pointed-htpy-hopf-segment
+```
+
+so that a future proof of the pointed boundary comparison immediately yields the `π₂(S²) ≅ π₁(S¹)` isomorphism. This does not prove the boundary comparison itself, but it replaces the previous set-level pointwise-equality interface with the upstream-quality pointed-homotopy interface we actually want. The checked commands were:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+```
+
+All checks passed. The next direct proof obligation is now a pointed homotopy
+
+```text
+pointed-map-Ω (pointed-map-iterated-boundary-fiber-sequence S n) ~∗
+boundary-pointed-map-fiber-sequence (iterated-loop-fiber-sequence S (succ-ℕ n))
+```
+
+and for the lower Hopf segment specifically the case `S = hopf-fiber-sequence-sphere-1-sphere-3-sphere-2`, `n = 0`.

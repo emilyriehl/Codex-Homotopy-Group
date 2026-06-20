@@ -2106,3 +2106,34 @@ The Agda check passed. The touched LES file contains no holes, postulates, or al
 Related commit:
 
 - This commit - Package structural boundary-fiber equivalence pointedly.
+
+
+### Add pointed-homotopy boundary exactness adapters
+
+Request: Emily asked Codex to keep working very hard toward the main `π₃(S²) ≅ ℤ` goal and to keep prioritizing the hard upstreamable proof route.
+
+Model context:
+
+- Date: 2026-06-19.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- This run continued after the previous pushed commit that packaged `Ω E ≃∗ fiber(boundary-fiber-Pointed-Type g)`.
+
+Actions:
+
+- Inspected the downstream set-level and group-level exactness modules and the lower Hopf LES file.
+- Identified that the remaining bridge was exposed as pointwise equality of set-truncated boundary maps, while the intended upstream-quality input should be a pointed homotopy between boundary pointed maps.
+- Added `is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence-pointed-htpy`, using `htpy-hom-trunc-Pointed-Set` to turn a pointed homotopy between the recursive looped boundary and the canonical boundary into the existing set-level exactness theorem.
+- Added `is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-pointed-htpy`, lifting that adapter to concrete homotopy-group exactness.
+- Added the Hopf-facing endpoint `iso-second-homotopy-group-pointed-htpy-hopf-segment`, so the lower Hopf isomorphism follows directly from the pointed boundary comparison in the case `S = hopf-fiber-sequence-sphere-1-sphere-3-sphere-2`, `n = 0`.
+
+Verification:
+
+- ./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+- ./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+- ./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+
+All checks passed. The remaining mathematical proof obligation is now stated as a pointed homotopy, not a raw set-truncated pointwise equality.
+
+Related commit:
+
+- This commit - Add pointed-homotopy boundary exactness adapters.

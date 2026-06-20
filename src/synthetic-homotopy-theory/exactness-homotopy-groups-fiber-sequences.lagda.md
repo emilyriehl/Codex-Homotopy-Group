@@ -19,11 +19,13 @@ open import group-theory.homomorphisms-concrete-groups
 
 open import structured-types.exact-sequences-pointed-sets
 open import structured-types.fiber-sequences
+open import structured-types.pointed-homotopies
 open import structured-types.pointed-sets
 
 open import synthetic-homotopy-theory.group-exactness-from-set-truncated-homotopy-group-exactness
 open import synthetic-homotopy-theory.homotopy-groups
 open import synthetic-homotopy-theory.functoriality-iterated-loop-spaces
+open import synthetic-homotopy-theory.functoriality-loop-spaces
 open import synthetic-homotopy-theory.iterated-loop-spaces
 open import synthetic-homotopy-theory.long-exact-sequence-homotopy-groups
 open import synthetic-homotopy-theory.loop-spaces
@@ -196,6 +198,51 @@ module _
     is-exact-hom-Group-is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence
       ( S)
       ( n)
+
+  is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-pointed-htpy :
+    (n : ℕ) →
+    ( pointed-map-Ω (pointed-map-iterated-boundary-fiber-sequence S n)) ~∗
+    ( boundary-pointed-map-fiber-sequence
+      ( iterated-loop-fiber-sequence S (succ-ℕ n))) →
+    is-exact-hom-Group
+      ( group-Concrete-Group
+        ( concrete-homotopy-group
+          ( succ-ℕ n)
+          ( total-space-fiber-sequence-Pointed-Type S)))
+      ( group-Concrete-Group
+        ( concrete-homotopy-group
+          ( succ-ℕ n)
+          ( base-fiber-sequence-Pointed-Type S)))
+      ( group-Concrete-Group
+        ( concrete-homotopy-group
+          ( n)
+          ( fiber-fiber-sequence-Pointed-Type S)))
+      ( hom-group-hom-Concrete-Group
+        ( concrete-homotopy-group
+          ( succ-ℕ n)
+          ( total-space-fiber-sequence-Pointed-Type S))
+        ( concrete-homotopy-group
+          ( succ-ℕ n)
+          ( base-fiber-sequence-Pointed-Type S))
+        ( hom-fibration-concrete-homotopy-group-fiber-sequence
+          S
+          ( succ-ℕ n)))
+      ( hom-group-hom-Concrete-Group
+        ( concrete-homotopy-group
+          ( succ-ℕ n)
+          ( base-fiber-sequence-Pointed-Type S))
+        ( concrete-homotopy-group
+          ( n)
+          ( fiber-fiber-sequence-Pointed-Type S))
+        ( boundary-hom-concrete-homotopy-group-fiber-sequence S n))
+  is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-pointed-htpy
+    n H =
+    is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence
+      ( n)
+      ( is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence-pointed-htpy
+        ( S)
+        ( n)
+        ( H))
 ```
 
 ### Exactness at the base homotopy group with trivial target

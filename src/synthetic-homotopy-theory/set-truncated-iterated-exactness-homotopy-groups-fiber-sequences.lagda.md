@@ -15,6 +15,7 @@ open import foundation.universe-levels
 
 open import structured-types.exact-sequences-pointed-sets
 open import structured-types.fiber-sequences
+open import structured-types.pointed-homotopies
 open import structured-types.pointed-maps
 open import structured-types.pointed-types
 
@@ -324,4 +325,38 @@ module _
       ( H)
       ( is-exact-set-truncation-canonical-iterated-loop-fibration-boundary-fiber-sequence
         ( n))
+
+  is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence-pointed-htpy :
+    (n : ℕ) →
+    ( pointed-map-Ω (pointed-map-iterated-boundary-fiber-sequence S n)) ~∗
+    ( boundary-pointed-map-fiber-sequence
+      ( iterated-loop-fiber-sequence S (succ-ℕ n))) →
+    is-exact-hom-Pointed-Set
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( succ-ℕ n)
+            ( total-space-fiber-sequence-Pointed-Type S))))
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( succ-ℕ n)
+            ( base-fiber-sequence-Pointed-Type S))))
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( n)
+            ( fiber-fiber-sequence-Pointed-Type S))))
+      ( hom-trunc-iterated-loop-fibration-fiber-sequence (succ-ℕ n))
+      ( hom-trunc-iterated-loop-boundary-fiber-sequence n)
+  is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence-pointed-htpy
+    n H =
+    is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence
+      ( n)
+      ( htpy-hom-trunc-Pointed-Set
+        { f = pointed-map-Ω (pointed-map-iterated-boundary-fiber-sequence S n)}
+        { g =
+          boundary-pointed-map-fiber-sequence
+            ( iterated-loop-fiber-sequence S (succ-ℕ n))}
+        ( htpy-pointed-htpy H))
 ```

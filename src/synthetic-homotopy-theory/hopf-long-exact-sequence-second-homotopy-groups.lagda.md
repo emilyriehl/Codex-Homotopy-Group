@@ -19,8 +19,10 @@ open import group-theory.isomorphisms-groups
 open import group-theory.trivial-underlying-groups-concrete-groups
 
 open import structured-types.exact-sequences-pointed-sets
+open import structured-types.pointed-homotopies
 
 open import synthetic-homotopy-theory.exactness-homotopy-groups-fiber-sequences
+open import synthetic-homotopy-theory.functoriality-loop-spaces
 open import synthetic-homotopy-theory.homotopy-groups
 open import synthetic-homotopy-theory.homotopy-groups-sphere-3
 open import synthetic-homotopy-theory.hopf-fiber-sequence
@@ -174,6 +176,31 @@ iso-second-homotopy-group-is-exact-set-truncation-hopf-segment :
 iso-second-homotopy-group-is-exact-set-truncation-hopf-segment H =
   iso-second-homotopy-group-is-exact-hopf-segment
     ( is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence
+      ( hopf-fiber-sequence-sphere-1-sphere-3-sphere-2)
+      ( 0)
+      ( H))
+```
+
+### The lower Hopf comparison from a pointed boundary homotopy
+
+```agda
+iso-second-homotopy-group-pointed-htpy-hopf-segment :
+  ( pointed-map-Ω
+    ( pointed-map-iterated-boundary-fiber-sequence
+      ( hopf-fiber-sequence-sphere-1-sphere-3-sphere-2)
+      ( 0))) ~∗
+  ( boundary-pointed-map-fiber-sequence
+    ( iterated-loop-fiber-sequence
+      ( hopf-fiber-sequence-sphere-1-sphere-3-sphere-2)
+      ( succ-ℕ 0))) →
+  iso-Group
+    ( group-Concrete-Group
+      ( concrete-homotopy-group 1 (sphere-Pointed-Type 2)))
+    ( group-Concrete-Group
+      ( concrete-homotopy-group 0 (sphere-Pointed-Type 1)))
+iso-second-homotopy-group-pointed-htpy-hopf-segment H =
+  iso-second-homotopy-group-is-exact-hopf-segment
+    ( is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-pointed-htpy
       ( hopf-fiber-sequence-sphere-1-sphere-3-sphere-2)
       ( 0)
       ( H))
