@@ -530,6 +530,19 @@ boundary map with the fiber inclusion of the fiber inclusion.
 
 ```agda
 module _
+  {l1 l2 l3 : Level} {X : UU l1} {A : UU l2} {B : UU l3}
+  (f : A → X) (g : B → X) (h : A → B)
+  (H : (x : A) → f x ＝ g (h x))
+  where
+
+  compute-fiber-triangle :
+    (x : X) (u : fiber f x) →
+    fiber-triangle f g h H x u ＝
+    ( h (pr1 u) , inv (H (pr1 u)) ∙ pr2 u)
+  compute-fiber-triangle .(f a) (a , refl) =
+    eq-Eq-fiber g (f a) refl right-unit
+
+module _
   {l1 l2 : Level} {E : Pointed-Type l1} {B : Pointed-Type l2}
   (g : E →∗ B)
   where
@@ -561,16 +574,60 @@ module _
         ( pointed-equiv-fiber-inclusion-boundary-fiber-Pointed-Type g))
       ( point-Pointed-Type (fiber-Pointed-Type g))
 
+  preserves-point-equiv-fiber-boundary-fiber-inclusion-boundary-fiber-Pointed-Type :
+    map-equiv
+      ( equiv-fiber-boundary-fiber-inclusion-boundary-fiber-Pointed-Type)
+      ( point-Pointed-Type
+        ( fiber-Pointed-Type (boundary-fiber-Pointed-Type g))) ＝
+    point-Pointed-Type
+      ( fiber-Pointed-Type
+        ( inclusion-fiber-Pointed-Type (inclusion-fiber-Pointed-Type g)))
+  preserves-point-equiv-fiber-boundary-fiber-inclusion-boundary-fiber-Pointed-Type =
+    compute-fiber-triangle
+      ( map-pointed-map (boundary-fiber-Pointed-Type g))
+      ( map-pointed-map
+        ( inclusion-fiber-Pointed-Type (inclusion-fiber-Pointed-Type g)))
+      ( map-pointed-equiv
+        ( pointed-equiv-fiber-inclusion-boundary-fiber-Pointed-Type g))
+      ( pr1 (pointed-htpy-boundary-fiber-inclusion-boundary-fiber-Pointed-Type g))
+      ( point-Pointed-Type (fiber-Pointed-Type g))
+      ( point-Pointed-Type
+        ( fiber-Pointed-Type (boundary-fiber-Pointed-Type g))) ∙
+    eq-Eq-fiber
+      ( map-pointed-map
+        ( inclusion-fiber-Pointed-Type (inclusion-fiber-Pointed-Type g)))
+      ( point-Pointed-Type (fiber-Pointed-Type g))
+      ( preserves-point-pointed-equiv
+        ( pointed-equiv-fiber-inclusion-boundary-fiber-Pointed-Type g))
+      ( inv
+        ( pr2
+          ( pointed-htpy-boundary-fiber-inclusion-boundary-fiber-Pointed-Type g)))
+
+  pointed-equiv-fiber-boundary-fiber-inclusion-boundary-fiber-Pointed-Type :
+    fiber-Pointed-Type (boundary-fiber-Pointed-Type g) ≃∗
+    fiber-Pointed-Type
+      ( inclusion-fiber-Pointed-Type (inclusion-fiber-Pointed-Type g))
+  pr1 pointed-equiv-fiber-boundary-fiber-inclusion-boundary-fiber-Pointed-Type =
+    equiv-fiber-boundary-fiber-inclusion-boundary-fiber-Pointed-Type
+  pr2 pointed-equiv-fiber-boundary-fiber-inclusion-boundary-fiber-Pointed-Type =
+    preserves-point-equiv-fiber-boundary-fiber-inclusion-boundary-fiber-Pointed-Type
+
+  pointed-equiv-fiber-boundary-map-Ω-Pointed-Type :
+    Ω E ≃∗
+    fiber-Pointed-Type (boundary-fiber-Pointed-Type g)
+  pointed-equiv-fiber-boundary-map-Ω-Pointed-Type =
+    comp-pointed-equiv
+      ( inv-pointed-equiv
+        pointed-equiv-fiber-boundary-fiber-inclusion-boundary-fiber-Pointed-Type)
+      ( pointed-equiv-fiber-inclusion-boundary-fiber-Pointed-Type
+        ( inclusion-fiber-Pointed-Type g))
+
   equiv-fiber-boundary-map-Ω-Pointed-Type :
     type-Ω E ≃
     type-Pointed-Type
       ( fiber-Pointed-Type (boundary-fiber-Pointed-Type g))
   equiv-fiber-boundary-map-Ω-Pointed-Type =
-    inv-equiv
-      ( equiv-fiber-boundary-fiber-inclusion-boundary-fiber-Pointed-Type) ∘e
-    equiv-pointed-equiv
-      ( pointed-equiv-fiber-inclusion-boundary-fiber-Pointed-Type
-        ( inclusion-fiber-Pointed-Type g))
+    equiv-pointed-equiv pointed-equiv-fiber-boundary-map-Ω-Pointed-Type
 ```
 
 ### First projection of the looped boundary comparison

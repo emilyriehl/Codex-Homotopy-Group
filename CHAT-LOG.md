@@ -2076,3 +2076,33 @@ The Agda check passed. The source search found no holes, postulates, or allow-un
 Related commit:
 
 - This commit - Advance structural boundary-fiber equivalence.
+
+
+### Package structural boundary-fiber equivalence pointedly
+
+Request: Emily asked Codex to keep working very hard on the main `π₃(S²) ≅ ℤ` goal, continuing the harder upfront route intended for eventual upstreaming to agda-unimath.
+
+Model context:
+
+- Date: 2026-06-19.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible. `./check.sh` remained the authoritative verification command.
+
+Actions:
+
+- Re-read the repository-local Agda/unimath workflow and HoTT reference guidance from the active skills.
+- Continued the structural route comparing the boundary map with the fiber inclusion of the fiber inclusion, rather than returning to the brittle direct section proof.
+- Added a reusable `compute-fiber-triangle` lemma exposing how the generic `fiber-triangle` map acts on a fiber element.
+- Used that computation lemma, `eq-Eq-fiber`, and the existing pointed homotopy between `boundary-fiber-Pointed-Type g` and the fiber-inclusion composite to prove that the structural fiber equivalence preserves basepoints.
+- Packaged the structural comparison as `pointed-equiv-fiber-boundary-fiber-inclusion-boundary-fiber-Pointed-Type` and derived `pointed-equiv-fiber-boundary-map-Ω-Pointed-Type : Ω E ≃∗ fiber-Pointed-Type (boundary-fiber-Pointed-Type g)`.
+- Updated the status report with the new handoff target: prove the canonical loop-fibration-boundary fiber sequence using this pointed equivalence, then transport it to the packaged Hopf LES boundary.
+
+Verification:
+
+- ./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+
+The Agda check passed. The touched LES file contains no holes, postulates, or allow-unsolved-metas.
+
+Related commit:
+
+- This commit - Package structural boundary-fiber equivalence pointedly.

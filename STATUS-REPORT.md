@@ -712,3 +712,24 @@ by comparing `boundary-fiber-Pointed-Type g` with the fiber inclusion of the fib
 ```
 
 The check passed, and the touched LES file contains no holes, postulates, or `--allow-unsolved-metas`.
+
+
+Later on 2026-06-19, the structural boundary-fiber comparison was upgraded from an unpointed equivalence to a pointed equivalence. The long exact sequence file now includes a reusable computation lemma for `fiber-triangle` and proves that the induced equivalence
+
+```text
+fiber (boundary-fiber-Pointed-Type g) ≃ fiber (inclusion-fiber-Pointed-Type (inclusion-fiber-Pointed-Type g))
+```
+
+preserves the distinguished fiber point. Composing its pointed inverse with the existing HoTT Book 8.4.4-style pointed equivalence for `inclusion-fiber-Pointed-Type g` gives the checked pointed equivalence
+
+```text
+Ω E ≃∗ fiber (boundary-fiber-Pointed-Type g)
+```
+
+as `pointed-equiv-fiber-boundary-map-Ω-Pointed-Type`. This removes the previous blocker that the structural comparison had not yet been packaged pointedly. The next direct target is to use this pointed equivalence to prove the canonical loop-fibration-boundary fiber sequence `Ω E ->* Ω B ->* fiber g`, then transport it to the packaged fiber sequence boundary used in the Hopf lower LES segment. The checked command was:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+The check passed, and the touched LES file contains no holes, postulates, or `--allow-unsolved-metas`.
