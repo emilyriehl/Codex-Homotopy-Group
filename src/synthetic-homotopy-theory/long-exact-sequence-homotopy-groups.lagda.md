@@ -16,6 +16,7 @@ open import foundation.equality-dependent-pair-types
 open import foundation.equality-fibers-of-maps
 open import foundation.equivalences
 open import foundation.fibers-of-maps
+open import foundation.functoriality-dependent-pair-types
 open import foundation.functoriality-set-truncation
 open import foundation.identity-types
 open import foundation.injective-maps
@@ -520,6 +521,56 @@ base. This is the first instance of HoTT Book Lemma 8.4.4.
     inclusion-fiber-Pointed-Type g
   pr2 (pr2 (pr2 (pr2 (pr2 fiber-sequence-boundary-fiber-Pointed-Type)))) =
     is-fiber-sequence-boundary-fiber-Pointed-Type
+```
+
+### The fiber of the boundary map
+
+The fiber of the boundary map is identified structurally, by comparing the
+boundary map with the fiber inclusion of the fiber inclusion.
+
+```agda
+module _
+  {l1 l2 : Level} {E : Pointed-Type l1} {B : Pointed-Type l2}
+  (g : E →∗ B)
+  where
+
+  equiv-fiber-boundary-fiber-inclusion-boundary-fiber-Pointed-Type :
+    type-Pointed-Type
+      ( fiber-Pointed-Type (boundary-fiber-Pointed-Type g)) ≃
+    type-Pointed-Type
+      ( fiber-Pointed-Type
+        ( inclusion-fiber-Pointed-Type (inclusion-fiber-Pointed-Type g)))
+  pr1 equiv-fiber-boundary-fiber-inclusion-boundary-fiber-Pointed-Type =
+    fiber-triangle
+      ( map-pointed-map (boundary-fiber-Pointed-Type g))
+      ( map-pointed-map
+        ( inclusion-fiber-Pointed-Type (inclusion-fiber-Pointed-Type g)))
+      ( map-pointed-equiv
+        ( pointed-equiv-fiber-inclusion-boundary-fiber-Pointed-Type g))
+      ( pr1 (pointed-htpy-boundary-fiber-inclusion-boundary-fiber-Pointed-Type g))
+      ( point-Pointed-Type (fiber-Pointed-Type g))
+  pr2 equiv-fiber-boundary-fiber-inclusion-boundary-fiber-Pointed-Type =
+    is-fiberwise-equiv-is-equiv-triangle
+      ( map-pointed-map (boundary-fiber-Pointed-Type g))
+      ( map-pointed-map
+        ( inclusion-fiber-Pointed-Type (inclusion-fiber-Pointed-Type g)))
+      ( map-pointed-equiv
+        ( pointed-equiv-fiber-inclusion-boundary-fiber-Pointed-Type g))
+      ( pr1 (pointed-htpy-boundary-fiber-inclusion-boundary-fiber-Pointed-Type g))
+      ( is-equiv-map-pointed-equiv
+        ( pointed-equiv-fiber-inclusion-boundary-fiber-Pointed-Type g))
+      ( point-Pointed-Type (fiber-Pointed-Type g))
+
+  equiv-fiber-boundary-map-Ω-Pointed-Type :
+    type-Ω E ≃
+    type-Pointed-Type
+      ( fiber-Pointed-Type (boundary-fiber-Pointed-Type g))
+  equiv-fiber-boundary-map-Ω-Pointed-Type =
+    inv-equiv
+      ( equiv-fiber-boundary-fiber-inclusion-boundary-fiber-Pointed-Type) ∘e
+    equiv-pointed-equiv
+      ( pointed-equiv-fiber-inclusion-boundary-fiber-Pointed-Type
+        ( inclusion-fiber-Pointed-Type g))
 ```
 
 ### First projection of the looped boundary comparison

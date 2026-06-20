@@ -698,3 +698,17 @@ canonical-vs-recursive boundary comparison. The checked commands were:
 ```
 
 All checks passed.
+
+Later on 2026-06-19, the upstream-quality route for the remaining lower Hopf fibration-boundary exactness advanced structurally. The long exact sequence file now proves an unpointed equivalence
+
+```text
+Ω E ≃ fiber (boundary-fiber-Pointed-Type g)
+```
+
+by comparing `boundary-fiber-Pointed-Type g` with the fiber inclusion of the fiber inclusion via the existing pointed equivalence `Ω B ≃ fiber (inclusion-fiber-Pointed-Type g)` and the generic `fiber-triangle` equivalence. This avoids the earlier brittle direct section proof for `map-fiber-boundary-map-Ω-Pointed-Type`; the remaining refinement is to package the equivalence pointedly, which requires a reusable basepoint-coherence lemma for the `fiber-triangle` map induced by a pointed homotopy. The checked command was:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+The check passed, and the touched LES file contains no holes, postulates, or `--allow-unsolved-metas`.

@@ -2046,3 +2046,33 @@ Agda source files changed.
 Related commit:
 
 - This commit — Update agent formalization priorities.
+
+
+### Advance structural boundary-fiber equivalence
+
+Request: Emily asked Codex to implement the hard upfront plan for the main pi3(S2) ~= Z goal, prioritizing the upstreamable connect_fiberseq-style route over local image/kernel shortcuts.
+
+Model context:
+
+- Date: 2026-06-19.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible. MCP reported Agda 2.8.0, but for this run ./check.sh was treated as authoritative because MCP gave inconsistent hole/typecheck status during one experimental edit.
+
+Actions:
+
+- Read the repository-local Agda/unimath workflow and HoTT reference guidance.
+- Investigated the direct section proof for map-fiber-boundary-map-Ω-Pointed-Type; Agda exposed the expected without-K second-component coherence problem.
+- Replaced that direct route with a checked structural equivalence: fiber(boundary-fiber-Pointed-Type g) is compared to fiber(inclusion-fiber-Pointed-Type (inclusion-fiber-Pointed-Type g)) using the existing Ω B ~= fiber(inclusion-fiber-Pointed-Type g) equivalence, the existing boundary/fiber-inclusion pointed homotopy, and fiber-triangle.
+- Composed with the existing HoTT Book 8.4.4-style equivalence for inclusion-fiber-Pointed-Type g to obtain an unpointed equivalence Ω E ~= fiber(boundary-fiber-Pointed-Type g).
+- Recorded that the next checked step is a reusable basepoint-coherence lemma for the fiber-triangle map induced by a pointed homotopy, needed to package this as the pointed equivalence for the connected fiber sequence.
+
+Verification:
+
+- ./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+- rg -n holes/allow-unsolved-metas/postulate in src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+
+The Agda check passed. The source search found no holes, postulates, or allow-unsolved-metas in the touched LES file.
+
+Related commit:
+
+- This commit - Advance structural boundary-fiber equivalence.
