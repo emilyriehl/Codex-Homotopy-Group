@@ -2326,3 +2326,34 @@ The Agda check passed. `git diff --check` passed. The grep found no holes, postu
 Related commit:
 
 - This commit - Route loop-boundary exactness through direct fiber sequences.
+
+
+### Record direct shifted loop-boundary exactness
+
+Request: Emily said "Great work. Keep working" after the checked direct `connect_fiberseq` exactness routing, continuing the instruction to work hard toward the upstreamable structural proof rather than stop at easy objectives.
+
+Model context:
+
+- Date: 2026-06-21.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible and used for scoped Agda edits, but `./check.sh` remained the authoritative verification command.
+
+Actions:
+
+- Re-read the repository-local Agda/unimath workflow and reference skills for this formalization run.
+- Added `hom-trunc-boundary-boundary-fiber-sequence-direct-Pointed-Type`, the set-truncated hom induced by the boundary map of the direct shifted fiber sequence `Omega E ->* Omega B ->* F`.
+- Proved `is-exact-set-truncation-loop-boundary-boundary-fiber-sequence-direct` by applying `is-exact-set-truncation-loop-boundary-fiber-sequence` to `fiber-sequence-boundary-fiber-sequence-direct-Pointed-Type S`.
+- Explored the harder replacement of the recursive loop-boundary exactness proof by direct homotopy invariance. Real Agda rejected the naive direct comparison and the attempted explicit inverse section because the section proof needs a K-safe equality-in-fibers argument.
+- Removed the failed comparison route, restored the checked recursive proof through the canonical-fiber bridge, and documented the remaining direct-to-recursive comparison target in `STATUS-REPORT.md`.
+
+Verification:
+
+- ./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+- git diff --check
+- rg -n "\{!!|--allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+
+The Agda check passed. `git diff --check` passed. The grep found no holes, postulates, or allow-unsolved-metas in the touched LES file.
+
+Related commit:
+
+- This commit - Record direct shifted loop-boundary exactness.

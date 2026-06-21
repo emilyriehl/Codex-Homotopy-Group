@@ -968,3 +968,33 @@ The checked command was:
 
 The check passed. `git diff --check` passed, and the touched LES file contains no
 holes, postulates, or `--allow-unsolved-metas`.
+
+
+Later on 2026-06-21, the shifted loop-boundary exactness layer was advanced one step further. The long exact sequence file now records the direct shifted hom and exactness theorem
+
+```text
+hom-trunc-boundary-boundary-fiber-sequence-direct-Pointed-Type
+is-exact-set-truncation-loop-boundary-boundary-fiber-sequence-direct
+```
+
+For a packaged fiber sequence `S : F ->* E ->* B`, this applies the generic set-truncated loop-boundary exactness theorem to the checked direct shifted fiber sequence
+
+```text
+fiber-sequence-boundary-fiber-sequence-direct-Pointed-Type S
+```
+
+and therefore proves the canonical exactness of the shifted adjacent triple
+
+```text
+OmegaOmega B -> Omega F -> Omega E
+```
+
+where the second map is the boundary map of the direct shifted sequence `Omega E ->* Omega B ->* F`. The existing recursive loop-boundary exactness theorem is still checked through the canonical-fiber transport bridge. An exploratory attempt to replace it by direct homotopy invariance exposed the remaining upstream-quality comparison: identify the direct shifted boundary with `pointed-map-Ω (fiber-inclusion-fiber-sequence-Pointed-Type S)` by a K-safe inverse computation for the direct boundary-fiber equivalence. The failed direct comparison was removed, so the file remains fully checked.
+
+The checked command was:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+The check passed. `git diff --check` passed, and the touched LES file contains no holes, postulates, or `--allow-unsolved-metas`.

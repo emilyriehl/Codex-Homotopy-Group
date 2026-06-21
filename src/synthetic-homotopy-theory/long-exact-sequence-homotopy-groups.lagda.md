@@ -2572,10 +2572,19 @@ module _
 
 ### Set-truncated looped boundary sequences of packaged fiber sequences are exact
 
-The preceding theorem is canonical, so its middle term is the canonical fiber
-of the fibration. For a packaged fiber sequence, exactness of the looped
-boundary/fiber-inclusion segment follows by transporting the middle term across
-the loop of the chosen fiber equivalence.
+The direct `connect_fiberseq` package for a fiber sequence identifies the
+shifted adjacent triple
+
+```text
+  ΩΩ B →∗ Ω F →∗ Ω E
+```
+
+as the loop-boundary segment of the shifted fiber sequence
+`Ω E →∗ Ω B →∗ F`. We record that direct shifted exactness theorem here. The
+recursive loop-boundary exactness theorem below is still transported through
+the canonical fiber of the fibration; the remaining upstream-quality comparison
+is to identify the direct shifted boundary with the recursive looped fiber
+inclusion by a K-safe inverse computation.
 
 ```agda
 module _
@@ -2629,6 +2638,25 @@ module _
     hom-trunc-Pointed-Set
       ( pointed-map-Ω
         ( pointed-map-fiber-fiber-sequence-Pointed-Type S))
+
+  hom-trunc-boundary-boundary-fiber-sequence-direct-Pointed-Type :
+    hom-Pointed-Set
+      ( trunc-Pointed-Set (Ω (fiber-fiber-sequence-Pointed-Type S)))
+      ( trunc-Pointed-Set (Ω (total-space-fiber-sequence-Pointed-Type S)))
+  hom-trunc-boundary-boundary-fiber-sequence-direct-Pointed-Type =
+    hom-trunc-boundary-fiber-sequence-Pointed-Type
+      ( fiber-sequence-boundary-fiber-sequence-direct-Pointed-Type S)
+
+  is-exact-set-truncation-loop-boundary-boundary-fiber-sequence-direct :
+    is-exact-hom-Pointed-Set
+      ( trunc-Pointed-Set (Ω (Ω (base-fiber-sequence-Pointed-Type S))))
+      ( trunc-Pointed-Set (Ω (fiber-fiber-sequence-Pointed-Type S)))
+      ( trunc-Pointed-Set (Ω (total-space-fiber-sequence-Pointed-Type S)))
+      ( hom-trunc-loop-boundary-fiber-sequence-Pointed-Type)
+      ( hom-trunc-boundary-boundary-fiber-sequence-direct-Pointed-Type)
+  is-exact-set-truncation-loop-boundary-boundary-fiber-sequence-direct =
+    is-exact-set-truncation-loop-boundary-fiber-sequence
+      ( fiber-sequence-boundary-fiber-sequence-direct-Pointed-Type S)
 
   eq-map-hom-trunc-loop-boundary-fiber-sequence-Pointed-Type :
     (x :
