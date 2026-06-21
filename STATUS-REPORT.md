@@ -1083,3 +1083,21 @@ The checked command was:
 ```
 
 The check passed. `git diff --check` passed, and the touched LES file contains no holes, postulates, or `--allow-unsolved-metas`.
+
+
+Later on 2026-06-21, a structural wrapper in the direct boundary equivalence was computed away. The long exact sequence file now records
+
+```text
+compute-map-equiv-equiv-ap-refl
+compute-equiv-eq-map-Ω-eq-ap-refl-Pointed-Type
+```
+
+The first lemma says that `equiv-ap` of an equivalence sends reflexivity to reflexivity. The second applies this to the loop-map comparison equivalence, showing that `equiv-eq-map-Ω-eq-ap-Pointed-Type p (map-Ω g p)` sends `refl` to the canonical path `eq-ap-map-Ω-Pointed-Type p`. This removes one structural wrapper from the second-component comparison between the direct equivalence and the hand boundary-fiber map.
+
+The checked command was:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+The check passed. `git diff --check` passed, and the touched LES file contains no holes, postulates, or `--allow-unsolved-metas`.

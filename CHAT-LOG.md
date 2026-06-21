@@ -2482,3 +2482,33 @@ The Agda check passed. `git diff --check` passed. The scan found no holes, postu
 Related commit:
 
 - This commit - Record raw shifted-boundary inverse computation.
+
+
+### Compute direct equivalence path wrapper
+
+Request: Emily asked Codex to keep working hard toward the next target after the raw shifted-boundary inverse computation was committed and pushed.
+
+Model context:
+
+- Date: 2026-06-21.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible and used for scoped Agda edits, but `./check.sh` remained the authoritative verification command.
+
+Actions:
+
+- Tried to prove that the structural direct boundary equivalence map is definitionally the hand boundary-fiber map; real Agda showed a remaining second-component wrapper from `inv-equiv-total-fiber` and `equiv-ap`.
+- Isolated the smaller blocker: `equiv-ap` applied to reflexivity inside `equiv-eq-map-Ω-eq-ap-Pointed-Type`.
+- Added `compute-map-equiv-equiv-ap-refl`, a general computation for `map-equiv (equiv-ap e x x) refl`.
+- Added `compute-equiv-eq-map-Ω-eq-ap-refl-Pointed-Type`, proving that the loop-map comparison equivalence sends `refl` to `eq-ap-map-Ω-Pointed-Type p`.
+
+Verification:
+
+- ./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+- git diff --check
+- scan for holes, postulates, and allow-unsolved-metas in the touched LES file
+
+The Agda check passed. `git diff --check` passed. The scan found no holes, postulates, or allow-unsolved-metas in the touched LES file.
+
+Related commit:
+
+- This commit - Compute direct equivalence path wrapper.

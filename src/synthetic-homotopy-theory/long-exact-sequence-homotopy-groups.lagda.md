@@ -79,6 +79,15 @@ The loop map of a constant pointed map is constant at the reflexivity loop.
 
 ```agda
 module _
+  {l1 l2 : Level} {A : UU l1} {B : UU l2}
+  where
+
+  compute-map-equiv-equiv-ap-refl :
+    (e : A ≃ B) (x : A) → map-equiv (equiv-ap e x x) refl ＝ refl
+  compute-map-equiv-equiv-ap-refl e x =
+    refl
+
+module _
   {l1 l2 : Level} {A : Pointed-Type l1} {B : Pointed-Type l2}
   where
 
@@ -500,6 +509,21 @@ module _
       ( map-equiv equiv-fiber-boundary-map-Ω-direct-Pointed-Type p)
   htpy-inclusion-fiber-boundary-map-Ω-direct-Pointed-Type p =
     refl
+
+  compute-equiv-eq-map-Ω-eq-ap-refl-Pointed-Type :
+    (p : type-Ω E) →
+    map-equiv
+      ( equiv-eq-map-Ω-eq-ap-Pointed-Type p (map-Ω g p))
+      ( refl) ＝
+    eq-ap-map-Ω-Pointed-Type p
+  compute-equiv-eq-map-Ω-eq-ap-refl-Pointed-Type p =
+    ( ap
+      ( eq-ap-map-Ω-Pointed-Type p ∙_)
+      ( compute-map-equiv-equiv-ap-refl
+        ( equiv-map-inv-tr-type-Ω-concat-inv-Pointed-Type
+          ( preserves-point-pointed-map g))
+        ( map-Ω g p))) ∙
+    ( right-unit)
 
   eq-map-Ω-inclusion-fiber-Pointed-Type :
     (q : type-Ω (fiber-Pointed-Type g)) →
