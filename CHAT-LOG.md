@@ -2772,3 +2772,36 @@ The Agda checks passed. `git diff --check` passed. The touched-file scan found n
 Related commit:
 
 - This commit - Prove lower Hopf comparison from direct connecting fiber sequence.
+
+
+### Add packaged shifted-boundary first-projection comparison
+
+Request: Emily asked Codex to keep working after the lower Hopf comparison was proved and pushed.
+
+Model context:
+
+- Date: 2026-06-21.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible and reported Agda 2.8.0 with agda-mcp-server 0.6.7. MCP was useful for scoped edits, but `./check.sh` remained the authoritative verification command.
+
+Actions:
+
+- Continued the unrestricted LES bridge rather than moving to easier scaffolds.
+- Inserted a temporary full packaged canonical-vs-recursive boundary equality to inspect the remaining shape; removed it after it exposed the expected dependent second-component obstruction.
+- Added `eq-pr1-map-equiv-fiber-canonical-boundary-boundary-fiber-sequence-boundary-boundary` in `long-exact-sequence-homotopy-groups.lagda.md`.
+- Proved it by composing the inverse of `eq-map-equiv-fiber-boundary-fiber-sequence-direct-loop-fiber-inclusion-canonical-Pointed-Type` on first projections with `eq-pr1-map-equiv-fiber-boundary-fiber-sequence-direct-loop-fiber-inclusion`.
+- Probed the dependent second component with `refl`, `right-unit`, and an explicit boundary-first-projection rewrite. Real Agda showed the remaining proof must control `ap (map-pointed-map (boundary-pointed-map-fiber-sequence S))` on the composed first-projection path; the failed probe was removed.
+- Updated `STATUS-REPORT.md` to record the checked first-projection theorem and the sharper remaining second-component target.
+
+Verification:
+
+- ./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+- git diff --check
+- rg -n "\{!!\}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+- rg -n "allow-unsolved-metas|\{!!\}" src/synthetic-homotopy-theory src/group-theory src/structured-types -g "*.lagda.md"
+
+The Agda check passed. `git diff --check` passed. The touched-file scan found no holes, postulates, or local `--allow-unsolved-metas`; the broader scaffold scan found only the expected Hopf fiber sequence and stability comparison holes.
+
+Related commit:
+
+- This commit - Add packaged shifted-boundary first-projection comparison.

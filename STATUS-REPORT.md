@@ -102,9 +102,10 @@ calculation:
   version across the loop of the chosen-fiber equivalence, and it has been
   transported to ordinary group exactness at `π₁(F)`.
   The nontrivial-target fibration-boundary group exactness statement is now
-  exposed as a checked wrapper from recursive set-level exactness. The
-  remaining general LES bridge is the comparison between the canonical shifted
-  boundary and the looped recursive boundary for nontrivial targets.
+  exposed as a checked wrapper from recursive set-level exactness. The packaged
+  canonical-vs-recursive shifted-boundary comparison now has a checked
+  first-projection theorem after the canonical lift; the remaining general LES
+  bridge is its dependent second-component coherence.
 - The algebraic extraction for the lower Hopf segment
   `π₂(S³) → π₂(S²) → π₁(S¹) → π₁(S³)` is now checked. The left
   fibration-boundary exactness input is supplied by looping the packaged direct
@@ -195,11 +196,11 @@ Hopf fiber sequence itself and the Freudenthal/stability comparison.
 
 1. Continue the unrestricted LES bridge for nontrivial targets by finishing the
    upstream-quality shifted-boundary comparison. The direct `connect_fiberseq`
-   package `Ω E ->* Ω B ->* F` is now checked, and the raw shifted-boundary
-   theorem has been lifted into the packaged fiber-sequence comparison layer;
-   the remaining hard step is the coherent second-component comparison that
-   identifies the packaged canonical boundary-boundary target with the recursive
-   boundary map used by the concrete-group homomorphism.
+   package `Ω E ->* Ω B ->* F` is now checked, the raw shifted-boundary theorem
+   has been lifted into the packaged fiber-sequence comparison layer, and the
+   first projection of the packaged canonical target is now identified with the
+   first projection of the recursive boundary map. The remaining hard step is
+   the dependent second-component comparison over this checked first projection.
 2. Formalize the Hopf fiber sequence `S^1 -> S^3 -> S^2`, including the actual
    pointed maps and the fiber-sequence proof.
 3. Prove the stability comparison `π₂(S²) ≅ π₃(S³)` from Freudenthal and sphere
@@ -227,12 +228,17 @@ from the checked definitions and lemmas in
 - `is-exact-set-truncation-loop-fiber-sequence`
 - `eq-map-equiv-fiber-boundary-map-Ω-direct-loop-inclusion-fiber-Pointed-Type`
 - `eq-map-equiv-fiber-boundary-fiber-sequence-direct-loop-fiber-inclusion-canonical-Pointed-Type`
+- `eq-pr1-map-equiv-fiber-canonical-boundary-boundary-fiber-sequence-boundary-boundary`
 
-The remaining hard step is the coherent second-component comparison identifying
-the packaged canonical boundary-boundary target with the recursive boundary map
-`boundary-fiber-Pointed-Type (boundary-pointed-map-fiber-sequence S)`. Once that
-is proved, feed it through the existing set-truncated iterated exactness and
-group-exactness transport layers for the nontrivial-target fibration-boundary
+The remaining hard step is the coherent second-component comparison over the
+checked first-projection path
+`eq-pr1-map-equiv-fiber-canonical-boundary-boundary-fiber-sequence-boundary-boundary`.
+A temporary probe showed that neither `refl` nor a bare `right-unit` closes this
+component: the residual involves how `ap` of `boundary-pointed-map-fiber-sequence`
+acts on the composed first-projection path before concatenating with the
+recursive boundary witness. Once this dependent path is proved, package the full
+fiber equality and feed it through the existing set-truncated iterated exactness
+and group-exactness transport layers for the nontrivial-target fibration-boundary
 case. Do not reopen the concrete-group classifying fiber-sequence route; it was
 recorded as too strong in general. Do not try to close the shifted-boundary
 comparison by `refl`, since the direct goal exposes genuine path algebra rather
@@ -1224,3 +1230,35 @@ rg -n "allow-unsolved-metas|\{!!\}" src/synthetic-homotopy-theory src/group-theo
 ```
 
 All Agda checks passed. `git diff --check` passed. The touched-file scan found no holes, postulates, or local `--allow-unsolved-metas`; the broader scaffold scan found only the expected Hopf fiber sequence and stability comparison holes.
+
+
+Later on 2026-06-21, the packaged shifted-boundary comparison gained the checked first-projection theorem
+
+```text
+eq-pr1-map-equiv-fiber-canonical-boundary-boundary-fiber-sequence-boundary-boundary
+```
+
+For a loop `q` in the packaged fiber `F`, this compares the first projection of the canonical boundary-boundary target after applying `equiv-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type` with the first projection of the recursive boundary map `boundary-fiber-Pointed-Type (boundary-pointed-map-fiber-sequence S) q`. The proof composes the inverse of the existing full lifted equality
+
+```text
+eq-map-equiv-fiber-boundary-fiber-sequence-direct-loop-fiber-inclusion-canonical-Pointed-Type
+```
+
+with the earlier direct first-projection comparison
+
+```text
+eq-pr1-map-equiv-fiber-boundary-fiber-sequence-direct-loop-fiber-inclusion
+```
+
+This is the correct base path for the remaining dependent second-component proof. A temporary probe of that second component was removed after real Agda showed that the residual is not a definitional `refl`/`right-unit` proof; it requires controlling `ap (map-pointed-map (boundary-pointed-map-fiber-sequence S))` on the composed first-projection path.
+
+The checked commands were:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+rg -n "allow-unsolved-metas|\{!!\}" src/synthetic-homotopy-theory src/group-theory src/structured-types -g "*.lagda.md"
+```
+
+The Agda check passed. `git diff --check` passed. The touched-file scan found no holes, postulates, or local `--allow-unsolved-metas`; the broader scaffold scan found only the expected Hopf fiber sequence and stability comparison holes.

@@ -2714,6 +2714,27 @@ module _
         ( equiv-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type S))
       ( eq-map-equiv-fiber-boundary-map-Ω-direct-loop-fiber-inclusion-fiber-sequence-Pointed-Type q)
 
+  eq-pr1-map-equiv-fiber-canonical-boundary-boundary-fiber-sequence-boundary-boundary :
+    (q : type-Ω (fiber-fiber-sequence-Pointed-Type S)) →
+    pr1
+      ( map-equiv
+        ( equiv-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type S)
+        ( map-pointed-map
+          ( boundary-fiber-Pointed-Type
+            ( boundary-fiber-Pointed-Type
+              ( fibration-fiber-sequence-Pointed-Type S)))
+          ( map-Ω (pointed-map-fiber-fiber-sequence-Pointed-Type S) q))) ＝
+    pr1
+      ( map-pointed-map
+        ( boundary-fiber-Pointed-Type (boundary-pointed-map-fiber-sequence S))
+        ( q))
+  eq-pr1-map-equiv-fiber-canonical-boundary-boundary-fiber-sequence-boundary-boundary q =
+    ( ap
+      ( pr1)
+      ( inv
+        ( eq-map-equiv-fiber-boundary-fiber-sequence-direct-loop-fiber-inclusion-canonical-Pointed-Type q))) ∙
+    ( eq-pr1-map-equiv-fiber-boundary-fiber-sequence-direct-loop-fiber-inclusion q)
+
   eq-map-hom-trunc-loop-boundary-fiber-sequence-Pointed-Type :
     (x :
       type-Pointed-Set
