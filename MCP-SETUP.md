@@ -11,6 +11,12 @@ Final verification remains:
 ./check.sh src/path/to/file.lagda.md
 ```
 
+For a milestone check that should ignore cached interface files, use:
+
+```sh
+./check.sh --fresh src/path/to/file.lagda.md
+```
+
 ## Recommended Server
 
 Use the npm package `agda-mcp-server`, currently pinned here to version `0.6.7`.
@@ -62,6 +68,16 @@ A successful smoke test should confirm:
 - the effective options include the project `.agda-lib` flags and
   `-l Codex-Homotopy-Group`;
 - `./check.sh src/structured-types/pointed-sets.lagda.md` also passes.
+
+For agents with direct MCP tools, the corresponding tool sequence is:
+
+1. `agda_show_version`
+2. `agda_effective_options` for the file being edited
+3. `agda_load` or `agda_typecheck` for interactive feedback
+4. `./check.sh <file>` for final verification
+
+Use `./check.sh --fresh <file>` before major milestones or when stale interface
+files are suspected.
 
 ## Agent Guidance
 

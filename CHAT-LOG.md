@@ -2697,3 +2697,40 @@ The Agda check passed. `git diff --check` passed. The scan found no holes, quest
 Related commit:
 
 - This commit - Lift raw shifted-boundary comparison to packaged layer.
+
+
+### Harden Agda verification tooling
+
+Request: Emily asked Codex to go ahead with the tooling moves suggested before returning to the next hard proof target.
+
+Model context:
+
+- Date: 2026-06-21.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible. The live server reported Agda 2.8.0 and agda-mcp-server 0.6.7; final verification remains `./check.sh`.
+
+Actions:
+
+- Updated `check.sh` so `--no-allow-unsolved-metas` is explicit in every raw Agda invocation.
+- Added `./check.sh --fresh <file>`, passing Agda native `--ignore-interfaces` for milestone checks or suspected stale interface files.
+- Added configurable RTS memory via `AGDA_RTS_MAX`, defaulting to 8G and accepting values with or without a leading `-M`.
+- Updated `MCP-SETUP.md` to document `--fresh` and the direct MCP smoke sequence: version, effective options, interactive load/typecheck, and final `./check.sh`.
+- Used a temporary untracked `src/CheckScriptSmoke.agda` to smoke-test the wrapper, then removed it before committing.
+
+Verification:
+
+- bash -n check.sh
+- ./check.sh src/CheckScriptSmoke.agda
+- ./check.sh --fresh src/CheckScriptSmoke.agda
+- AGDA_RTS_MAX=-M8G ./check.sh src/CheckScriptSmoke.agda
+- rg -n "CheckScriptSmoke" _build src
+- ./check.sh src/structured-types/pointed-sets.lagda.md
+- git diff --check
+- agda_show_version
+- agda_effective_options for src/structured-types/pointed-sets.lagda.md
+
+All wrapper smoke checks passed. The real repository check of `src/structured-types/pointed-sets.lagda.md` passed. MCP reported Agda 2.8.0, agda-mcp-server 0.6.7, and the expected project flags. The temporary smoke source was removed before commit.
+
+Related commit:
+
+- This commit - Harden Agda verification tooling.
