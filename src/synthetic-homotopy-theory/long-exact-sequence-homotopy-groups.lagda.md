@@ -525,6 +525,31 @@ module _
         ( map-Ω g p))) ∙
     ( right-unit)
 
+  compute-equiv-fiber-map-Ω-boundary-map-Ω-map-fiber-boundary-Pointed-Type :
+    (p : type-Ω E) →
+    map-equiv
+      ( equiv-fiber-map-Ω-boundary-map-Ω-Pointed-Type (map-Ω g p))
+      ( p , refl) ＝
+    eq-boundary-map-Ω-Pointed-Type p
+  compute-equiv-fiber-map-Ω-boundary-map-Ω-map-fiber-boundary-Pointed-Type p =
+    ap
+      ( map-inv-fiber-ap-eq-fiber
+        ( map-pointed-map g)
+        ( map-pointed-map boundary-fiber-Pointed-Type (map-Ω g p))
+        ( point-Pointed-Type (fiber-Pointed-Type g)))
+      ( eq-pair-Σ
+        ( refl)
+        ( compute-equiv-eq-map-Ω-eq-ap-refl-Pointed-Type p))
+
+  eq-map-equiv-fiber-boundary-map-Ω-direct-map-fiber-boundary-Pointed-Type :
+    (p : type-Ω E) →
+    map-equiv equiv-fiber-boundary-map-Ω-direct-Pointed-Type p ＝
+    map-fiber-boundary-map-Ω-Pointed-Type p
+  eq-map-equiv-fiber-boundary-map-Ω-direct-map-fiber-boundary-Pointed-Type p =
+    eq-pair-Σ
+      ( refl)
+      ( compute-equiv-fiber-map-Ω-boundary-map-Ω-map-fiber-boundary-Pointed-Type p)
+
   eq-map-Ω-inclusion-fiber-Pointed-Type :
     (q : type-Ω (fiber-Pointed-Type g)) →
     map-Ω g (map-Ω (inclusion-fiber-Pointed-Type g) q) ＝ refl
