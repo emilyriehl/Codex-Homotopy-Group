@@ -2294,3 +2294,35 @@ The Agda check passed. `git diff --check` passed. The grep found no holes, postu
 Related commit:
 
 - This commit - Package direct connect_fiberseq fiber sequence.
+
+
+### Route loop-boundary exactness through direct fiber sequences
+
+Request: Emily asked Codex to keep working after the direct `connect_fiberseq` package was checked.
+
+Model context:
+
+- Date: 2026-06-21.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible and used for scoped Agda edits, but `./check.sh` remained the authoritative verification command.
+
+Actions:
+
+- Re-read the repository-local Agda/unimath workflow, HoTT reference, and foundational API guidance from the active skills.
+- Routed `is-exact-set-truncation-loop-boundary-fiber-sequence-Pointed-Type` through the new `fiber-sequence-boundary-map-Ω-direct-Pointed-Type g`, replacing the previous bespoke image-comparison proof for the raw pointed-map segment.
+- Reworked `pointed-equiv-fiber-boundary-fiber-sequence-direct-Pointed-Type` to use `comp-pointed-equiv`, then added `pointed-htpy-inclusion-fiber-boundary-fiber-sequence-direct-Pointed-Type` by composing the raw-map direct coherence with the canonical-to-packaged boundary-fiber coherence.
+- Packaged the adjacent sequence `Omega E ->* Omega B ->* F` for a packaged fiber sequence as `is-fiber-sequence-boundary-fiber-sequence-direct-Pointed-Type` and `fiber-sequence-boundary-fiber-sequence-direct-Pointed-Type`.
+- Routed `is-exact-set-truncation-loop-boundary-fiber-sequence` through `fiber-sequence-boundary-fiber-sequence-direct-Pointed-Type S`, replacing the previous kernel-transport adapters from the chosen fiber to the canonical fiber.
+- Removed the obsolete image/kernel adapter lemmas and updated `STATUS-REPORT.md` with the checked structural exactness progress.
+
+Verification:
+
+- ./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+- git diff --check
+- rg -n "\{!!|--allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+
+The Agda check passed. `git diff --check` passed. The grep found no holes, postulates, or allow-unsolved-metas in the touched LES file.
+
+Related commit:
+
+- This commit - Route loop-boundary exactness through direct fiber sequences.

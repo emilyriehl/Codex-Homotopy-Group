@@ -918,3 +918,53 @@ This clears the previous hard basepoint-coherence block. The next hard target is
 ```
 
 The check passed. `git diff --check` passed, and the touched LES file contains no holes, postulates, or `--allow-unsolved-metas`.
+
+
+Later on 2026-06-21, the direct `connect_fiberseq` package was connected to the set-truncated exactness layer. The long exact sequence file now defines, for every packaged pointed fiber sequence `S`, the pointed coherence and fiber-sequence package
+
+```text
+pointed-htpy-inclusion-fiber-boundary-fiber-sequence-direct-Pointed-Type
+is-fiber-sequence-boundary-fiber-sequence-direct-Pointed-Type
+fiber-sequence-boundary-fiber-sequence-direct-Pointed-Type
+```
+
+This packages the adjacent sequence
+
+```text
+Omega E ->* Omega B ->* F
+```
+
+for a fiber sequence `F ->* E ->* B`, using the direct equivalence
+`Omega E ~=* fiber (boundary-pointed-map-fiber-sequence S)`. The pointed equivalence
+`pointed-equiv-fiber-boundary-fiber-sequence-direct-Pointed-Type` is now explicitly
+constructed by `comp-pointed-equiv`, so the inclusion coherence is obtained by
+composing the raw-map direct coherence with the canonical-to-packaged boundary
+fiber coherence.
+
+The set-truncated exactness theorem for the raw pointed-map segment
+
+```text
+is-exact-set-truncation-loop-boundary-fiber-sequence-Pointed-Type
+```
+
+now factors through `fiber-sequence-boundary-map-Ω-direct-Pointed-Type`, and the
+packaged theorem
+
+```text
+is-exact-set-truncation-loop-boundary-fiber-sequence
+```
+
+now factors through `fiber-sequence-boundary-fiber-sequence-direct-Pointed-Type S`.
+The previous bespoke image comparison for the raw segment and the previous
+kernel-transport adapters for the packaged segment were removed. This makes the
+set-truncated exactness proof follow the structural fiber-sequence route rather
+than re-proving image/kernel transport locally.
+
+The checked command was:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+The check passed. `git diff --check` passed, and the touched LES file contains no
+holes, postulates, or `--allow-unsolved-metas`.
