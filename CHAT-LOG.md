@@ -2635,3 +2635,34 @@ The Agda check passed. `git diff --check` passed. The scan found no holes, quest
 Related commit:
 
 - This commit - Prove raw shifted-boundary comparison.
+
+
+### Add loop retraction for pointed equivalences
+
+Request: Emily asked Codex to keep working hard after the raw shifted-boundary comparison was proved and pushed.
+
+Model context:
+
+- Date: 2026-06-21.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible and used for scoped Agda edits, but `./check.sh` remained the authoritative verification command.
+
+Actions:
+
+- Started lifting the raw shifted-boundary theorem to the packaged fiber-sequence comparison.
+- Tested whether the canonical boundary-boundary fiber equivalence computes by `refl`; real Agda rejected this because the first projections differ by the loop of the inverse fiber equivalence followed by the loop of the fiber equivalence.
+- Removed that scratch lemma and isolated the reusable first-projection ingredient instead.
+- Added `is-retraction-map-Ω-pointed-map-inv-pointed-equiv`, proving that `Ω(inv e)` retracts `Ω(e)` for any pointed equivalence `e`.
+- Proved it via `pointed-htpy-Ω-inv-pointed-equiv` followed by `is-retraction-map-inv-equiv (equiv-Ω-pointed-equiv e)`.
+
+Verification:
+
+- ./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+- git diff --check
+- scan for holes, question-mark metas, postulates, and allow-unsolved-metas in the touched LES file
+
+The Agda check passed. `git diff --check` passed. The scan found no holes, question-mark metas, postulates, or allow-unsolved-metas in the touched LES file.
+
+Related commit:
+
+- This commit - Add loop retraction for pointed equivalences.

@@ -1118,6 +1118,17 @@ pointed-htpy-Ω-inv-pointed-equiv e =
             ( pointed-map-inv-pointed-equiv
               ( pointed-equiv-Ω-pointed-equiv e))))))
 
+is-retraction-map-Ω-pointed-map-inv-pointed-equiv :
+  {l1 l2 : Level} {A : Pointed-Type l1} {B : Pointed-Type l2}
+  (e : A ≃∗ B) (q : type-Ω A) →
+  map-Ω (pointed-map-inv-pointed-equiv e)
+    ( map-Ω (pointed-map-pointed-equiv e) q) ＝
+  q
+is-retraction-map-Ω-pointed-map-inv-pointed-equiv e q =
+  ( pr1 (pointed-htpy-Ω-inv-pointed-equiv e)
+    ( map-Ω (pointed-map-pointed-equiv e) q)) ∙
+  ( is-retraction-map-inv-equiv (equiv-Ω-pointed-equiv e) q)
+
 pointed-htpy-section-explicit-inv-comp-pointed-equiv :
   {l1 l2 l3 : Level}
   {A : Pointed-Type l1} {B : Pointed-Type l2} {C : Pointed-Type l3}

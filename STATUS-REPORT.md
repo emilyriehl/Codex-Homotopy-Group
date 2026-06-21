@@ -1173,3 +1173,20 @@ The checked command was:
 ```
 
 The check passed. `git diff --check` passed, and the touched LES file contains no holes, question-mark metas, postulates, or `--allow-unsolved-metas`.
+
+
+Later on 2026-06-21, a generic pointed-equivalence loop retraction helper was added as a packaged-lift ingredient. The long exact sequence file now records
+
+```text
+is-retraction-map-Ω-pointed-map-inv-pointed-equiv
+```
+
+For a pointed equivalence `e`, this proves that `map-Ω (pointed-map-inv-pointed-equiv e)` retracts `map-Ω (pointed-map-pointed-equiv e)`. The proof uses the existing pointed homotopy `pointed-htpy-Ω-inv-pointed-equiv` to compare `Ω(inv e)` with the inverse of the loop equivalence, then applies `is-retraction-map-inv-equiv (equiv-Ω-pointed-equiv e)`. This is the first-projection ingredient needed for the packaged canonical fiber comparison after the raw shifted-boundary theorem.
+
+The checked command was:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+The check passed. `git diff --check` passed, and the touched LES file contains no holes, question-mark metas, postulates, or `--allow-unsolved-metas`.
