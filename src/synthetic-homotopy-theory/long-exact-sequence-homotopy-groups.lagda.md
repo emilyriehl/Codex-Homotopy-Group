@@ -369,6 +369,59 @@ module _
       ( preserves-point-pointed-map g)
       ( q))
 
+  equiv-fiber-map-Ω-fiber-ap-Pointed-Type :
+    (q : type-Ω B) →
+    fiber (map-Ω g) q ≃
+    fiber
+      ( ap (map-pointed-map g))
+      ( (preserves-point-pointed-map g ∙ q) ∙
+        inv (preserves-point-pointed-map g))
+  equiv-fiber-map-Ω-fiber-ap-Pointed-Type q =
+    equiv-tot
+      ( λ p →
+        inv-equiv
+          ( equiv-ap
+            ( equiv-tr-type-Ω (preserves-point-pointed-map g))
+            ( ap (map-pointed-map g) p)
+            ( (preserves-point-pointed-map g ∙ q) ∙
+              inv (preserves-point-pointed-map g))) ∘e
+        equiv-inv-concat'
+          ( tr-type-Ω
+            ( preserves-point-pointed-map g)
+            ( ap (map-pointed-map g) p))
+          ( eq-tr-type-Ω-concat-inv-Pointed-Type
+            ( preserves-point-pointed-map g)
+            ( q)))
+
+  equiv-fiber-map-Ω-boundary-map-Ω-Pointed-Type :
+    (q : type-Ω B) →
+    fiber (map-Ω g) q ≃
+    ( map-pointed-map boundary-fiber-Pointed-Type q ＝
+      point-Pointed-Type (fiber-Pointed-Type g))
+  equiv-fiber-map-Ω-boundary-map-Ω-Pointed-Type q =
+    inv-equiv
+      ( equiv-fiber-ap-eq-fiber
+        ( map-pointed-map g)
+        ( map-pointed-map boundary-fiber-Pointed-Type q)
+        ( point-Pointed-Type (fiber-Pointed-Type g))) ∘e
+    equiv-fiber-map-Ω-fiber-ap-Pointed-Type q
+
+  equiv-fiber-boundary-map-Ω-direct-Pointed-Type :
+    type-Ω E ≃
+    type-Pointed-Type (fiber-Pointed-Type boundary-fiber-Pointed-Type)
+  equiv-fiber-boundary-map-Ω-direct-Pointed-Type =
+    equiv-tot equiv-fiber-map-Ω-boundary-map-Ω-Pointed-Type ∘e
+    inv-equiv-total-fiber (map-Ω g)
+
+  htpy-inclusion-fiber-boundary-map-Ω-direct-Pointed-Type :
+    (p : type-Ω E) →
+    map-Ω g p ＝
+    map-pointed-map
+      ( inclusion-fiber-Pointed-Type boundary-fiber-Pointed-Type)
+      ( map-equiv equiv-fiber-boundary-map-Ω-direct-Pointed-Type p)
+  htpy-inclusion-fiber-boundary-map-Ω-direct-Pointed-Type p =
+    refl
+
 ```
 
 ### The fiber sequence after taking the fiber of a pointed map
@@ -1029,6 +1082,23 @@ module _
   pr1 pointed-htpy-inclusion-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type u =
     refl
   pr2 pointed-htpy-inclusion-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type =
+    refl
+
+  equiv-fiber-boundary-fiber-sequence-direct-Pointed-Type :
+    type-Ω (total-space-fiber-sequence-Pointed-Type S) ≃
+    type-Pointed-Type (fiber-Pointed-Type boundary-pointed-map-fiber-sequence)
+  equiv-fiber-boundary-fiber-sequence-direct-Pointed-Type =
+    equiv-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type ∘e
+    equiv-fiber-boundary-map-Ω-direct-Pointed-Type
+      ( fibration-fiber-sequence-Pointed-Type S)
+
+  htpy-inclusion-fiber-boundary-fiber-sequence-direct-Pointed-Type :
+    (p : type-Ω (total-space-fiber-sequence-Pointed-Type S)) →
+    map-Ω (fibration-fiber-sequence-Pointed-Type S) p ＝
+    map-pointed-map
+      ( inclusion-fiber-Pointed-Type boundary-pointed-map-fiber-sequence)
+      ( map-equiv equiv-fiber-boundary-fiber-sequence-direct-Pointed-Type p)
+  htpy-inclusion-fiber-boundary-fiber-sequence-direct-Pointed-Type p =
     refl
 
   boundary-hom-concrete-homotopy-group-fiber-sequence :

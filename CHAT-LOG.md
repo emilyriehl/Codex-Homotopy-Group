@@ -2198,3 +2198,35 @@ The Agda check passed. The touched LES file contains no new holes, postulates, o
 Related commit:
 
 - This commit - Compare canonical and packaged boundary fibers.
+
+
+### Add direct over-Omega boundary-fiber equivalence
+
+Request: Emily asked Codex to implement the plan to continue real progress toward the hard `connect_fiberseq` target.
+
+Model context:
+
+- Date: 2026-06-21.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible and used for scoped Agda edits, but `./check.sh` remained the authoritative verification command.
+
+Actions:
+
+- Re-read the repository-local Agda/unimath workflow and HoTT reference guidance from the active skills.
+- Built a direct unpointed equivalence from `Omega E` to the fiber of `boundary-fiber-Pointed-Type g` by factoring through the total fiber of `map-Ω g` and a fiberwise comparison with `fiber-ap-eq-fiber`.
+- Added `htpy-inclusion-fiber-boundary-map-Ω-direct-Pointed-Type`, proving this direct equivalence has the desired first projection over `Omega B` definitionally.
+- Composed the direct equivalence with the existing canonical-to-packaged boundary-fiber comparison, producing `equiv-fiber-boundary-fiber-sequence-direct-Pointed-Type` and its projection law over the packaged boundary map.
+- Isolated the remaining hard target to basepoint preservation for the direct equivalence, which is the last coherence needed before packaging the pointed fiber sequence `Omega E ->* Omega B ->* F`.
+- Updated `STATUS-REPORT.md` with the checked progress and precise remaining proof obligation.
+
+Verification:
+
+- ./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+- git diff --check
+- rg -n "\{!!|--allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+
+The Agda check passed. `git diff --check` passed. The grep found no holes, postulates, or allow-unsolved-metas in the touched LES file.
+
+Related commit:
+
+- This commit - Add direct over-Omega boundary-fiber equivalence.

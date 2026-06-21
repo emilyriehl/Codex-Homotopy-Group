@@ -812,3 +812,34 @@ An attempted direct package through the older `pointed-equiv-fiber-boundary-map-
 ```
 
 The check passed. The touched LES file contains no new holes, postulates, or `--allow-unsolved-metas`.
+
+
+Later on 2026-06-21, the direct `connect_fiberseq` equivalence was advanced past the previous projection obstruction. The long exact sequence file now defines
+
+```text
+equiv-fiber-map-Ω-fiber-ap-Pointed-Type
+equiv-fiber-map-Ω-boundary-map-Ω-Pointed-Type
+equiv-fiber-boundary-map-Ω-direct-Pointed-Type
+htpy-inclusion-fiber-boundary-map-Ω-direct-Pointed-Type
+```
+
+For an arbitrary pointed map `g : E ->* B`, this gives a direct unpointed equivalence
+
+```text
+Omega E ~= fiber (boundary-fiber-Pointed-Type g)
+```
+
+built by total-fiber factorization of `map-Ω g`. Unlike the older pointed equivalence, its first projection is definitionally aligned with `map-Ω g`, recorded by `htpy-inclusion-fiber-boundary-map-Ω-direct-Pointed-Type`. Composing this with the already checked canonical-to-packaged boundary-fiber comparison gives the packaged fiber-sequence version
+
+```text
+equiv-fiber-boundary-fiber-sequence-direct-Pointed-Type
+htpy-inclusion-fiber-boundary-fiber-sequence-direct-Pointed-Type
+```
+
+so the comparison `Omega E ~= fiber boundary-pointed-map-fiber-sequence` is now checked and over `Omega B`. The remaining hard coherence is the basepoint preservation for this direct equivalence; once that is proved, it can be packaged as the pointed equivalence required for the full `Omega E ->* Omega B ->* F` fiber sequence. The checked command was:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+The check passed. The touched LES file contains no new holes, postulates, or `--allow-unsolved-metas`.
