@@ -568,6 +568,37 @@ module _
   pr2 equiv-map-fiber-boundary-map-Ω-Pointed-Type =
     is-equiv-map-fiber-boundary-map-Ω-Pointed-Type
 
+  is-equiv-map-inv-fiber-boundary-map-Ω-Pointed-Type :
+    is-equiv map-inv-fiber-boundary-map-Ω-Pointed-Type
+  is-equiv-map-inv-fiber-boundary-map-Ω-Pointed-Type =
+    is-equiv-is-retraction
+      ( is-equiv-map-fiber-boundary-map-Ω-Pointed-Type)
+      ( is-retraction-map-inv-fiber-boundary-map-Ω-Pointed-Type)
+
+  equiv-map-inv-fiber-boundary-map-Ω-Pointed-Type :
+    type-Pointed-Type (fiber-Pointed-Type boundary-fiber-Pointed-Type) ≃
+    type-Ω E
+  pr1 equiv-map-inv-fiber-boundary-map-Ω-Pointed-Type =
+    map-inv-fiber-boundary-map-Ω-Pointed-Type
+  pr2 equiv-map-inv-fiber-boundary-map-Ω-Pointed-Type =
+    is-equiv-map-inv-fiber-boundary-map-Ω-Pointed-Type
+
+  is-section-map-inv-fiber-boundary-map-Ω-Pointed-Type :
+    (u : type-Pointed-Type (fiber-Pointed-Type boundary-fiber-Pointed-Type)) →
+    map-fiber-boundary-map-Ω-Pointed-Type
+      ( map-inv-fiber-boundary-map-Ω-Pointed-Type u) ＝
+    u
+  is-section-map-inv-fiber-boundary-map-Ω-Pointed-Type u =
+    inv
+      ( htpy-map-inv-equiv-section
+        ( equiv-map-inv-fiber-boundary-map-Ω-Pointed-Type)
+        ( map-fiber-boundary-map-Ω-Pointed-Type ,
+          is-retraction-map-inv-fiber-boundary-map-Ω-Pointed-Type)
+        ( map-inv-fiber-boundary-map-Ω-Pointed-Type u)) ∙
+    ( is-retraction-map-inv-equiv
+      ( equiv-map-inv-fiber-boundary-map-Ω-Pointed-Type)
+      ( u))
+
   eq-map-Ω-inclusion-fiber-Pointed-Type :
     (q : type-Ω (fiber-Pointed-Type g)) →
     map-Ω g (map-Ω (inclusion-fiber-Pointed-Type g) q) ＝ refl

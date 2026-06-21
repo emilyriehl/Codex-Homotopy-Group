@@ -2573,3 +2573,34 @@ The Agda check passed. `git diff --check` passed. The scan found no holes, quest
 Related commit:
 
 - This commit - Register hand boundary map as equivalence.
+
+
+### Prove hand inverse section by uniqueness
+
+Request: Emily asked Codex to keep up the hard work after the hand boundary map was registered as an equivalence.
+
+Model context:
+
+- Date: 2026-06-21.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible and used for scoped Agda edits, but `./check.sh` remained the authoritative verification command.
+
+Actions:
+
+- Searched the equivalence API for the right abstract principle instead of expanding the direct fiber equality.
+- Used `is-equiv-is-retraction` to prove `is-equiv-map-inv-fiber-boundary-map-Ω-Pointed-Type` from the existing retraction of the checked hand-map equivalence.
+- Packaged the inverse as `equiv-map-inv-fiber-boundary-map-Ω-Pointed-Type`.
+- Added `is-section-map-inv-fiber-boundary-map-Ω-Pointed-Type`, proving `map-fiber-boundary-map-Ω-Pointed-Type (map-inv-fiber-boundary-map-Ω-Pointed-Type u) ＝ u` via `htpy-map-inv-equiv-section` and `is-retraction-map-inv-equiv`.
+- Avoided importing extra homotopy operations by writing the final section proof pointwise with ordinary path inverse and concatenation.
+
+Verification:
+
+- ./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+- git diff --check
+- scan for holes, question-mark metas, postulates, and allow-unsolved-metas in the touched LES file
+
+The Agda check passed. `git diff --check` passed. The scan found no holes, question-mark metas, postulates, or allow-unsolved-metas in the touched LES file.
+
+Related commit:
+
+- This commit - Prove hand inverse section by uniqueness.

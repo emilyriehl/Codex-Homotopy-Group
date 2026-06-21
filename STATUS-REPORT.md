@@ -1137,3 +1137,22 @@ The checked command was:
 ```
 
 The check passed. `git diff --check` passed, and the touched LES file contains no holes, question-mark metas, postulates, or `--allow-unsolved-metas`.
+
+
+Later on 2026-06-21, the hand inverse for the boundary-fiber map gained a checked two-sided inverse law by inverse uniqueness. The long exact sequence file now records
+
+```text
+is-equiv-map-inv-fiber-boundary-map-Ω-Pointed-Type
+equiv-map-inv-fiber-boundary-map-Ω-Pointed-Type
+is-section-map-inv-fiber-boundary-map-Ω-Pointed-Type
+```
+
+The proof first observes that `map-inv-fiber-boundary-map-Ω-Pointed-Type` is a retraction of the now-checked equivalence `map-fiber-boundary-map-Ω-Pointed-Type`, hence is itself an equivalence by `is-equiv-is-retraction`. The missing section is then obtained from `htpy-map-inv-equiv-section` and `is-retraction-map-inv-equiv` for the packaged inverse equivalence. This clears the previous section block without expanding the large `fiber-ap-eq-fiber` naturality equation and keeps the construction compatible with `--without-K`.
+
+The checked command was:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+The check passed. `git diff --check` passed, and the touched LES file contains no holes, question-mark metas, postulates, or `--allow-unsolved-metas`.
