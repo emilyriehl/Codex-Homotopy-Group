@@ -107,6 +107,42 @@ module _
         ( inv (right-inv p)))
   compute-fiber-ap-eq-fiber-ap-pair x p .p refl =
     refl
+
+  is-section-map-inv-fiber-ap-eq-fiber :
+    (s t : fiber f b) (α : s ＝ t) →
+    map-inv-fiber-ap-eq-fiber f s t (fiber-ap-eq-fiber f s t α) ＝ α
+  is-section-map-inv-fiber-ap-eq-fiber (x , refl) .(x , refl) refl =
+    refl
+
+  htpy-map-inv-fiber-ap-eq-fiber-map-inv-equiv :
+    (s t : fiber f b)
+    (v : fiber (ap f {x = pr1 s} {y = pr1 t}) (pr2 s ∙ inv (pr2 t))) →
+    map-inv-fiber-ap-eq-fiber f s t v ＝
+    map-inv-equiv (equiv-fiber-ap-eq-fiber f s t) v
+  htpy-map-inv-fiber-ap-eq-fiber-map-inv-equiv s t v =
+    ( ap
+      ( map-inv-fiber-ap-eq-fiber f s t)
+      ( inv (is-section-map-inv-equiv (equiv-fiber-ap-eq-fiber f s t) v))) ∙
+    ( is-section-map-inv-fiber-ap-eq-fiber
+      ( s)
+      ( t)
+      ( map-inv-equiv (equiv-fiber-ap-eq-fiber f s t) v))
+
+  is-equiv-map-inv-fiber-ap-eq-fiber :
+    (s t : fiber f b) → is-equiv (map-inv-fiber-ap-eq-fiber f s t)
+  is-equiv-map-inv-fiber-ap-eq-fiber s t =
+    is-equiv-htpy-equiv'
+      ( inv-equiv (equiv-fiber-ap-eq-fiber f s t))
+      ( λ v → inv (htpy-map-inv-fiber-ap-eq-fiber-map-inv-equiv s t v))
+
+  equiv-map-inv-fiber-ap-eq-fiber :
+    (s t : fiber f b) →
+    fiber (ap f {x = pr1 s} {y = pr1 t}) (pr2 s ∙ inv (pr2 t)) ≃
+    (s ＝ t)
+  pr1 (equiv-map-inv-fiber-ap-eq-fiber s t) =
+    map-inv-fiber-ap-eq-fiber f s t
+  pr2 (equiv-map-inv-fiber-ap-eq-fiber s t) =
+    is-equiv-map-inv-fiber-ap-eq-fiber s t
 ```
 
 ### The loop space of the fiber of a pointed map
@@ -399,11 +435,10 @@ module _
     ( map-pointed-map boundary-fiber-Pointed-Type q ＝
       point-Pointed-Type (fiber-Pointed-Type g))
   equiv-fiber-map-Ω-boundary-map-Ω-Pointed-Type q =
-    inv-equiv
-      ( equiv-fiber-ap-eq-fiber
-        ( map-pointed-map g)
-        ( map-pointed-map boundary-fiber-Pointed-Type q)
-        ( point-Pointed-Type (fiber-Pointed-Type g))) ∘e
+    equiv-map-inv-fiber-ap-eq-fiber
+      ( map-pointed-map g)
+      ( map-pointed-map boundary-fiber-Pointed-Type q)
+      ( point-Pointed-Type (fiber-Pointed-Type g)) ∘e
     equiv-fiber-map-Ω-fiber-ap-Pointed-Type q
 
   equiv-fiber-boundary-map-Ω-direct-Pointed-Type :
@@ -681,6 +716,23 @@ module _
       ( fiber-Pointed-Type (boundary-fiber-Pointed-Type g))
   equiv-fiber-boundary-map-Ω-Pointed-Type =
     equiv-pointed-equiv pointed-equiv-fiber-boundary-map-Ω-Pointed-Type
+```
+
+### The direct boundary-fiber equivalence preserves base points
+
+```agda
+module _
+  {l1 l2 : Level} {E : Pointed-Type l1} {B : Pointed-Type l2}
+  where
+
+  preserves-point-map-fiber-boundary-map-Ω-Pointed-Type :
+    (g : E →∗ B) →
+    map-fiber-boundary-map-Ω-Pointed-Type g refl ＝
+    point-Pointed-Type
+      ( fiber-Pointed-Type (boundary-fiber-Pointed-Type g))
+  preserves-point-map-fiber-boundary-map-Ω-Pointed-Type (h , refl) =
+    refl
+
 ```
 
 ### First projection of the looped boundary comparison

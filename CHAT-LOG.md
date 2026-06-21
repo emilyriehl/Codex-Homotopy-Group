@@ -2230,3 +2230,34 @@ The Agda check passed. `git diff --check` passed. The grep found no holes, postu
 Related commit:
 
 - This commit - Add direct over-Omega boundary-fiber equivalence.
+
+
+### Make explicit fiber-ap inverse for direct boundary fibers
+
+Request: Emily asked Codex to implement the plan and keep working hard to clear the next hard `connect_fiberseq` blocks, prioritizing upstreamable structural proofs over local exactness shortcuts.
+
+Model context:
+
+- Date: 2026-06-21.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible and used for scoped Agda edits, but `./check.sh` remained the authoritative verification command.
+
+Actions:
+
+- Re-read the repository-local Agda/unimath workflow and HoTT reference guidance from the active skills.
+- Added a checked section computation for `map-inv-fiber-ap-eq-fiber`, proving it sends `fiber-ap-eq-fiber` images back to their source paths.
+- Proved `map-inv-fiber-ap-eq-fiber` is homotopic to the abstract inverse of `equiv-fiber-ap-eq-fiber`, and packaged it as `equiv-map-inv-fiber-ap-eq-fiber`.
+- Replaced the abstract `inv-equiv (equiv-fiber-ap-eq-fiber ...)` inside the direct boundary-fiber comparison with this explicit inverse equivalence.
+- Added `preserves-point-map-fiber-boundary-map-Ω-Pointed-Type`, the checked basepoint computation for the explicit forward boundary-fiber map.
+- Confirmed by a failed exploratory check, then removed the failed clause, that the remaining direct-equivalence basepoint obstruction is now the abstract inverse of `equiv-ap (equiv-tr-type-Ω refl)` in `equiv-fiber-map-Ω-fiber-ap-Pointed-Type`, not the fiber-ap inverse.
+- Updated `STATUS-REPORT.md` with the checked progress and the narrowed remaining proof obligation.
+
+Verification:
+
+- ./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+
+The Agda check passed. The touched LES file contains no new holes, postulates, or allow-unsolved-metas.
+
+Related commit:
+
+- This commit - Use explicit fiber-ap inverse in boundary fibers.

@@ -843,3 +843,40 @@ so the comparison `Omega E ~= fiber boundary-pointed-map-fiber-sequence` is now 
 ```
 
 The check passed. The touched LES file contains no new holes, postulates, or `--allow-unsolved-metas`.
+
+
+Later on 2026-06-21, the direct `connect_fiberseq` route cleared the first
+basepoint-coherence obstruction. The long exact sequence file now records an
+explicit inverse equivalence for the fiber equality comparison:
+
+```text
+equiv-map-inv-fiber-ap-eq-fiber
+```
+
+This packages the already available map `map-inv-fiber-ap-eq-fiber` as an
+equivalence by proving it is homotopic to the abstract inverse of
+`equiv-fiber-ap-eq-fiber`. The direct boundary-fiber comparison now uses this
+explicit inverse rather than `inv-equiv (equiv-fiber-ap-eq-fiber ...)`, removing
+the noncomputing abstract inverse that blocked the basepoint proof.
+
+The same run also added the checked basepoint computation for the explicit
+forward boundary-fiber map
+
+```text
+preserves-point-map-fiber-boundary-map-Ω-Pointed-Type
+```
+
+A renewed attempt to prove basepoint preservation for the full direct
+equivalence reduced to the next precise obstruction: the abstract inverse of
+`equiv-ap (equiv-tr-type-Ω refl)` inside
+`equiv-fiber-map-Ω-fiber-ap-Pointed-Type`. The remaining hard target is now to
+make that `map-Ω`/`ap` fiber conversion explicit, after which the direct
+equivalence should be packageable as a pointed equivalence. The checked command
+was:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+The check passed. The touched LES file contains no new holes, postulates, or
+`--allow-unsolved-metas`.
