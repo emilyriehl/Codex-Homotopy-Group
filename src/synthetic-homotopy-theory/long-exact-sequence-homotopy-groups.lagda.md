@@ -989,6 +989,30 @@ module _
   eq-map-inv-fiber-boundary-map-Ω-boundary-boundary-Pointed-Type g q =
     eq-ap-pr1-preserves-point-boundary-fiber-concat-loop-Pointed-Type g q
 
+  eq-map-equiv-fiber-boundary-map-Ω-direct-loop-inclusion-fiber-Pointed-Type :
+    (g : E →∗ B) (q : type-Ω (fiber-Pointed-Type g)) →
+    map-equiv (equiv-fiber-boundary-map-Ω-direct-Pointed-Type g)
+      ( map-Ω (inclusion-fiber-Pointed-Type g) q) ＝
+    map-pointed-map
+      ( boundary-fiber-Pointed-Type (boundary-fiber-Pointed-Type g))
+      ( q)
+  eq-map-equiv-fiber-boundary-map-Ω-direct-loop-inclusion-fiber-Pointed-Type
+    g q =
+    ( eq-map-equiv-fiber-boundary-map-Ω-direct-map-fiber-boundary-Pointed-Type
+      ( g)
+      ( map-Ω (inclusion-fiber-Pointed-Type g) q)) ∙
+    ( ap
+      ( map-fiber-boundary-map-Ω-Pointed-Type g)
+      ( inv
+        ( eq-map-inv-fiber-boundary-map-Ω-boundary-boundary-Pointed-Type
+          ( g)
+          ( q)))) ∙
+    ( is-section-map-inv-fiber-boundary-map-Ω-Pointed-Type
+      ( g)
+      ( map-pointed-map
+        ( boundary-fiber-Pointed-Type (boundary-fiber-Pointed-Type g))
+        ( q)))
+
   is-fiber-sequence-boundary-map-Ω-direct-Pointed-Type :
     (g : E →∗ B) →
     is-fiber-sequence-Pointed-Type

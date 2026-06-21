@@ -1156,3 +1156,20 @@ The checked command was:
 ```
 
 The check passed. `git diff --check` passed, and the touched LES file contains no holes, question-mark metas, postulates, or `--allow-unsolved-metas`.
+
+
+Later on 2026-06-21, the raw shifted-boundary comparison was proved. The long exact sequence file now records
+
+```text
+eq-map-equiv-fiber-boundary-map-Ω-direct-loop-inclusion-fiber-Pointed-Type
+```
+
+For a pointed map `g` and a loop `q` in its fiber, this lemma identifies the direct boundary equivalence applied to `map-Ω (inclusion-fiber-Pointed-Type g) q` with the boundary-of-boundary map `boundary-fiber-Pointed-Type (boundary-fiber-Pointed-Type g) q`. The proof is the intended three-step route: use the checked direct-to-hand forward-map comparison, rewrite by the inverse-side boundary-of-boundary computation, and finish with the section of the hand inverse obtained by equivalence uniqueness. This clears the raw hard target without the rejected `--without-K` path split and without expanding the large `fiber-ap-eq-fiber` coherence.
+
+The checked command was:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+The check passed. `git diff --check` passed, and the touched LES file contains no holes, question-mark metas, postulates, or `--allow-unsolved-metas`.

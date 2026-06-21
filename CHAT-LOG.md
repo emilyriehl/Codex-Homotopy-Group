@@ -2604,3 +2604,34 @@ The Agda check passed. `git diff --check` passed. The scan found no holes, quest
 Related commit:
 
 - This commit - Prove hand inverse section by uniqueness.
+
+
+### Prove raw shifted-boundary comparison
+
+Request: Emily asked Codex to keep working hard after the hand inverse section was proved by equivalence uniqueness.
+
+Model context:
+
+- Date: 2026-06-21.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible and used for scoped Agda edits, but `./check.sh` remained the authoritative verification command.
+
+Actions:
+
+- Returned to the original raw shifted-boundary comparison after the hand inverse gained a checked section.
+- Added `eq-map-equiv-fiber-boundary-map-Ω-direct-loop-inclusion-fiber-Pointed-Type`.
+- Proved the direct equivalence applied to `map-Ω (inclusion-fiber-Pointed-Type g) q` equals `boundary-fiber-Pointed-Type (boundary-fiber-Pointed-Type g) q`.
+- Used the three-step proof path: direct equivalence agrees with the hand map; the hand inverse sends boundary-of-boundary to the loop of the fiber inclusion; the hand inverse section converts this inverse-side equality back to the desired target equality.
+- Avoided both previously failed routes: no `--without-K` split on a loop/fiber path, and no direct expansion of the large second-component coherence.
+
+Verification:
+
+- ./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+- git diff --check
+- scan for holes, question-mark metas, postulates, and allow-unsolved-metas in the touched LES file
+
+The Agda check passed. `git diff --check` passed. The scan found no holes, question-mark metas, postulates, or allow-unsolved-metas in the touched LES file.
+
+Related commit:
+
+- This commit - Prove raw shifted-boundary comparison.
