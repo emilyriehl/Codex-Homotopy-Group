@@ -2734,3 +2734,41 @@ All wrapper smoke checks passed. The real repository check of `src/structured-ty
 Related commit:
 
 - This commit - Harden Agda verification tooling.
+
+
+### Prove lower Hopf comparison from direct connecting fiber sequence
+
+Request: Emily asked Codex to implement the next plan and keep working on hard, upstream-quality formalization progress rather than local shortcuts.
+
+Model context:
+
+- Date: 2026-06-21.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible and used earlier in the run for scoped Agda edits; `./check.sh` remained the authoritative verification command.
+
+Actions:
+
+- Revisited the lower Hopf comparison after the direct `connect_fiberseq` package was checked in the LES layer.
+- Avoided adding a local image/kernel transport or keeping a temporary full shifted-boundary equality with an unsolved interaction meta.
+- Added `is-exact-set-truncation-second-homotopy-hopf-fibration-boundary` in `hopf-long-exact-sequence-second-homotopy-groups.lagda.md`.
+- Proved that set-level exactness by applying `is-exact-set-truncation-loop-fiber-sequence` to `fiber-sequence-boundary-fiber-sequence-direct-Pointed-Type` for the Hopf fiber sequence, i.e. by looping the packaged direct sequence `Ω S³ ->* Ω S² ->* S¹`.
+- Filled `iso-second-homotopy-group-sphere-2-fundamental-group-sphere-1` with that checked exactness theorem.
+- Removed the local `--allow-unsolved-metas` pragma from `second-homotopy-group-sphere-2.lagda.md`.
+- Updated `STATUS-REPORT.md` so the lower Hopf comparison is recorded as checked and the remaining tasks now focus on the unrestricted LES bridge, the Hopf fiber sequence, and stability.
+
+Verification:
+
+- ./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+- ./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+- ./check.sh src/synthetic-homotopy-theory/second-homotopy-group-sphere-2.lagda.md
+- ./check.sh src/synthetic-homotopy-theory/third-homotopy-group-sphere-3.lagda.md
+- ./check.sh src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md
+- git diff --check
+- rg -n "\{!!\}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md src/synthetic-homotopy-theory/second-homotopy-group-sphere-2.lagda.md
+- rg -n "allow-unsolved-metas|\{!!\}" src/synthetic-homotopy-theory src/group-theory src/structured-types -g "*.lagda.md"
+
+The Agda checks passed. `git diff --check` passed. The touched-file scan found no holes, postulates, or local `--allow-unsolved-metas`; the broader scaffold scan found only the expected Hopf fiber sequence and stability comparison holes.
+
+Related commit:
+
+- This commit - Prove lower Hopf comparison from direct connecting fiber sequence.

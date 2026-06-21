@@ -148,6 +148,32 @@ iso-second-homotopy-group-is-exact-hopf-segment H1 =
       ( is-exact-second-homotopy-hopf-boundary-fiber-inclusion))
 ```
 
+### The recursive set-level exactness input for the lower Hopf segment
+
+```agda
+is-exact-set-truncation-second-homotopy-hopf-fibration-boundary :
+  is-exact-hom-Pointed-Set
+    ( trunc-Pointed-Set
+      ( Ω
+        ( iterated-loop-space 1 (sphere-Pointed-Type 3))))
+    ( trunc-Pointed-Set
+      ( Ω
+        ( iterated-loop-space 1 (sphere-Pointed-Type 2))))
+    ( trunc-Pointed-Set
+      ( Ω
+        ( iterated-loop-space 0 (sphere-Pointed-Type 1))))
+    ( hom-trunc-iterated-loop-fibration-fiber-sequence
+      ( hopf-fiber-sequence-sphere-1-sphere-3-sphere-2)
+      ( 1))
+    ( hom-trunc-iterated-loop-boundary-fiber-sequence
+      ( hopf-fiber-sequence-sphere-1-sphere-3-sphere-2)
+      ( 0))
+is-exact-set-truncation-second-homotopy-hopf-fibration-boundary =
+  is-exact-set-truncation-loop-fiber-sequence
+    ( fiber-sequence-boundary-fiber-sequence-direct-Pointed-Type
+      ( hopf-fiber-sequence-sphere-1-sphere-3-sphere-2))
+```
+
 ### The lower Hopf comparison from recursive set-level exactness
 
 ```agda

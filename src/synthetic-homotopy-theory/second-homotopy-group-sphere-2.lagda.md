@@ -1,7 +1,6 @@
 # The second homotopy group of the 2-sphere
 
 ```agda
-{-# OPTIONS --allow-unsolved-metas #-}
 module synthetic-homotopy-theory.second-homotopy-group-sphere-2 where
 ```
 
@@ -38,5 +37,5 @@ iso-second-homotopy-group-sphere-2-fundamental-group-sphere-1 :
       ( concrete-homotopy-group 0 (sphere-Pointed-Type 1)))
 iso-second-homotopy-group-sphere-2-fundamental-group-sphere-1 =
   iso-second-homotopy-group-is-exact-set-truncation-hopf-segment
-    ( {!!})
+    ( is-exact-set-truncation-second-homotopy-hopf-fibration-boundary)
 ```
