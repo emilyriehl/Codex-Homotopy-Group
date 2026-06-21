@@ -2983,3 +2983,28 @@ All Agda checks passed. `git diff --check` passed. The touched-file scan found n
 Related commit:
 
 - This commit - Add circle H-space and Hopf construction map.
+
+
+### Clarify library inventory versus local progress in the formalization plan
+
+Request: Emily pointed out that the `Status` column in `FORMALIZATION-PLAN.md` was meant to describe the initial agda-unimath library inventory, not current local progress, and asked whether the plan should clarify what is in the library versus what has been completed locally or remains missing.
+
+Model context:
+
+- Date: 2026-06-21.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- No Agda proof work was performed in this run; this was a documentation clarification.
+
+Actions:
+
+- Updated the dependency inventory in `FORMALIZATION-PLAN.md` to split the old ambiguous `Status` column into `Library status` and `Local status`.
+- Restored `EXISTS`/`MISSING` as historical agda-unimath library-inventory labels and added local progress labels such as `Done locally`, `Partial locally`, `Stubbed locally`, and `Not started locally`.
+- Clarified the inventory counts as project-start library counts and pointed readers to `STATUS-REPORT.md` for the authoritative current proof state.
+
+Verification:
+
+- git diff --check
+
+Related commit:
+
+- This commit - Clarify formalization inventory status columns.
