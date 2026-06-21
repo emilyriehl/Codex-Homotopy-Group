@@ -103,9 +103,13 @@ calculation:
   transported to ordinary group exactness at `π₁(F)`.
   The nontrivial-target fibration-boundary group exactness statement is now
   exposed as a checked wrapper from recursive set-level exactness. The packaged
-  canonical-vs-recursive shifted-boundary comparison now has a checked
-  first-projection theorem after the canonical lift; the remaining general LES
-  bridge is its dependent second-component coherence.
+  canonical-vs-recursive shifted-boundary comparison now has a checked full
+  fiber equality after a generic path-splitting computation for applying
+  pointed maps to paths into the base followed by loops. It also identifies the
+  direct shifted boundary map pointwise with the recursive looped fiber
+  inclusion, and lifts that comparison to set-truncated homomorphisms. The
+  remaining general LES bridge is to thread this equality through the
+  concrete-homotopy-group transport layer.
 - The algebraic extraction for the lower Hopf segment
   `π₂(S³) → π₂(S²) → π₁(S¹) → π₁(S³)` is now checked. The left
   fibration-boundary exactness input is supplied by looping the packaged direct
@@ -125,8 +129,9 @@ comparing set-truncated adjacent exactness with ordinary group exactness of
 concrete homotopy groups. The total-space set-truncated iterated exactness
 case, the canonical shifted boundary case, and the trivial-codomain
 fibration-boundary group exactness case now check; the outstanding general
-bridge is the coherence identifying the canonical shifted boundary with the
-looped recursive boundary map expected by the concrete-group homomorphism. The
+bridge can now use the checked coherence identifying the canonical shifted
+boundary with the looped recursive boundary map expected by the concrete-group
+homomorphism. The
 `π₃(S³) ≅ ℤ` calculation is reduced to the stability comparison
 `π₂(S²) ≅ π₃(S³)`, the now-checked Hopf base computation
 `π₂(S²) ≅ π₁(S¹)`, and the checked group-level circle calculation

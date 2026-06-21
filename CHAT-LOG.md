@@ -2805,3 +2805,37 @@ The Agda check passed. `git diff --check` passed. The touched-file scan found no
 Related commit:
 
 - This commit - Add packaged shifted-boundary first-projection comparison.
+
+
+### Complete packaged shifted-boundary comparison
+
+Request: Emily asked Codex to keep working hard after the first-projection shifted-boundary comparison was committed.
+
+Model context:
+
+- Date: 2026-06-21.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible and reported Agda 2.8.0 with agda-mcp-server 0.6.7. MCP was useful for scoped edits, but it again accepted terms that `./check.sh` rejected, so final verification used raw Agda through `./check.sh`.
+
+Actions:
+
+- Continued the unrestricted LES bridge rather than moving to easier scaffold files.
+- Added the generic path-algebra lemma `eq-ap-concat-loop-preserves-point-Pointed-Type`, which computes the result of applying a pointed map to a path into the base followed by a loop.
+- Upgraded the packaged canonical-vs-recursive shifted-boundary comparison from the checked first-projection theorem to the full fiber equality `eq-map-equiv-fiber-canonical-boundary-boundary-fiber-sequence-boundary-boundary`.
+- Filled the dependent second component using the new path-splitting lemma and `is-retraction-map-Ω-pointed-map-inv-pointed-equiv` for the chosen-fiber equivalence.
+- Proved `eq-map-boundary-boundary-fiber-sequence-direct-loop-fiber-inclusion`, identifying the direct shifted boundary map pointwise with the recursive looped fiber inclusion.
+- Proved `eq-map-hom-trunc-boundary-boundary-fiber-sequence-direct-loop-fiber-inclusion`, lifting that pointwise comparison to the corresponding set-truncated homomorphisms.
+- Updated `STATUS-REPORT.md` to record that the remaining general LES bridge can now use this checked shifted-boundary coherence in the concrete-homotopy-group transport layer.
+
+Verification:
+
+- ./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+- git diff --check
+- rg -n "{!!}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+- rg -n "allow-unsolved-metas|{!!}" src/synthetic-homotopy-theory src/group-theory src/structured-types -g "*.lagda.md"
+
+The Agda check passed. `git diff --check` passed. The touched-file scan found no holes, postulates, or local `--allow-unsolved-metas`; the broader scaffold scan found only the expected Hopf fiber sequence and stability comparison holes.
+
+Related commit:
+
+- This commit - Complete packaged shifted-boundary comparison.
