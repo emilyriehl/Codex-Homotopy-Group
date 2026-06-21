@@ -2839,3 +2839,41 @@ The Agda check passed. `git diff --check` passed. The touched-file scan found no
 Related commit:
 
 - This commit - Complete packaged shifted-boundary comparison.
+
+
+### Use direct shifted exactness for the Hopf third segment
+
+Request: Emily asked Codex to implement the adjusted plan after prioritizing the harder upfront equivalence and proof aesthetics for eventual agda-unimath upstreaming. The plan was adjusted away from using triviality of `π₂(S¹)` as the exactness proof for the Hopf `π₃` fibration-boundary segment.
+
+Model context:
+
+- Date: 2026-06-21.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible and reported Agda 2.8.0 with agda-mcp-server 0.6.7. MCP remained useful for scoped edits, but final acceptance used `./check.sh`.
+
+Actions:
+
+- Tried the fully general direct shifted exactness theorem first. Real Agda showed the arbitrary-index direct route needs an iterated-loop reassociation bridge: the direct connecting fiber sequence naturally gives `Ω^n(Ω X)`, while the public homotopy-group exactness statement is phrased with `Ω^(n+1) X` and the corresponding induced maps.
+- Added checked direct set-level exactness for the first two shifted recursive fibration-boundary segments:
+  `is-exact-set-truncation-first-iterated-loop-fibration-boundary-fiber-sequence-direct` and
+  `is-exact-set-truncation-second-iterated-loop-fibration-boundary-fiber-sequence-direct`.
+- Promoted the second shifted direct set-level theorem to group exactness as
+  `is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-second-direct`.
+- Updated `is-exact-third-homotopy-hopf-fibration-boundary` to use the new direct theorem instead of the trivial-codomain exactness wrapper.
+- Updated `STATUS-REPORT.md` and `FORMALIZATION-PLAN.md` to record that the Hopf `π₃` exactness segment now uses direct shifted exactness and that the remaining general LES bridge is the functorial reassociation theorem for arbitrary iterates.
+
+Verification:
+
+- ./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+- ./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+- ./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+- ./check.sh src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md
+- git diff --check
+- rg -n "\{!!\}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+- rg -n "allow-unsolved-metas|\{!!\}" src/synthetic-homotopy-theory src/group-theory src/structured-types -g "*.lagda.md"
+
+The Agda checks passed. `git diff --check` passed. The touched-file scan found no holes, postulates, or local `--allow-unsolved-metas`; the broader scaffold scan found only the expected Hopf fiber sequence and stability comparison holes.
+
+Related commit:
+
+- This commit - Use direct shifted exactness for Hopf third segment.

@@ -296,8 +296,13 @@ should be checked with:
    iterated loop space. Do not route adjacent exactness through a claim that
    the concrete homotopy-group classifying maps form fiber sequences: that
    would impose short-exact-style information, while the long exact sequence
-   only gives exactness at the middle group of each adjacent triple. Use
-   Coq-HoTT `ExactSequence.v` only for decomposition guidance.
+   only gives exactness at the middle group of each adjacent triple. For the
+   fibration-boundary part, prioritize direct shifted connecting fiber sequences
+   where they match the public iterated-loop indexing. The Hopf `π₃` segment is
+   now handled this way for the second shifted segment; the general theorem
+   should be obtained by a clean reassociation comparison between `Ω^n(Ω X)`
+   and `Ω^(n+1) X`, including the induced maps. Use Coq-HoTT
+   `ExactSequence.v` only for decomposition guidance.
 
 5. **Develop the Hopf construction and Hopf fibration.** Start with the circle
    H-space structure, then the general Hopf construction, then specialize to

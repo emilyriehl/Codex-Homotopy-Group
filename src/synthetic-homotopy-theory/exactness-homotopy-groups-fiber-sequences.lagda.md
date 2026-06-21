@@ -199,6 +199,42 @@ module _
       ( S)
       ( n)
 
+  is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-second-direct :
+    is-exact-hom-Group
+      ( group-Concrete-Group
+        ( concrete-homotopy-group
+          ( 2)
+          ( total-space-fiber-sequence-Pointed-Type S)))
+      ( group-Concrete-Group
+        ( concrete-homotopy-group
+          ( 2)
+          ( base-fiber-sequence-Pointed-Type S)))
+      ( group-Concrete-Group
+        ( concrete-homotopy-group
+          ( 1)
+          ( fiber-fiber-sequence-Pointed-Type S)))
+      ( hom-group-hom-Concrete-Group
+        ( concrete-homotopy-group
+          ( 2)
+          ( total-space-fiber-sequence-Pointed-Type S))
+        ( concrete-homotopy-group
+          ( 2)
+          ( base-fiber-sequence-Pointed-Type S))
+        ( hom-fibration-concrete-homotopy-group-fiber-sequence S 2))
+      ( hom-group-hom-Concrete-Group
+        ( concrete-homotopy-group
+          ( 2)
+          ( base-fiber-sequence-Pointed-Type S))
+        ( concrete-homotopy-group
+          ( 1)
+          ( fiber-fiber-sequence-Pointed-Type S))
+        ( boundary-hom-concrete-homotopy-group-fiber-sequence S 1))
+  is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-second-direct =
+    is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence
+      ( 1)
+      ( is-exact-set-truncation-second-iterated-loop-fibration-boundary-fiber-sequence-direct
+        ( S))
+
   is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-pointed-htpy :
     (n : ℕ) →
     ( pointed-map-Ω (pointed-map-iterated-boundary-fiber-sequence S n)) ~∗
