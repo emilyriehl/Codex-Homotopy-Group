@@ -2949,3 +2949,37 @@ All Agda checks passed. `git diff --check` passed. The touched-file scan found n
 Related commit:
 
 - This commit - Complete arbitrary-index direct fibration-boundary bridge.
+
+
+### Add circle H-space and first Hopf construction layer
+
+Request: Emily asked Codex to implement the next plan after recent progress, prioritizing hard upstream-quality progress toward the Hopf/stability blockers rather than easy objectives.
+
+Model context:
+
+- Date: 2026-06-21.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible and useful for targeted edits after `apply_patch` intermittently failed in the sandbox wrapper. Final acceptance used raw `./check.sh`.
+
+Actions:
+
+- Inspected the current status report, formalization plan, Hopf fiber-sequence scaffold, stability scaffold, existing circle multiplication, H-space APIs, join APIs, and suspension APIs.
+- Added `synthetic-homotopy-theory.h-space-structure-circle`, packaging the existing circle multiplication as a coherent `𝕊¹-H-Space` and transporting it to the 1-sphere as `sphere-1-H-Space`.
+- Added `synthetic-homotopy-theory.hopf-construction`, defining the generic Hopf total space `A * A`, base `suspension A`, Hopf cocone, Hopf map, and pointed Hopf map for any H-space.
+- Added `synthetic-homotopy-theory.hopf-construction-circle`, specializing the construction to `sphere-1-H-Space` and exposing the checked pointed map `S¹ * S¹ ->* S²`.
+- Updated `STATUS-REPORT.md` and `FORMALIZATION-PLAN.md` to mark the circle H-space as done, the Hopf construction as partial, and the next Hopf target as the total-space comparison plus fiber-sequence package.
+
+Verification:
+
+- ./check.sh src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md
+- ./check.sh src/synthetic-homotopy-theory/hopf-construction.lagda.md
+- ./check.sh src/synthetic-homotopy-theory/hopf-construction-circle.lagda.md
+- git diff --check
+- rg -n "\{!!\}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md src/synthetic-homotopy-theory/hopf-construction.lagda.md src/synthetic-homotopy-theory/hopf-construction-circle.lagda.md
+- rg -n "allow-unsolved-metas|\{!!\}" src/synthetic-homotopy-theory src/group-theory src/structured-types -g "*.lagda.md"
+
+All Agda checks passed. `git diff --check` passed. The touched-file scan found no holes, postulates, or local `--allow-unsolved-metas`; the broader scaffold scan found only the expected Hopf fiber sequence and stability comparison holes.
+
+Related commit:
+
+- This commit - Add circle H-space and Hopf construction map.

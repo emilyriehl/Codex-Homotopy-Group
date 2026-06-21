@@ -48,6 +48,14 @@ calculation:
   formalized: the loop space of the circle and the 1-sphere is equivalent to
   the integers, the circle and 1-sphere are 1-types, and positive concrete
   homotopy groups of 1-types are trivial.
+- The circle H-space prerequisite for the Hopf construction is now checked.
+  The module `h-space-structure-circle` packages the standard multiplication
+  on `𝕊¹` as `𝕊¹-H-Space` and transports it to the 1-sphere as
+  `sphere-1-H-Space`.
+- The first Hopf-construction layer is now checked. The generic module
+  `hopf-construction` defines the Hopf map `A * A -> suspension A` and its
+  pointed form for any H-space, and `hopf-construction-circle` specializes it
+  to a pointed map `S¹ * S¹ ->* S²`.
 - The low-dimensional sphere-connectivity facts needed for the lower Hopf
   segment have been formalized: `S³` is 2-connected, and therefore the first
   two concrete homotopy groups of `S³` are trivial.
@@ -154,6 +162,7 @@ Hopf fiber sequence itself and the Freudenthal/stability comparison.
 | Boundary maps and LES exactness steps | [`src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md) | Defines the boundary pointed map, induced maps on homotopy groups of a fiber sequence, recursive boundary pointed maps, and boundary homomorphisms. It proves the first fiber-of-the-fiber identification, packages `Ω B ->* fiber g ->* E` as a pointed fiber sequence, proves pointed-set exactness for canonical and packaged `F ->* E ->* B` fiber sequences, proves pointed-set exactness for the packaged boundary segment `Ω B ->* F ->* E`, proves pointed-set exactness for the packaged loop-boundary segment `Ω E ->* Ω B ->* F`, proves pointed-set exactness for the looped packaged segment `Ω F ->* Ω E ->* Ω B`, proves pointed-set exactness for the canonical adjacent triples `Ω B ->* fiber g ->* E`, `Ω E ->* Ω B ->* fiber g`, and `Ω² B ->* Ω (fiber g) ->* Ω E`, transports the last canonical theorem to the packaged looped boundary/fiber-inclusion segment `Ω² B ->* Ω F ->* Ω E`, and bundles the first four packaged exactness proofs as an initial set-truncated LES segment. These are steps toward, not yet the full proof of, Theorem 8.4.6 of the HoTT book. |
 | Higher homotopy groups of 1-types | [`src/synthetic-homotopy-theory/higher-homotopy-groups-truncated-types.lagda.md`](src/synthetic-homotopy-theory/higher-homotopy-groups-truncated-types.lagda.md) | Proves that positive concrete homotopy groups of pointed 1-types are trivial. |
 | Circle and 1-sphere homotopy facts | [`src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md`](src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md) | Proves the loop-space equivalences for the circle and 1-sphere, the 1-type facts, and triviality of their positive concrete homotopy groups. |
+| Circle and 1-sphere H-space structures | [`src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md`](src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md) | Packages the existing circle multiplication as a coherent `𝕊¹-H-Space`, transports it across the circle--1-sphere equivalence, and packages the transported multiplication as `sphere-1-H-Space`. |
 | Low homotopy groups of `S³` | [`src/synthetic-homotopy-theory/homotopy-groups-sphere-3.lagda.md`](src/synthetic-homotopy-theory/homotopy-groups-sphere-3.lagda.md) | Proves that inhabited types are `(-1)`-connected, that `1`-connected pointed types have trivial concrete group, that `S³` is 2-connected by iterated suspension connectivity, and that `concrete-homotopy-group 0 (S³)` and `concrete-homotopy-group 1 (S³)` are trivial. |
 | Integer powers of loops | [`src/synthetic-homotopy-theory/computing-integer-powers-of-loops.lagda.md`](src/synthetic-homotopy-theory/computing-integer-powers-of-loops.lagda.md) | Proves successor, predecessor, and automorphism-iteration addition computations for integer powers of loops. |
 | Computing the loop space of the circle | [`src/synthetic-homotopy-theory/computing-loop-space-circle.lagda.md`](src/synthetic-homotopy-theory/computing-loop-space-circle.lagda.md) | Proves the universal-cover encoder concatenation computation, generator and inverse-generator integer-code computations, that integer powers of the circle loop encode to their exponents, and that `compute-loop-space-𝕊¹` sends loop concatenation to integer addition. |
@@ -171,6 +180,8 @@ Hopf fiber sequence itself and the Freudenthal/stability comparison.
 | Set-truncated iterated LES exactness | [`src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md) | Defines the set-truncated maps on `Ω Ω^n F`, `Ω Ω^n E`, and `Ω Ω^n B`, plus both the recursive boundary map used by the concrete-group homomorphism and the canonical shifted boundary map suggested by Coq-HoTT. It checks without `--allow-unsolved-metas`, proving the total-space iterated case for all `n`, exactness for the canonical shifted fibration-boundary case, transport theorems that turn either a kernel equivalence or a pointwise canonical-vs-recursive boundary comparison into recursive boundary exactness, and direct recursive fibration-boundary exactness for all iterates in the public shifted indexing by reassociation transport; the finite Hopf-facing instances reduce to the all-index theorem. |
 | Group exactness transport for homotopy groups | [`src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md`](src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md) | Proves a generic transfer theorem from pointed-set exactness to ordinary group exactness using explicit comparison maps, injectivity, unit compatibility, and coherence squares; proves a pointed-type wrapper; proves a trivial-codomain pointed-type wrapper that avoids comparing the second maps; and proves the total-space LES-specific transport target from set-truncated iterated exactness to ordinary group exactness of concrete homotopy groups. This file no longer uses `--allow-unsolved-metas`. |
 | Group exactness of homotopy groups | [`src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md) | Records the adjacent group-level exactness statements needed by the Hopf comparison. The total-space statement composes through the checked transport layer. The boundary/fiber-inclusion statement `π₂(B) -> π₁(F) -> π₁(E)` is checked from the packaged looped boundary exactness theorem. The fibration-boundary statement is still available under a trivial-codomain hypothesis, and the unrestricted nontrivial-target fibration-boundary statement now has a direct checked group exactness theorem for every index, obtained from the reassociated public set-level direct theorem. The Hopf `π₃(S³) -> π₃(S²) -> π₂(S¹)` segment is the second shifted instance of this all-index theorem. |
+| Hopf construction | [`src/synthetic-homotopy-theory/hopf-construction.lagda.md`](src/synthetic-homotopy-theory/hopf-construction.lagda.md) | Defines the generic Hopf total space `A * A`, base `suspension A`, cocone, map, pointed total space, pointed base, and pointed Hopf map for any H-space. |
+| Hopf construction on the 1-sphere | [`src/synthetic-homotopy-theory/hopf-construction-circle.lagda.md`](src/synthetic-homotopy-theory/hopf-construction-circle.lagda.md) | Specializes the generic Hopf construction to `sphere-1-H-Space`, yielding the checked pointed map `S¹ * S¹ ->* S²`. |
 | Hopf fiber sequence | [`src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md`](src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md) | Records the unfinished packaged fiber sequence with fiber `S¹`, total space `S³`, and base `S²` fixed definitionally. |
 | Hopf LES comparison for second homotopy groups | [`src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md) | Proves the right-hand boundary/fiber-inclusion exactness statement for the lower Hopf segment, the left fibration-boundary exactness statement by applying `is-exact-set-truncation-loop-fiber-sequence` to `fiber-sequence-boundary-fiber-sequence-direct-Pointed-Type` instantiated at the Hopf fiber sequence, and the algebraic extraction identifying `π₂(S²)` with `π₁(S¹)` from the two exactness statements and the checked trivial outer `S³` groups. |
 | Hopf LES comparison for third homotopy groups | [`src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md) | Builds the Hopf comparison isomorphism from the Hopf fibration homomorphism, the checked total-space exactness theorem, the new direct fibration-boundary exactness theorem for the second shifted segment, and the two trivial endpoint hypotheses. The exactness proof no longer uses triviality of `π₂(S¹)` as a shortcut. |
@@ -191,7 +202,8 @@ Hopf fiber sequence itself and the Freudenthal/stability comparison.
 | Exactness-to-isomorphism with zero endpoints | Done | Proved in [`src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md`](src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md). |
 | Higher homotopy groups of the circle vanish | Mostly done | Positive concrete homotopy groups of the circle and 1-sphere are trivial. Further packaging may be needed for the exact Hopf LES endpoints. |
 | Loop space of the circle is the integers | Done | The loop-space equivalence is formalized, the universal-cover encoder is proved additive on loop concatenation, the result is transferred to the 1-sphere, and the concrete group isomorphism `π₁(S¹) ≅ ℤ` is checked. |
-| Hopf construction and Hopf fibration | Stubbed | The packaged Hopf fiber sequence target `S^1 -> S^3 -> S^2` is recorded, but the construction, maps, and fiber-sequence proof remain holes. |
+| Circle as an H-space | Done | The checked module [`src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md`](src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md) packages both `𝕊¹-H-Space` and the transported `sphere-1-H-Space`. |
+| Hopf construction and Hopf fibration | Partial | The generic Hopf map `A * A -> suspension A` and the `S¹ * S¹ ->* S²` specialization are checked. The packaged Hopf fiber sequence target `S^1 -> S^3 -> S^2` is still stubbed pending the total-space comparison and fiber-sequence proof. |
 | Hopf LES consequence `pi_3(S^3) = pi_3(S^2)` | Partially proved | The exactness-to-isomorphism extraction and Hopf LES packaging are proved, and the fibration-boundary exactness now uses the direct checked second shifted boundary theorem rather than the trivial-codomain shortcut. The comparison still depends on the unfinished Hopf fiber sequence scaffold. |
 | Freudenthal suspension theorem | Not started | Still a major missing theorem. |
 | Stability of homotopy groups of spheres | Instance stubbed | The needed comparison `π₂(S²) ≅ π₃(S³)` is recorded as an unfinished theorem depending on Freudenthal/stability. |
@@ -200,8 +212,7 @@ Hopf fiber sequence itself and the Freudenthal/stability comparison.
 
 ## Remaining tasks
 
-1. Formalize the Hopf fiber sequence `S^1 -> S^3 -> S^2`, including the actual
-   pointed maps and the fiber-sequence proof.
+1. Extend the checked Hopf map `S¹ * S¹ ->* S²` to the Hopf fiber sequence `S^1 -> S^3 -> S^2` by proving or packaging the total-space comparison `S¹ * S¹ ≃ S³` and the fiber-sequence proof.
 2. Prove the stability comparison `π₂(S²) ≅ π₃(S³)` from Freudenthal and sphere
    stability.
 3. Recheck `π₃(S³) ≅ ℤ` and `π₃(S²) ≅ ℤ` after their imported lower stubs are
@@ -209,54 +220,20 @@ Hopf fiber sequence itself and the Freudenthal/stability comparison.
 
 ## Next agent handoff
 
-The lower Hopf comparison no longer blocks on recursive fibration-boundary
-exactness. In
-`src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md`,
-`is-exact-set-truncation-second-homotopy-hopf-fibration-boundary` obtains the
-needed set-level exactness by applying `is-exact-set-truncation-loop-fiber-sequence`
-to `fiber-sequence-boundary-fiber-sequence-direct-Pointed-Type` for the Hopf
-fiber sequence. The file
-`src/synthetic-homotopy-theory/second-homotopy-group-sphere-2.lagda.md` consumes
-that theorem directly and no longer has a local `--allow-unsolved-metas`.
+The arbitrary-index LES bridge is complete. The circle/1-sphere H-space input is checked in `src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md`. The generic Hopf map is checked in `src/synthetic-homotopy-theory/hopf-construction.lagda.md`, and the sphere-1 specialization is checked in `src/synthetic-homotopy-theory/hopf-construction-circle.lagda.md`.
 
-For the unrestricted LES bridge, continue the structural shifted-boundary route
-from the checked definitions and lemmas in
-`long-exact-sequence-homotopy-groups.lagda.md`:
+The next upstream-shaped target is to turn the checked pointed Hopf map `S¹ * S¹ ->* S²` into the packaged Hopf fiber sequence. Prove or package the total-space comparison `S¹ * S¹ ≃ S³`, transport the Hopf map across that comparison as needed, and fill `src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md` with the actual pointed maps and fiber-sequence proof.
 
-- `fiber-sequence-boundary-fiber-sequence-direct-Pointed-Type`
-- `is-exact-set-truncation-loop-fiber-sequence`
-- `eq-map-equiv-fiber-boundary-map-Ω-direct-loop-inclusion-fiber-Pointed-Type`
-- `eq-map-equiv-fiber-boundary-fiber-sequence-direct-loop-fiber-inclusion-canonical-Pointed-Type`
-- `eq-pr1-map-equiv-fiber-canonical-boundary-boundary-fiber-sequence-boundary-boundary`
-
-The remaining hard step is the coherent second-component comparison over the
-checked first-projection path
-`eq-pr1-map-equiv-fiber-canonical-boundary-boundary-fiber-sequence-boundary-boundary`.
-A temporary probe showed that neither `refl` nor a bare `right-unit` closes this
-component: the residual involves how `ap` of `boundary-pointed-map-fiber-sequence`
-acts on the composed first-projection path before concatenating with the
-recursive boundary witness. Once this dependent path is proved, package the full
-fiber equality and feed it through the existing set-truncated iterated exactness
-and group-exactness transport layers for the nontrivial-target fibration-boundary
-case. Do not reopen the concrete-group classifying fiber-sequence route; it was
-recorded as too strong in general. Do not try to close the shifted-boundary
-comparison by `refl`, since the direct goal exposes genuine path algebra rather
-than a definitional equality.
-
-Expected verification state while this unrestricted bridge is still open:
+Expected verification for this next step should start with:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
-./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
-./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md
-./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
-./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
-./check.sh src/synthetic-homotopy-theory/second-homotopy-group-sphere-2.lagda.md
-./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-construction.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-construction-circle.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md
 ```
 
-All should pass, with the remaining intentional scaffolds confined to the Hopf
-fiber sequence and stability comparison.
+Once the Hopf scaffold is closed, recheck the Hopf LES second and third segment files before moving to the Freudenthal/stability scaffold.
 
 ## Current verification
 
@@ -1400,3 +1377,37 @@ The checked commands were:
 ```
 
 All Agda checks passed. `git diff --check` passed. The touched-file scan found no holes, postulates, or local `--allow-unsolved-metas`; the broader scaffold scan found only the expected Hopf fiber sequence and stability comparison holes. The next major mathematical blockers are the Hopf fiber sequence scaffold and the Freudenthal/stability comparison scaffold.
+
+
+Later on 2026-06-21, the circle H-space prerequisite and first Hopf-construction layer were checked. The new module
+
+```text
+synthetic-homotopy-theory.h-space-structure-circle
+```
+
+packages the existing circle multiplication as a coherent `𝕊¹-H-Space`, transports it across the circle--1-sphere equivalence, and packages the result as `sphere-1-H-Space`. The new generic module
+
+```text
+synthetic-homotopy-theory.hopf-construction
+```
+
+defines the Hopf total space `A * A`, the base `suspension A`, the Hopf cocone, the Hopf map, and its pointed form for any H-space. The specialization
+
+```text
+synthetic-homotopy-theory.hopf-construction-circle
+```
+
+instantiates this construction at `sphere-1-H-Space`, yielding the checked pointed Hopf map `S¹ * S¹ ->* S²`.
+
+The checked commands were:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-construction.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-construction-circle.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md src/synthetic-homotopy-theory/hopf-construction.lagda.md src/synthetic-homotopy-theory/hopf-construction-circle.lagda.md
+rg -n "allow-unsolved-metas|\{!!\}" src/synthetic-homotopy-theory src/group-theory src/structured-types -g "*.lagda.md"
+```
+
+All three Agda checks passed. `git diff --check` passed. The touched-file scan found no holes, postulates, or local `--allow-unsolved-metas`; the broader scaffold scan still found only the expected Hopf fiber sequence and Freudenthal/stability comparison holes. The next Hopf target is the total-space comparison `S¹ * S¹ ≃ S³` and the packaged fiber-sequence proof using the checked pointed Hopf map.

@@ -158,8 +158,8 @@ module/theorem was found by search.
 | 25 | General pointed fiber sequences | MISSING | Develop natively from HoTT book `homotopy.tex` lines 108-119, guided by Coq-HoTT `ExactSequence.v` for decomposition only. | Needed before the LES can be stated uniformly. |
 | 26 | Long exact sequence of homotopy groups | MISSING | Develop natively from HoTT book `homotopy.tex` lines 119-133, using Coq-HoTT `ExactSequence.v` only as proof-architecture guidance. | Major prerequisite; includes maps on homotopy groups, set-truncated adjacent exactness, and a bridge from that exactness to ordinary group exactness of concrete homotopy groups. Do not try to prove adjacent exactness by making the corresponding concrete-group classifying maps into fiber sequences; that is generally too strong. |
 | 27 | Exactness-to-isomorphism lemma with zero endpoints | MISSING | Prove natively from HoTT book lemma `thm:ses` in `homotopy.tex` lines 134-135, adapting to agda-unimath `Group`/`Ab`. | Needed to extract `pi_3(S^3) ~= pi_3(S^2)` from the Hopf LES. |
-| 28 | Hopf construction for connected H-spaces | MISSING | Develop natively from HoTT book `sec:hopf`, using Coq-HoTT `Hopf.v` and older HoTT-Agda only for decomposition and lemma order. | Produces fibration over `suspension A` with fiber `A` and total space `A * A`. |
-| 29 | Circle as connected H-space | MISSING | Develop natively from HoTT book `lem:hspace-S1`, guided by Coq-HoTT `HSpaceS1.v` for statement separation. | The circle exists, but this packaged H-space structure was not found. |
+| 28 | Hopf construction for connected H-spaces | PARTIAL | `synthetic-homotopy-theory.hopf-construction` | The generic Hopf map `A * A -> suspension A` and its pointed form are checked for any H-space. The remaining work is the fibration proof, including the fiber comparison and total-space package. |
+| 29 | Circle as connected H-space | EXISTS | `synthetic-homotopy-theory.h-space-structure-circle`; `synthetic-homotopy-theory.circle` | The checked local module packages `𝕊¹-H-Space` and the transported `sphere-1-H-Space`; circle connectedness is already provided by `is-0-connected-𝕊¹`. |
 | 30 | Hopf fibration `S^1 -> S^3 -> S^2` and total-space equivalence | MISSING | Develop natively from HoTT book `thm:hopf-fibration`, using Coq-HoTT `Hopf.v` only to identify conceptual milestones. | Includes proving `S^1 * S^1 ~= S^3`. |
 | 31 | Higher homotopy groups of `S^1` vanish | MISSING | Derive from existing `compute-loop-space-circle` plus truncation/set facts; HoTT book `cor:pi1s1`. | The base equivalence exists; packaged group-level vanishing has partial local infrastructure and may need final Hopf-facing packaging. |
 | 32 | Freudenthal suspension theorem | MISSING | Develop natively from HoTT book `thm:freudenthal`/`cor:freudenthal-equiv`; Coq-HoTT `BlakersMassey.v` suggests a Blakers-Massey route. | High risk, proof-heavy homotopy-theoretic development. |
@@ -167,7 +167,7 @@ module/theorem was found by search.
 | 34 | Diagonal theorem `pi_n(S^n) ~= Z` | MISSING | Develop natively from HoTT book `thm:pinsn`; Coq-HoTT `PinSn.v` is a proof-architecture reference for the induction. | Needed at instance `n = 3`. |
 | 35 | Final theorem `pi_3(S^2) ~= Z` | MISSING | New agda-unimath assembly module after prerequisites land. | Should only compose established isomorphisms; do not prove directly. |
 
-Summary counts: `EXISTS = 24`, `MISSING = 11`.
+Summary counts: `EXISTS = 25`, `PARTIAL = 1`, `MISSING = 9`.
 
 ## Searches run
 
@@ -202,9 +202,6 @@ Likely new modules:
   if a separate one-concept bridge module is needed to compare concrete
   homotopy groups with set-truncated loop spaces.
 - `src/synthetic-homotopy-theory/higher-homotopy-groups-truncated-types.lagda.md`
-- `src/synthetic-homotopy-theory/h-spaces.lagda.md` or a narrower
-  `h-space-structure-circle.lagda.md`, depending on existing naming guidance
-- `src/synthetic-homotopy-theory/hopf-construction.lagda.md`
 - `src/synthetic-homotopy-theory/hopf-fibration.lagda.md`
 - `src/synthetic-homotopy-theory/freudenthal-suspension-theorem.lagda.md`
 - `src/synthetic-homotopy-theory/stability-homotopy-groups-spheres.lagda.md`
@@ -305,9 +302,10 @@ should be checked with:
    `Ω^(n+1) X`, including the induced maps. Use Coq-HoTT
    `ExactSequence.v` only for decomposition guidance.
 
-5. **Develop the Hopf construction and Hopf fibration.** Start with the circle
-   H-space structure, then the general Hopf construction, then specialize to
-   `S^1` and prove the total space equivalent to `S^3`. Use Coq-HoTT
+5. **Develop the Hopf construction and Hopf fibration.** The circle and
+   1-sphere H-space structures are now checked, as are the generic Hopf map
+   and its `S^1` specialization. Next, prove the fibration package and the
+   total space equivalence with `S^3`. Use Coq-HoTT
    `Hopf.v`/`HSpaceS1.v` to identify milestones, not to translate code.
 
 6. **Extract `pi_3(S^3) ~= pi_3(S^2)`.** Use the Hopf LES and the vanishing of
