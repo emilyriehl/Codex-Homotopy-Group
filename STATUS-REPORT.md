@@ -880,3 +880,41 @@ was:
 
 The check passed. The touched LES file contains no new holes, postulates, or
 `--allow-unsolved-metas`.
+
+
+Later on 2026-06-21, the direct `connect_fiberseq` analogue for a pointed map was packaged as a checked pointed fiber sequence. The long exact sequence file now removes the last noncomputing `map-Ω`/`ap` conversion obstruction by defining an explicit conjugation inverse for loop-space transport:
+
+```text
+map-inv-tr-type-Ω-concat-inv-Pointed-Type
+equiv-map-inv-tr-type-Ω-concat-inv-Pointed-Type
+equiv-eq-map-Ω-eq-ap-Pointed-Type
+```
+
+Using this explicit inverse, the direct boundary-fiber equivalence now computes at the basepoint. The file consequently defines the reusable pointed package
+
+```text
+pointed-equiv-fiber-boundary-map-Ω-direct-Pointed-Type
+pointed-htpy-inclusion-fiber-boundary-map-Ω-direct-Pointed-Type
+is-fiber-sequence-boundary-map-Ω-direct-Pointed-Type
+fiber-sequence-boundary-map-Ω-direct-Pointed-Type
+```
+
+for every pointed map `g : E ->* B`, exhibiting
+
+```text
+Omega E ->* Omega B ->* fiber g
+```
+
+as a pointed fiber sequence via the direct equivalence `Omega E ~=* fiber (boundary-fiber-Pointed-Type g)`. The fiber-sequence-specialized comparison is also now pointed:
+
+```text
+pointed-equiv-fiber-boundary-fiber-sequence-direct-Pointed-Type
+```
+
+This clears the previous hard basepoint-coherence block. The next hard target is to feed this direct pointed fiber-sequence package into the set-truncated exactness layer and then bridge the canonical shifted boundary maps to the recursive concrete homotopy-group boundary maps. The checked command was:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+The check passed. `git diff --check` passed, and the touched LES file contains no holes, postulates, or `--allow-unsolved-metas`.

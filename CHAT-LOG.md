@@ -2261,3 +2261,36 @@ The Agda check passed. The touched LES file contains no new holes, postulates, o
 Related commit:
 
 - This commit - Use explicit fiber-ap inverse in boundary fibers.
+
+
+### Package direct connect_fiberseq fiber sequence
+
+Request: Emily asked Codex to keep working hard to get around the current hard block in the `connect_fiberseq` route, prioritizing the upstreamable structural proof over shortcuts.
+
+Model context:
+
+- Date: 2026-06-21.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible and used for scoped Agda edits, but `./check.sh` remained the authoritative verification command.
+
+Actions:
+
+- Re-read the repository-local Agda/unimath workflow, HoTT reference, and foundational API guidance from the active skills.
+- Proved an explicit conjugation inverse for `tr-type-Ω`, packaged it as `equiv-map-inv-tr-type-Ω-concat-inv-Pointed-Type`, and rebuilt the `map-Ω`/`ap` fiber comparison as `equiv-eq-map-Ω-eq-ap-Pointed-Type` without the abstract inverse of `equiv-ap (equiv-tr-type-Ω ...)`.
+- Reintroduced and checked `preserves-point-equiv-fiber-boundary-map-Ω-direct-Pointed-Type`, the previously blocked basepoint computation for the full direct boundary-fiber equivalence.
+- Packaged the direct arbitrary-map equivalence as `pointed-equiv-fiber-boundary-map-Ω-direct-Pointed-Type` and added the pointed inclusion coherence `pointed-htpy-inclusion-fiber-boundary-map-Ω-direct-Pointed-Type`.
+- Added `is-fiber-sequence-boundary-map-Ω-direct-Pointed-Type` and `fiber-sequence-boundary-map-Ω-direct-Pointed-Type`, giving the checked direct pointed fiber sequence `Omega E ->* Omega B ->* fiber g` for every pointed map `g`.
+- Proved the fiber-sequence-specialized direct comparison is pointed by adding `preserves-point-equiv-fiber-boundary-fiber-sequence-direct-Pointed-Type` and `pointed-equiv-fiber-boundary-fiber-sequence-direct-Pointed-Type`.
+- Updated `STATUS-REPORT.md` with the cleared basepoint-coherence block and the next downstream exactness target.
+
+Verification:
+
+- ./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+- git diff --check
+- rg -n "\{!!|--allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+
+The Agda check passed. `git diff --check` passed. The grep found no holes, postulates, or allow-unsolved-metas in the touched LES file.
+
+Related commit:
+
+- This commit - Package direct connect_fiberseq fiber sequence.
