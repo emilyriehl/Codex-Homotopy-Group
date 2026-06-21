@@ -3008,3 +3008,35 @@ Verification:
 Related commit:
 
 - This commit - Clarify formalization inventory status columns.
+
+
+### Add Hopf construction source fiber sequence and suspension-join maps
+
+Request: Emily asked Codex to implement the plan for hard upstream-quality progress toward the Hopf fiber-sequence blocker.
+
+Model context:
+
+- Date: 2026-06-21.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible and used for scoped Agda edits after apply_patch failed in the sandbox wrapper. Final acceptance used raw `./check.sh`.
+
+Actions:
+
+- Added `synthetic-homotopy-theory.hopf-construction-fiber-sequence`, packaging the canonical fiber sequence of the generic Hopf-construction pointed map and its sphere-1 specialization.
+- Added `synthetic-homotopy-theory.suspensions-as-joins`, defining maps `Fin 2 * X -> suspension X` and `suspension X -> Fin 2 * X` with checked endpoint/right-copy/meridian computation rules.
+- Probed the section law for the suspension/join comparison. The probe was removed after MCP exposed that the meridian case expands to a large dependent-transport coherence, so the next step is a reusable helper lemma rather than an inline proof.
+- Updated `STATUS-REPORT.md` and `FORMALIZATION-PLAN.md` to record the checked progress and remaining total-space comparison work.
+
+Verification:
+
+- ./check.sh src/synthetic-homotopy-theory/hopf-construction-fiber-sequence.lagda.md
+- ./check.sh src/synthetic-homotopy-theory/suspensions-as-joins.lagda.md
+- git diff --check
+- rg touched files for holes, local allow-unsolved-metas, and postulates
+- rg scaffold directories for allow-unsolved-metas and holes
+
+Both Agda checks passed. Touched-file scan found no holes/postulates/allow-unsolved-metas; broad scan found only expected Hopf fiber sequence and stability scaffold holes.
+
+Related commit:
+
+- This commit - Add Hopf construction source sequence and suspension-join maps.

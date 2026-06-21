@@ -1411,3 +1411,39 @@ rg -n "allow-unsolved-metas|\{!!\}" src/synthetic-homotopy-theory src/group-theo
 ```
 
 All three Agda checks passed. `git diff --check` passed. The touched-file scan found no holes, postulates, or local `--allow-unsolved-metas`; the broader scaffold scan still found only the expected Hopf fiber sequence and Freudenthal/stability comparison holes. The next Hopf target is the total-space comparison `S¹ * S¹ ≃ S³` and the packaged fiber-sequence proof using the checked pointed Hopf map.
+
+
+Later on 2026-06-21, the Hopf-construction source fiber sequence and the first total-space comparison layer were checked. The new module
+
+```text
+synthetic-homotopy-theory.hopf-construction-fiber-sequence
+```
+
+packages the canonical fiber sequence of the generic Hopf-construction pointed map. For `sphere-1-H-Space`, this gives a checked source fiber sequence whose fiber is the pointed fiber of `S^1 * S^1 ->* S^2`, total space is the Hopf-construction total space, and base is `S^2`. This is the structural object to compare with the desired geometric Hopf fiber sequence.
+
+The new module
+
+```text
+synthetic-homotopy-theory.suspensions-as-joins
+```
+
+defines the two comparison maps
+
+```text
+Fin 2 * X -> suspension X
+suspension X -> Fin 2 * X
+```
+
+and checked computation rules on the two `Fin 2` endpoints, the right copy of `X`, and the suspension meridians. A probe of the section law was removed after MCP exposed that the meridian case expands to a large dependent-transport coherence; the next proof should package a reusable helper for this suspension/join computation rather than inline the expanded transport.
+
+The checked commands were:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/hopf-construction-fiber-sequence.lagda.md
+./check.sh src/synthetic-homotopy-theory/suspensions-as-joins.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/hopf-construction-fiber-sequence.lagda.md src/synthetic-homotopy-theory/suspensions-as-joins.lagda.md
+rg -n "allow-unsolved-metas|\{!!\}" src/synthetic-homotopy-theory src/group-theory src/structured-types -g "*.lagda.md"
+```
+
+Both Agda checks passed. `git diff --check` passed. The touched-file scan found no holes, postulates, or local `--allow-unsolved-metas`; the broader scaffold scan found only the expected Hopf fiber sequence and Freudenthal/stability comparison holes. The Hopf fibration scaffold and Freudenthal/stability scaffold remain the only expected unfinished Agda theorem files in this area.
