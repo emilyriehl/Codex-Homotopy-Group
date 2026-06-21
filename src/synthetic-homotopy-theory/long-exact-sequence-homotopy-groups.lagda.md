@@ -850,6 +850,37 @@ module _
         ( boundary-fiber-Pointed-Type g)
         ( q)))
 
+  eq-inv-preserves-point-boundary-fiber-concat-loop-Pointed-Type :
+    (g : E →∗ B) (q : type-Ω (fiber-Pointed-Type g)) →
+    inv (preserves-point-pointed-map (boundary-fiber-Pointed-Type g)) ∙
+      ( preserves-point-pointed-map (boundary-fiber-Pointed-Type g) ∙ q) ＝
+    q
+  eq-inv-preserves-point-boundary-fiber-concat-loop-Pointed-Type g q =
+    is-retraction-inv-concat
+      ( preserves-point-pointed-map (boundary-fiber-Pointed-Type g))
+      ( q)
+
+  eq-ap-pr1-preserves-point-boundary-fiber-Pointed-Type :
+    (g : E →∗ B) →
+    ap pr1 (preserves-point-pointed-map (boundary-fiber-Pointed-Type g)) ＝ refl
+  eq-ap-pr1-preserves-point-boundary-fiber-Pointed-Type g =
+    ap-pr1-eq-pair-Σ refl right-unit
+
+  eq-ap-pr1-preserves-point-boundary-fiber-concat-loop-Pointed-Type :
+    (g : E →∗ B) (q : type-Ω (fiber-Pointed-Type g)) →
+    ap pr1
+      ( preserves-point-pointed-map (boundary-fiber-Pointed-Type g) ∙ q) ＝
+    map-Ω (inclusion-fiber-Pointed-Type g) q
+  eq-ap-pr1-preserves-point-boundary-fiber-concat-loop-Pointed-Type g q =
+    ( ap-concat
+      ( pr1)
+      ( preserves-point-pointed-map (boundary-fiber-Pointed-Type g))
+      ( q)) ∙
+    ( ap
+      ( _∙ ap pr1 q)
+      ( eq-ap-pr1-preserves-point-boundary-fiber-Pointed-Type g)) ∙
+    ( left-unit)
+
   is-fiber-sequence-boundary-map-Ω-direct-Pointed-Type :
     (g : E →∗ B) →
     is-fiber-sequence-Pointed-Type

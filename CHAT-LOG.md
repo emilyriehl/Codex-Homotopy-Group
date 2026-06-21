@@ -2420,3 +2420,35 @@ The Agda check passed. `git diff --check` passed. The scan found no holes, postu
 Related commit:
 
 - This commit - Record first projection of shifted boundary comparison.
+
+
+### Record boundary basepoint path algebra
+
+Request: Emily asked Codex to keep up the hard work and try the next target, after the first-projection shifted-boundary comparison was committed and pushed.
+
+Model context:
+
+- Date: 2026-06-21.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible and used for scoped Agda edits, but `./check.sh` remained the authoritative verification command.
+
+Actions:
+
+- Tried the full raw comparison by `eq-Eq-fiber`; real Agda showed the missing second component is not a unit law.
+- Tried the apparent `refl` pattern proof; real Agda rejected pattern matching on the fiber loop under `--without-K`.
+- Pivoted to the inverse-side comparison through the direct boundary equivalence.
+- Added `eq-inv-preserves-point-boundary-fiber-concat-loop-Pointed-Type`, canceling the boundary basepoint path before a fiber loop.
+- Added `eq-ap-pr1-preserves-point-boundary-fiber-Pointed-Type`, computing the first projection of the direct boundary basepoint path.
+- Added `eq-ap-pr1-preserves-point-boundary-fiber-concat-loop-Pointed-Type`, identifying the first projection of `preserves-point boundary ∙ q` with `map-Ω` of the fiber inclusion on `q`.
+
+Verification:
+
+- ./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+- git diff --check
+- scan for holes, postulates, and allow-unsolved-metas in the touched LES file
+
+The Agda check passed. `git diff --check` passed. The scan found no holes, postulates, or allow-unsolved-metas in the touched LES file.
+
+Related commit:
+
+- This commit - Record boundary basepoint path algebra.

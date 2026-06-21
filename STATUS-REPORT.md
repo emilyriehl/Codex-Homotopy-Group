@@ -1047,3 +1047,22 @@ The checked command was:
 ```
 
 The check passed. `git diff --check` passed, and the touched LES file contains no holes, postulates, or `--allow-unsolved-metas`.
+
+
+Later on 2026-06-21, the shifted-boundary comparison gained a second checked helper layer for the inverse-side route. The long exact sequence file now records boundary-basepoint path algebra for the direct boundary map:
+
+```text
+eq-inv-preserves-point-boundary-fiber-concat-loop-Pointed-Type
+eq-ap-pr1-preserves-point-boundary-fiber-Pointed-Type
+eq-ap-pr1-preserves-point-boundary-fiber-concat-loop-Pointed-Type
+```
+
+These lemmas show that the boundary basepoint path cancels before a loop in the fiber, that its first projection is reflexivity, and that the first projection of `preserves-point boundary ∙ q` is exactly `map-Ω` of the fiber inclusion on `q`. This converts part of the remaining direct shifted-boundary comparison into a checked inverse-side computation and avoids the rejected `--without-K` loop pattern split.
+
+The checked command was:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+The check passed. `git diff --check` passed, and the touched LES file contains no holes, postulates, or `--allow-unsolved-metas`.
