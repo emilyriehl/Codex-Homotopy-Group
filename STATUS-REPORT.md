@@ -998,3 +998,32 @@ The checked command was:
 ```
 
 The check passed. `git diff --check` passed, and the touched LES file contains no holes, postulates, or `--allow-unsolved-metas`.
+
+
+Later on 2026-06-21, the looped packaged fiber-sequence exactness segment was upgraded to the structural iterated-loop route. The long exact sequence file now defines
+
+```text
+is-exact-set-truncation-loop-fiber-sequence-direct
+```
+
+by applying the generic packaged fiber-sequence exactness theorem to
+
+```text
+iterated-loop-fiber-sequence S (succ-ℕ zero-ℕ)
+```
+
+and the public theorem
+
+```text
+is-exact-set-truncation-loop-fiber-sequence
+```
+
+is now just this direct structural proof. The previous hand-built proof at `Omega E`, together with its bespoke kernel/image conversions and explicit loop-fiber comparison helpers, was removed. This keeps the set-truncated exactness layer aligned with the intended upstream proof: adjacent triples are exact because they are packaged fiber sequences, not because each adjacent image/kernel comparison is reconstructed locally.
+
+The checked command was:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+The check passed. `git diff --check` passed, and the touched LES file contains no holes, postulates, or `--allow-unsolved-metas`. The remaining hard target is still the K-safe comparison identifying the direct shifted boundary with `pointed-map-Ω (fiber-inclusion-fiber-sequence-Pointed-Type S)`, which would let the recursive shifted boundary theorem collapse onto the direct route.

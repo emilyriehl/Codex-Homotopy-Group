@@ -2357,3 +2357,34 @@ The Agda check passed. `git diff --check` passed. The grep found no holes, postu
 Related commit:
 
 - This commit - Record direct shifted loop-boundary exactness.
+
+
+### Route looped packaged exactness through iterated loops
+
+Request: Emily said "Great job. Can you work even harder to make more progress", continuing the instruction to make substantial progress toward the upstreamable structural proof.
+
+Model context:
+
+- Date: 2026-06-21.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible and used for scoped Agda edits, but `./check.sh` remained the authoritative verification command.
+
+Actions:
+
+- Re-read the repository-local Agda/unimath workflow and reference skills for this formalization run.
+- Added `is-exact-set-truncation-loop-fiber-sequence-direct`, proving exactness of `Omega F -> Omega E -> Omega B` by applying `is-exact-set-truncation-fiber-sequence` to `iterated-loop-fiber-sequence S (succ-ℕ zero-ℕ)`.
+- Replaced the public `is-exact-set-truncation-loop-fiber-sequence` body by the direct structural theorem.
+- Removed the obsolete bespoke proof of looped packaged exactness, including the local loop-kernel/image conversions and explicit loop-fiber comparison helpers.
+- Confirmed that the remaining direct-to-recursive shifted-boundary block is still the K-safe boundary comparison, not this now-cleared looped packaged segment.
+
+Verification:
+
+- ./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+- git diff --check
+- rg -n "\{!!|--allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+
+The Agda check passed. `git diff --check` passed. The grep found no holes, postulates, or allow-unsolved-metas in the touched LES file.
+
+Related commit:
+
+- This commit - Route looped packaged exactness through iterated loops.

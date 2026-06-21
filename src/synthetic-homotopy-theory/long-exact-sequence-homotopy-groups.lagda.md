@@ -2185,9 +2185,9 @@ exact by the generic exactness theorem for packaged fiber sequences.
 ### Set-truncated looped packaged fiber sequences are exact
 
 The next adjacent segment is obtained by looping the two maps in the packaged
-fiber sequence. Exactness at `Ω E` follows by sending a loop in `E` whose image
-in `B` is null to the corresponding loop in the canonical fiber, and then
-transporting it back across the pointed equivalence with the chosen fiber.
+fiber sequence. This is itself the set truncation of the iterated-loop fiber
+sequence `iterated-loop-fiber-sequence S (succ-ℕ zero-ℕ)`, so exactness follows
+from the generic exactness theorem for packaged fiber sequences.
 
 ```agda
   hom-trunc-loop-fiber-inclusion-fiber-sequence-Pointed-Type :
@@ -2198,193 +2198,16 @@ transporting it back across the pointed equivalence with the chosen fiber.
     hom-trunc-Pointed-Set
       ( pointed-map-Ω (fiber-inclusion-fiber-sequence-Pointed-Type S))
 
-  eq-map-Ω-fibration-map-Ω-fiber-inclusion-fiber-sequence-Pointed-Type :
-    (x : type-Ω (fiber-fiber-sequence-Pointed-Type S)) →
-    map-Ω (fibration-fiber-sequence-Pointed-Type S)
-      ( map-Ω (fiber-inclusion-fiber-sequence-Pointed-Type S) x) ＝
-    refl
-  eq-map-Ω-fibration-map-Ω-fiber-inclusion-fiber-sequence-Pointed-Type x =
-    ( inv
-      ( preserves-comp-map-Ω
-        ( fibration-fiber-sequence-Pointed-Type S)
-        ( fiber-inclusion-fiber-sequence-Pointed-Type S)
-        ( x))) ∙
-    ( htpy-map-Ω
-      ( fibration-fiber-sequence-Pointed-Type S ∘∗
-        fiber-inclusion-fiber-sequence-Pointed-Type S)
-      ( constant-pointed-map
-        ( fiber-fiber-sequence-Pointed-Type S)
-        ( base-fiber-sequence-Pointed-Type S))
-      ( null-htpy-comp-fibration-fiber-inclusion-fiber-sequence-Pointed-Type S)
-      ( x)) ∙
-    ( eq-map-Ω-constant-pointed-map-Pointed-Type x)
-
-  loop-fiber-fiber-sequence-is-in-kernel-loop-fibration :
-    (x : type-Ω (total-space-fiber-sequence-Pointed-Type S)) →
-    map-Ω (fibration-fiber-sequence-Pointed-Type S) x ＝ refl →
-    type-Ω (fiber-fiber-sequence-Pointed-Type S)
-  loop-fiber-fiber-sequence-is-in-kernel-loop-fibration x H =
-    map-inv-equiv
-      ( equiv-Ω-pointed-equiv (pointed-equiv-fiber-fiber-sequence-Pointed-Type S))
-      ( loop-fiber-is-in-kernel-map-Ω
-        ( fibration-fiber-sequence-Pointed-Type S)
-        ( x)
-        ( inv H))
-
-  eq-map-Ω-fiber-inclusion-loop-fiber-fiber-sequence-is-in-kernel-loop-fibration :
-    (x : type-Ω (total-space-fiber-sequence-Pointed-Type S))
-    (H : map-Ω (fibration-fiber-sequence-Pointed-Type S) x ＝ refl) →
-    map-Ω (fiber-inclusion-fiber-sequence-Pointed-Type S)
-      ( loop-fiber-fiber-sequence-is-in-kernel-loop-fibration x H) ＝
-    x
-  eq-map-Ω-fiber-inclusion-loop-fiber-fiber-sequence-is-in-kernel-loop-fibration
-    x H =
-    ( htpy-map-Ω
-      ( fiber-inclusion-fiber-sequence-Pointed-Type S)
-      ( inclusion-fiber-Pointed-Type (fibration-fiber-sequence-Pointed-Type S) ∘∗
-        pointed-map-fiber-fiber-sequence-Pointed-Type S)
-      ( pointed-htpy-fiber-inclusion-fiber-sequence-Pointed-Type S)
-      ( loop-fiber-fiber-sequence-is-in-kernel-loop-fibration x H)) ∙
-    ( preserves-comp-map-Ω
-      ( inclusion-fiber-Pointed-Type (fibration-fiber-sequence-Pointed-Type S))
-      ( pointed-map-fiber-fiber-sequence-Pointed-Type S)
-      ( loop-fiber-fiber-sequence-is-in-kernel-loop-fibration x H)) ∙
-    ( ap
-      ( map-Ω
-        ( inclusion-fiber-Pointed-Type (fibration-fiber-sequence-Pointed-Type S)))
-      ( is-section-map-inv-equiv
-        ( equiv-Ω-pointed-equiv
-          ( pointed-equiv-fiber-fiber-sequence-Pointed-Type S))
-        ( loop-fiber-is-in-kernel-map-Ω
-          ( fibration-fiber-sequence-Pointed-Type S)
-          ( x)
-          ( inv H)))) ∙
-    ( map-Ω-inclusion-loop-fiber-is-in-kernel-map-Ω
-      ( fibration-fiber-sequence-Pointed-Type S)
-      ( x)
-      ( inv H))
-
-  is-in-kernel-trunc-loop-fibration-is-in-image-trunc-loop-fiber-inclusion-fiber-sequence :
-    (x :
-      type-Pointed-Set
-        ( trunc-Pointed-Set (Ω (total-space-fiber-sequence-Pointed-Type S)))) →
-    is-in-image-hom-Pointed-Set
-      {A = trunc-Pointed-Set (Ω (fiber-fiber-sequence-Pointed-Type S))}
-      {B = trunc-Pointed-Set (Ω (total-space-fiber-sequence-Pointed-Type S))}
+  is-exact-set-truncation-loop-fiber-sequence-direct :
+    is-exact-hom-Pointed-Set
+      ( trunc-Pointed-Set (Ω (fiber-fiber-sequence-Pointed-Type S)))
+      ( trunc-Pointed-Set (Ω (total-space-fiber-sequence-Pointed-Type S)))
+      ( trunc-Pointed-Set (Ω (base-fiber-sequence-Pointed-Type S)))
       ( hom-trunc-loop-fiber-inclusion-fiber-sequence-Pointed-Type)
-      ( x) →
-    is-in-kernel-hom-Pointed-Set
-      {A = trunc-Pointed-Set (Ω (total-space-fiber-sequence-Pointed-Type S))}
-      {B = trunc-Pointed-Set (Ω (base-fiber-sequence-Pointed-Type S))}
       ( hom-trunc-loop-fibration-fiber-sequence-Pointed-Type)
-      ( x)
-  is-in-kernel-trunc-loop-fibration-is-in-image-trunc-loop-fiber-inclusion-fiber-sequence
-    x H =
-    apply-universal-property-trunc-Prop H
-      ( subtype-kernel-hom-Pointed-Set
-        {A = trunc-Pointed-Set (Ω (total-space-fiber-sequence-Pointed-Type S))}
-        {B = trunc-Pointed-Set (Ω (base-fiber-sequence-Pointed-Type S))}
-        ( hom-trunc-loop-fibration-fiber-sequence-Pointed-Type)
-        ( x))
-      ( λ (t , p) →
-        apply-dependent-universal-property-trunc-Set'
-          ( λ t' →
-            function-Set
-              ( map-pointed-map
-                hom-trunc-loop-fiber-inclusion-fiber-sequence-Pointed-Type
-                t' ＝ x)
-              ( set-Prop
-                ( subtype-kernel-hom-Pointed-Set
-                  {A =
-                    trunc-Pointed-Set
-                      ( Ω (total-space-fiber-sequence-Pointed-Type S))}
-                  {B =
-                    trunc-Pointed-Set
-                      ( Ω (base-fiber-sequence-Pointed-Type S))}
-                  ( hom-trunc-loop-fibration-fiber-sequence-Pointed-Type)
-                  ( x))))
-          ( λ q p' →
-            ( inv
-              ( ap
-                ( map-pointed-map
-                  hom-trunc-loop-fibration-fiber-sequence-Pointed-Type)
-                ( p'))) ∙
-            ( ap
-              ( map-pointed-map
-                hom-trunc-loop-fibration-fiber-sequence-Pointed-Type)
-              ( naturality-unit-trunc-Set
-                ( map-pointed-map
-                  ( pointed-map-Ω
-                    ( fiber-inclusion-fiber-sequence-Pointed-Type S)))
-                ( q))) ∙
-            ( naturality-unit-trunc-Set
-              ( map-pointed-map
-                ( pointed-map-Ω (fibration-fiber-sequence-Pointed-Type S)))
-              ( map-Ω (fiber-inclusion-fiber-sequence-Pointed-Type S) q)) ∙
-            ( ap
-              ( unit-trunc-Set)
-              ( eq-map-Ω-fibration-map-Ω-fiber-inclusion-fiber-sequence-Pointed-Type
-                ( q))))
-          ( t)
-          ( p))
-
-  is-in-image-trunc-loop-fiber-inclusion-is-in-kernel-trunc-loop-fibration-fiber-sequence :
-    (x :
-      type-Pointed-Set
-        ( trunc-Pointed-Set (Ω (total-space-fiber-sequence-Pointed-Type S)))) →
-    is-in-kernel-hom-Pointed-Set
-      {A = trunc-Pointed-Set (Ω (total-space-fiber-sequence-Pointed-Type S))}
-      {B = trunc-Pointed-Set (Ω (base-fiber-sequence-Pointed-Type S))}
-      ( hom-trunc-loop-fibration-fiber-sequence-Pointed-Type)
-      ( x) →
-    is-in-image-hom-Pointed-Set
-      {A = trunc-Pointed-Set (Ω (fiber-fiber-sequence-Pointed-Type S))}
-      {B = trunc-Pointed-Set (Ω (total-space-fiber-sequence-Pointed-Type S))}
-      ( hom-trunc-loop-fiber-inclusion-fiber-sequence-Pointed-Type)
-      ( x)
-  is-in-image-trunc-loop-fiber-inclusion-is-in-kernel-trunc-loop-fibration-fiber-sequence =
-    apply-dependent-universal-property-trunc-Set'
-      ( λ x →
-        function-Set
-          ( is-in-kernel-hom-Pointed-Set
-            {A = trunc-Pointed-Set (Ω (total-space-fiber-sequence-Pointed-Type S))}
-            {B = trunc-Pointed-Set (Ω (base-fiber-sequence-Pointed-Type S))}
-            ( hom-trunc-loop-fibration-fiber-sequence-Pointed-Type)
-            ( x))
-          ( set-Prop
-            ( subtype-image-hom-Pointed-Set
-              {A = trunc-Pointed-Set (Ω (fiber-fiber-sequence-Pointed-Type S))}
-              {B = trunc-Pointed-Set (Ω (total-space-fiber-sequence-Pointed-Type S))}
-              ( hom-trunc-loop-fiber-inclusion-fiber-sequence-Pointed-Type)
-              ( x))))
-      ( λ x H →
-        apply-universal-property-trunc-Prop
-          ( apply-effectiveness-unit-trunc-Set
-            ( ( inv
-                ( naturality-unit-trunc-Set
-                  ( map-pointed-map
-                    ( pointed-map-Ω (fibration-fiber-sequence-Pointed-Type S)))
-                  ( x))) ∙
-              ( H)))
-          ( subtype-image-hom-Pointed-Set
-            {A = trunc-Pointed-Set (Ω (fiber-fiber-sequence-Pointed-Type S))}
-            {B = trunc-Pointed-Set (Ω (total-space-fiber-sequence-Pointed-Type S))}
-            ( hom-trunc-loop-fiber-inclusion-fiber-sequence-Pointed-Type)
-            ( unit-trunc-Set x))
-          ( λ h →
-            unit-trunc-Prop
-              ( unit-trunc-Set
-                ( loop-fiber-fiber-sequence-is-in-kernel-loop-fibration x h) ,
-                ( naturality-unit-trunc-Set
-                  ( map-pointed-map
-                    ( pointed-map-Ω
-                      ( fiber-inclusion-fiber-sequence-Pointed-Type S)))
-                  ( loop-fiber-fiber-sequence-is-in-kernel-loop-fibration x h)) ∙
-                ( ap
-                  ( unit-trunc-Set)
-                  ( eq-map-Ω-fiber-inclusion-loop-fiber-fiber-sequence-is-in-kernel-loop-fibration
-                    ( x)
-                    ( h))))))
+  is-exact-set-truncation-loop-fiber-sequence-direct =
+    is-exact-set-truncation-fiber-sequence
+      ( iterated-loop-fiber-sequence S (succ-ℕ zero-ℕ))
 
   is-exact-set-truncation-loop-fiber-sequence :
     is-exact-hom-Pointed-Set
@@ -2393,89 +2216,8 @@ transporting it back across the pointed equivalence with the chosen fiber.
       ( trunc-Pointed-Set (Ω (base-fiber-sequence-Pointed-Type S)))
       ( hom-trunc-loop-fiber-inclusion-fiber-sequence-Pointed-Type)
       ( hom-trunc-loop-fibration-fiber-sequence-Pointed-Type)
-  pr1 (is-exact-set-truncation-loop-fiber-sequence x) =
-    is-in-kernel-trunc-loop-fibration-is-in-image-trunc-loop-fiber-inclusion-fiber-sequence x
-  pr2 (is-exact-set-truncation-loop-fiber-sequence x) =
-    is-in-image-trunc-loop-fiber-inclusion-is-in-kernel-trunc-loop-fibration-fiber-sequence x
-
-  map-loop-fiber-sequence-Pointed-Type :
-    type-Ω (fiber-fiber-sequence-Pointed-Type S) →
-    type-Pointed-Type
-      ( fiber-Pointed-Type
-        ( pointed-map-Ω (fibration-fiber-sequence-Pointed-Type S)))
-  pr1 (map-loop-fiber-sequence-Pointed-Type x) =
-    map-Ω (fiber-inclusion-fiber-sequence-Pointed-Type S) x
-  pr2 (map-loop-fiber-sequence-Pointed-Type x) =
-    eq-map-Ω-fibration-map-Ω-fiber-inclusion-fiber-sequence-Pointed-Type x
-
-  pointed-map-loop-fiber-sequence-Pointed-Type :
-    Ω (fiber-fiber-sequence-Pointed-Type S) →∗
-    fiber-Pointed-Type
-      ( pointed-map-Ω (fibration-fiber-sequence-Pointed-Type S))
-  pr1 pointed-map-loop-fiber-sequence-Pointed-Type =
-    map-loop-fiber-sequence-Pointed-Type
-  pr2 pointed-map-loop-fiber-sequence-Pointed-Type =
-    eq-Eq-fiber
-      ( map-pointed-map (pointed-map-Ω (fibration-fiber-sequence-Pointed-Type S)))
-      ( point-Pointed-Type (Ω (base-fiber-sequence-Pointed-Type S)))
-      ( preserves-refl-map-Ω (fiber-inclusion-fiber-sequence-Pointed-Type S))
-      ( ( left-transpose-eq-concat
-          ( preserves-comp-map-Ω
-            ( fibration-fiber-sequence-Pointed-Type S)
-            ( fiber-inclusion-fiber-sequence-Pointed-Type S)
-            ( refl))
-          ( preserves-point-pointed-map
-            ( pointed-map-Ω (fibration-fiber-sequence-Pointed-Type S) ∘∗
-              pointed-map-Ω (fiber-inclusion-fiber-sequence-Pointed-Type S)))
-          ( preserves-refl-map-Ω
-            ( fibration-fiber-sequence-Pointed-Type S ∘∗
-              fiber-inclusion-fiber-sequence-Pointed-Type S))
-          ( inv
-            ( coherence-point-comp-map-Ω
-              ( fibration-fiber-sequence-Pointed-Type S)
-              ( fiber-inclusion-fiber-sequence-Pointed-Type S)))) ∙
-        ( ap
-          ( λ u →
-            inv
-              ( preserves-comp-map-Ω
-                ( fibration-fiber-sequence-Pointed-Type S)
-                ( fiber-inclusion-fiber-sequence-Pointed-Type S)
-                ( refl)) ∙
-            u)
-          ( coherence-point-htpy-map-Ω
-            ( fibration-fiber-sequence-Pointed-Type S ∘∗
-              fiber-inclusion-fiber-sequence-Pointed-Type S)
-            ( constant-pointed-map
-              ( fiber-fiber-sequence-Pointed-Type S)
-              ( base-fiber-sequence-Pointed-Type S))
-            ( null-htpy-comp-fibration-fiber-inclusion-fiber-sequence-Pointed-Type S))) ∙
-        ( inv
-          ( assoc
-            ( inv
-              ( preserves-comp-map-Ω
-                ( fibration-fiber-sequence-Pointed-Type S)
-                ( fiber-inclusion-fiber-sequence-Pointed-Type S)
-                ( refl)))
-            ( htpy-map-Ω
-              ( fibration-fiber-sequence-Pointed-Type S ∘∗
-                fiber-inclusion-fiber-sequence-Pointed-Type S)
-              ( constant-pointed-map
-                ( fiber-fiber-sequence-Pointed-Type S)
-                ( base-fiber-sequence-Pointed-Type S))
-              ( null-htpy-comp-fibration-fiber-inclusion-fiber-sequence-Pointed-Type S)
-              ( refl))
-            ( eq-map-Ω-constant-pointed-map-Pointed-Type
-              { A = fiber-fiber-sequence-Pointed-Type S}
-              { B = base-fiber-sequence-Pointed-Type S}
-              ( refl)))))
-
-  map-inv-loop-fiber-sequence-Pointed-Type :
-    type-Pointed-Type
-      ( fiber-Pointed-Type
-        ( pointed-map-Ω (fibration-fiber-sequence-Pointed-Type S))) →
-    type-Ω (fiber-fiber-sequence-Pointed-Type S)
-  map-inv-loop-fiber-sequence-Pointed-Type (x , H) =
-    loop-fiber-fiber-sequence-is-in-kernel-loop-fibration x H
+  is-exact-set-truncation-loop-fiber-sequence =
+    is-exact-set-truncation-loop-fiber-sequence-direct
 
 ```
 
