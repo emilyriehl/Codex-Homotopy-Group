@@ -974,6 +974,63 @@ module _
         ( n)
         ( fibration-fiber-sequence-Pointed-Type S))
 
+  equiv-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type :
+    type-Pointed-Type
+      ( fiber-Pointed-Type
+        ( boundary-fiber-Pointed-Type
+          ( fibration-fiber-sequence-Pointed-Type S))) ≃
+    type-Pointed-Type (fiber-Pointed-Type boundary-pointed-map-fiber-sequence)
+  equiv-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type =
+    equiv-tot
+      ( λ q →
+        ( equiv-concat'
+          ( map-pointed-map boundary-pointed-map-fiber-sequence q)
+          ( preserves-point-map-inv-pointed-equiv
+            ( pointed-equiv-fiber-fiber-sequence-Pointed-Type S))) ∘e
+        ( equiv-ap
+          ( equiv-inv-pointed-equiv
+            ( pointed-equiv-fiber-fiber-sequence-Pointed-Type S))
+          ( map-pointed-map
+            ( boundary-fiber-Pointed-Type
+              ( fibration-fiber-sequence-Pointed-Type S))
+            ( q))
+          ( point-Pointed-Type
+            ( fiber-Pointed-Type
+              ( fibration-fiber-sequence-Pointed-Type S)))))
+
+  preserves-point-equiv-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type :
+    map-equiv
+      ( equiv-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type)
+      ( point-Pointed-Type
+        ( fiber-Pointed-Type
+          ( boundary-fiber-Pointed-Type
+            ( fibration-fiber-sequence-Pointed-Type S)))) ＝
+    point-Pointed-Type (fiber-Pointed-Type boundary-pointed-map-fiber-sequence)
+  preserves-point-equiv-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type =
+    refl
+
+  pointed-equiv-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type :
+    fiber-Pointed-Type
+      ( boundary-fiber-Pointed-Type
+        ( fibration-fiber-sequence-Pointed-Type S)) ≃∗
+    fiber-Pointed-Type boundary-pointed-map-fiber-sequence
+  pr1 pointed-equiv-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type =
+    equiv-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type
+  pr2 pointed-equiv-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type =
+    preserves-point-equiv-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type
+
+  pointed-htpy-inclusion-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type :
+    inclusion-fiber-Pointed-Type
+      ( boundary-fiber-Pointed-Type
+        ( fibration-fiber-sequence-Pointed-Type S)) ~∗
+    ( inclusion-fiber-Pointed-Type boundary-pointed-map-fiber-sequence ∘∗
+      pointed-map-pointed-equiv
+        pointed-equiv-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type)
+  pr1 pointed-htpy-inclusion-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type u =
+    refl
+  pr2 pointed-htpy-inclusion-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type =
+    refl
+
   boundary-hom-concrete-homotopy-group-fiber-sequence :
     (n : ℕ) →
     hom-Concrete-Group

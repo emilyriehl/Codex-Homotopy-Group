@@ -2168,3 +2168,33 @@ The Agda check passed. `git diff --check` passed. The touched LES file contains 
 Related commit:
 
 - This commit - Record oriented boundary-comparison infrastructure.
+
+
+### Compare canonical and packaged boundary fibers
+
+Request: Emily asked Codex to implement the plan and continue prioritizing the hard upstreamable `connect_fiberseq` route toward the lower Hopf exactness/isomorphism.
+
+Model context:
+
+- Date: 2026-06-21.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible and used for scoped Agda edits, but `./check.sh` remained the authoritative verification command.
+
+Actions:
+
+- Re-read the repository-local Agda/unimath workflow and HoTT reference guidance from the active skills.
+- Preserved the hard structural route and removed exploratory fragments that tried to package `Omega E ->* Omega B ->* F` through an equivalence whose first projection is not definitional.
+- Added `equiv-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type`, comparing the fiber of the canonical boundary of `fibration-fiber-sequence-Pointed-Type S` with the fiber of the packaged boundary `boundary-pointed-map-fiber-sequence`.
+- Packaged this comparison as `pointed-equiv-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type`.
+- Added `pointed-htpy-inclusion-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type`, proving the comparison lies over the common loop-space coordinate and therefore records the projection law needed by the eventual `connect_fiberseq` package.
+- Updated `STATUS-REPORT.md` with the new checked infrastructure and the remaining direct over-`Omega B` equivalence/projection-law target.
+
+Verification:
+
+- ./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+
+The Agda check passed. The touched LES file contains no new holes, postulates, or allow-unsolved-metas.
+
+Related commit:
+
+- This commit - Compare canonical and packaged boundary fibers.

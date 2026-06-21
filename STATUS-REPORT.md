@@ -785,3 +785,30 @@ as the boundary map of the iterated-loop fiber sequence transported back along t
 ```
 
 The check passed. The touched LES file contains no new holes, postulates, or `--allow-unsolved-metas`. The existing pointed-homotopy adapters downstream remain the correct consumers once the oriented boundary comparison is proved.
+
+
+Later on 2026-06-21, the `connect_fiberseq` route gained a checked comparison between the canonical boundary of the fibration map and the packaged boundary of a fiber sequence. The long exact sequence file now defines
+
+```text
+equiv-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type
+pointed-equiv-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type
+pointed-htpy-inclusion-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type
+```
+
+The pointed equivalence identifies
+
+```text
+fiber (boundary-fiber-Pointed-Type (fibration-fiber-sequence-Pointed-Type S))
+  ~=*
+fiber boundary-pointed-map-fiber-sequence
+```
+
+using `equiv-tot` over the common loop coordinate and the inverse of `pointed-equiv-fiber-fiber-sequence-Pointed-Type S`. The pointed homotopy proves that this comparison is over `Omega B`: both fiber inclusions have the same first projection. This removes the codomain-transport part of the planned upstream-quality `Omega E ->* Omega B ->* F` fiber-sequence package.
+
+An attempted direct package through the older `pointed-equiv-fiber-boundary-map-Ω-Pointed-Type` was not kept, because real Agda reduces its required triangle to a non-definitional first-projection equality. The remaining hard target is therefore precise: construct a direct over-`Omega B` pointed equivalence `Omega E ~=* fiber boundary-pointed-map-fiber-sequence`, or prove the required projection law for the existing equivalence without changing orientations. After that, the package `Omega E ->* Omega B ->* F` can feed the set-truncated exactness theorem needed for the lower Hopf segment. The checked command was:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+The check passed. The touched LES file contains no new holes, postulates, or `--allow-unsolved-metas`.
