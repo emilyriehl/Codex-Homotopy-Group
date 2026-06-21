@@ -2666,3 +2666,34 @@ The Agda check passed. `git diff --check` passed. The scan found no holes, quest
 Related commit:
 
 - This commit - Add loop retraction for pointed equivalences.
+
+
+### Lift raw shifted-boundary comparison to the packaged fiber-sequence layer
+
+Request: Emily asked Codex to implement the plan for continued hard progress on the packaged shifted-boundary comparison, prioritizing the upstream-quality structural route over easier image/kernel shortcuts.
+
+Model context:
+
+- Date: 2026-06-21.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible, but `./check.sh` remained the authoritative verification command.
+
+Actions:
+
+- Kept the target at the packaged fiber-sequence comparison layer rather than switching to a lower-level set-truncated adapter.
+- Added `eq-map-Ω-fiber-inclusion-map-Ω-pointed-map-fiber-fiber-sequence-Pointed-Type`, comparing the loop of the packaged fiber inclusion with the loop of the canonical fiber inclusion composite.
+- Added `eq-map-equiv-fiber-boundary-map-Ω-direct-loop-fiber-inclusion-fiber-sequence-Pointed-Type`, applying the raw shifted-boundary theorem to loops coming from the packaged fiber inclusion.
+- Added `eq-map-equiv-fiber-boundary-fiber-sequence-direct-loop-fiber-inclusion-canonical-Pointed-Type`, lifting the comparison through `equiv-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type`.
+- Updated `STATUS-REPORT.md` to mark this as checked progress and to name the remaining hard second-component comparison against `boundary-fiber-Pointed-Type (boundary-pointed-map-fiber-sequence S)`.
+
+Verification:
+
+- ./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+- git diff --check
+- scan for holes, question-mark metas, postulates, and allow-unsolved-metas in the touched LES file
+
+The Agda check passed. `git diff --check` passed. The scan found no holes, question-mark metas, postulates, or allow-unsolved-metas in the touched LES file.
+
+Related commit:
+
+- This commit - Lift raw shifted-boundary comparison to packaged layer.

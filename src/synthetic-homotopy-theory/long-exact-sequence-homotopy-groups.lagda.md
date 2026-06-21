@@ -2655,6 +2655,65 @@ module _
         ( boundary-pointed-map-fiber-sequence S)
         ( q)))
 
+  eq-map-Ω-fiber-inclusion-map-Ω-pointed-map-fiber-fiber-sequence-Pointed-Type :
+    (q : type-Ω (fiber-fiber-sequence-Pointed-Type S)) →
+    map-Ω (fiber-inclusion-fiber-sequence-Pointed-Type S) q ＝
+    map-Ω
+      ( inclusion-fiber-Pointed-Type
+        ( fibration-fiber-sequence-Pointed-Type S))
+      ( map-Ω (pointed-map-fiber-fiber-sequence-Pointed-Type S) q)
+  eq-map-Ω-fiber-inclusion-map-Ω-pointed-map-fiber-fiber-sequence-Pointed-Type q =
+    ( htpy-map-Ω
+      ( fiber-inclusion-fiber-sequence-Pointed-Type S)
+      ( inclusion-fiber-Pointed-Type
+        ( fibration-fiber-sequence-Pointed-Type S) ∘∗
+        pointed-map-fiber-fiber-sequence-Pointed-Type S)
+      ( pointed-htpy-fiber-inclusion-fiber-sequence-Pointed-Type S)
+      ( q)) ∙
+    ( preserves-comp-map-Ω
+      ( inclusion-fiber-Pointed-Type
+        ( fibration-fiber-sequence-Pointed-Type S))
+      ( pointed-map-fiber-fiber-sequence-Pointed-Type S)
+      ( q))
+
+  eq-map-equiv-fiber-boundary-map-Ω-direct-loop-fiber-inclusion-fiber-sequence-Pointed-Type :
+    (q : type-Ω (fiber-fiber-sequence-Pointed-Type S)) →
+    map-equiv
+      ( equiv-fiber-boundary-map-Ω-direct-Pointed-Type
+        ( fibration-fiber-sequence-Pointed-Type S))
+      ( map-Ω (fiber-inclusion-fiber-sequence-Pointed-Type S) q) ＝
+    map-pointed-map
+      ( boundary-fiber-Pointed-Type
+        ( boundary-fiber-Pointed-Type
+          ( fibration-fiber-sequence-Pointed-Type S)))
+      ( map-Ω (pointed-map-fiber-fiber-sequence-Pointed-Type S) q)
+  eq-map-equiv-fiber-boundary-map-Ω-direct-loop-fiber-inclusion-fiber-sequence-Pointed-Type q =
+    ( ap
+      ( map-equiv
+        ( equiv-fiber-boundary-map-Ω-direct-Pointed-Type
+          ( fibration-fiber-sequence-Pointed-Type S)))
+      ( eq-map-Ω-fiber-inclusion-map-Ω-pointed-map-fiber-fiber-sequence-Pointed-Type q)) ∙
+    ( eq-map-equiv-fiber-boundary-map-Ω-direct-loop-inclusion-fiber-Pointed-Type
+      ( fibration-fiber-sequence-Pointed-Type S)
+      ( map-Ω (pointed-map-fiber-fiber-sequence-Pointed-Type S) q))
+
+  eq-map-equiv-fiber-boundary-fiber-sequence-direct-loop-fiber-inclusion-canonical-Pointed-Type :
+    (q : type-Ω (fiber-fiber-sequence-Pointed-Type S)) →
+    map-equiv (equiv-fiber-boundary-fiber-sequence-direct-Pointed-Type S)
+      ( map-Ω (fiber-inclusion-fiber-sequence-Pointed-Type S) q) ＝
+    map-equiv
+      ( equiv-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type S)
+      ( map-pointed-map
+        ( boundary-fiber-Pointed-Type
+          ( boundary-fiber-Pointed-Type
+            ( fibration-fiber-sequence-Pointed-Type S)))
+        ( map-Ω (pointed-map-fiber-fiber-sequence-Pointed-Type S) q))
+  eq-map-equiv-fiber-boundary-fiber-sequence-direct-loop-fiber-inclusion-canonical-Pointed-Type q =
+    ap
+      ( map-equiv
+        ( equiv-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type S))
+      ( eq-map-equiv-fiber-boundary-map-Ω-direct-loop-fiber-inclusion-fiber-sequence-Pointed-Type q)
+
   eq-map-hom-trunc-loop-boundary-fiber-sequence-Pointed-Type :
     (x :
       type-Pointed-Set

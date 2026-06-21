@@ -1190,3 +1190,22 @@ The checked command was:
 ```
 
 The check passed. `git diff --check` passed, and the touched LES file contains no holes, question-mark metas, postulates, or `--allow-unsolved-metas`.
+
+
+Later on 2026-06-21, the raw shifted-boundary theorem was lifted into the packaged fiber-sequence comparison layer. The long exact sequence file now records
+
+```text
+eq-map-Ω-fiber-inclusion-map-Ω-pointed-map-fiber-fiber-sequence-Pointed-Type
+eq-map-equiv-fiber-boundary-map-Ω-direct-loop-fiber-inclusion-fiber-sequence-Pointed-Type
+eq-map-equiv-fiber-boundary-fiber-sequence-direct-loop-fiber-inclusion-canonical-Pointed-Type
+```
+
+The first lemma compares the loop of the packaged fiber inclusion with the loop of the canonical fiber inclusion composite through `pointed-map-fiber-fiber-sequence-Pointed-Type`. The second applies the checked raw shifted-boundary theorem to the packaged fiber inclusion. The third lifts that equality through `equiv-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type`, so the packaged direct boundary equivalence is now reduced to the canonical boundary-boundary target on loops from the fiber fiber sequence. This is the intended upstreamable route toward the `connect_fiberseq` analogue; the remaining hard step is the second-component comparison identifying the canonical boundary-boundary target with `boundary-fiber-Pointed-Type (boundary-pointed-map-fiber-sequence S)`.
+
+The checked command was:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+The check passed. `git diff --check` passed, and the touched LES file contains no holes, question-mark metas, postulates, or `--allow-unsolved-metas`.
