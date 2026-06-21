@@ -299,11 +299,10 @@ should be checked with:
    only gives exactness at the middle group of each adjacent triple. For the
    fibration-boundary part, prioritize direct shifted connecting fiber sequences
    where they match the public iterated-loop indexing. The Hopf `π₃` segment is
-   now handled this way for the second shifted segment, and the direct-indexed
-   theorem is checked for all iterates in the natural `Ω^n(Ω X)` indexing. The
-   public arbitrary-index theorem should be obtained by transporting the induced
-   maps through a clean reassociation comparison between `Ω^n(Ω X)` and
-   `Ω^(n+1) X`. Use Coq-HoTT
+   now handled this way, and the arbitrary-index public fibration-boundary
+   exactness theorem is checked by transporting the direct `Ω^n(Ω X)` theorem
+   through clean reassociation comparisons between `Ω^n(Ω X)` and
+   `Ω^(n+1) X`, including the induced maps. Use Coq-HoTT
    `ExactSequence.v` only for decomposition guidance.
 
 5. **Develop the Hopf construction and Hopf fibration.** Start with the circle

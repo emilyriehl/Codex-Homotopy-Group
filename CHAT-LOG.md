@@ -2912,3 +2912,40 @@ All Agda checks passed. `git diff --check` passed. The touched-file scan found n
 Related commit:
 
 - This commit - Generalize direct shifted exactness in natural indexing.
+
+
+### Complete arbitrary-index direct fibration-boundary bridge
+
+Request: Emily asked Codex to keep working after the direct shifted exactness theorem had been generalized in its natural indexing.
+
+Model context:
+
+- Date: 2026-06-21.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible and useful for scoped edits, but raw `./check.sh` remained the acceptance criterion; MCP again missed missing imports/metas that raw Agda caught.
+
+Actions:
+
+- Added `tr-hom-trunc-Pointed-Set` in `structured-types.pointed-sets`, proving that set truncation of pointed maps commutes with transport of source and target pointed types.
+- Added `is-exact-hom-Pointed-Set-tr` in `structured-types.exact-sequences-pointed-sets`, transporting pointed-set exactness along identified triples and maps.
+- Completed the reassociation module with `tr-pointed-map-Ω`, `reassociate-pointed-map-iterated-loop-space`, and `reassociate-Ω-pointed-map-iterated-loop-space`.
+- Added boundary-specific recursive/direct reassociation lemmas in the long exact sequence file.
+- Proved `is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence-direct` for every `n` in the public `Ω^(n+1) X` indexing.
+- Lifted this to group exactness as `is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-direct`, making the previous second-shifted Hopf theorem the `n = 1` instance.
+- Updated `STATUS-REPORT.md` and `FORMALIZATION-PLAN.md` to record that the arbitrary-index fibration-boundary bridge is complete and that the next major blockers are the Hopf fiber sequence and stability scaffolds.
+
+Verification:
+
+- ./check.sh src/structured-types/pointed-sets.lagda.md
+- ./check.sh src/structured-types/exact-sequences-pointed-sets.lagda.md
+- ./check.sh src/synthetic-homotopy-theory/reassociation-iterated-loop-spaces.lagda.md
+- ./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+- ./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+- ./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+- ./check.sh src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md
+
+All Agda checks passed. `git diff --check` passed. The touched-file scan found no holes, postulates, or local `--allow-unsolved-metas`; the broader scaffold scan found only the expected Hopf fiber sequence and stability comparison holes.
+
+Related commit:
+
+- This commit - Complete arbitrary-index direct fibration-boundary bridge.

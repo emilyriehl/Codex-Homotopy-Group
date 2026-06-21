@@ -13,6 +13,7 @@ open import foundation.functoriality-set-truncation
 open import foundation.identity-types
 open import foundation.set-truncations
 open import foundation.sets
+open import foundation.transport-along-identifications
 open import foundation.universe-levels
 
 open import structured-types.pointed-maps
@@ -101,4 +102,34 @@ module _
       ( map-pointed-map f)
       ( point-Pointed-Type A)) ∙
     ( ap unit-trunc-Set (preserves-point-pointed-map f))
+```
+
+## Properties
+
+### Set truncation of pointed maps transports along identifications
+
+```agda
+module _
+  {l1 l2 : Level}
+  {A A' : Pointed-Type l1} {B B' : Pointed-Type l2}
+  where
+
+  tr-hom-trunc-Pointed-Set :
+    (pA : A' ＝ A) (pB : B' ＝ B) (f' : A' →∗ B') →
+    tr
+      (λ X → hom-Pointed-Set X (trunc-Pointed-Set B))
+      (ap trunc-Pointed-Set pA)
+      ( tr
+        (λ Y → hom-Pointed-Set (trunc-Pointed-Set A') Y)
+        (ap trunc-Pointed-Set pB)
+        (hom-trunc-Pointed-Set f')) ＝
+    hom-trunc-Pointed-Set
+      ( tr
+        (λ X → X →∗ B)
+        (pA)
+        ( tr
+          (λ Y → A' →∗ Y)
+          (pB)
+          (f')))
+  tr-hom-trunc-Pointed-Set refl refl f = refl
 ```

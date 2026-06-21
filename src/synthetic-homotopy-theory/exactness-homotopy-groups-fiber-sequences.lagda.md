@@ -199,6 +199,46 @@ module _
       ( S)
       ( n)
 
+  is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-direct :
+    (n : ℕ) →
+    is-exact-hom-Group
+      ( group-Concrete-Group
+        ( concrete-homotopy-group
+          ( succ-ℕ n)
+          ( total-space-fiber-sequence-Pointed-Type S)))
+      ( group-Concrete-Group
+        ( concrete-homotopy-group
+          ( succ-ℕ n)
+          ( base-fiber-sequence-Pointed-Type S)))
+      ( group-Concrete-Group
+        ( concrete-homotopy-group
+          ( n)
+          ( fiber-fiber-sequence-Pointed-Type S)))
+      ( hom-group-hom-Concrete-Group
+        ( concrete-homotopy-group
+          ( succ-ℕ n)
+          ( total-space-fiber-sequence-Pointed-Type S))
+        ( concrete-homotopy-group
+          ( succ-ℕ n)
+          ( base-fiber-sequence-Pointed-Type S))
+        ( hom-fibration-concrete-homotopy-group-fiber-sequence
+          S
+          ( succ-ℕ n)))
+      ( hom-group-hom-Concrete-Group
+        ( concrete-homotopy-group
+          ( succ-ℕ n)
+          ( base-fiber-sequence-Pointed-Type S))
+        ( concrete-homotopy-group
+          ( n)
+          ( fiber-fiber-sequence-Pointed-Type S))
+        ( boundary-hom-concrete-homotopy-group-fiber-sequence S n))
+  is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-direct n =
+    is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence
+      ( n)
+      ( is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence-direct
+        ( S)
+        ( n))
+
   is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-second-direct :
     is-exact-hom-Group
       ( group-Concrete-Group
@@ -230,10 +270,8 @@ module _
           ( fiber-fiber-sequence-Pointed-Type S))
         ( boundary-hom-concrete-homotopy-group-fiber-sequence S 1))
   is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-second-direct =
-    is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence
+    is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-direct
       ( 1)
-      ( is-exact-set-truncation-second-iterated-loop-fibration-boundary-fiber-sequence-direct
-        ( S))
 
   is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-pointed-htpy :
     (n : ℕ) →

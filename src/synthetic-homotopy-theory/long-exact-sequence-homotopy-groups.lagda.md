@@ -48,6 +48,7 @@ open import synthetic-homotopy-theory.functoriality-loop-spaces
 open import synthetic-homotopy-theory.homotopy-groups
 open import synthetic-homotopy-theory.iterated-loop-spaces
 open import synthetic-homotopy-theory.loop-spaces
+open import synthetic-homotopy-theory.reassociation-iterated-loop-spaces
 ```
 
 </details>
@@ -1411,6 +1412,38 @@ module _
     boundary-pointed-map-fiber-sequence
   pointed-map-iterated-boundary-fiber-sequence (succ-ℕ n) =
     pointed-map-Ω (pointed-map-iterated-boundary-fiber-sequence n)
+
+  reassociate-pointed-map-iterated-boundary-fiber-sequence :
+    (n : ℕ) →
+    tr
+      (λ X → X →∗ iterated-loop-space n (fiber-fiber-sequence-Pointed-Type S))
+      (reassociate-succ-iterated-loop-space n (base-fiber-sequence-Pointed-Type S))
+      (pointed-map-iterated-boundary-fiber-sequence n) ＝
+    pointed-map-iterated-loop-space n boundary-pointed-map-fiber-sequence
+  reassociate-pointed-map-iterated-boundary-fiber-sequence zero-ℕ = refl
+  reassociate-pointed-map-iterated-boundary-fiber-sequence (succ-ℕ n) =
+    tr-pointed-map-Ω
+      (reassociate-succ-iterated-loop-space n (base-fiber-sequence-Pointed-Type S))
+      (refl)
+      (pointed-map-iterated-boundary-fiber-sequence n) ∙
+    ap pointed-map-Ω
+      (reassociate-pointed-map-iterated-boundary-fiber-sequence n)
+
+  reassociate-Ω-pointed-map-iterated-boundary-fiber-sequence :
+    (n : ℕ) →
+    tr
+      (λ X → X →∗ Ω (iterated-loop-space n (fiber-fiber-sequence-Pointed-Type S)))
+      (reassociate-Ω-succ-iterated-loop-space n (base-fiber-sequence-Pointed-Type S))
+      (pointed-map-Ω (pointed-map-iterated-boundary-fiber-sequence n)) ＝
+    pointed-map-Ω
+      (pointed-map-iterated-loop-space n boundary-pointed-map-fiber-sequence)
+  reassociate-Ω-pointed-map-iterated-boundary-fiber-sequence n =
+    tr-pointed-map-Ω
+      (reassociate-succ-iterated-loop-space n (base-fiber-sequence-Pointed-Type S))
+      (refl)
+      (pointed-map-iterated-boundary-fiber-sequence n) ∙
+    ap pointed-map-Ω
+      (reassociate-pointed-map-iterated-boundary-fiber-sequence n)
 
   canonical-pointed-map-iterated-boundary-fiber-sequence :
     (n : ℕ) →

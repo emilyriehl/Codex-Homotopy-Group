@@ -21,6 +21,7 @@ open import foundation.propositional-truncations
 open import foundation.set-truncations
 open import foundation.sets
 open import foundation.subtypes
+open import foundation.transport-along-identifications
 open import foundation.universe-levels
 
 open import structured-types.fiber-sequences
@@ -92,6 +93,37 @@ module _
 ```
 
 ## Properties
+
+### Exactness transports along identifications of pointed-set triples
+
+```agda
+module _
+  {l1 l2 l3 : Level}
+  {A A' : Pointed-Set l1} {B B' : Pointed-Set l2} {C C' : Pointed-Set l3}
+  where
+
+  is-exact-hom-Pointed-Set-tr :
+    (pA : A' ＝ A) (pB : B' ＝ B) (pC : C' ＝ C)
+    (f : hom-Pointed-Set A B) (g : hom-Pointed-Set B C)
+    (f' : hom-Pointed-Set A' B') (g' : hom-Pointed-Set B' C') →
+    tr
+      (λ X → hom-Pointed-Set X B)
+      (pA)
+      ( tr
+        (λ Y → hom-Pointed-Set A' Y)
+        (pB)
+        (f')) ＝ f →
+    tr
+      (λ X → hom-Pointed-Set X C)
+      (pB)
+      ( tr
+        (λ Y → hom-Pointed-Set B' Y)
+        (pC)
+        (g')) ＝ g →
+    is-exact-hom-Pointed-Set A B C f g →
+    is-exact-hom-Pointed-Set A' B' C' f' g'
+  is-exact-hom-Pointed-Set-tr refl refl refl f g .f .g refl refl E = E
+```
 
 ### Homotopies of set-truncated pointed maps
 
