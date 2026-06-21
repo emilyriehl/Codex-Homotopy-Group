@@ -1119,3 +1119,21 @@ The checked command was:
 ```
 
 The check passed. `git diff --check` passed, and the touched LES file contains no holes, postulates, or `--allow-unsolved-metas`.
+
+
+Later on 2026-06-21, the hand boundary-fiber map was registered as an equivalence by comparison with the direct structural equivalence. The long exact sequence file now records
+
+```text
+is-equiv-map-fiber-boundary-map-Ω-Pointed-Type
+equiv-map-fiber-boundary-map-Ω-Pointed-Type
+```
+
+The proof uses `is-equiv-htpy-equiv` and the checked forward-map comparison between `equiv-fiber-boundary-map-Ω-direct-Pointed-Type` and `map-fiber-boundary-map-Ω-Pointed-Type`. This avoids expanding the large second-component section path for the hand inverse directly. The failed direct section attempt showed that path induction on the boundary fiber path is blocked by `--without-K`; the equivalence-transfer route is cleaner and better aligned with an upstreamable proof.
+
+The checked command was:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+The check passed. `git diff --check` passed, and the touched LES file contains no holes, question-mark metas, postulates, or `--allow-unsolved-metas`.

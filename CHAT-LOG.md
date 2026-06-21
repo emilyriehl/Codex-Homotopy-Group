@@ -2542,3 +2542,34 @@ The Agda check passed. `git diff --check` passed. The scan found no holes, postu
 Related commit:
 
 - This commit - Compare direct boundary equivalence with hand map.
+
+
+### Register hand boundary map as equivalence
+
+Request: Emily asked Codex to keep up the hard work after the direct boundary equivalence was compared with the hand map.
+
+Model context:
+
+- Date: 2026-06-21.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible and used for scoped Agda edits, but `./check.sh` remained the authoritative verification command.
+
+Actions:
+
+- Explored the direct section proof for `map-inv-fiber-boundary-map-Ω-Pointed-Type` and confirmed that splitting the boundary fiber path by `refl` is rejected under `--without-K`.
+- Tried the correct `eq-Eq-fiber` proof shape and isolated the remaining second-component naturality equation, which expands into a large `fiber-ap-eq-fiber` coherence.
+- Replaced that brittle direct expansion with the cleaner equivalence-transfer route.
+- Added `is-equiv-map-fiber-boundary-map-Ω-Pointed-Type`, using `is-equiv-htpy-equiv` and the checked homotopy from the direct structural equivalence to the hand map.
+- Added `equiv-map-fiber-boundary-map-Ω-Pointed-Type`, packaging the hand boundary-fiber map as an equivalence for later inverse-uniqueness arguments.
+
+Verification:
+
+- ./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+- git diff --check
+- scan for holes, question-mark metas, postulates, and allow-unsolved-metas in the touched LES file
+
+The Agda check passed. `git diff --check` passed. The scan found no holes, question-mark metas, postulates, or allow-unsolved-metas in the touched LES file.
+
+Related commit:
+
+- This commit - Register hand boundary map as equivalence.

@@ -550,6 +550,24 @@ module _
       ( refl)
       ( compute-equiv-fiber-map-Ω-boundary-map-Ω-map-fiber-boundary-Pointed-Type p)
 
+  is-equiv-map-fiber-boundary-map-Ω-Pointed-Type :
+    is-equiv map-fiber-boundary-map-Ω-Pointed-Type
+  is-equiv-map-fiber-boundary-map-Ω-Pointed-Type =
+    is-equiv-htpy-equiv
+      ( equiv-fiber-boundary-map-Ω-direct-Pointed-Type)
+      ( λ p →
+        inv
+          ( eq-map-equiv-fiber-boundary-map-Ω-direct-map-fiber-boundary-Pointed-Type
+            ( p)))
+
+  equiv-map-fiber-boundary-map-Ω-Pointed-Type :
+    type-Ω E ≃
+    type-Pointed-Type (fiber-Pointed-Type boundary-fiber-Pointed-Type)
+  pr1 equiv-map-fiber-boundary-map-Ω-Pointed-Type =
+    map-fiber-boundary-map-Ω-Pointed-Type
+  pr2 equiv-map-fiber-boundary-map-Ω-Pointed-Type =
+    is-equiv-map-fiber-boundary-map-Ω-Pointed-Type
+
   eq-map-Ω-inclusion-fiber-Pointed-Type :
     (q : type-Ω (fiber-Pointed-Type g)) →
     map-Ω g (map-Ω (inclusion-fiber-Pointed-Type g) q) ＝ refl
