@@ -1066,3 +1066,20 @@ The checked command was:
 ```
 
 The check passed. `git diff --check` passed, and the touched LES file contains no holes, postulates, or `--allow-unsolved-metas`.
+
+
+Later on 2026-06-21, the raw shifted-boundary inverse computation was made explicit. The long exact sequence file now proves
+
+```text
+eq-map-inv-fiber-boundary-map-Ω-boundary-boundary-Pointed-Type
+```
+
+For a pointed map `g` and a loop `q` in its fiber, the hand inverse `map-inv-fiber-boundary-map-Ω-Pointed-Type g` sends the boundary-of-boundary element to `map-Ω (inclusion-fiber-Pointed-Type g) q`. This is the inverse-side computation needed before comparing the direct equivalence inverse with the hand inverse, and it was proved from the checked boundary-basepoint first-projection algebra.
+
+The checked command was:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+The check passed. `git diff --check` passed, and the touched LES file contains no holes, postulates, or `--allow-unsolved-metas`.

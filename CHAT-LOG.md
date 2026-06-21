@@ -2452,3 +2452,33 @@ The Agda check passed. `git diff --check` passed. The scan found no holes, postu
 Related commit:
 
 - This commit - Record boundary basepoint path algebra.
+
+
+### Record raw shifted-boundary inverse computation
+
+Request: Emily asked Codex to keep working hard toward the next target after the boundary-basepoint helper layer was committed and pushed.
+
+Model context:
+
+- Date: 2026-06-21.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible and used for scoped Agda edits, but `./check.sh` remained the authoritative verification command.
+
+Actions:
+
+- Inspected the packaged direct boundary equivalence and identified the raw hand inverse as the next transportable computation.
+- Added `eq-map-inv-fiber-boundary-map-Ω-boundary-boundary-Pointed-Type`.
+- Proved that the hand inverse `map-inv-fiber-boundary-map-Ω-Pointed-Type g` sends `boundary-fiber (boundary-fiber g) q` to `map-Ω (inclusion-fiber-Pointed-Type g) q`.
+- Reused `eq-ap-pr1-preserves-point-boundary-fiber-concat-loop-Pointed-Type`, keeping the proof K-safe and avoiding the rejected loop pattern split.
+
+Verification:
+
+- ./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+- git diff --check
+- scan for holes, postulates, and allow-unsolved-metas in the touched LES file
+
+The Agda check passed. `git diff --check` passed. The scan found no holes, postulates, or allow-unsolved-metas in the touched LES file.
+
+Related commit:
+
+- This commit - Record raw shifted-boundary inverse computation.
