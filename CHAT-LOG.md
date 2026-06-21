@@ -2388,3 +2388,35 @@ The Agda check passed. `git diff --check` passed. The grep found no holes, postu
 Related commit:
 
 - This commit - Route looped packaged exactness through iterated loops.
+
+
+### Record first projection of shifted boundary comparison
+
+Request: Emily said "Good job. Keep up the hard work and try for the next target", continuing the push toward the hard upstreamable shifted-boundary comparison.
+
+Model context:
+
+- Date: 2026-06-21.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible and used for scoped Agda edits, but `./check.sh` remained the authoritative verification command.
+
+Actions:
+
+- Re-read the repository-local Agda/unimath workflow and reference skills for this formalization run.
+- Added `eq-map-Ω-inclusion-fiber-Pointed-Type`, a K-safe null-composition computation for looping the inclusion of a canonical fiber.
+- Added the polymorphic first-projection helper `eq-pr1-boundary-fiber-Pointed-Type` for direct boundary-fiber maps.
+- Proved `eq-pr1-map-equiv-fiber-boundary-map-Ω-direct-loop-inclusion-fiber-Pointed-Type`, showing that the raw direct shifted-boundary comparison has the expected first projection.
+- Added the packaged fiber-sequence analogue `eq-map-Ω-fibration-map-Ω-fiber-inclusion-fiber-sequence-Pointed-Type` and proved `eq-pr1-map-equiv-fiber-boundary-fiber-sequence-direct-loop-fiber-inclusion`.
+- Preserved the failed full comparison as knowledge rather than code: real Agda shows the remaining obstruction is the second component of equality in the fiber, a higher path not solved by `right-unit`.
+
+Verification:
+
+- ./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+- git diff --check
+- scan for holes, postulates, and allow-unsolved-metas in the touched LES file
+
+The Agda check passed. `git diff --check` passed. The scan found no holes, postulates, or allow-unsolved-metas in the touched LES file.
+
+Related commit:
+
+- This commit - Record first projection of shifted boundary comparison.

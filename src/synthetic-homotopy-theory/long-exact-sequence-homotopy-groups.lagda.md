@@ -501,6 +501,22 @@ module _
   htpy-inclusion-fiber-boundary-map-Ω-direct-Pointed-Type p =
     refl
 
+  eq-map-Ω-inclusion-fiber-Pointed-Type :
+    (q : type-Ω (fiber-Pointed-Type g)) →
+    map-Ω g (map-Ω (inclusion-fiber-Pointed-Type g) q) ＝ refl
+  eq-map-Ω-inclusion-fiber-Pointed-Type q =
+    ( inv
+      ( preserves-comp-map-Ω
+        ( g)
+        ( inclusion-fiber-Pointed-Type g)
+        ( q))) ∙
+    ( htpy-map-Ω
+      ( g ∘∗ inclusion-fiber-Pointed-Type g)
+      ( constant-pointed-map (fiber-Pointed-Type g) B)
+      ( null-htpy-comp-fibration-inclusion-fiber-Pointed-Type g)
+      ( q)) ∙
+    ( eq-map-Ω-constant-pointed-map-Pointed-Type q)
+
 ```
 
 ### The fiber sequence after taking the fiber of a pointed map
@@ -769,6 +785,17 @@ module _
   {l1 l2 : Level} {E : Pointed-Type l1} {B : Pointed-Type l2}
   where
 
+  eq-pr1-boundary-fiber-Pointed-Type :
+    (g : E →∗ B) (q : type-Ω B) →
+    pr1 (map-pointed-map (boundary-fiber-Pointed-Type g) q) ＝
+    point-Pointed-Type E
+  eq-pr1-boundary-fiber-Pointed-Type g q =
+    refl
+
+module _
+  {l1 l2 : Level} {E : Pointed-Type l1} {B : Pointed-Type l2}
+  where
+
   preserves-point-map-fiber-boundary-map-Ω-Pointed-Type :
     (g : E →∗ B) →
     map-fiber-boundary-map-Ω-Pointed-Type g refl ＝
@@ -805,6 +832,23 @@ module _
     ( pointed-htpy-inclusion-fiber-boundary-map-Ω-direct-Pointed-Type
       ( h , refl)) =
     refl
+
+  eq-pr1-map-equiv-fiber-boundary-map-Ω-direct-loop-inclusion-fiber-Pointed-Type :
+    (g : E →∗ B) (q : type-Ω (fiber-Pointed-Type g)) →
+    pr1
+      ( map-equiv (equiv-fiber-boundary-map-Ω-direct-Pointed-Type g)
+        ( map-Ω (inclusion-fiber-Pointed-Type g) q)) ＝
+    pr1
+      ( map-pointed-map
+        ( boundary-fiber-Pointed-Type (boundary-fiber-Pointed-Type g))
+        ( q))
+  eq-pr1-map-equiv-fiber-boundary-map-Ω-direct-loop-inclusion-fiber-Pointed-Type
+    g q =
+    ( eq-map-Ω-inclusion-fiber-Pointed-Type g q) ∙
+    ( inv
+      ( eq-pr1-boundary-fiber-Pointed-Type
+        ( boundary-fiber-Pointed-Type g)
+        ( q)))
 
   is-fiber-sequence-boundary-map-Ω-direct-Pointed-Type :
     (g : E →∗ B) →
@@ -2399,6 +2443,43 @@ module _
   is-exact-set-truncation-loop-boundary-boundary-fiber-sequence-direct =
     is-exact-set-truncation-loop-boundary-fiber-sequence
       ( fiber-sequence-boundary-fiber-sequence-direct-Pointed-Type S)
+
+  eq-map-Ω-fibration-map-Ω-fiber-inclusion-fiber-sequence-Pointed-Type :
+    (q : type-Ω (fiber-fiber-sequence-Pointed-Type S)) →
+    map-Ω (fibration-fiber-sequence-Pointed-Type S)
+      ( map-Ω (fiber-inclusion-fiber-sequence-Pointed-Type S) q) ＝
+    refl
+  eq-map-Ω-fibration-map-Ω-fiber-inclusion-fiber-sequence-Pointed-Type q =
+    ( inv
+      ( preserves-comp-map-Ω
+        ( fibration-fiber-sequence-Pointed-Type S)
+        ( fiber-inclusion-fiber-sequence-Pointed-Type S)
+        ( q))) ∙
+    ( htpy-map-Ω
+      ( fibration-fiber-sequence-Pointed-Type S ∘∗
+        fiber-inclusion-fiber-sequence-Pointed-Type S)
+      ( constant-pointed-map
+        ( fiber-fiber-sequence-Pointed-Type S)
+        ( base-fiber-sequence-Pointed-Type S))
+      ( null-htpy-comp-fibration-fiber-inclusion-fiber-sequence-Pointed-Type S)
+      ( q)) ∙
+    ( eq-map-Ω-constant-pointed-map-Pointed-Type q)
+
+  eq-pr1-map-equiv-fiber-boundary-fiber-sequence-direct-loop-fiber-inclusion :
+    (q : type-Ω (fiber-fiber-sequence-Pointed-Type S)) →
+    pr1
+      ( map-equiv (equiv-fiber-boundary-fiber-sequence-direct-Pointed-Type S)
+        ( map-Ω (fiber-inclusion-fiber-sequence-Pointed-Type S) q)) ＝
+    pr1
+      ( map-pointed-map
+        ( boundary-fiber-Pointed-Type (boundary-pointed-map-fiber-sequence S))
+        ( q))
+  eq-pr1-map-equiv-fiber-boundary-fiber-sequence-direct-loop-fiber-inclusion q =
+    ( eq-map-Ω-fibration-map-Ω-fiber-inclusion-fiber-sequence-Pointed-Type q) ∙
+    ( inv
+      ( eq-pr1-boundary-fiber-Pointed-Type
+        ( boundary-pointed-map-fiber-sequence S)
+        ( q)))
 
   eq-map-hom-trunc-loop-boundary-fiber-sequence-Pointed-Type :
     (x :

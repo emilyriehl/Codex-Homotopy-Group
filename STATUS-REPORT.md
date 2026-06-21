@@ -1027,3 +1027,23 @@ The checked command was:
 ```
 
 The check passed. `git diff --check` passed, and the touched LES file contains no holes, postulates, or `--allow-unsolved-metas`. The remaining hard target is still the K-safe comparison identifying the direct shifted boundary with `pointed-map-Ω (fiber-inclusion-fiber-sequence-Pointed-Type S)`, which would let the recursive shifted boundary theorem collapse onto the direct route.
+
+
+Later on 2026-06-21, the direct shifted-boundary comparison target gained a checked first-projection foothold. The long exact sequence file now records K-safe loop-nullity computations for the canonical fiber and packaged fiber-sequence composites, together with first-projection comparisons
+
+```text
+eq-map-Ω-inclusion-fiber-Pointed-Type
+eq-pr1-map-equiv-fiber-boundary-map-Ω-direct-loop-inclusion-fiber-Pointed-Type
+eq-map-Ω-fibration-map-Ω-fiber-inclusion-fiber-sequence-Pointed-Type
+eq-pr1-map-equiv-fiber-boundary-fiber-sequence-direct-loop-fiber-inclusion
+```
+
+These lemmas prove that the raw and packaged direct shifted boundary comparison has the expected underlying point in the target fiber. The remaining hard target is the second component of the equality in the fiber: real Agda rejected the naive `right-unit` proof because this is a higher path in a fiber, so the upstreamable comparison still needs a coherent K-safe path-algebra proof rather than a definitional shortcut.
+
+The checked command was:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+The check passed. `git diff --check` passed, and the touched LES file contains no holes, postulates, or `--allow-unsolved-metas`.
