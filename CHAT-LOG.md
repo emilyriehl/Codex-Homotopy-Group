@@ -2877,3 +2877,38 @@ The Agda checks passed. `git diff --check` passed. The touched-file scan found n
 Related commit:
 
 - This commit - Use direct shifted exactness for Hopf third segment.
+
+
+### Generalize direct shifted exactness in natural indexing
+
+Request: Emily asked Codex to keep working after the Hopf third segment was rerouted through direct shifted exactness.
+
+Model context:
+
+- Date: 2026-06-21.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible and reported Agda 2.8.0 with agda-mcp-server 0.6.7. MCP was useful for scoped edits and goal inspection, but final acceptance used `./check.sh`; in this run MCP again accepted a proof that raw Agda rejected.
+
+Actions:
+
+- Added direct-indexed set-truncated maps for all iterates of the direct shifted connecting sequence:
+  `hom-trunc-direct-iterated-loop-fibration-fiber-sequence` and
+  `hom-trunc-direct-iterated-loop-boundary-fiber-sequence`.
+- Proved `is-exact-set-truncation-direct-iterated-loop-fibration-boundary-fiber-sequence`, giving exactness for every iterate in the natural `Ω^n(Ω X)` indexing.
+- Refactored the first and second public shifted direct exactness theorems to be the `0` and `1` instances of the new direct-indexed theorem.
+- Added `synthetic-homotopy-theory.reassociation-iterated-loop-spaces` with checked pointed-type equalities comparing `Ω^(n+1) X` and `Ω^n(Ω X)`, plus their looped versions.
+- Probed the induced-map reassociation theorem. MCP accepted the natural induction-with-rewrite proof, but raw `./check.sh` rejected it because the successor case cannot split `ap Ω` of the reassociation path as `refl`; this shows the next bridge needs an explicit transport-through-`Ω` computation. The failed proof was removed.
+- Updated `STATUS-REPORT.md` and `FORMALIZATION-PLAN.md` to record the stronger direct-indexed theorem and the narrowed remaining blocker.
+
+Verification:
+
+- ./check.sh src/synthetic-homotopy-theory/reassociation-iterated-loop-spaces.lagda.md
+- ./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+- ./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+- ./check.sh src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md
+
+All Agda checks passed. `git diff --check` passed. The touched-file scan found no holes, postulates, or local `--allow-unsolved-metas`; the broader scaffold scan found only the expected Hopf fiber sequence and stability comparison holes.
+
+Related commit:
+
+- This commit - Generalize direct shifted exactness in natural indexing.
