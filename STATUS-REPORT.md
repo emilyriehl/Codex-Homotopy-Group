@@ -97,8 +97,9 @@ calculation:
   The Hopf-family total space and the canonical Hopf-construction total-space
   accessor are now checked equivalent to
   `join-power 2 (Fin 2) * join-power 2 (Fin 2)`. The structural join
-  arithmetic now has a checked product-preservation pushout theorem, a checked
-  associator map `((A * B) * C) -> A * (B * C)`, a checked inverse-direction
+  arithmetic now has checked right- and left-product preservation pushout
+  theorems for joins, a checked associator map
+  `((A * B) * C) -> A * (B * C)`, a checked inverse-direction
   associator map `A * (B * C) -> (A * B) * C`, a checked right-composite
   homotopy `map-associative-join ∘ map-right-associative-join ~ inr-join`, a
   checked retraction-side left-composite homotopy

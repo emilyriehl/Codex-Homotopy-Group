@@ -3722,3 +3722,49 @@ pragmas after the unaccepted packaging was removed.
 Related commit:
 
 - This commit - Advance join associator inverse laws.
+
+
+### Add left-product join pushout infrastructure
+
+Request: Emily asked Codex to keep working hard on the next steps toward the
+full join associator equivalence.
+
+Model context:
+
+- Date: 2026-06-22.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible, but raw `./check.sh` remained the proof
+  acceptance gate.
+
+Actions:
+
+- Probed the direct retraction packaging for
+  `map-inv-associative-join ∘ map-associative-join ~ id`. Agda reduced the
+  remaining outer glue to the expected inner higher triangle coherence over
+  the `A * B` join glue, confirming that endpoint reductions alone do not
+  assemble definitionally.
+- Removed the temporary proof experiment before final checking.
+- Added checked left-product preservation of join pushouts:
+  `cocone-left-product-join` and `cocone-left-product-join'`, with universal
+  properties for the spans
+  `A × (B × C) -> A × B` and `A × (B × C) -> A × C`.
+- The proof reuses the existing right-product preservation theorem by an
+  equivalence of spans and then transfers across product commutativity to the
+  standard target `A × (B * C)`.
+- Updated `STATUS-REPORT.md` and `FORMALIZATION-PLAN.md` to record the new
+  pushout infrastructure and the continuing associator-equivalence blocker.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+./check.sh src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md
+```
+
+Both Agda checks passed with no holes.
+
+Related commit:
+
+- This commit - Add left-product join pushout infrastructure.

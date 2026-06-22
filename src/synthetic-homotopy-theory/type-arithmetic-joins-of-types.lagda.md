@@ -10,6 +10,7 @@ module synthetic-homotopy-theory.type-arithmetic-joins-of-types where
 open import foundation.action-on-identifications-dependent-functions
 open import foundation.action-on-identifications-functions
 open import foundation.cartesian-product-types
+open import foundation.commuting-squares-of-maps
 open import foundation.dependent-pair-types
 open import foundation.dependent-identifications
 open import foundation.constant-type-families
@@ -219,6 +220,115 @@ module _
       ( cocone-product-join)
   universal-property-pushout-cocone-product-join =
     pr2 universal-property-pushout-product-join-data
+
+```
+
+### Left products preserve join pushouts
+
+```agda
+module _
+  {l1 l2 l3 : Level} {A : UU l1} {B : UU l2} {C : UU l3}
+  where
+
+  left-map-span-left-product-join : A × (B × C) → A × B
+  pr1 (left-map-span-left-product-join (a , b , c)) = a
+  pr2 (left-map-span-left-product-join (a , b , c)) = b
+
+  right-map-span-left-product-join : A × (B × C) → A × C
+  pr1 (right-map-span-left-product-join (a , b , c)) = a
+  pr2 (right-map-span-left-product-join (a , b , c)) = c
+
+  coherence-left-map-span-left-product-join :
+    coherence-square-maps
+      ( map-commutative-product)
+      ( left-map-span-left-product-join)
+      ( left-map-span-product-join {A = B} {B = C} {C = A})
+      ( map-commutative-product)
+  coherence-left-map-span-left-product-join (a , b , c) = refl
+
+  coherence-right-map-span-left-product-join :
+    coherence-square-maps
+      ( right-map-span-left-product-join)
+      ( map-commutative-product)
+      ( map-commutative-product)
+      ( right-map-span-product-join {A = B} {B = C} {C = A})
+  coherence-right-map-span-left-product-join (a , b , c) = refl
+
+  universal-property-pushout-left-product-join-data :
+    {l : Level} →
+    Σ ( cocone
+        ( left-map-span-left-product-join)
+        ( right-map-span-left-product-join)
+        ( (B * C) × A))
+      ( universal-property-pushout-Level l
+        ( left-map-span-left-product-join)
+        ( right-map-span-left-product-join))
+  universal-property-pushout-left-product-join-data =
+    universal-property-pushout-extension-by-equivalences
+      ( left-map-span-product-join {A = B} {B = C} {C = A})
+      ( right-map-span-product-join {A = B} {B = C} {C = A})
+      ( left-map-span-left-product-join)
+      ( right-map-span-left-product-join)
+      ( map-commutative-product)
+      ( map-commutative-product)
+      ( map-commutative-product)
+      ( cocone-product-join {A = B} {B = C} {C = A})
+      ( universal-property-pushout-cocone-product-join
+        { A = B}
+        { B = C}
+        { C = A})
+      ( coherence-left-map-span-left-product-join)
+      ( coherence-right-map-span-left-product-join)
+      ( is-equiv-map-commutative-product)
+      ( is-equiv-map-commutative-product)
+      ( is-equiv-map-commutative-product)
+
+  cocone-left-product-join :
+    cocone
+      ( left-map-span-left-product-join)
+      ( right-map-span-left-product-join)
+      ( (B * C) × A)
+  cocone-left-product-join =
+    pr1 (universal-property-pushout-left-product-join-data {l = lzero})
+
+  universal-property-pushout-cocone-left-product-join :
+    universal-property-pushout
+      ( left-map-span-left-product-join)
+      ( right-map-span-left-product-join)
+      ( cocone-left-product-join)
+  universal-property-pushout-cocone-left-product-join =
+    pr2 universal-property-pushout-left-product-join-data
+
+  cocone-left-product-join' :
+    cocone
+      ( left-map-span-left-product-join)
+      ( right-map-span-left-product-join)
+      ( A × (B * C))
+  cocone-left-product-join' =
+    cocone-map
+      ( left-map-span-left-product-join)
+      ( right-map-span-left-product-join)
+      ( cocone-left-product-join)
+      ( map-commutative-product)
+
+  universal-property-pushout-cocone-left-product-join' :
+    universal-property-pushout
+      ( left-map-span-left-product-join)
+      ( right-map-span-left-product-join)
+      ( cocone-left-product-join')
+  universal-property-pushout-cocone-left-product-join' =
+    up-pushout-up-pushout-is-equiv
+      ( left-map-span-left-product-join)
+      ( right-map-span-left-product-join)
+      ( cocone-left-product-join)
+      ( cocone-left-product-join')
+      ( map-commutative-product)
+      ( refl-htpy-cocone
+        ( left-map-span-left-product-join)
+        ( right-map-span-left-product-join)
+        ( cocone-left-product-join'))
+      ( is-equiv-map-commutative-product)
+      ( universal-property-pushout-cocone-left-product-join)
 ```
 
 ### Associativity of joins
