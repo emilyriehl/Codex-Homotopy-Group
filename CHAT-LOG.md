@@ -3115,3 +3115,41 @@ The Agda check passed. `git diff --check` passed. The touched-file scan found no
 Related commit:
 
 - This commit - Bridge spheres to join powers.
+
+
+### Add join functoriality and commutativity infrastructure
+
+Request: Emily asked Codex to work even harder and make more progress toward the main `π₃(S²) ≅ ℤ` formalization goal.
+
+Model context:
+
+- Date: 2026-06-21.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible and used for interactive proof checking and scoped source edits. Final acceptance used raw `./check.sh`.
+
+Actions:
+
+- Added `synthetic-homotopy-theory.functoriality-joins-of-types`.
+- Defined the map induced on joins by maps in both factors, with checked computation rules on `inl`, `inr`, and glue.
+- Proved that this functorial action preserves equivalences by applying pushout invariance under equivalences of spans, and packaged the result as `equiv-join`.
+- Added `synthetic-homotopy-theory.type-arithmetic-joins-of-types`.
+- Proved commutativity of joins, `A * B ≃ B * A`, using the pushout-swap theorem and commutativity of cartesian products.
+- Extended `synthetic-homotopy-theory.spheres-as-join-powers` with the Hopf-facing comparison from `S¹ * S¹` to `join-power 2 (Fin 2) * join-power 2 (Fin 2)`.
+- Updated `STATUS-REPORT.md` and `FORMALIZATION-PLAN.md` to record the checked join infrastructure and narrow the next total-space blocker to associativity/join-power multiplication from `join-power 2 (Fin 2) * join-power 2 (Fin 2)` to `join-power 4 (Fin 2)`.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/functoriality-joins-of-types.lagda.md
+./check.sh src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+./check.sh src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/functoriality-joins-of-types.lagda.md src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md
+rg -n "allow-unsolved-metas|\{!!\}" src/synthetic-homotopy-theory src/group-theory src/structured-types -g "*.lagda.md"
+```
+
+All three Agda checks passed. `git diff --check` passed. The touched-file scan found no holes, postulates, or local `--allow-unsolved-metas`; the broad scaffold scan found only the expected Hopf fiber sequence and stability scaffold holes.
+
+Related commit:
+
+- This commit - Add join functoriality and commutativity.

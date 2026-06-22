@@ -13,6 +13,7 @@ open import foundation.empty-types
 open import foundation.equivalences
 open import foundation.universe-levels
 
+open import synthetic-homotopy-theory.functoriality-joins-of-types
 open import synthetic-homotopy-theory.functoriality-suspensions
 open import synthetic-homotopy-theory.join-powers-of-types
 open import synthetic-homotopy-theory.joins-of-types
@@ -48,4 +49,16 @@ equiv-sphere-1-join-power-Fin-2 =
 equiv-sphere-3-join-power-Fin-2 : join-power 4 (Fin 2) ≃ sphere 3
 equiv-sphere-3-join-power-Fin-2 =
   equiv-sphere-join-power-Fin-2 3
+```
+
+### The join of two 1-spheres as a join of join powers
+
+```agda
+equiv-join-sphere-1-join-power-Fin-2 :
+  sphere 1 * sphere 1 ≃
+  join-power 2 (Fin 2) * join-power 2 (Fin 2)
+equiv-join-sphere-1-join-power-Fin-2 =
+  equiv-join
+    ( inv-equiv equiv-sphere-1-join-power-Fin-2)
+    ( inv-equiv equiv-sphere-1-join-power-Fin-2)
 ```

@@ -62,9 +62,13 @@ calculation:
   `Fin 2 × X` join span with suspension structures, then deriving the pushout
   universal property for the suspension cocone. The module
   `spheres-as-join-powers` proves `join-power (succ n) (Fin 2) ≃ sphere n`,
-  with named `S¹` and `S³` instances; the remaining total-space comparison is
-  therefore focused on join associativity/packaging from `S¹ * S¹` to
-  `join-power 4 (Fin 2)`.
+  with named `S¹` and `S³` instances, and now also uses join functoriality to
+  compare `S¹ * S¹` with the join of two `join-power 2 (Fin 2)` models. The
+  new join infrastructure proves functoriality of joins under maps, preservation
+  of equivalences by this functorial action, and commutativity `A * B ≃ B * A`.
+  The remaining total-space comparison is therefore focused on associativity
+  and join-power multiplication from
+  `join-power 2 (Fin 2) * join-power 2 (Fin 2)` to `join-power 4 (Fin 2)`.
 - The low-dimensional sphere-connectivity facts needed for the lower Hopf
   segment have been formalized: `S³` is 2-connected, and therefore the first
   two concrete homotopy groups of `S³` are trivial.
@@ -192,7 +196,9 @@ Hopf fiber sequence itself and the Freudenthal/stability comparison.
 | Hopf construction | [`src/synthetic-homotopy-theory/hopf-construction.lagda.md`](src/synthetic-homotopy-theory/hopf-construction.lagda.md) | Defines the generic Hopf total space `A * A`, base `suspension A`, cocone, map, pointed total space, pointed base, and pointed Hopf map for any H-space. |
 | Hopf construction on the 1-sphere | [`src/synthetic-homotopy-theory/hopf-construction-circle.lagda.md`](src/synthetic-homotopy-theory/hopf-construction-circle.lagda.md) | Specializes the generic Hopf construction to `sphere-1-H-Space`, yielding the checked pointed map `S¹ * S¹ ->* S²`. |
 | Suspensions as joins | [`src/synthetic-homotopy-theory/suspensions-as-joins.lagda.md`](src/synthetic-homotopy-theory/suspensions-as-joins.lagda.md) | Defines the `Fin 2 × X` join span, maps both directions between `Fin 2 * X` and `suspension X`, proves cocones over that span equivalent to suspension structures, derives the pushout universal property for the suspension cocone, and packages the checked equivalence `Fin 2 * X ≃ suspension X`. |
-| Spheres as join powers | [`src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md`](src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md) | Proves by induction that the nonzero join powers of `Fin 2` are spheres, packaged as `join-power (succ n) (Fin 2) ≃ sphere n`, with named `S¹` and `S³` instances. |
+| Functoriality of joins | [`src/synthetic-homotopy-theory/functoriality-joins-of-types.lagda.md`](src/synthetic-homotopy-theory/functoriality-joins-of-types.lagda.md) | Defines the map induced on joins by maps in both factors, proves its constructor computation rules, proves that it preserves equivalences by pushout invariance under equivalences of spans, and packages the resulting `equiv-join`. |
+| Type arithmetic for joins | [`src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md`](src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md) | Proves commutativity of joins, `A * B ≃ B * A`, using the pushout-swap theorem and the commutativity equivalence of cartesian products. |
+| Spheres as join powers | [`src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md`](src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md) | Proves by induction that the nonzero join powers of `Fin 2` are spheres, packaged as `join-power (succ n) (Fin 2) ≃ sphere n`, with named `S¹` and `S³` instances, and proves the Hopf-facing comparison from `S¹ * S¹` to the join of two `join-power 2 (Fin 2)` models. |
 | Hopf fiber sequence | [`src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md`](src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md) | Records the unfinished packaged fiber sequence with fiber `S¹`, total space `S³`, and base `S²` fixed definitionally. |
 | Hopf LES comparison for second homotopy groups | [`src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md) | Proves the right-hand boundary/fiber-inclusion exactness statement for the lower Hopf segment, the left fibration-boundary exactness statement by applying `is-exact-set-truncation-loop-fiber-sequence` to `fiber-sequence-boundary-fiber-sequence-direct-Pointed-Type` instantiated at the Hopf fiber sequence, and the algebraic extraction identifying `π₂(S²)` with `π₁(S¹)` from the two exactness statements and the checked trivial outer `S³` groups. |
 | Hopf LES comparison for third homotopy groups | [`src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md) | Builds the Hopf comparison isomorphism from the Hopf fibration homomorphism, the checked total-space exactness theorem, the new direct fibration-boundary exactness theorem for the second shifted segment, and the two trivial endpoint hypotheses. The exactness proof no longer uses triviality of `π₂(S¹)` as a shortcut. |
@@ -214,7 +220,7 @@ Hopf fiber sequence itself and the Freudenthal/stability comparison.
 | Higher homotopy groups of the circle vanish | Mostly done | Positive concrete homotopy groups of the circle and 1-sphere are trivial. Further packaging may be needed for the exact Hopf LES endpoints. |
 | Loop space of the circle is the integers | Done | The loop-space equivalence is formalized, the universal-cover encoder is proved additive on loop concatenation, the result is transferred to the 1-sphere, and the concrete group isomorphism `π₁(S¹) ≅ ℤ` is checked. |
 | Circle as an H-space | Done | The checked module [`src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md`](src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md) packages both `𝕊¹-H-Space` and the transported `sphere-1-H-Space`. |
-| Hopf construction and Hopf fibration | Partial | The generic Hopf map `A * A -> suspension A`, the `S¹ * S¹ ->* S²` specialization, and the comparison `Fin 2 * X ≃ suspension X` are checked. The packaged Hopf fiber sequence target `S^1 -> S^3 -> S^2` is still stubbed pending join-power/associativity packaging for `S¹ * S¹ ≃ S³` and the fiber-sequence proof. |
+| Hopf construction and Hopf fibration | Partial | The generic Hopf map `A * A -> suspension A`, the `S¹ * S¹ ->* S²` specialization, the comparison `Fin 2 * X ≃ suspension X`, join functoriality under equivalences, join commutativity, and the bridge from `S¹ * S¹` to the join of two `join-power 2 (Fin 2)` models are checked. The packaged Hopf fiber sequence target `S^1 -> S^3 -> S^2` is still stubbed pending associativity/join-power multiplication from `join-power 2 (Fin 2) * join-power 2 (Fin 2)` to `join-power 4 (Fin 2)` and the fiber-sequence proof. |
 | Hopf LES consequence `pi_3(S^3) = pi_3(S^2)` | Partially proved | The exactness-to-isomorphism extraction and Hopf LES packaging are proved, and the fibration-boundary exactness now uses the direct checked second shifted boundary theorem rather than the trivial-codomain shortcut. The comparison still depends on the unfinished Hopf fiber sequence scaffold. |
 | Freudenthal suspension theorem | Not started | Still a major missing theorem. |
 | Stability of homotopy groups of spheres | Instance stubbed | The needed comparison `π₂(S²) ≅ π₃(S³)` is recorded as an unfinished theorem depending on Freudenthal/stability. |
@@ -224,10 +230,12 @@ Hopf fiber sequence itself and the Freudenthal/stability comparison.
 ## Remaining tasks
 
 1. Extend the checked Hopf map `S¹ * S¹ ->* S²` to the Hopf fiber sequence
-   `S^1 -> S^3 -> S^2`. The first total-space layer
-   `Fin 2 * X ≃ suspension X` is checked; the remaining total-space work is
-   join associativity/join-power packaging for `S¹ * S¹ ≃ S³`, followed by the
-   fiber-sequence proof.
+   `S^1 -> S^3 -> S^2`. The suspension-as-join layer, sphere-as-join-power
+   layer, join functoriality under equivalences, join commutativity, and the
+   bridge from `S¹ * S¹` to
+   `join-power 2 (Fin 2) * join-power 2 (Fin 2)` are checked. The remaining
+   total-space work is associativity/join-power multiplication from that join
+   to `join-power 4 (Fin 2)`, followed by the fiber-sequence proof.
 2. Prove the stability comparison `π₂(S²) ≅ π₃(S³)` from Freudenthal and sphere
    stability.
 3. Recheck `π₃(S³) ≅ ℤ` and `π₃(S²) ≅ ℤ` after their imported lower stubs are

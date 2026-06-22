@@ -164,7 +164,7 @@ repository. For the authoritative current proof state, see
 | 27 | Exactness-to-isomorphism lemma with zero endpoints | MISSING | Done locally | `src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md` | Used to extract Hopf LES comparison isomorphisms. |
 | 28 | Hopf construction for connected H-spaces | MISSING | Partial locally | `src/synthetic-homotopy-theory/hopf-construction.lagda.md`, `src/synthetic-homotopy-theory/hopf-construction-fiber-sequence.lagda.md`; HoTT book `sec:hopf` | The generic Hopf map, its pointed form, and the canonical fiber sequence of that pointed map are checked; the geometric fiber identification remains. |
 | 29 | Circle as connected H-space | MISSING | Done locally | `src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md`; `synthetic-homotopy-theory.circle` | The local module packages `𝕊¹-H-Space` and the transported `sphere-1-H-Space`; circle connectedness is supplied by the library circle module. |
-| 30 | Hopf fibration `S^1 -> S^3 -> S^2` and total-space equivalence | MISSING | Partial locally | `src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md`, `src/synthetic-homotopy-theory/suspensions-as-joins.lagda.md`, `src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md`; HoTT book `thm:hopf-fibration` | The desired packaged sequence is still scaffolded, but the first total-space layers are checked: `suspensions-as-joins` proves the upstream-style equivalence `Fin 2 * X ≃ suspension X`, and `spheres-as-join-powers` proves `join-power (succ n) (Fin 2) ≃ sphere n`, including the `join-power 4 (Fin 2) ≃ S^3` instance. Next targets are join associativity/packaging from `S^1 * S^1` to `join-power 4 (Fin 2)` and final `S^1 * S^1 ≃ S^3` packaging. |
+| 30 | Hopf fibration `S^1 -> S^3 -> S^2` and total-space equivalence | MISSING | Partial locally | `src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md`, `src/synthetic-homotopy-theory/suspensions-as-joins.lagda.md`, `src/synthetic-homotopy-theory/functoriality-joins-of-types.lagda.md`, `src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md`, `src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md`; HoTT book `thm:hopf-fibration` | The desired packaged sequence is still scaffolded, but the first total-space layers are checked: `suspensions-as-joins` proves `Fin 2 * X ≃ suspension X`; `functoriality-joins-of-types` proves functoriality and preservation of equivalences for joins; `type-arithmetic-joins-of-types` proves `A * B ≃ B * A`; and `spheres-as-join-powers` proves `join-power (succ n) (Fin 2) ≃ sphere n`, including `join-power 4 (Fin 2) ≃ S^3`, plus the bridge from `S^1 * S^1` to `join-power 2 (Fin 2) * join-power 2 (Fin 2)`. Next targets are associativity/join-power multiplication from that join to `join-power 4 (Fin 2)` and final `S^1 * S^1 ≃ S^3` packaging. |
 | 31 | Higher homotopy groups of `S^1` vanish | MISSING | Mostly done locally | `src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md`; HoTT book `cor:pi1s1` | Positive concrete homotopy groups of the circle and 1-sphere are trivial; further packaging may still be useful. |
 | 32 | Freudenthal suspension theorem | MISSING | Not started locally | HoTT book `thm:freudenthal`/`cor:freudenthal-equiv`; Coq-HoTT `BlakersMassey.v` as decomposition guide | High risk, proof-heavy homotopy-theoretic development. |
 | 33 | Stability of homotopy groups of spheres | MISSING | Stubbed locally | `src/synthetic-homotopy-theory/stability-third-homotopy-group-sphere-3.lagda.md`; HoTT book `cor:stability-spheres` | The needed comparison `π₂(S²) ≅ π₃(S³)` is recorded as an unfinished theorem. |
@@ -311,13 +311,15 @@ should be checked with:
 5. **Develop the Hopf construction and Hopf fibration.** The circle and
    1-sphere H-space structures are now checked, as are the generic Hopf map
    and its `S^1` specialization. The first total-space comparison layers are
-   also checked: `Fin 2 * X ≃ suspension X` and
-   `join-power (succ n) (Fin 2) ≃ sphere n`. Next, prove
-   join associativity/packaging comparing `S^1 * S^1` with
-   `join-power 4 (Fin 2)`, then use that to package the total-space
-   equivalence with `S^3` and attack the geometric fiber identification. Use
-   Coq-HoTT `Hopf.v`/`HSpaceS1.v` to identify milestones, not to translate
-   code.
+   also checked: `Fin 2 * X ≃ suspension X`,
+   `join-power (succ n) (Fin 2) ≃ sphere n`, functoriality of joins under
+   equivalences, commutativity of joins, and the bridge from `S^1 * S^1` to
+   `join-power 2 (Fin 2) * join-power 2 (Fin 2)`. Next, prove the
+   associativity/join-power multiplication comparison from that join to
+   `join-power 4 (Fin 2)`, then use `join-power 4 (Fin 2) ≃ S^3` to package
+   the total-space equivalence with `S^3` and attack the geometric fiber
+   identification. Use Coq-HoTT `Hopf.v`/`HSpaceS1.v` to identify milestones,
+   not to translate code.
 
 6. **Extract `pi_3(S^3) ~= pi_3(S^2)`.** Use the Hopf LES and the vanishing of
    `pi_3(S^1)` and `pi_2(S^1)`.
