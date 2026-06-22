@@ -3822,3 +3822,57 @@ pragmas.
 Related commit:
 
 - This commit - Package join associator inverse reductions.
+
+
+### Reduce associator inverse laws to normalized triple coherences
+
+Request: Emily asked Codex to keep working on the real remaining blocker for
+the full join associator equivalence.
+
+Model context:
+
+- Date: 2026-06-22.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible, but raw `./check.sh` remained the proof
+  acceptance gate.
+
+Actions:
+
+- Isolated the dependent pushout route for the two remaining inverse laws.
+- Added `dependent-universal-property-pushouts` as an import and used the
+  existing product/left-product join pushout universal properties to build
+  checked dependent-cocone reductions.
+- Replaced the failing direct `refl` probes by two named normalized coherence
+  families over triples `(a , b , c)`: one over the product-join glue for the
+  retraction side, and one over the swapped left-product glue for the section
+  side.
+- Proved that the product-side normalized coherence assembles into a section of
+  `triangle-family-map-inv-coherence-map-associative-join`, hence into the full
+  homotopy `map-inv-associative-join ∘ map-associative-join ~ id`.
+- Proved the symmetric left-product-side reduction for
+  `triangle-family-map-associative-coherence-map-inv-associative-join`, hence
+  into the full homotopy
+  `map-associative-join ∘ map-inv-associative-join ~ id`.
+- Updated `STATUS-REPORT.md` and `FORMALIZATION-PLAN.md` to record that the
+  remaining direct associator-equivalence blocker is now the construction of
+  those two normalized triple coherence families, or an equivalent pushout
+  universal-property proof of the associator.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+./check.sh src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate|lossy-unification" src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+```
+
+Both Agda checks passed. `git diff --check` passed. The touched-file scan found
+no holes, postulates, unsolved-meta pragmas, or temporary lossy-unification
+pragmas.
+
+Related commit:
+
+- This commit - Reduce associator laws to triple coherences.

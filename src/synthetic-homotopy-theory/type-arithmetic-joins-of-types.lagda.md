@@ -29,6 +29,7 @@ open import foundation.universe-levels
 
 open import synthetic-homotopy-theory.cocones-under-spans
 open import synthetic-homotopy-theory.dependent-cocones-under-spans
+open import synthetic-homotopy-theory.dependent-universal-property-pushouts
 open import synthetic-homotopy-theory.flattening-lemma-pushouts
 open import synthetic-homotopy-theory.joins-of-types
 open import synthetic-homotopy-theory.pushouts
@@ -1532,6 +1533,90 @@ module _
   compute-map-inv-map-associative-join H =
     dependent-cogap-join (dependent-cocone-map-inv-map-associative-join H)
 
+  coherence-triangle-map-inv-coherence-product-join :
+    UU (l1 ⊔ l2 ⊔ l3)
+  coherence-triangle-map-inv-coherence-product-join =
+    (a : A) (b : B) (c : C) →
+    dependent-identification
+      ( λ z →
+        triangle-family-map-inv-coherence-map-associative-join
+          ( pr1 z)
+          ( pr2 z))
+      ( eq-pair-Σ
+        { A = A * B}
+        { B = λ _ → C}
+        ( glue-join (a , b))
+        ( tr-constant-type-family
+          { A = A * B}
+          { B = C}
+          ( glue-join (a , b))
+          ( c)))
+      ( compute-inl-triangle-map-inv-coherence-map-associative-join a c)
+      ( compute-inr-triangle-map-inv-coherence-map-associative-join b c)
+
+  dependent-cocone-triangle-map-inv-coherence-product-join :
+    coherence-triangle-map-inv-coherence-product-join →
+    dependent-cocone
+      ( left-map-span-product-join)
+      ( right-map-span-product-join)
+      ( cocone-product-join)
+      ( λ z →
+        triangle-family-map-inv-coherence-map-associative-join
+          ( pr1 z)
+          ( pr2 z))
+  pr1 (dependent-cocone-triangle-map-inv-coherence-product-join H) (a , c) =
+    compute-inl-triangle-map-inv-coherence-map-associative-join a c
+  pr1
+    ( pr2 (dependent-cocone-triangle-map-inv-coherence-product-join H))
+    ( b , c) =
+    compute-inr-triangle-map-inv-coherence-map-associative-join b c
+  pr2
+    ( pr2 (dependent-cocone-triangle-map-inv-coherence-product-join H))
+    ( (a , b) , c) =
+    tr
+      ( λ p →
+        dependent-identification
+          ( λ z →
+            triangle-family-map-inv-coherence-map-associative-join
+              ( pr1 z)
+              ( pr2 z))
+          ( p)
+          ( compute-inl-triangle-map-inv-coherence-map-associative-join a c)
+          ( compute-inr-triangle-map-inv-coherence-map-associative-join b c))
+      ( inv (compute-glue-cocone-product-join ((a , b) , c)))
+      ( H a b c)
+
+  triangle-map-inv-coherence-product-join :
+    coherence-triangle-map-inv-coherence-product-join →
+    (z : (A * B) × C) →
+    triangle-family-map-inv-coherence-map-associative-join (pr1 z) (pr2 z)
+  triangle-map-inv-coherence-product-join H =
+    map-inv-is-equiv
+      ( dependent-universal-property-universal-property-pushout
+        ( left-map-span-product-join)
+        ( right-map-span-product-join)
+        ( cocone-product-join)
+        ( universal-property-pushout-cocone-product-join)
+        ( λ z →
+          triangle-family-map-inv-coherence-map-associative-join
+            ( pr1 z)
+            ( pr2 z)))
+      ( dependent-cocone-triangle-map-inv-coherence-product-join H)
+
+  triangle-map-inv-coherence-map-associative-join :
+    coherence-triangle-map-inv-coherence-product-join →
+    (x : A * B) (c : C) →
+    triangle-family-map-inv-coherence-map-associative-join x c
+  triangle-map-inv-coherence-map-associative-join H x c =
+    triangle-map-inv-coherence-product-join H (x , c)
+
+  compute-map-inv-map-associative-join-product-coherence :
+    coherence-triangle-map-inv-coherence-product-join →
+    map-inv-associative-join ∘ map-associative-join ~ id
+  compute-map-inv-map-associative-join-product-coherence H =
+    compute-map-inv-map-associative-join
+      ( triangle-map-inv-coherence-map-associative-join H)
+
   compute-inl-map-associative-map-inv-associative-join :
     (a : A) →
     map-associative-join (map-inv-associative-join (inl-join a)) ＝
@@ -1762,5 +1847,95 @@ module _
   compute-map-associative-map-inv-associative-join H =
     dependent-cogap-join
       ( dependent-cocone-map-associative-map-inv-associative-join H)
+
+  coherence-triangle-map-associative-coherence-left-product-join :
+    UU (l1 ⊔ l2 ⊔ l3)
+  coherence-triangle-map-associative-coherence-left-product-join =
+    (a : A) (b : B) (c : C) →
+    dependent-identification
+      ( λ z →
+        triangle-family-map-associative-coherence-map-inv-associative-join
+          ( pr1 z)
+          ( pr2 z))
+      ( eq-pair-Σ
+        { A = A}
+        { B = λ _ → B * C}
+        ( refl)
+        ( glue-join (b , c)))
+      ( compute-inl-triangle-map-associative-coherence-map-inv-associative-join
+        a b)
+      ( compute-inr-triangle-map-associative-coherence-map-inv-associative-join
+        a c)
+
+  dependent-cocone-triangle-map-associative-coherence-left-product-join :
+    coherence-triangle-map-associative-coherence-left-product-join →
+    dependent-cocone
+      ( left-map-span-left-product-join)
+      ( right-map-span-left-product-join)
+      ( cocone-left-product-join')
+      ( λ z →
+        triangle-family-map-associative-coherence-map-inv-associative-join
+          ( pr1 z)
+          ( pr2 z))
+  pr1
+    ( dependent-cocone-triangle-map-associative-coherence-left-product-join H)
+    ( a , b) =
+    compute-inl-triangle-map-associative-coherence-map-inv-associative-join a b
+  pr1
+    ( pr2
+      ( dependent-cocone-triangle-map-associative-coherence-left-product-join H))
+    ( a , c) =
+    compute-inr-triangle-map-associative-coherence-map-inv-associative-join a c
+  pr2
+    ( pr2
+      ( dependent-cocone-triangle-map-associative-coherence-left-product-join H))
+    ( a , b , c) =
+    tr
+      ( λ p →
+        dependent-identification
+          ( λ z →
+            triangle-family-map-associative-coherence-map-inv-associative-join
+              ( pr1 z)
+              ( pr2 z))
+          ( p)
+          ( compute-inl-triangle-map-associative-coherence-map-inv-associative-join
+            a b)
+          ( compute-inr-triangle-map-associative-coherence-map-inv-associative-join
+            a c))
+      ( inv (compute-glue-cocone-left-product-join' (a , b , c)))
+      ( H a b c)
+
+  triangle-map-associative-coherence-left-product-join :
+    coherence-triangle-map-associative-coherence-left-product-join →
+    (z : A × (B * C)) →
+    triangle-family-map-associative-coherence-map-inv-associative-join
+      ( pr1 z)
+      ( pr2 z)
+  triangle-map-associative-coherence-left-product-join H =
+    map-inv-is-equiv
+      ( dependent-universal-property-universal-property-pushout
+        ( left-map-span-left-product-join)
+        ( right-map-span-left-product-join)
+        ( cocone-left-product-join')
+        ( universal-property-pushout-cocone-left-product-join')
+        ( λ z →
+          triangle-family-map-associative-coherence-map-inv-associative-join
+            ( pr1 z)
+            ( pr2 z)))
+      ( dependent-cocone-triangle-map-associative-coherence-left-product-join H)
+
+  triangle-map-associative-coherence-map-inv-associative-join :
+    coherence-triangle-map-associative-coherence-left-product-join →
+    (a : A) (y : B * C) →
+    triangle-family-map-associative-coherence-map-inv-associative-join a y
+  triangle-map-associative-coherence-map-inv-associative-join H a y =
+    triangle-map-associative-coherence-left-product-join H (a , y)
+
+  compute-map-associative-map-inv-associative-join-left-product-coherence :
+    coherence-triangle-map-associative-coherence-left-product-join →
+    map-associative-join ∘ map-inv-associative-join ~ id
+  compute-map-associative-map-inv-associative-join-left-product-coherence H =
+    compute-map-associative-map-inv-associative-join
+      ( triangle-map-associative-coherence-map-inv-associative-join H)
 
 ```
