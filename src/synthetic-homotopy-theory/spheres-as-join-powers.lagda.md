@@ -9,6 +9,7 @@ module synthetic-homotopy-theory.spheres-as-join-powers where
 ```agda
 open import elementary-number-theory.natural-numbers
 
+open import foundation.dependent-pair-types
 open import foundation.empty-types
 open import foundation.equivalences
 open import foundation.function-types
@@ -74,6 +75,61 @@ map-join-power-two-two-Fin-2 :
   join-power 2 (Fin 2) * join-power 2 (Fin 2) → join-power 4 (Fin 2)
 map-join-power-two-two-Fin-2 =
   map-join-power-two-two (Fin 2)
+
+is-equiv-map-join-power-two-two-is-equiv-map-associative-join :
+  {l : Level} (A : UU l) →
+  is-equiv
+    ( map-associative-join
+      {A = A}
+      {B = join-power 1 A}
+      {C = join-power 2 A}) →
+  is-equiv
+    ( map-associative-join
+      {A = A}
+      {B = raise-empty _}
+      {C = join-power 2 A}) →
+  is-equiv (map-join-power-two-two A)
+is-equiv-map-join-power-two-two-is-equiv-map-associative-join A H1 H2 =
+  is-equiv-comp
+    ( map-join
+      ( id)
+      ( map-join
+        ( id)
+        ( map-inv-equiv (left-unit-law-join-is-empty is-empty-raise-empty))))
+    ( ( map-join
+        ( id)
+        ( map-associative-join
+          {A = A}
+          {B = raise-empty _}
+          {C = join-power 2 A})) ∘
+      ( map-associative-join
+        {A = A}
+        {B = join-power 1 A}
+        {C = join-power 2 A}))
+    ( is-equiv-comp
+      ( map-join
+        ( id)
+        ( map-associative-join
+          {A = A}
+          {B = raise-empty _}
+          {C = join-power 2 A}))
+      ( map-associative-join
+        {A = A}
+        {B = join-power 1 A}
+        {C = join-power 2 A})
+      ( H1)
+      ( is-equiv-map-join
+        ( id-equiv)
+        ( map-associative-join
+          {A = A}
+          {B = raise-empty _}
+          {C = join-power 2 A} ,
+          H2)))
+    ( is-equiv-map-join
+      ( id-equiv)
+      ( equiv-join
+        ( id-equiv)
+        ( inv-equiv (left-unit-law-join-is-empty is-empty-raise-empty))))
 
 equiv-join-sphere-1-join-power-Fin-2 :
   sphere 1 * sphere 1 ≃

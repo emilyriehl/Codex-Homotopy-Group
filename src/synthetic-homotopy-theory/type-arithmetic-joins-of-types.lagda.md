@@ -454,4 +454,198 @@ module _
       ( compute-inr-map-associative-join)
   compute-glue-map-associative-join =
     compute-glue-cogap-join cocone-associative-join
+
+  cocone-right-map-associative-join :
+    cocone pr1 pr2 ((A * B) * C)
+  pr1 cocone-right-map-associative-join =
+    inl-join ∘ inr-join
+  pr1 (pr2 cocone-right-map-associative-join) =
+    inr-join
+  pr2 (pr2 cocone-right-map-associative-join) (b , c) =
+    glue-join (inr-join b , c)
+
+  map-right-associative-join : B * C → (A * B) * C
+  map-right-associative-join =
+    cogap-join ((A * B) * C) cocone-right-map-associative-join
+
+  compute-inl-map-right-associative-join :
+    map-right-associative-join ∘ inl-join ~ inl-join ∘ inr-join
+  compute-inl-map-right-associative-join =
+    compute-inl-cogap-join cocone-right-map-associative-join
+
+  compute-inr-map-right-associative-join :
+    map-right-associative-join ∘ inr-join ~ inr-join
+  compute-inr-map-right-associative-join =
+    compute-inr-cogap-join cocone-right-map-associative-join
+
+  compute-glue-map-right-associative-join :
+    statement-coherence-htpy-cocone pr1 pr2
+      ( cocone-map pr1 pr2 cocone-join map-right-associative-join)
+      ( cocone-right-map-associative-join)
+      ( compute-inl-map-right-associative-join)
+      ( compute-inr-map-right-associative-join)
+  compute-glue-map-right-associative-join =
+    compute-glue-cogap-join cocone-right-map-associative-join
+
+  naturality-glue-right-join :
+    (a : A) (b : B) (c : C) →
+    ap inl-join (glue-join (a , b)) ∙
+    glue-join (inr-join b , c) ＝
+    glue-join (inl-join a , c)
+  naturality-glue-right-join a b c =
+    map-inv-compute-dependent-identification-eq-value-function
+      ( inl-join {A = A * B} {B = C})
+      ( λ _ → inr-join {A = A * B} {B = C} c)
+      ( glue-join (a , b))
+      ( glue-join (inl-join a , c))
+      ( glue-join (inr-join b , c))
+      ( apd (λ x → glue-join {A = A * B} {B = C} (x , c))
+        ( glue-join (a , b))) ∙
+    ap
+      ( glue-join (inl-join a , c) ∙_)
+      ( ap-const (inr-join {A = A * B} {B = C} c) (glue-join (a , b))) ∙
+    right-unit
+
+  compute-tr-Id-right-map-right-associative-join :
+    (a : A) (t : B × C)
+    (q :
+      inl-join (inl-join a) ＝
+      map-right-associative-join (inl-join (pr1 t))) →
+    tr
+      ( λ y → inl-join (inl-join a) ＝ map-right-associative-join y)
+      ( glue-join t)
+      ( q) ＝
+    q ∙ ap map-right-associative-join (glue-join t)
+  compute-tr-Id-right-map-right-associative-join a t q =
+    inv
+      ( substitution-law-tr
+        ( λ y → inl-join (inl-join a) ＝ y)
+        ( map-right-associative-join)
+        ( glue-join t)) ∙
+    tr-Id-right (ap map-right-associative-join (glue-join t)) q
+
+  right-transpose-compute-glue-map-right-associative-join :
+    (t : B × C) →
+    inv (compute-inl-map-right-associative-join (pr1 t)) ∙
+    ap map-right-associative-join (glue-join t) ＝
+    glue-join (inr-join (pr1 t) , pr2 t) ∙
+    inv (compute-inr-map-right-associative-join (pr2 t))
+  right-transpose-compute-glue-map-right-associative-join t =
+    equational-reasoning
+      inv linl ∙ apm
+      ＝ (inv linl ∙ apm) ∙ refl
+        by inv right-unit
+      ＝ (inv linl ∙ apm) ∙ (rinr ∙ inv rinr)
+        by ap ((inv linl ∙ apm) ∙_) (inv (right-inv rinr))
+      ＝ ((inv linl ∙ apm) ∙ rinr) ∙ inv rinr
+        by inv (assoc (inv linl ∙ apm) rinr (inv rinr))
+      ＝ (inv linl ∙ (apm ∙ rinr)) ∙ inv rinr
+        by ap (_∙ inv rinr) (assoc (inv linl) apm rinr)
+      ＝ (inv linl ∙ (linl ∙ glue-inr)) ∙ inv rinr
+        by ap (λ p → (inv linl ∙ p) ∙ inv rinr)
+          ( compute-glue-map-right-associative-join t)
+      ＝ ((inv linl ∙ linl) ∙ glue-inr) ∙ inv rinr
+        by ap (_∙ inv rinr) (inv (assoc (inv linl) linl glue-inr))
+      ＝ glue-inr ∙ inv rinr
+        by ap (_∙ inv rinr) (ap (_∙ glue-inr) (left-inv linl))
+    where
+    apm = ap map-right-associative-join (glue-join t)
+    linl = compute-inl-map-right-associative-join (pr1 t)
+    rinr = compute-inr-map-right-associative-join (pr2 t)
+    glue-inr = glue-join (inr-join (pr1 t) , pr2 t)
+
+  coherence-right-map-associative-join :
+    (a : A) (t : B × C) →
+    dependent-identification
+      ( λ y → inl-join (inl-join a) ＝ map-right-associative-join y)
+      ( glue-join t)
+      ( ap inl-join (glue-join (a , pr1 t)) ∙
+        inv (compute-inl-map-right-associative-join (pr1 t)))
+      ( glue-join (inl-join a , pr2 t) ∙
+        inv (compute-inr-map-right-associative-join (pr2 t)))
+  coherence-right-map-associative-join a t =
+    equational-reasoning
+      tr
+        ( λ y → inl-join (inl-join a) ＝ map-right-associative-join y)
+        ( glue-join t)
+        ( h)
+      ＝ h ∙ apm
+        by compute-tr-Id-right-map-right-associative-join a t h
+      ＝ (apinl ∙ inv linl) ∙ apm
+        by refl
+      ＝ apinl ∙ (inv linl ∙ apm)
+        by assoc apinl (inv linl) apm
+      ＝ apinl ∙ (glue-inr ∙ inv rinr)
+        by ap (apinl ∙_)
+          ( right-transpose-compute-glue-map-right-associative-join t)
+      ＝ (apinl ∙ glue-inr) ∙ inv rinr
+        by inv (assoc apinl glue-inr (inv rinr))
+      ＝ glue-inl ∙ inv rinr
+        by ap (_∙ inv rinr)
+          ( naturality-glue-right-join a (pr1 t) (pr2 t))
+    where
+    h :
+      inl-join (inl-join a) ＝
+      map-right-associative-join (inl-join (pr1 t))
+    h =
+      ap inl-join (glue-join (a , pr1 t)) ∙
+      inv (compute-inl-map-right-associative-join (pr1 t))
+
+    apm = ap map-right-associative-join (glue-join t)
+    apinl = ap inl-join (glue-join (a , pr1 t))
+    linl = compute-inl-map-right-associative-join (pr1 t)
+    rinr = compute-inr-map-right-associative-join (pr2 t)
+    glue-inl = glue-join (inl-join a , pr2 t)
+    glue-inr = glue-join (inr-join (pr1 t) , pr2 t)
+
+  dependent-cocone-right-map-associative-join :
+    (a : A) →
+    dependent-cocone pr1 pr2 cocone-join
+      ( λ y → inl-join (inl-join a) ＝ map-right-associative-join y)
+  pr1 (dependent-cocone-right-map-associative-join a) b =
+    ap inl-join (glue-join (a , b)) ∙
+    inv (compute-inl-map-right-associative-join b)
+  pr1 (pr2 (dependent-cocone-right-map-associative-join a)) c =
+    glue-join (inl-join a , c) ∙
+    inv (compute-inr-map-right-associative-join c)
+  pr2 (pr2 (dependent-cocone-right-map-associative-join a)) =
+    coherence-right-map-associative-join a
+
+  coherence-map-inv-associative-join :
+    (a : A) (y : B * C) →
+    inl-join (inl-join a) ＝ map-right-associative-join y
+  coherence-map-inv-associative-join a =
+    dependent-cogap-join (dependent-cocone-right-map-associative-join a)
+
+  cocone-inv-associative-join :
+    cocone pr1 pr2 ((A * B) * C)
+  pr1 cocone-inv-associative-join =
+    inl-join ∘ inl-join
+  pr1 (pr2 cocone-inv-associative-join) =
+    map-right-associative-join
+  pr2 (pr2 cocone-inv-associative-join) (a , y) =
+    coherence-map-inv-associative-join a y
+
+  map-inv-associative-join : A * (B * C) → (A * B) * C
+  map-inv-associative-join =
+    cogap-join ((A * B) * C) cocone-inv-associative-join
+
+  compute-inl-map-inv-associative-join :
+    map-inv-associative-join ∘ inl-join ~ inl-join ∘ inl-join
+  compute-inl-map-inv-associative-join =
+    compute-inl-cogap-join cocone-inv-associative-join
+
+  compute-inr-map-inv-associative-join :
+    map-inv-associative-join ∘ inr-join ~ map-right-associative-join
+  compute-inr-map-inv-associative-join =
+    compute-inr-cogap-join cocone-inv-associative-join
+
+  compute-glue-map-inv-associative-join :
+    statement-coherence-htpy-cocone pr1 pr2
+      ( cocone-map pr1 pr2 cocone-join map-inv-associative-join)
+      ( cocone-inv-associative-join)
+      ( compute-inl-map-inv-associative-join)
+      ( compute-inr-map-inv-associative-join)
+  compute-glue-map-inv-associative-join =
+    compute-glue-cogap-join cocone-inv-associative-join
 ```

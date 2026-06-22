@@ -3568,3 +3568,54 @@ no holes or postulates.
 Related commit:
 
 - This commit - Build structural join associator map.
+
+
+### Build the inverse join associator map
+
+Request: Emily asked Codex to keep working on the real formalization blocker
+after the checked forward associator map was committed and pushed.
+
+Model context:
+
+- Date: 2026-06-22.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible and used for goal inspection. Final acceptance
+  used raw `./check.sh`.
+
+Actions:
+
+- Built the checked right-associating auxiliary map
+  `map-right-associative-join : B * C -> (A * B) * C`.
+- Proved the right-hand naturality and transport coherences for join glue,
+  including the transpose of the `map-right-associative-join` glue computation.
+- Constructed the checked inverse-direction associator cocone and map
+  `map-inv-associative-join : A * (B * C) -> (A * B) * C`.
+- Probed the full `is-equiv map-associative-join` proof with Agda. The proof
+  reduces to the two expected inverse homotopies for
+  `map-associative-join` and `map-inv-associative-join`; the temporary holes
+  were removed before final checking.
+- Added a checked reduction lemma showing that
+  `map-join-power-two-two : join-power 2 A * join-power 2 A -> join-power 4 A`
+  is an equivalence once the two relevant associator instances are
+  equivalences.
+- Updated `STATUS-REPORT.md` and `FORMALIZATION-PLAN.md` to record that both
+  associator directions are now checked and that the remaining blocker is the
+  associator inverse-homotopy/universal-property proof itself.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+./check.sh src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md
+git diff --check
+rg -n "\?|\{!|postulate" src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md
+```
+
+The Agda checks passed. `git diff --check` passed. The touched-file scan found
+no holes or postulates.
+
+Related commit:
+
+- This commit - Build inverse join associator map.
