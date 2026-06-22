@@ -3153,3 +3153,48 @@ All three Agda checks passed. `git diff --check` passed. The touched-file scan f
 Related commit:
 
 - This commit - Add join functoriality and commutativity.
+
+
+## 2026-06-22
+
+### Add Hopf-family input over the 2-sphere
+
+Request: Emily asked Codex to implement the next Hopf-first plan for the
+`π₃(S²) ≅ ℤ` formalization.
+
+Model context:
+
+- Date: 2026-06-22.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible at the start of the formalization work. Final
+  acceptance used raw `./check.sh`.
+
+Actions:
+
+- Extended `synthetic-homotopy-theory.h-space-structure-circle` with checked
+  proofs that all left and right translations by points of `𝕊¹` are
+  equivalences.
+- Transported those translation equivalences across the circle--1-sphere
+  equivalence to obtain left and right translation equivalences on `sphere 1`.
+- Added `synthetic-homotopy-theory.hopf-family-circle`.
+- Defined the Hopf family over `sphere 2` by using univalence to classify each
+  meridian by the left-multiplication equivalence on `sphere 1`.
+- Recorded the north, south, and meridian computation rules for the family and
+  named its total space.
+- Updated `STATUS-REPORT.md` and `FORMALIZATION-PLAN.md` to record the checked
+  Hopf-family/descent input and the remaining comparison targets.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-family-circle.lagda.md
+```
+
+Both Agda checks passed.
+
+Related commit:
+
+- This commit - Add Hopf family over the 2-sphere.
