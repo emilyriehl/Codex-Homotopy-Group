@@ -3198,3 +3198,42 @@ Both Agda checks passed.
 Related commit:
 
 - This commit - Add Hopf family over the 2-sphere.
+
+
+### Package the Hopf-family projection as a fiber sequence
+
+Request: Emily asked Codex to keep working after the checked Hopf-family input.
+
+Model context:
+
+- Date: 2026-06-22.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible at the start of the formalization work. Final
+  acceptance used raw `./check.sh`.
+
+Actions:
+
+- Extended `synthetic-homotopy-theory.hopf-family-circle` with a pointed total
+  space for the Hopf family and its projection to `sphere 2`.
+- Identified the north fiber of this projection with `sphere 1` using the
+  standard fiber-of-`pr1` equivalence and the checked north-pole computation
+  of the Hopf family.
+- Packaged the projection as a pointed fiber sequence
+  `S¹ ->* total-space-hopf-family-sphere-1 ->* S²`.
+- Updated `STATUS-REPORT.md` and `FORMALIZATION-PLAN.md` to record that the
+  checked Hopf-family layer now includes the projection fiber sequence, while
+  the remaining Hopf work is the comparison with `S¹ * S¹` and `S³`.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/hopf-family-circle.lagda.md
+```
+
+The Agda check passed.
+
+Related commit:
+
+- This commit - Package Hopf family projection as a fiber sequence.
