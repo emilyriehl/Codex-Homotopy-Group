@@ -3040,3 +3040,39 @@ Both Agda checks passed. Touched-file scan found no holes/postulates/allow-unsol
 Related commit:
 
 - This commit - Add Hopf construction source sequence and suspension-join maps.
+
+
+### Prove suspensions as joins by universal property
+
+Request: Emily asked Codex to keep working hard toward the main formalization goal, prioritizing upstream-quality constructions over quick local transports.
+
+Model context:
+
+- Date: 2026-06-21.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible and used for interactive proof development. Final acceptance used raw `./check.sh`.
+
+Actions:
+
+- Continued the Hopf total-space comparison route in `synthetic-homotopy-theory.suspensions-as-joins`.
+- Added named maps for the `Fin 2 × X` join span and constructor-level names for the two points of `Fin 2`, keeping reduction stable for raw Agda.
+- Defined maps between cocones over the `Fin 2` join span and suspension structures, proved both inverse laws, and packaged the equivalence between those two structure types.
+- Derived the pushout universal property for the suspension cocone over the `Fin 2` join span by factoring `ev-suspension` through the new structure equivalence.
+- Used the pushout 3-for-2 theorem to prove `map-suspension-join-Fin-2 : Fin 2 * X -> suspension X` is an equivalence, packaged as `equiv-suspension-join-Fin-2`.
+- Added join-glue computation lemmas specialized to the zero and one points of `Fin 2`.
+- Updated `STATUS-REPORT.md` and `FORMALIZATION-PLAN.md` to record that the first total-space comparison layer is locally complete, while `S¹ * S¹ ≃ S³` still needs join associativity and join-power packaging.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/suspensions-as-joins.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/suspensions-as-joins.lagda.md
+rg -n "allow-unsolved-metas|\{!!\}" src/synthetic-homotopy-theory src/group-theory src/structured-types -g "*.lagda.md"
+```
+
+The Agda check passed. `git diff --check` passed. The touched-file scan found no holes, postulates, or local `--allow-unsolved-metas`; the broad scaffold scan found only the expected Hopf fiber sequence and stability scaffold holes.
+
+Related commit:
+
+- This commit - Prove suspensions as joins with Fin 2.
