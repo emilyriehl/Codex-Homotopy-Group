@@ -3876,3 +3876,53 @@ pragmas.
 Related commit:
 
 - This commit - Reduce associator laws to triple coherences.
+
+
+### Reduce join-power equivalence to first associator squares
+
+Request: Emily asked Codex to work very hard to make further progress on the
+real remaining formalization blocker.
+
+Model context:
+
+- Date: 2026-06-22.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible. MCP was used only for inspection; raw
+  `./check.sh` remained the proof acceptance gate.
+
+Actions:
+
+- Refined the two normalized triple coherences for the join associator inverse
+  route into ordinary dependent-function coherence squares using
+  `map-compute-dependent-identification-eq-value`.
+- Added named path families and left/right path functions for the product-side
+  retraction square and the left-product-side section square.
+- Packaged the full retraction homotopy, section homotopy, and associator
+  equivalence from those two ordinary square coherences.
+- Threaded this interface into `spheres-as-join-powers`: the structural map
+  `join-power 2 A * join-power 2 A -> join-power 4 A` is now checked to be an
+  equivalence from the two square coherences for the first associator instance.
+- Discharged the second associator instance in that join-power comparison
+  vacuously because its middle factor is `raise-empty`.
+- Updated `STATUS-REPORT.md` and `FORMALIZATION-PLAN.md` to record that the
+  Hopf-facing total-space comparison now needs only those two ordinary square
+  coherences, or an equivalent universal-property proof of the associator.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+./check.sh src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate|lossy-unification" src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md
+```
+
+Both Agda checks passed. `git diff --check` passed. The touched-file scan found
+no holes, postulates, unsolved-meta pragmas, or temporary lossy-unification
+pragmas.
+
+Related commit:
+
+- This commit - Reduce join-power equivalence to first associator squares.

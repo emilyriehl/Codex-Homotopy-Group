@@ -131,6 +131,91 @@ is-equiv-map-join-power-two-two-is-equiv-map-associative-join A H1 H2 =
         ( id-equiv)
         ( inv-equiv (left-unit-law-join-is-empty is-empty-raise-empty))))
 
+is-equiv-map-join-power-two-two-coherence-squares :
+  {l : Level} (A : UU l) →
+  coherence-square-triangle-map-inv-coherence-product-join
+    {A = A}
+    {B = join-power 1 A}
+    {C = join-power 2 A} →
+  coherence-square-triangle-map-associative-coherence-left-product-join
+    {A = A}
+    {B = join-power 1 A}
+    {C = join-power 2 A} →
+  coherence-square-triangle-map-inv-coherence-product-join
+    {A = A}
+    {B = raise-empty _}
+    {C = join-power 2 A} →
+  coherence-square-triangle-map-associative-coherence-left-product-join
+    {A = A}
+    {B = raise-empty _}
+    {C = join-power 2 A} →
+  is-equiv (map-join-power-two-two A)
+is-equiv-map-join-power-two-two-coherence-squares
+  A H1 K1 H2 K2 =
+  is-equiv-map-join-power-two-two-is-equiv-map-associative-join
+    ( A)
+    ( is-equiv-map-associative-join-coherence-squares H1 K1)
+    ( is-equiv-map-associative-join-coherence-squares H2 K2)
+
+equiv-join-power-two-two-coherence-squares :
+  {l : Level} (A : UU l) →
+  coherence-square-triangle-map-inv-coherence-product-join
+    {A = A}
+    {B = join-power 1 A}
+    {C = join-power 2 A} →
+  coherence-square-triangle-map-associative-coherence-left-product-join
+    {A = A}
+    {B = join-power 1 A}
+    {C = join-power 2 A} →
+  coherence-square-triangle-map-inv-coherence-product-join
+    {A = A}
+    {B = raise-empty _}
+    {C = join-power 2 A} →
+  coherence-square-triangle-map-associative-coherence-left-product-join
+    {A = A}
+    {B = raise-empty _}
+    {C = join-power 2 A} →
+  (join-power 2 A * join-power 2 A) ≃ join-power 4 A
+pr1 (equiv-join-power-two-two-coherence-squares A H1 K1 H2 K2) =
+  map-join-power-two-two A
+pr2 (equiv-join-power-two-two-coherence-squares A H1 K1 H2 K2) =
+  is-equiv-map-join-power-two-two-coherence-squares A H1 K1 H2 K2
+
+is-equiv-map-join-power-two-two-coherence-squares-first-associator :
+  {l : Level} (A : UU l) →
+  coherence-square-triangle-map-inv-coherence-product-join
+    {A = A}
+    {B = join-power 1 A}
+    {C = join-power 2 A} →
+  coherence-square-triangle-map-associative-coherence-left-product-join
+    {A = A}
+    {B = join-power 1 A}
+    {C = join-power 2 A} →
+  is-equiv (map-join-power-two-two A)
+is-equiv-map-join-power-two-two-coherence-squares-first-associator A H K =
+  is-equiv-map-join-power-two-two-coherence-squares
+    ( A)
+    ( H)
+    ( K)
+    ( λ a b c → ex-falso (is-empty-raise-empty b))
+    ( λ a b c → ex-falso (is-empty-raise-empty b))
+
+equiv-join-power-two-two-coherence-squares-first-associator :
+  {l : Level} (A : UU l) →
+  coherence-square-triangle-map-inv-coherence-product-join
+    {A = A}
+    {B = join-power 1 A}
+    {C = join-power 2 A} →
+  coherence-square-triangle-map-associative-coherence-left-product-join
+    {A = A}
+    {B = join-power 1 A}
+    {C = join-power 2 A} →
+  (join-power 2 A * join-power 2 A) ≃ join-power 4 A
+pr1 (equiv-join-power-two-two-coherence-squares-first-associator A H K) =
+  map-join-power-two-two A
+pr2 (equiv-join-power-two-two-coherence-squares-first-associator A H K) =
+  is-equiv-map-join-power-two-two-coherence-squares-first-associator A H K
+
 equiv-join-sphere-1-join-power-Fin-2 :
   sphere 1 * sphere 1 ≃
   join-power 2 (Fin 2) * join-power 2 (Fin 2)
