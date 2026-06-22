@@ -3464,3 +3464,59 @@ scaffold holes.
 Related commit:
 
 - This commit - Complete Hopf-family flattened span comparison.
+
+
+### Compose Hopf total spaces to the join-power target
+
+Request: Emily asked Codex to keep working and try to make more progress after
+the checked Hopf-family flattened span comparison was committed and pushed.
+
+Model context:
+
+- Date: 2026-06-22.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible at the start of the formalization work. Final
+  acceptance used raw `./check.sh`.
+
+Actions:
+
+- Added
+  `equiv-total-space-hopf-construction-sphere-1-join-power-Fin-2`, exposing
+  the Hopf-construction total space as the join of the two checked
+  `join-power 2 (Fin 2)` circle models.
+- Added
+  `equiv-total-space-hopf-family-sphere-1-total-space-hopf-construction-sphere-1`
+  and `equiv-total-space-hopf-family-sphere-1-join-power-Fin-2`, composing the
+  checked Hopf-family total-space comparison with the existing `S¹ * S¹`
+  join-power bridge.
+- Added
+  `equiv-total-space-fiber-sequence-hopf-construction-sphere-1-join-power-Fin-2`
+  so the canonical Hopf-construction fiber sequence exposes the same
+  total-space accessor comparison.
+- Searched for existing join associativity/pushout-pasting infrastructure.
+  The useful pasting lemmas exist, but they do not eliminate the need for a
+  dedicated associativity/join-power multiplication proof.
+- Updated `STATUS-REPORT.md` and `FORMALIZATION-PLAN.md` to record the new
+  checked comparisons and keep the remaining Hopf target focused on
+  associativity/join-power multiplication to `join-power 4 (Fin 2)`.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/hopf-construction-circle.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-family-circle.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-construction-fiber-sequence.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/hopf-construction-circle.lagda.md src/synthetic-homotopy-theory/hopf-family-circle.lagda.md src/synthetic-homotopy-theory/hopf-construction-fiber-sequence.lagda.md
+rg -n "allow-unsolved-metas|\{!!\}" src/synthetic-homotopy-theory src/group-theory src/structured-types -g "*.lagda.md"
+```
+
+The Agda checks passed. `git diff --check` passed. The touched-file scan found
+no holes, postulates, or local `--allow-unsolved-metas`; the broad scaffold
+scan found only the expected Hopf fiber sequence and stability scaffold holes.
+
+Related commit:
+
+- This commit - Compose Hopf total spaces to the join-power target.

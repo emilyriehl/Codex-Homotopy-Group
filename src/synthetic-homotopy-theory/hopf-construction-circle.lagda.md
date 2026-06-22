@@ -7,6 +7,7 @@ module synthetic-homotopy-theory.hopf-construction-circle where
 <details><summary>Imports</summary>
 
 ```agda
+open import foundation.equivalences
 open import foundation.universe-levels
 
 open import structured-types.pointed-maps
@@ -14,7 +15,12 @@ open import structured-types.pointed-types
 
 open import synthetic-homotopy-theory.h-space-structure-circle
 open import synthetic-homotopy-theory.hopf-construction
+open import synthetic-homotopy-theory.join-powers-of-types
+open import synthetic-homotopy-theory.joins-of-types
 open import synthetic-homotopy-theory.spheres
+open import synthetic-homotopy-theory.spheres-as-join-powers
+
+open import univalent-combinatorics.standard-finite-types
 ```
 
 </details>
@@ -40,6 +46,16 @@ total-space-hopf-construction-sphere-1 =
 pointed-total-space-hopf-construction-sphere-1 : Pointed-Type lzero
 pointed-total-space-hopf-construction-sphere-1 =
   pointed-total-space-hopf-construction-H-Space sphere-1-H-Space
+```
+
+### Comparison with the join-power model
+
+```agda
+equiv-total-space-hopf-construction-sphere-1-join-power-Fin-2 :
+  total-space-hopf-construction-sphere-1 ≃
+  join-power 2 (Fin 2) * join-power 2 (Fin 2)
+equiv-total-space-hopf-construction-sphere-1-join-power-Fin-2 =
+  equiv-join-sphere-1-join-power-Fin-2
 ```
 
 ### The Hopf map from `S¹ * S¹` to `S²`

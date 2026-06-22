@@ -34,11 +34,16 @@ open import synthetic-homotopy-theory.cocones-under-spans
 open import synthetic-homotopy-theory.descent-data-pushouts
 open import synthetic-homotopy-theory.flattening-lemma-pushouts
 open import synthetic-homotopy-theory.h-space-structure-circle
+open import synthetic-homotopy-theory.hopf-construction-circle
+open import synthetic-homotopy-theory.join-powers-of-types
 open import synthetic-homotopy-theory.joins-of-types
 open import synthetic-homotopy-theory.spheres
+open import synthetic-homotopy-theory.spheres-as-join-powers
 open import synthetic-homotopy-theory.suspension-structures
 open import synthetic-homotopy-theory.suspensions-of-types
 open import synthetic-homotopy-theory.universal-property-pushouts
+
+open import univalent-combinatorics.standard-finite-types
 ```
 
 </details>
@@ -431,6 +436,19 @@ pr1 equiv-total-space-hopf-family-sphere-1-join-sphere-1 =
   map-total-space-hopf-family-sphere-1-join-sphere-1
 pr2 equiv-total-space-hopf-family-sphere-1-join-sphere-1 =
   is-equiv-map-total-space-hopf-family-sphere-1-join-sphere-1
+
+equiv-total-space-hopf-family-sphere-1-total-space-hopf-construction-sphere-1 :
+  total-space-hopf-family-sphere-1 ≃
+  total-space-hopf-construction-sphere-1
+equiv-total-space-hopf-family-sphere-1-total-space-hopf-construction-sphere-1 =
+  equiv-total-space-hopf-family-sphere-1-join-sphere-1
+
+equiv-total-space-hopf-family-sphere-1-join-power-Fin-2 :
+  total-space-hopf-family-sphere-1 ≃
+  join-power 2 (Fin 2) * join-power 2 (Fin 2)
+equiv-total-space-hopf-family-sphere-1-join-power-Fin-2 =
+  equiv-join-sphere-1-join-power-Fin-2 ∘e
+  equiv-total-space-hopf-family-sphere-1-join-sphere-1
 ```
 
 ### The projection from the total space of the Hopf family

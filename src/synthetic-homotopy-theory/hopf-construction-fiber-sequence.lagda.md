@@ -7,6 +7,7 @@ module synthetic-homotopy-theory.hopf-construction-fiber-sequence where
 <details><summary>Imports</summary>
 
 ```agda
+open import foundation.equivalences
 open import foundation.universe-levels
 
 open import structured-types.fiber-sequences
@@ -17,6 +18,10 @@ open import structured-types.pointed-types
 open import synthetic-homotopy-theory.h-space-structure-circle
 open import synthetic-homotopy-theory.hopf-construction
 open import synthetic-homotopy-theory.hopf-construction-circle
+open import synthetic-homotopy-theory.join-powers-of-types
+open import synthetic-homotopy-theory.joins-of-types
+
+open import univalent-combinatorics.standard-finite-types
 ```
 
 </details>
@@ -67,4 +72,16 @@ fiber-sequence-hopf-construction-sphere-1 :
   fiber-sequence-Pointed-Type lzero lzero lzero
 fiber-sequence-hopf-construction-sphere-1 =
   fiber-sequence-hopf-construction-H-Space sphere-1-H-Space
+```
+
+### The total-space comparison with the join-power model
+
+```agda
+equiv-total-space-fiber-sequence-hopf-construction-sphere-1-join-power-Fin-2 :
+  type-Pointed-Type
+    ( total-space-fiber-sequence-Pointed-Type
+      fiber-sequence-hopf-construction-sphere-1) ≃
+  join-power 2 (Fin 2) * join-power 2 (Fin 2)
+equiv-total-space-fiber-sequence-hopf-construction-sphere-1-join-power-Fin-2 =
+  equiv-total-space-hopf-construction-sphere-1-join-power-Fin-2
 ```
