@@ -12,6 +12,9 @@ open import foundation.dependent-pair-types
 open import foundation.equivalences
 open import foundation.fibers-of-maps
 open import foundation.identity-types
+open import foundation.span-diagrams
+open import foundation.type-arithmetic-unit-type
+open import foundation.unit-type
 open import foundation.univalence
 open import foundation.universe-levels
 
@@ -22,10 +25,15 @@ open import structured-types.pointed-homotopies
 open import structured-types.pointed-maps
 open import structured-types.pointed-types
 
+open import synthetic-homotopy-theory.cocones-under-spans
+open import synthetic-homotopy-theory.descent-data-pushouts
+open import synthetic-homotopy-theory.flattening-lemma-pushouts
 open import synthetic-homotopy-theory.h-space-structure-circle
+open import synthetic-homotopy-theory.joins-of-types
 open import synthetic-homotopy-theory.spheres
 open import synthetic-homotopy-theory.suspension-structures
 open import synthetic-homotopy-theory.suspensions-of-types
+open import synthetic-homotopy-theory.universal-property-pushouts
 ```
 
 </details>
@@ -88,6 +96,83 @@ compute-meridian-hopf-family-sphere-1 =
 total-space-hopf-family-sphere-1 : UU lzero
 total-space-hopf-family-sphere-1 =
   Σ (sphere 2) hopf-family-sphere-1
+```
+
+### The flattened Hopf-family descent span
+
+```agda
+span-diagram-suspension-sphere-1 : span-diagram lzero lzero lzero
+span-diagram-suspension-sphere-1 =
+  make-span-diagram
+    ( terminal-map (sphere 1))
+    ( terminal-map (sphere 1))
+
+descent-data-hopf-family-sphere-1 :
+  descent-data-pushout span-diagram-suspension-sphere-1 lzero lzero
+pr1 descent-data-hopf-family-sphere-1 _ =
+  sphere 1
+pr1 (pr2 descent-data-hopf-family-sphere-1) _ =
+  sphere 1
+pr2 (pr2 descent-data-hopf-family-sphere-1) x =
+  equiv-left-mul-sphere-1 x
+
+span-diagram-flattening-hopf-family-sphere-1 :
+  span-diagram lzero lzero lzero
+span-diagram-flattening-hopf-family-sphere-1 =
+  span-diagram-flattening-descent-data-pushout
+    descent-data-hopf-family-sphere-1
+
+equiv-domain-flattening-hopf-family-sphere-1 :
+  domain-span-diagram span-diagram-flattening-hopf-family-sphere-1 ≃
+  sphere 1
+equiv-domain-flattening-hopf-family-sphere-1 =
+  left-unit-law-Σ (λ _ → sphere 1)
+
+equiv-codomain-flattening-hopf-family-sphere-1 :
+  codomain-span-diagram span-diagram-flattening-hopf-family-sphere-1 ≃
+  sphere 1
+equiv-codomain-flattening-hopf-family-sphere-1 =
+  left-unit-law-Σ (λ _ → sphere 1)
+
+cocone-join-flattening-hopf-family-sphere-1 :
+  cocone
+    ( left-map-span-diagram span-diagram-flattening-hopf-family-sphere-1)
+    ( right-map-span-diagram span-diagram-flattening-hopf-family-sphere-1)
+    ( sphere 1 * sphere 1)
+cocone-join-flattening-hopf-family-sphere-1 =
+  comp-cocone-hom-span
+    ( pr1)
+    ( pr2)
+    ( left-map-span-diagram span-diagram-flattening-hopf-family-sphere-1)
+    ( right-map-span-diagram span-diagram-flattening-hopf-family-sphere-1)
+    ( map-equiv equiv-domain-flattening-hopf-family-sphere-1)
+    ( map-equiv equiv-codomain-flattening-hopf-family-sphere-1)
+    ( hopf-shear-sphere-1)
+    ( cocone-join)
+    ( λ _ → refl)
+    ( λ _ → refl)
+
+universal-property-pushout-cocone-join-flattening-hopf-family-sphere-1 :
+  universal-property-pushout
+    ( left-map-span-diagram span-diagram-flattening-hopf-family-sphere-1)
+    ( right-map-span-diagram span-diagram-flattening-hopf-family-sphere-1)
+    ( cocone-join-flattening-hopf-family-sphere-1)
+universal-property-pushout-cocone-join-flattening-hopf-family-sphere-1 =
+  universal-property-pushout-extended-by-equivalences
+    ( pr1)
+    ( pr2)
+    ( left-map-span-diagram span-diagram-flattening-hopf-family-sphere-1)
+    ( right-map-span-diagram span-diagram-flattening-hopf-family-sphere-1)
+    ( map-equiv equiv-domain-flattening-hopf-family-sphere-1)
+    ( map-equiv equiv-codomain-flattening-hopf-family-sphere-1)
+    ( hopf-shear-sphere-1)
+    ( cocone-join)
+    ( up-join)
+    ( λ _ → refl)
+    ( λ _ → refl)
+    ( is-equiv-map-equiv equiv-domain-flattening-hopf-family-sphere-1)
+    ( is-equiv-map-equiv equiv-codomain-flattening-hopf-family-sphere-1)
+    ( is-equiv-map-equiv equiv-hopf-shear-sphere-1)
 ```
 
 ### The projection from the total space of the Hopf family

@@ -63,21 +63,29 @@ calculation:
   fibers are both `sphere 1` and whose meridians are the univalent paths
   classified by left multiplication on `sphere 1`; it also records the pole and
   meridian computation rules, names the family total space, identifies the
-  fiber of the projection over the north pole with `sphere 1`, and packages the
-  projection as a pointed fiber sequence `S¹ ->* total ->* S²`.
+  fiber of the projection over the north pole with `sphere 1`, packages the
+  projection as a pointed fiber sequence `S¹ ->* total ->* S²`, names the
+  Hopf-family descent data over the suspension span, forms its flattened
+  descent span, and proves that the standard join `S¹ * S¹` is a pushout of
+  that flattened span via the Hopf shear.
 - The first total-space comparison layers for the Hopf construction are now
   checked. The module `suspensions-as-joins` proves an upstream-style
   equivalence `Fin 2 * X ≃ suspension X` by first identifying cocones over the
   `Fin 2 × X` join span with suspension structures, then deriving the pushout
   universal property for the suspension cocone. The module
-  `spheres-as-join-powers` proves `join-power (succ n) (Fin 2) ≃ sphere n`,
+  `hopf-family-circle` now also proves the pushout universal property of
+  `S¹ * S¹` for the flattened Hopf-family descent span, using the unit-vertex
+  equivalences and the Hopf shear. The module `spheres-as-join-powers` proves
+  `join-power (succ n) (Fin 2) ≃ sphere n`,
   with named `S¹` and `S³` instances, and now also uses join functoriality to
   compare `S¹ * S¹` with the join of two `join-power 2 (Fin 2)` models. The
   new join infrastructure proves functoriality of joins under maps, preservation
   of equivalences by this functorial action, and commutativity `A * B ≃ B * A`.
-  The remaining total-space comparison is therefore focused on associativity
-  and join-power multiplication from
-  `join-power 2 (Fin 2) * join-power 2 (Fin 2)` to `join-power 4 (Fin 2)`.
+  The remaining total-space comparison is therefore focused on the
+  descent-data/flattening map identifying the actual Hopf-family total space
+  with this flattened-span pushout, plus associativity and join-power
+  multiplication from `join-power 2 (Fin 2) * join-power 2 (Fin 2)` to
+  `join-power 4 (Fin 2)`.
 - The low-dimensional sphere-connectivity facts needed for the lower Hopf
   segment have been formalized: `S³` is 2-connected, and therefore the first
   two concrete homotopy groups of `S³` are trivial.
@@ -204,7 +212,7 @@ Hopf fiber sequence itself and the Freudenthal/stability comparison.
 | Group exactness of homotopy groups | [`src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md) | Records the adjacent group-level exactness statements needed by the Hopf comparison. The total-space statement composes through the checked transport layer. The boundary/fiber-inclusion statement `π₂(B) -> π₁(F) -> π₁(E)` is checked from the packaged looped boundary exactness theorem. The fibration-boundary statement is still available under a trivial-codomain hypothesis, and the unrestricted nontrivial-target fibration-boundary statement now has a direct checked group exactness theorem for every index, obtained from the reassociated public set-level direct theorem. The Hopf `π₃(S³) -> π₃(S²) -> π₂(S¹)` segment is the second shifted instance of this all-index theorem. |
 | Hopf construction | [`src/synthetic-homotopy-theory/hopf-construction.lagda.md`](src/synthetic-homotopy-theory/hopf-construction.lagda.md) | Defines the generic Hopf total space `A * A`, base `suspension A`, cocone, map, pointed total space, pointed base, and pointed Hopf map for any H-space. |
 | Hopf construction on the 1-sphere | [`src/synthetic-homotopy-theory/hopf-construction-circle.lagda.md`](src/synthetic-homotopy-theory/hopf-construction-circle.lagda.md) | Specializes the generic Hopf construction to `sphere-1-H-Space`, yielding the checked pointed map `S¹ * S¹ ->* S²`. |
-| Hopf family over `S²` | [`src/synthetic-homotopy-theory/hopf-family-circle.lagda.md`](src/synthetic-homotopy-theory/hopf-family-circle.lagda.md) | Defines the Hopf family over `sphere 2` using the univalent paths classified by left multiplication equivalences on `sphere 1`, proves the pole and meridian computation rules, names the total space of the family, identifies the north fiber of its projection with `sphere 1`, and packages that projection as a pointed fiber sequence. |
+| Hopf family over `S²` | [`src/synthetic-homotopy-theory/hopf-family-circle.lagda.md`](src/synthetic-homotopy-theory/hopf-family-circle.lagda.md) | Defines the Hopf family over `sphere 2` using the univalent paths classified by left multiplication equivalences on `sphere 1`, proves the pole and meridian computation rules, names the total space of the family, identifies the north fiber of its projection with `sphere 1`, packages that projection as a pointed fiber sequence, names the corresponding descent data over the suspension span and its flattened span, and proves that `S¹ * S¹` is a pushout of that flattened span by comparison with the standard join span via the Hopf shear. |
 | Suspensions as joins | [`src/synthetic-homotopy-theory/suspensions-as-joins.lagda.md`](src/synthetic-homotopy-theory/suspensions-as-joins.lagda.md) | Defines the `Fin 2 × X` join span, maps both directions between `Fin 2 * X` and `suspension X`, proves cocones over that span equivalent to suspension structures, derives the pushout universal property for the suspension cocone, and packages the checked equivalence `Fin 2 * X ≃ suspension X`. |
 | Functoriality of joins | [`src/synthetic-homotopy-theory/functoriality-joins-of-types.lagda.md`](src/synthetic-homotopy-theory/functoriality-joins-of-types.lagda.md) | Defines the map induced on joins by maps in both factors, proves its constructor computation rules, proves that it preserves equivalences by pushout invariance under equivalences of spans, and packages the resulting `equiv-join`. |
 | Type arithmetic for joins | [`src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md`](src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md) | Proves commutativity of joins, `A * B ≃ B * A`, using the pushout-swap theorem and the commutativity equivalence of cartesian products. |
@@ -230,7 +238,7 @@ Hopf fiber sequence itself and the Freudenthal/stability comparison.
 | Higher homotopy groups of the circle vanish | Mostly done | Positive concrete homotopy groups of the circle and 1-sphere are trivial. Further packaging may be needed for the exact Hopf LES endpoints. |
 | Loop space of the circle is the integers | Done | The loop-space equivalence is formalized, the universal-cover encoder is proved additive on loop concatenation, the result is transferred to the 1-sphere, and the concrete group isomorphism `π₁(S¹) ≅ ℤ` is checked. |
 | Circle as an H-space | Done | The checked module [`src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md`](src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md) packages both `𝕊¹-H-Space` and the transported `sphere-1-H-Space`, and proves that circle and 1-sphere translations are equivalences. |
-| Hopf construction and Hopf fibration | Partial | The generic Hopf map `A * A -> suspension A`, the `S¹ * S¹ ->* S²` specialization, the Hopf family over `S²`, the Hopf-family projection fiber sequence with fiber `S¹`, the Hopf shear equivalence on `S¹ × S¹`, the comparison `Fin 2 * X ≃ suspension X`, join functoriality under equivalences, join commutativity, and the bridge from `S¹ * S¹` to the join of two `join-power 2 (Fin 2)` models are checked. The packaged Hopf fiber sequence target `S^1 -> S^3 -> S^2` is still stubbed pending the family-total-space comparison, the associativity/join-power multiplication comparison from `join-power 2 (Fin 2) * join-power 2 (Fin 2)` to `join-power 4 (Fin 2)`, and transport/packaging of the final fiber-sequence proof. |
+| Hopf construction and Hopf fibration | Partial | The generic Hopf map `A * A -> suspension A`, the `S¹ * S¹ ->* S²` specialization, the Hopf family over `S²`, the Hopf-family projection fiber sequence with fiber `S¹`, the Hopf shear equivalence on `S¹ × S¹`, the proof that `S¹ * S¹` is a pushout of the flattened Hopf-family descent span, the comparison `Fin 2 * X ≃ suspension X`, join functoriality under equivalences, join commutativity, and the bridge from `S¹ * S¹` to the join of two `join-power 2 (Fin 2)` models are checked. The packaged Hopf fiber sequence target `S^1 -> S^3 -> S^2` is still stubbed pending the descent-data/flattening map from the actual family total space to this flattened-span pushout, the associativity/join-power multiplication comparison from `join-power 2 (Fin 2) * join-power 2 (Fin 2)` to `join-power 4 (Fin 2)`, and transport/packaging of the final fiber-sequence proof. |
 | Hopf LES consequence `pi_3(S^3) = pi_3(S^2)` | Partially proved | The exactness-to-isomorphism extraction and Hopf LES packaging are proved, and the fibration-boundary exactness now uses the direct checked second shifted boundary theorem rather than the trivial-codomain shortcut. The comparison still depends on the unfinished Hopf fiber sequence scaffold. |
 | Freudenthal suspension theorem | Not started | Still a major missing theorem. |
 | Stability of homotopy groups of spheres | Instance stubbed | The needed comparison `π₂(S²) ≅ π₃(S³)` is recorded as an unfinished theorem depending on Freudenthal/stability. |
@@ -242,13 +250,15 @@ Hopf fiber sequence itself and the Freudenthal/stability comparison.
 1. Extend the checked Hopf map `S¹ * S¹ ->* S²` to the Hopf fiber sequence
    `S^1 -> S^3 -> S^2`. The circle translation equivalences, Hopf family over
    `S²`, Hopf-family projection fiber sequence, Hopf shear equivalence on
-   `S¹ × S¹`, suspension-as-join layer, sphere-as-join-power layer, join
-   functoriality under equivalences, join commutativity, and the bridge from
-   `S¹ * S¹` to `join-power 2 (Fin 2) * join-power 2 (Fin 2)` are checked. The
-   remaining Hopf work is to compare the checked Hopf-family fiber sequence
-   with the Hopf-construction total space, prove associativity/join-power
-   multiplication from that join to `join-power 4 (Fin 2)`, and then transport
-   the result to the final `S^1 -> S^3 -> S^2` fiber sequence.
+   `S¹ × S¹`, flattened-span pushout comparison with `S¹ * S¹`,
+   suspension-as-join layer, sphere-as-join-power layer, join functoriality
+   under equivalences, join commutativity, and the bridge from `S¹ * S¹` to
+   `join-power 2 (Fin 2) * join-power 2 (Fin 2)` are checked. The remaining
+   Hopf work is to construct the descent-data/flattening map comparing the
+   actual Hopf-family total space with this `S¹ * S¹` pushout, prove
+   associativity/join-power multiplication from that join to
+   `join-power 4 (Fin 2)`, and then transport the result to the final
+   `S^1 -> S^3 -> S^2` fiber sequence.
 2. Prove the stability comparison `π₂(S²) ≅ π₃(S³)` from Freudenthal and sphere
    stability.
 3. Recheck `π₃(S³) ≅ ℤ` and `π₃(S²) ≅ ℤ` after their imported lower stubs are
@@ -256,9 +266,9 @@ Hopf fiber sequence itself and the Freudenthal/stability comparison.
 
 ## Next agent handoff
 
-The arbitrary-index LES bridge is complete. The circle/1-sphere H-space input and translation equivalences are checked in `src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md`. The generic Hopf map is checked in `src/synthetic-homotopy-theory/hopf-construction.lagda.md`, the sphere-1 specialization is checked in `src/synthetic-homotopy-theory/hopf-construction-circle.lagda.md`, and the Hopf family over `S²` is checked in `src/synthetic-homotopy-theory/hopf-family-circle.lagda.md`, including the pointed fiber sequence given by projecting its total space to `S²`.
+The arbitrary-index LES bridge is complete. The circle/1-sphere H-space input and translation equivalences are checked in `src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md`. The generic Hopf map is checked in `src/synthetic-homotopy-theory/hopf-construction.lagda.md`, the sphere-1 specialization is checked in `src/synthetic-homotopy-theory/hopf-construction-circle.lagda.md`, and the Hopf family over `S²` is checked in `src/synthetic-homotopy-theory/hopf-family-circle.lagda.md`, including the pointed fiber sequence given by projecting its total space to `S²` and the proof that `S¹ * S¹` is a pushout of the flattened Hopf-family descent span.
 
-The next upstream-shaped target is to turn the checked pointed Hopf map `S¹ * S¹ ->* S²` into the packaged Hopf fiber sequence. The structural route now has two explicit comparison targets: prove the flattening/descent comparison between `total-space-hopf-family-sphere-1` and the Hopf-construction total space `S¹ * S¹`, and prove or package the total-space comparison `S¹ * S¹ ≃ S³`. Then transport the Hopf map across the `S³` comparison as needed and fill `src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md` with the actual pointed maps and fiber-sequence proof.
+The next upstream-shaped target is to turn the checked pointed Hopf map `S¹ * S¹ ->* S²` into the packaged Hopf fiber sequence. The structural route now has two explicit comparison targets: finish the descent-data/flattening map between `total-space-hopf-family-sphere-1` and the checked flattened-span pushout `S¹ * S¹`, and prove or package the total-space comparison `S¹ * S¹ ≃ S³`. Then transport the Hopf map across the `S³` comparison as needed and fill `src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md` with the actual pointed maps and fiber-sequence proof.
 
 Expected verification for this next step should start with:
 
@@ -273,6 +283,18 @@ Expected verification for this next step should start with:
 Once the Hopf scaffold is closed, recheck the Hopf LES second and third segment files before moving to the Freudenthal/stability scaffold.
 
 ## Current verification
+
+Later on 2026-06-22, the flattened Hopf-family descent span was compared with
+the standard join span and checked with:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/hopf-family-circle.lagda.md
+```
+
+The check passed. The new checked layer names the Hopf-family descent data over
+the suspension span, forms its flattened descent span, and proves that
+`S¹ * S¹` satisfies the pushout universal property for that span via the unit
+vertex equivalences and the Hopf shear.
 
 Later on 2026-06-22, the Hopf shear equivalence on `S¹ × S¹` was added and
 checked with:

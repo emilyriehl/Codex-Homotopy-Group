@@ -3278,3 +3278,50 @@ Both Agda checks passed.
 Related commit:
 
 - This commit - Add Hopf shear equivalence.
+
+
+### Compare the flattened Hopf-family span with the join
+
+Request: Emily asked Codex to keep working after the checked Hopf shear
+equivalence and Hopf-family projection fiber sequence.
+
+Model context:
+
+- Date: 2026-06-22.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible at the start of the formalization work. Final
+  acceptance used raw `./check.sh`.
+
+Actions:
+
+- Extended `synthetic-homotopy-theory.hopf-family-circle` with the suspension
+  span for `S²` and the explicit Hopf-family descent data over that span.
+- Formed the flattened descent span associated to that data.
+- Identified the domain and codomain vertices of the flattened span with
+  `sphere 1` by the unit law for dependent pairs.
+- Compared the flattened span with the standard join span using the Hopf shear
+  equivalence on `S¹ × S¹`.
+- Proved that the standard join `S¹ * S¹` satisfies the pushout universal
+  property for the flattened Hopf-family descent span.
+- Updated `STATUS-REPORT.md` and `FORMALIZATION-PLAN.md` to record this
+  checked span comparison and narrow the remaining total-space comparison to
+  the actual descent-data/flattening map and the `S¹ * S¹ ≃ S³` packaging.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/hopf-family-circle.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/hopf-family-circle.lagda.md
+rg -n "allow-unsolved-metas|\{!!\}" src/synthetic-homotopy-theory src/group-theory src/structured-types -g "*.lagda.md"
+```
+
+The Agda check passed. `git diff --check` passed. The touched-file scan found
+no holes, postulates, or local `--allow-unsolved-metas`; the broad scaffold
+scan found only the expected Hopf fiber sequence and stability scaffold holes.
+
+Related commit:
+
+- This commit - Compare flattened Hopf-family span with the join.
