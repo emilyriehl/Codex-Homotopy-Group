@@ -3325,3 +3325,49 @@ scan found only the expected Hopf fiber sequence and stability scaffold holes.
 Related commit:
 
 - This commit - Compare flattened Hopf-family span with the join.
+
+
+### Add the actual Hopf-family flattening pushout
+
+Request: Emily asked Codex to keep working after the checked flattened-span
+comparison with the join.
+
+Model context:
+
+- Date: 2026-06-22.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible at the start of the formalization work. Final
+  acceptance used raw `./check.sh`.
+
+Actions:
+
+- Extended `synthetic-homotopy-theory.hopf-family-circle` with the flattened
+  span induced directly by the Hopf family over the suspension cocone
+  `cocone-suspension (sphere 1)`.
+- Named the canonical cocone from that flattened span into
+  `total-space-hopf-family-sphere-1`.
+- Applied the standard pushout flattening lemma to prove that this cocone has
+  the pushout universal property.
+- Updated `STATUS-REPORT.md` and `FORMALIZATION-PLAN.md` to record that the
+  actual family total space and the explicit join comparison now both have
+  checked pushout universal properties; the remaining descent step is the
+  comparison between those two flattened spans.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/hopf-family-circle.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/hopf-family-circle.lagda.md
+rg -n "allow-unsolved-metas|\{!!\}" src/synthetic-homotopy-theory src/group-theory src/structured-types -g "*.lagda.md"
+```
+
+The Agda check passed. `git diff --check` passed. The touched-file scan found
+no holes, postulates, or local `--allow-unsolved-metas`; the broad scaffold
+scan found only the expected Hopf fiber sequence and stability scaffold holes.
+
+Related commit:
+
+- This commit - Add Hopf family flattening pushout.

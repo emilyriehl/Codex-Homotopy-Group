@@ -98,6 +98,46 @@ total-space-hopf-family-sphere-1 =
   Σ (sphere 2) hopf-family-sphere-1
 ```
 
+### The flattened span of the Hopf family
+
+```agda
+span-diagram-flattening-family-hopf-family-sphere-1 :
+  span-diagram lzero lzero lzero
+span-diagram-flattening-family-hopf-family-sphere-1 =
+  span-diagram-flattening-pushout
+    ( cocone-suspension (sphere 1))
+    ( hopf-family-sphere-1)
+
+cocone-flattening-family-hopf-family-sphere-1 :
+  cocone
+    ( left-map-span-diagram
+      span-diagram-flattening-family-hopf-family-sphere-1)
+    ( right-map-span-diagram
+      span-diagram-flattening-family-hopf-family-sphere-1)
+    ( total-space-hopf-family-sphere-1)
+cocone-flattening-family-hopf-family-sphere-1 =
+  cocone-flattening-pushout
+    ( hopf-family-sphere-1)
+    ( terminal-map (sphere 1))
+    ( terminal-map (sphere 1))
+    ( cocone-suspension (sphere 1))
+
+universal-property-pushout-cocone-flattening-family-hopf-family-sphere-1 :
+  universal-property-pushout
+    ( left-map-span-diagram
+      span-diagram-flattening-family-hopf-family-sphere-1)
+    ( right-map-span-diagram
+      span-diagram-flattening-family-hopf-family-sphere-1)
+    ( cocone-flattening-family-hopf-family-sphere-1)
+universal-property-pushout-cocone-flattening-family-hopf-family-sphere-1 =
+  flattening-lemma-pushout
+    ( hopf-family-sphere-1)
+    ( terminal-map (sphere 1))
+    ( terminal-map (sphere 1))
+    ( cocone-suspension (sphere 1))
+    ( up-suspension' (sphere 1))
+```
+
 ### The flattened Hopf-family descent span
 
 ```agda
