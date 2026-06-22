@@ -3768,3 +3768,57 @@ Both Agda checks passed with no holes.
 Related commit:
 
 - This commit - Add left-product join pushout infrastructure.
+
+
+### Package associator inverse homotopy reductions
+
+Request: Emily asked Codex to keep working on the full join associator
+equivalence, with emphasis on the real blocker rather than side quests.
+
+Model context:
+
+- Date: 2026-06-22.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible, but raw `./check.sh` remained the proof
+  acceptance gate.
+
+Actions:
+
+- Added checked path-algebra helpers for product pair paths:
+  `compute-ap-map-commutative-product-eq-pair-Σ`,
+  `triangle-eq-pair-Σ-constant-type-family`, and
+  `compute-ap-map-Σ-map-base-eq-pair-Σ-refl`.
+- Proved checked glue computation laws for `cocone-product-join`, the
+  unswapped `cocone-left-product-join`, and the swapped
+  `cocone-left-product-join'`. These expose the native join glue paths inside
+  the product-preservation pushout infrastructure.
+- Added checked conditional packages showing that a section of
+  `triangle-family-map-inv-coherence-map-associative-join` assembles the full
+  retraction homotopy
+  `map-inv-associative-join ∘ map-associative-join ~ id`, and a section of
+  `triangle-family-map-associative-coherence-map-inv-associative-join`
+  assembles the full section homotopy
+  `map-associative-join ∘ map-inv-associative-join ~ id`.
+- Updated `STATUS-REPORT.md` and `FORMALIZATION-PLAN.md` to record that the
+  remaining direct inverse route is now exactly the construction of those two
+  triangle-family extensions, unless replaced by a universal-property proof of
+  the associator.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+./check.sh src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate|lossy-unification" src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+```
+
+Both Agda checks passed. `git diff --check` passed. The touched-file scan found
+no holes, postulates, unsolved-meta pragmas, or temporary lossy-unification
+pragmas.
+
+Related commit:
+
+- This commit - Package join associator inverse reductions.

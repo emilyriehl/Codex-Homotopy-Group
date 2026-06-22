@@ -20,6 +20,7 @@ open import foundation.equivalences
 open import foundation.function-extensionality
 open import foundation.function-types
 open import foundation.functoriality-cartesian-product-types
+open import foundation.functoriality-dependent-pair-types
 open import foundation.homotopies
 open import foundation.identity-types
 open import foundation.type-arithmetic-cartesian-product-types
@@ -57,6 +58,72 @@ naturality-homotopy :
   (H : f ~ g) {x y : X} (p : x ＝ y) →
   ap f p ∙ H y ＝ H x ∙ ap g p
 naturality-homotopy H refl = inv right-unit
+
+compute-ap-map-commutative-product-eq-pair-Σ :
+  {l1 l2 : Level} {A : UU l1} {B : UU l2}
+  {x x' : A} (p : x ＝ x') (y : B) →
+  ap (map-commutative-product {A = A} {B = B})
+    ( eq-pair-Σ
+      { A = A}
+      { B = λ _ → B}
+      { s = x , y}
+      { t = x' , y}
+      ( p)
+      ( tr-constant-type-family p y)) ＝
+  eq-pair-Σ
+    { A = B}
+    { B = λ _ → A}
+    { s = y , x}
+    { t = y , x'}
+    ( refl)
+    ( p)
+compute-ap-map-commutative-product-eq-pair-Σ refl y = refl
+
+triangle-eq-pair-Σ-constant-type-family :
+  {l1 l2 : Level} {A : UU l1} {B : UU l2}
+  {x x' : A} (p : x ＝ x') (y : B) →
+  eq-pair-Σ
+    { A = A}
+    { B = λ _ → B}
+    { s = x , y}
+    { t = x' , y}
+    ( p)
+    ( tr-constant-type-family p y) ＝
+  ( eq-pair-Σ
+    { A = A}
+    { B = λ _ → B}
+    { s = x , y}
+    { t = x' , tr (λ _ → B) p y}
+    ( p)
+    ( refl) ∙
+    eq-pair-Σ
+    { A = A}
+    { B = λ _ → B}
+    { s = x' , tr (λ _ → B) p y}
+    { t = x' , y}
+    ( refl)
+    ( tr-constant-type-family p y))
+triangle-eq-pair-Σ-constant-type-family refl y = refl
+
+compute-ap-map-Σ-map-base-eq-pair-Σ-refl :
+  {l1 l2 l3 : Level} {A : UU l1} {B : UU l2} {C : UU l3}
+  (f : A → B) {x : A} {y y' : C} (q : y ＝ y') →
+  ap (map-Σ-map-base f (λ _ → C))
+    ( eq-pair-Σ
+      { A = A}
+      { B = λ _ → C}
+      { s = x , y}
+      { t = x , y'}
+      ( refl)
+      ( q)) ＝
+  eq-pair-Σ
+    { A = B}
+    { B = λ _ → C}
+    { s = f x , y}
+    { t = f x , y'}
+    ( refl)
+    ( q)
+compute-ap-map-Σ-map-base-eq-pair-Σ-refl f refl = refl
 ```
 
 ### Commutativity of joins
@@ -221,6 +288,66 @@ module _
   universal-property-pushout-cocone-product-join =
     pr2 universal-property-pushout-product-join-data
 
+  triangle-eq-pair-Σ-product-join :
+    {x x' : A * B} (p : x ＝ x') (c : C) →
+    eq-pair-Σ
+      { A = A * B}
+      { B = λ _ → C}
+      { s = x , c}
+      { t = x' , c}
+      ( p)
+      ( tr-constant-type-family {A = A * B} {B = C} p c) ＝
+    ( eq-pair-Σ
+      { A = A * B}
+      { B = λ _ → C}
+      { s = x , c}
+      { t = x' , tr (λ _ → C) p c}
+      ( p)
+      ( refl) ∙
+      eq-pair-Σ
+      { A = A * B}
+      { B = λ _ → C}
+      { s = x' , tr (λ _ → C) p c}
+      { t = x' , c}
+      ( refl)
+      ( tr-constant-type-family {A = A * B} {B = C} p c))
+  triangle-eq-pair-Σ-product-join refl c = refl
+
+  compute-glue-cocone-product-join :
+    coherence-square-cocone
+      ( left-map-span-product-join)
+      ( right-map-span-product-join)
+      ( cocone-product-join) ~
+    ( λ (t , c) →
+      eq-pair-Σ
+        { A = A * B}
+        { B = λ _ → C}
+        ( glue-join t)
+        ( tr-constant-type-family
+          { A = A * B}
+          { B = C}
+          ( glue-join t)
+          ( c)))
+  compute-glue-cocone-product-join (t , c) =
+    ( ap
+      ( λ q →
+        eq-pair-Σ
+          { A = A * B}
+          { B = λ _ → C}
+          { s = inl-join (pr1 t) , c}
+          { t = inr-join (pr2 t) , tr (λ _ → C) (glue-join t) c}
+          ( glue-join t)
+          ( refl) ∙
+        q)
+      ( compute-ap-map-Σ-map-base-eq-pair-Σ-refl
+        ( inr-join {A = A} {B = B})
+        ( tr-constant-type-family
+          { A = A * B}
+          { B = C}
+          ( glue-join t)
+          ( c)))) ∙
+    ( inv (triangle-eq-pair-Σ-product-join (glue-join t) c))
+
 ```
 
 ### Left products preserve join pushouts
@@ -299,6 +426,31 @@ module _
   universal-property-pushout-cocone-left-product-join =
     pr2 universal-property-pushout-left-product-join-data
 
+  compute-glue-cocone-left-product-join :
+    coherence-square-cocone
+      ( left-map-span-left-product-join)
+      ( right-map-span-left-product-join)
+      ( cocone-left-product-join) ~
+    ( λ (a , b , c) →
+      eq-pair-Σ
+        { A = B * C}
+        { B = λ _ → A}
+        ( glue-join (b , c))
+        ( tr-constant-type-family
+          { A = B * C}
+          { B = A}
+          ( glue-join (b , c))
+          ( a)))
+  compute-glue-cocone-left-product-join (a , b , c) =
+    ( ap
+      ( _∙ refl)
+      ( compute-glue-cocone-product-join
+        { A = B}
+        { B = C}
+        { C = A}
+        ( (b , c) , a))) ∙
+    right-unit
+
   cocone-left-product-join' :
     cocone
       ( left-map-span-left-product-join)
@@ -329,6 +481,43 @@ module _
         ( cocone-left-product-join'))
       ( is-equiv-map-commutative-product)
       ( universal-property-pushout-cocone-left-product-join)
+
+  compute-horizontal-map-cocone-left-product-join' :
+    horizontal-map-cocone
+      ( left-map-span-left-product-join)
+      ( right-map-span-left-product-join)
+      ( cocone-left-product-join') ~
+    map-product id inl-join
+  compute-horizontal-map-cocone-left-product-join' = refl-htpy
+
+  compute-vertical-map-cocone-left-product-join' :
+    vertical-map-cocone
+      ( left-map-span-left-product-join)
+      ( right-map-span-left-product-join)
+      ( cocone-left-product-join') ~
+    map-product id inr-join
+  compute-vertical-map-cocone-left-product-join' = refl-htpy
+
+  compute-glue-cocone-left-product-join' :
+    coherence-square-cocone
+      ( left-map-span-left-product-join)
+      ( right-map-span-left-product-join)
+      ( cocone-left-product-join') ~
+    ( λ t →
+      eq-pair-Σ
+        { A = A}
+        { B = λ _ → B * C}
+        ( refl)
+        ( glue-join (pr1 (pr2 t) , pr2 (pr2 t))))
+  compute-glue-cocone-left-product-join' (a , b , c) =
+    ( ap
+      ( ap (map-commutative-product {A = B * C} {B = A}))
+      ( compute-glue-cocone-left-product-join (a , b , c))) ∙
+    compute-ap-map-commutative-product-eq-pair-Σ
+      { A = B * C}
+      { B = A}
+      ( glue-join (b , c))
+      ( a)
 ```
 
 ### Associativity of joins
@@ -1229,6 +1418,120 @@ module _
     apinr = ap inr-join p
     glueOuter = glue-join (inr-join b , c)
 
+  coherence-map-inv-map-associative-join :
+    ( (x : A * B) (c : C) →
+      triangle-family-map-inv-coherence-map-associative-join x c) →
+    (x : A * B) (c : C) →
+    dependent-identification
+      ( λ z → map-inv-associative-join (map-associative-join z) ＝ z)
+      ( glue-join (x , c))
+      ( compute-inl-map-inv-map-associative-join x)
+      ( compute-inr-map-inv-map-associative-join c)
+  coherence-map-inv-map-associative-join H x c =
+    map-compute-dependent-identification-eq-value-function
+      ( map-inv-associative-join ∘ map-associative-join)
+      ( id)
+      ( p)
+      ( compute-inl-map-inv-map-associative-join x)
+      ( compute-inr-map-inv-map-associative-join c)
+      ( equational-reasoning
+        ap (map-inv-associative-join ∘ map-associative-join) p ∙ qr
+        ＝ ap map-inv-associative-join (ap map-associative-join p) ∙ qr
+          by ap (_∙ qr)
+            ( ap-comp map-inv-associative-join map-associative-join p)
+        ＝ ap map-inv-associative-join (ap map-associative-join p) ∙
+            ((ap map-inv-associative-join ainr ∙ finr) ∙ rinr)
+          by refl
+        ＝ ( ap map-inv-associative-join (ap map-associative-join p) ∙
+            ( ap map-inv-associative-join ainr ∙ finr)) ∙
+            rinr
+          by inv
+            ( assoc
+              ( ap map-inv-associative-join (ap map-associative-join p))
+              ( ap map-inv-associative-join ainr ∙ finr)
+              ( rinr))
+        ＝ ( ( ap map-inv-associative-join (ap map-associative-join p) ∙
+              ap map-inv-associative-join ainr) ∙
+            finr) ∙
+            rinr
+          by ap (_∙ rinr)
+            ( inv
+              ( assoc
+                ( ap map-inv-associative-join (ap map-associative-join p))
+                ( ap map-inv-associative-join ainr)
+                ( finr)))
+        ＝ ( ap map-inv-associative-join
+            ( ap map-associative-join p ∙ ainr) ∙
+            finr) ∙
+            rinr
+          by ap (λ q → (q ∙ finr) ∙ rinr)
+            ( inv
+              ( ap-concat
+                ( map-inv-associative-join)
+                ( ap map-associative-join p)
+                ( ainr)))
+        ＝ ( ap map-inv-associative-join (ainl ∙ coh) ∙ finr) ∙
+            rinr
+          by ap (λ q → (ap map-inv-associative-join q ∙ finr) ∙ rinr)
+            ( compute-glue-map-associative-join (x , c))
+        ＝ ((ap map-inv-associative-join ainl ∙
+            ap map-inv-associative-join coh) ∙
+            finr) ∙
+            rinr
+          by ap (_∙ rinr)
+            ( ap (_∙ finr)
+              ( ap-concat map-inv-associative-join ainl coh))
+        ＝ ( ap map-inv-associative-join ainl ∙
+            ( ap map-inv-associative-join coh ∙ finr)) ∙
+            rinr
+          by ap (_∙ rinr)
+            ( assoc
+              ( ap map-inv-associative-join ainl)
+              ( ap map-inv-associative-join coh)
+              ( finr))
+        ＝ ap map-inv-associative-join ainl ∙
+            ((ap map-inv-associative-join coh ∙ finr) ∙ rinr)
+          by assoc
+            ( ap map-inv-associative-join ainl)
+            ( ap map-inv-associative-join coh ∙ finr)
+            ( rinr)
+        ＝ ap map-inv-associative-join ainl ∙
+            (ap map-inv-associative-join coh ∙ (finr ∙ rinr))
+          by ap (ap map-inv-associative-join ainl ∙_)
+            ( assoc (ap map-inv-associative-join coh) finr rinr)
+        ＝ ap map-inv-associative-join ainl ∙ (linv ∙ ap id p)
+          by ap (ap map-inv-associative-join ainl ∙_) (H x c)
+        ＝ (ap map-inv-associative-join ainl ∙ linv) ∙ ap id p
+          by inv (assoc (ap map-inv-associative-join ainl) linv (ap id p)))
+    where
+    p = glue-join (x , c)
+    ainl = compute-inl-map-associative-join x
+    ainr = compute-inr-map-associative-join c
+    coh = coherence-map-associative-join x c
+    linv = compute-map-inv-map-left-associative-join x
+    finr = compute-inr-map-inv-associative-join (inr-join c)
+    rinr = compute-inr-map-right-associative-join c
+    qr = compute-inr-map-inv-map-associative-join c
+
+  dependent-cocone-map-inv-map-associative-join :
+    ( (x : A * B) (c : C) →
+      triangle-family-map-inv-coherence-map-associative-join x c) →
+    dependent-cocone pr1 pr2 cocone-join
+      ( λ z → map-inv-associative-join (map-associative-join z) ＝ z)
+  pr1 (dependent-cocone-map-inv-map-associative-join H) =
+    compute-inl-map-inv-map-associative-join
+  pr1 (pr2 (dependent-cocone-map-inv-map-associative-join H)) =
+    compute-inr-map-inv-map-associative-join
+  pr2 (pr2 (dependent-cocone-map-inv-map-associative-join H)) (x , c) =
+    coherence-map-inv-map-associative-join H x c
+
+  compute-map-inv-map-associative-join :
+    ( (x : A * B) (c : C) →
+      triangle-family-map-inv-coherence-map-associative-join x c) →
+    map-inv-associative-join ∘ map-associative-join ~ id
+  compute-map-inv-map-associative-join H =
+    dependent-cogap-join (dependent-cocone-map-inv-map-associative-join H)
+
   compute-inl-map-associative-map-inv-associative-join :
     (a : A) →
     map-associative-join (map-inv-associative-join (inl-join a)) ＝
@@ -1370,5 +1673,94 @@ module _
     glueOuter = glue-join (a , inr-join c)
     P = ap map-associative-join glueAC
     Q = ap map-associative-join rinr
+
+  coherence-map-associative-map-inv-associative-join :
+    ( (a : A) (y : B * C) →
+      triangle-family-map-associative-coherence-map-inv-associative-join a y) →
+    (a : A) (y : B * C) →
+    dependent-identification
+      ( λ z → map-associative-join (map-inv-associative-join z) ＝ z)
+      ( glue-join (a , y))
+      ( compute-inl-map-associative-map-inv-associative-join a)
+      ( compute-inr-map-associative-map-inv-associative-join y)
+  coherence-map-associative-map-inv-associative-join H a y =
+    map-compute-dependent-identification-eq-value-function
+      ( map-associative-join ∘ map-inv-associative-join)
+      ( id)
+      ( p)
+      ( compute-inl-map-associative-map-inv-associative-join a)
+      ( compute-inr-map-associative-map-inv-associative-join y)
+      ( equational-reasoning
+        ap (map-associative-join ∘ map-inv-associative-join) p ∙ qr
+        ＝ ap map-associative-join (ap map-inv-associative-join p) ∙ qr
+          by ap (_∙ qr)
+            ( ap-comp map-associative-join map-inv-associative-join p)
+        ＝ ap map-associative-join (ap map-inv-associative-join p) ∙
+            ( ap map-associative-join finr ∙ Hr)
+          by refl
+        ＝ ( ap map-associative-join (ap map-inv-associative-join p) ∙
+            ap map-associative-join finr) ∙
+            Hr
+          by inv
+            ( assoc
+              ( ap map-associative-join (ap map-inv-associative-join p))
+              ( ap map-associative-join finr)
+              ( Hr))
+        ＝ ap map-associative-join (ap map-inv-associative-join p ∙ finr) ∙
+            Hr
+          by ap (_∙ Hr)
+            ( inv
+              ( ap-concat
+                ( map-associative-join)
+                ( ap map-inv-associative-join p)
+                ( finr)))
+        ＝ ap map-associative-join (finl ∙ coh) ∙ Hr
+          by ap (λ q → ap map-associative-join q ∙ Hr)
+            ( compute-glue-map-inv-associative-join (a , y))
+        ＝ (ap map-associative-join finl ∙ ap map-associative-join coh) ∙
+            Hr
+          by ap (_∙ Hr) (ap-concat map-associative-join finl coh)
+        ＝ ap map-associative-join finl ∙
+            (ap map-associative-join coh ∙ Hr)
+          by assoc
+            ( ap map-associative-join finl)
+            ( ap map-associative-join coh)
+            ( Hr)
+        ＝ ap map-associative-join finl ∙ ((ainl ∙ linl) ∙ ap id p)
+          by ap (ap map-associative-join finl ∙_) (H a y)
+        ＝ (ap map-associative-join finl ∙ (ainl ∙ linl)) ∙ ap id p
+          by inv (assoc (ap map-associative-join finl) (ainl ∙ linl) (ap id p))
+        ＝ ((ap map-associative-join finl ∙ ainl) ∙ linl) ∙ ap id p
+          by ap (_∙ ap id p)
+            ( inv (assoc (ap map-associative-join finl) ainl linl)))
+    where
+    p = glue-join (a , y)
+    finl = compute-inl-map-inv-associative-join a
+    finr = compute-inr-map-inv-associative-join y
+    coh = coherence-map-inv-associative-join a y
+    Hr = compute-map-associative-map-right-associative-join y
+    ainl = compute-inl-map-associative-join (inl-join a)
+    linl = compute-inl-map-left-associative-join a
+    qr = compute-inr-map-associative-map-inv-associative-join y
+
+  dependent-cocone-map-associative-map-inv-associative-join :
+    ( (a : A) (y : B * C) →
+      triangle-family-map-associative-coherence-map-inv-associative-join a y) →
+    dependent-cocone pr1 pr2 cocone-join
+      ( λ z → map-associative-join (map-inv-associative-join z) ＝ z)
+  pr1 (dependent-cocone-map-associative-map-inv-associative-join H) =
+    compute-inl-map-associative-map-inv-associative-join
+  pr1 (pr2 (dependent-cocone-map-associative-map-inv-associative-join H)) =
+    compute-inr-map-associative-map-inv-associative-join
+  pr2 (pr2 (dependent-cocone-map-associative-map-inv-associative-join H)) (a , y) =
+    coherence-map-associative-map-inv-associative-join H a y
+
+  compute-map-associative-map-inv-associative-join :
+    ( (a : A) (y : B * C) →
+      triangle-family-map-associative-coherence-map-inv-associative-join a y) →
+    map-associative-join ∘ map-inv-associative-join ~ id
+  compute-map-associative-map-inv-associative-join H =
+    dependent-cogap-join
+      ( dependent-cocone-map-associative-map-inv-associative-join H)
 
 ```
