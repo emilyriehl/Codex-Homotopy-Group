@@ -3414,3 +3414,53 @@ scan found only the expected Hopf fiber sequence and stability scaffold holes.
 Related commit:
 
 - This commit - Start comparing Hopf-family flattened spans.
+
+
+### Complete the Hopf-family flattened span comparison
+
+Request: Emily asked Codex to implement the plan after the next-step discussion
+for the overall formalization objective.
+
+Model context:
+
+- Date: 2026-06-22.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible at the start of the formalization work. Final
+  acceptance used raw `./check.sh`.
+
+Actions:
+
+- Proved the right-leg meridian coherence comparing the family-induced
+  flattened span with the explicit flattened Hopf-family descent span.
+- Added reusable equivalence-level and map-level meridian comparison helpers
+  deriving the right-leg square from the Hopf-family meridian computation and
+  univalence concatenation.
+- Inverted the completed span comparison and transported the family total-space
+  pushout property to the explicit flattened descent span.
+- Used the two pushout universal properties over the explicit span to package
+  the canonical equivalence
+  `total-space-hopf-family-sphere-1 ≃ S¹ * S¹`.
+- Updated `STATUS-REPORT.md` and `FORMALIZATION-PLAN.md` to record the checked
+  Hopf-family total-space comparison and narrow the remaining Hopf task to
+  join-power multiplication/associativity and `S³` packaging.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/hopf-family-circle.lagda.md
+./check.sh src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/hopf-family-circle.lagda.md
+rg -n "allow-unsolved-metas|\{!!\}" src/synthetic-homotopy-theory src/group-theory src/structured-types -g "*.lagda.md"
+```
+
+The two Agda checks passed. `git diff --check` passed. The touched-file scan
+found no holes, postulates, or local `--allow-unsolved-metas`; the broad
+scaffold scan found only the expected Hopf fiber sequence and stability
+scaffold holes.
+
+Related commit:
+
+- This commit - Complete Hopf-family flattened span comparison.
