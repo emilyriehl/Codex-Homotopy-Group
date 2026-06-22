@@ -99,13 +99,22 @@ calculation:
   `join-power 2 (Fin 2) * join-power 2 (Fin 2)`. The structural join
   arithmetic now has a checked product-preservation pushout theorem, a checked
   associator map `((A * B) * C) -> A * (B * C)`, a checked inverse-direction
-  associator map `A * (B * C) -> (A * B) * C`, and a checked generic
+  associator map `A * (B * C) -> (A * B) * C`, a checked right-composite
+  homotopy `map-associative-join ∘ map-right-associative-join ~ inr-join`, a
+  checked retraction-side left-composite homotopy
+  `map-inv-associative-join ∘ map-left-associative-join ~ inl-join`, checked
+  endpoint reductions for the retraction triangle of
+  `map-inv-associative-join ∘ map-associative-join`, checked endpoint
+  reductions for the section triangle of
+  `map-associative-join ∘ map-inv-associative-join`, and a checked generic
   comparison map
   `join-power 2 A * join-power 2 A -> join-power 4 A`. There is also a checked
   reduction proving this join-power comparison is an equivalence once the two
   relevant associator instances are equivalences. The remaining total-space
-  comparison is therefore focused on the inverse-homotopy/universal-property
-  proof for the associator itself, then transporting to the `S³` model.
+  comparison is therefore focused on the two higher coherences extending these
+  checked triangle endpoints over the inner join glues, or an equivalent
+  universal-property proof for the associator itself, then transporting to the
+  `S³` model.
 - The low-dimensional sphere-connectivity facts needed for the lower Hopf
   segment have been formalized: `S³` is 2-connected, and therefore the first
   two concrete homotopy groups of `S³` are trivial.
@@ -236,7 +245,7 @@ Hopf fiber sequence itself and the Freudenthal/stability comparison.
 | Hopf family over `S²` | [`src/synthetic-homotopy-theory/hopf-family-circle.lagda.md`](src/synthetic-homotopy-theory/hopf-family-circle.lagda.md) | Defines the Hopf family over `sphere 2` using the univalent paths classified by left multiplication equivalences on `sphere 1`, proves the pole and meridian computation rules, names the total space of the family, identifies the north fiber of its projection with `sphere 1`, packages that projection as a pointed fiber sequence, proves by the flattening lemma that the family total space is a pushout of the family-induced flattened span, names the corresponding descent data over the suspension span and its flattened span, proves that `S¹ * S¹` is a pushout of that explicit flattened span by comparison with the standard join span via the Hopf shear, completes the comparison between the two flattened spans by proving both leg coherences, transports the total-space pushout property to the explicit span, packages the canonical equivalence `total-space-hopf-family-sphere-1 ≃ S¹ * S¹`, identifies the family total space with the Hopf-construction total space, and composes to a checked comparison with `join-power 2 (Fin 2) * join-power 2 (Fin 2)`. |
 | Suspensions as joins | [`src/synthetic-homotopy-theory/suspensions-as-joins.lagda.md`](src/synthetic-homotopy-theory/suspensions-as-joins.lagda.md) | Defines the `Fin 2 × X` join span, maps both directions between `Fin 2 * X` and `suspension X`, proves cocones over that span equivalent to suspension structures, derives the pushout universal property for the suspension cocone, and packages the checked equivalence `Fin 2 * X ≃ suspension X`. |
 | Functoriality of joins | [`src/synthetic-homotopy-theory/functoriality-joins-of-types.lagda.md`](src/synthetic-homotopy-theory/functoriality-joins-of-types.lagda.md) | Defines the map induced on joins by maps in both factors, proves its constructor computation rules, proves that it preserves equivalences by pushout invariance under equivalences of spans, and packages the resulting `equiv-join`. |
-| Type arithmetic for joins | [`src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md`](src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md) | Proves commutativity of joins, `A * B ≃ B * A`, using the pushout-swap theorem and the commutativity equivalence of cartesian products. It now also proves that products preserve join pushouts via the flattening lemma, constructs the checked associator cocone and map `((A * B) * C) -> A * (B * C)`, and constructs the checked inverse-direction cocone and map `A * (B * C) -> (A * B) * C`, including the glue coherences needed to make both maps structural rather than sphere-mediated. |
+| Type arithmetic for joins | [`src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md`](src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md) | Proves commutativity of joins, `A * B ≃ B * A`, using the pushout-swap theorem and the commutativity equivalence of cartesian products. It now also proves that products preserve join pushouts via the flattening lemma, constructs the checked associator cocone and map `((A * B) * C) -> A * (B * C)`, constructs the checked inverse-direction cocone and map `A * (B * C) -> (A * B) * C`, proves the checked right-composite homotopy `map-associative-join ∘ map-right-associative-join ~ inr-join`, proves the checked inverse-side left-composite homotopy `map-inv-associative-join ∘ map-left-associative-join ~ inl-join`, and proves endpoint reductions for both the retraction and section triangles. |
 | Spheres as join powers | [`src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md`](src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md) | Proves by induction that the nonzero join powers of `Fin 2` are spheres, packaged as `join-power (succ n) (Fin 2) ≃ sphere n`, with named `S¹` and `S³` instances, proves the Hopf-facing comparison from `S¹ * S¹` to the join of two `join-power 2 (Fin 2)` models, defines the checked structural comparison map `join-power 2 A * join-power 2 A -> join-power 4 A` with the `Fin 2` specialization, and proves that this comparison is an equivalence assuming the two relevant associator instances are equivalences. |
 | Hopf fiber sequence | [`src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md`](src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md) | Records the unfinished packaged fiber sequence with fiber `S¹`, total space `S³`, and base `S²` fixed definitionally. |
 | Hopf LES comparison for second homotopy groups | [`src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md) | Proves the right-hand boundary/fiber-inclusion exactness statement for the lower Hopf segment, the left fibration-boundary exactness statement by applying `is-exact-set-truncation-loop-fiber-sequence` to `fiber-sequence-boundary-fiber-sequence-direct-Pointed-Type` instantiated at the Hopf fiber sequence, and the algebraic extraction identifying `π₂(S²)` with `π₁(S¹)` from the two exactness statements and the checked trivial outer `S³` groups. |
@@ -296,7 +305,7 @@ Hopf fiber sequence itself and the Freudenthal/stability comparison.
 
 The arbitrary-index LES bridge is complete. The circle/1-sphere H-space input and translation equivalences are checked in `src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md`. The generic Hopf map is checked in `src/synthetic-homotopy-theory/hopf-construction.lagda.md`, the sphere-1 specialization is checked in `src/synthetic-homotopy-theory/hopf-construction-circle.lagda.md`, the canonical Hopf-construction source sequence is checked in `src/synthetic-homotopy-theory/hopf-construction-fiber-sequence.lagda.md`, and the Hopf family over `S²` is checked in `src/synthetic-homotopy-theory/hopf-family-circle.lagda.md`, including the pointed fiber sequence given by projecting its total space to `S²`, the flattening-lemma pushout for its actual total space, the proof that `S¹ * S¹` is a pushout of the explicit flattened Hopf-family descent span, the completed two-leg comparison between those flattened spans, the canonical equivalence `total-space-hopf-family-sphere-1 ≃ S¹ * S¹`, and the composed comparison of the Hopf-family total space with `join-power 2 (Fin 2) * join-power 2 (Fin 2)`.
 
-The next upstream-shaped target is to turn the checked pointed Hopf map `S¹ * S¹ ->* S²` into the packaged Hopf fiber sequence. The structural route now has one main total-space comparison target: prove the checked join associator map `((A * B) * C) -> A * (B * C)` is an equivalence, using either the checked inverse-direction map or a universal-property proof. The checked lemma in `spheres-as-join-powers` then turns the resulting associator equivalence instances into the equivalence of `join-power 2 (Fin 2) * join-power 2 (Fin 2) -> join-power 4 (Fin 2)`. After that, compose with the checked `S¹ * S¹` and `join-power 4 (Fin 2) ≃ S³` comparisons, transport the Hopf map across the `S³` comparison as needed, and fill `src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md` with the actual pointed maps and fiber-sequence proof.
+The next upstream-shaped target is to turn the checked pointed Hopf map `S¹ * S¹ ->* S²` into the packaged Hopf fiber sequence. The structural route now has one main total-space comparison target: prove the checked join associator map `((A * B) * C) -> A * (B * C)` is an equivalence, using either the checked inverse-direction map or a universal-property proof. The inverse-homotopy route now has checked endpoint reductions for both the retraction and section triangles; the remaining hard subgoals are the higher coherences extending those endpoints over the inner joins `A * B` and `B * C`. The checked lemma in `spheres-as-join-powers` then turns the resulting associator equivalence instances into the equivalence of `join-power 2 (Fin 2) * join-power 2 (Fin 2) -> join-power 4 (Fin 2)`. After that, compose with the checked `S¹ * S¹` and `join-power 4 (Fin 2) ≃ S³` comparisons, transport the Hopf map across the `S³` comparison as needed, and fill `src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md` with the actual pointed maps and fiber-sequence proof.
 
 Expected verification for this next step should start with:
 
@@ -1610,3 +1619,35 @@ rg -n "allow-unsolved-metas|\{!!\}" src/synthetic-homotopy-theory src/group-theo
 ```
 
 Both Agda checks passed. `git diff --check` passed. The touched-file scan found no holes, postulates, or local `--allow-unsolved-metas`; the broader scaffold scan found only the expected Hopf fiber sequence and Freudenthal/stability comparison holes. The Hopf fibration scaffold and Freudenthal/stability scaffold remain the only expected unfinished Agda theorem files in this area.
+
+
+Later on 2026-06-22, the associator inverse-homotopy route made checked
+progress in `type-arithmetic-joins-of-types`. The file now proves the
+right-composite homotopy
+
+```text
+map-associative-join ∘ map-right-associative-join ~ inr-join
+```
+
+and the inverse-side left-composite homotopy
+
+```text
+map-inv-associative-join ∘ map-left-associative-join ~ inl-join
+```
+
+It also proves endpoint reductions for both the retraction triangle of
+`map-inv-associative-join ∘ map-associative-join` and the section triangle of
+`map-associative-join ∘ map-inv-associative-join`. Direct attempts to extend
+those endpoints over the inner joins exposed higher dependent-identification
+coherences over the `A * B` and `B * C` glue paths; those coherences are now the
+precise remaining inverse-homotopy blockers, unless the next pass instead
+proves the associator equivalence by a pushout universal-property/pasting
+argument.
+
+The checked command was:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+```
+
+The Agda check passed with no holes.

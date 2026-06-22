@@ -3619,3 +3619,106 @@ no holes or postulates.
 Related commit:
 
 - This commit - Build inverse join associator map.
+
+
+### Reduce the join associator section to its higher coherence
+
+Request: Emily asked Codex to keep working hard on the full equivalence for the
+structural join associator, after both directions of the associator map had
+been checked.
+
+Model context:
+
+- Date: 2026-06-22.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible and used for goal inspection. Final acceptance
+  used raw `./check.sh`.
+
+Actions:
+
+- Added a generic homotopy-naturality lemma needed for endpoint path algebra.
+- Added the missing left endpoint computation for
+  `coherence-map-associative-join`; the previous run had only needed the right
+  endpoint.
+- Proved the full glue coherence for
+  `map-associative-join ∘ map-right-associative-join ~ inr-join`, using
+  functoriality of `ap`, the checked `map-right-associative-join` glue
+  computation, the main associator glue computation, and the endpoint
+  computation for `coherence-map-associative-join`.
+- Packaged this as the checked homotopy
+  `compute-map-associative-map-right-associative-join`.
+- Added checked endpoints for the section triangle of
+  `map-associative-join ∘ map-inv-associative-join`.
+- Probed the full section coherence. Agda reduced it to a higher
+  dependent-identification coherence over the inner join glue path
+  `glue-join (b , c)`. The temporary general-coherence skeleton was removed
+  before final checking; the checked endpoint reductions were retained as the
+  next reusable inputs.
+- Updated `STATUS-REPORT.md` to record that the real remaining blocker is this
+  higher section-triangle coherence, or an equivalent pushout
+  universal-property proof of the associator equivalence.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+```
+
+The Agda check passed with no holes.
+
+Related commit:
+
+- This commit - Reduce join associator section coherence.
+
+
+### Advance join associator inverse laws
+
+Request: Emily asked Codex to work harder toward finishing the full structural
+join associator equivalence.
+
+Model context:
+
+- Date: 2026-06-22.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible, but this run again treated raw `./check.sh` as
+  the proof acceptance gate.
+
+Actions:
+
+- Proved the checked retraction-side left-composite homotopy
+  `map-inv-associative-join ∘ map-left-associative-join ~ inl-join`.
+- Added checked endpoint reductions for the retraction triangle of
+  `map-inv-associative-join ∘ map-associative-join`.
+- Probed the full two-sided inverse packaging for the associator. Raw Agda
+  reduced the attempted proof to two non-definitional higher coherences: one
+  over the `A * B` inner join for the retraction triangle and one over the
+  `B * C` inner join for the section triangle.
+- Fixed the section-side composite square calculation so that, after replacing
+  the higher coherence with a temporary hole, the remaining section homotopy
+  packaging reduced to the same higher-coherence blocker rather than a
+  lower-level path-algebra or universe-inference error.
+- Removed the unaccepted full equivalence packaging and all temporary holes
+  before final checking. The checked endpoint reductions remain as reusable
+  inputs for the next attempt, and the status documents now record the two
+  higher coherences or a pushout universal-property proof as the real blocker.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+./check.sh src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate|lossy-unification" src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+```
+
+The Agda checks passed. `git diff --check` passed. The touched-file scan found
+no holes, postulates, unsolved-meta pragmas, or temporary lossy-unification
+pragmas after the unaccepted packaging was removed.
+
+Related commit:
+
+- This commit - Advance join associator inverse laws.
