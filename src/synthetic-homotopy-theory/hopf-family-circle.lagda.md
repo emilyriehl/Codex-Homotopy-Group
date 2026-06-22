@@ -8,9 +8,11 @@ module synthetic-homotopy-theory.hopf-family-circle where
 
 ```agda
 open import foundation.action-on-identifications-functions
+open import foundation.commuting-squares-of-maps
 open import foundation.dependent-pair-types
 open import foundation.equivalences
 open import foundation.fibers-of-maps
+open import foundation.functoriality-dependent-pair-types
 open import foundation.identity-types
 open import foundation.span-diagrams
 open import foundation.type-arithmetic-unit-type
@@ -108,6 +110,22 @@ span-diagram-flattening-family-hopf-family-sphere-1 =
     ( cocone-suspension (sphere 1))
     ( hopf-family-sphere-1)
 
+equiv-domain-flattening-family-hopf-family-sphere-1 :
+  domain-span-diagram span-diagram-flattening-family-hopf-family-sphere-1 ≃
+  sphere 1
+equiv-domain-flattening-family-hopf-family-sphere-1 =
+  ( equiv-eq compute-north-hopf-family-sphere-1) ∘e
+  ( left-unit-law-Σ
+    ( λ _ → hopf-family-sphere-1 (north-sphere 2)))
+
+equiv-codomain-flattening-family-hopf-family-sphere-1 :
+  codomain-span-diagram span-diagram-flattening-family-hopf-family-sphere-1 ≃
+  sphere 1
+equiv-codomain-flattening-family-hopf-family-sphere-1 =
+  ( equiv-eq compute-south-hopf-family-sphere-1) ∘e
+  ( left-unit-law-Σ
+    ( λ _ → hopf-family-sphere-1 (south-sphere 2)))
+
 cocone-flattening-family-hopf-family-sphere-1 :
   cocone
     ( left-map-span-diagram
@@ -161,6 +179,40 @@ span-diagram-flattening-hopf-family-sphere-1 :
 span-diagram-flattening-hopf-family-sphere-1 =
   span-diagram-flattening-descent-data-pushout
     descent-data-hopf-family-sphere-1
+
+equiv-spanning-type-flattening-hopf-family-sphere-1 :
+  spanning-type-span-diagram
+    span-diagram-flattening-family-hopf-family-sphere-1 ≃
+  spanning-type-span-diagram
+    span-diagram-flattening-hopf-family-sphere-1
+equiv-spanning-type-flattening-hopf-family-sphere-1 =
+  equiv-tot (λ _ → equiv-eq compute-north-hopf-family-sphere-1)
+
+equiv-domain-comparison-flattening-hopf-family-sphere-1 :
+  domain-span-diagram
+    span-diagram-flattening-family-hopf-family-sphere-1 ≃
+  domain-span-diagram
+    span-diagram-flattening-hopf-family-sphere-1
+equiv-domain-comparison-flattening-hopf-family-sphere-1 =
+  equiv-tot (λ _ → equiv-eq compute-north-hopf-family-sphere-1)
+
+equiv-codomain-comparison-flattening-hopf-family-sphere-1 :
+  codomain-span-diagram
+    span-diagram-flattening-family-hopf-family-sphere-1 ≃
+  codomain-span-diagram
+    span-diagram-flattening-hopf-family-sphere-1
+equiv-codomain-comparison-flattening-hopf-family-sphere-1 =
+  equiv-tot (λ _ → equiv-eq compute-south-hopf-family-sphere-1)
+
+coherence-left-map-comparison-flattening-hopf-family-sphere-1 :
+  coherence-square-maps
+    ( left-map-span-diagram
+      span-diagram-flattening-family-hopf-family-sphere-1)
+    ( map-equiv equiv-spanning-type-flattening-hopf-family-sphere-1)
+    ( map-equiv equiv-domain-comparison-flattening-hopf-family-sphere-1)
+    ( left-map-span-diagram span-diagram-flattening-hopf-family-sphere-1)
+coherence-left-map-comparison-flattening-hopf-family-sphere-1 _ =
+  refl
 
 equiv-domain-flattening-hopf-family-sphere-1 :
   domain-span-diagram span-diagram-flattening-hopf-family-sphere-1 ≃

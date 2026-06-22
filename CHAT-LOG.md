@@ -3371,3 +3371,46 @@ scan found only the expected Hopf fiber sequence and stability scaffold holes.
 Related commit:
 
 - This commit - Add Hopf family flattening pushout.
+
+
+### Start comparing the two Hopf-family flattened spans
+
+Request: Emily asked Codex to keep working after the actual Hopf-family
+flattening pushout was checked.
+
+Model context:
+
+- Date: 2026-06-22.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible at the start of the formalization work. Final
+  acceptance used raw `./check.sh`.
+
+Actions:
+
+- Added equivalences normalizing the domain and codomain of the
+  family-induced flattened span to `sphere 1` via the north and south pole
+  computation rules.
+- Added the direct middle, domain, and codomain vertex equivalences from the
+  family-induced flattened span to the explicit flattened descent span.
+- Proved the left-leg comparison square by reflexivity.
+- Updated `STATUS-REPORT.md` and `FORMALIZATION-PLAN.md` to narrow the
+  remaining flattened-span comparison to the right-leg meridian coherence.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/hopf-family-circle.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/hopf-family-circle.lagda.md
+rg -n "allow-unsolved-metas|\{!!\}" src/synthetic-homotopy-theory src/group-theory src/structured-types -g "*.lagda.md"
+```
+
+The Agda check passed. `git diff --check` passed. The touched-file scan found
+no holes, postulates, or local `--allow-unsolved-metas`; the broad scaffold
+scan found only the expected Hopf fiber sequence and stability scaffold holes.
+
+Related commit:
+
+- This commit - Start comparing Hopf-family flattened spans.
