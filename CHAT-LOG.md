@@ -3076,3 +3076,42 @@ The Agda check passed. `git diff --check` passed. The touched-file scan found no
 Related commit:
 
 - This commit - Prove suspensions as joins with Fin 2.
+
+
+### Bridge spheres to join powers
+
+Request: Emily asked Codex to keep working hard toward the main formalization goal, continuing the upstream-quality Hopf total-space comparison route.
+
+Model context:
+
+- Date: 2026-06-21.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible and used for interactive proof checking. Final acceptance used raw `./check.sh`.
+
+Actions:
+
+- Added `synthetic-homotopy-theory.spheres-as-join-powers` as a focused bridge module.
+- Proved by induction that the nonzero join powers of the two-point type are spheres:
+
+```text
+equiv-sphere-join-power-Fin-2 :
+  (n : ℕ) → join-power (succ-ℕ n) (Fin 2) ≃ sphere n
+```
+
+- Added named low-dimensional instances for `S¹` and `S³`, including the needed bridge `join-power 4 (Fin 2) ≃ sphere 3`.
+- Updated `STATUS-REPORT.md` and `FORMALIZATION-PLAN.md` to record that the suspension-as-join and sphere-as-join-power layers are checked, while the remaining total-space task is join associativity/packaging from `S¹ * S¹` to `join-power 4 (Fin 2)` followed by the final `S¹ * S¹ ≃ S³` packaging.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md
+rg -n "allow-unsolved-metas|\{!!\}" src/synthetic-homotopy-theory src/group-theory src/structured-types -g "*.lagda.md"
+```
+
+The Agda check passed. `git diff --check` passed. The touched-file scan found no holes, postulates, or local `--allow-unsolved-metas`; the broad scaffold scan found only the expected Hopf fiber sequence and stability scaffold holes.
+
+Related commit:
+
+- This commit - Bridge spheres to join powers.
