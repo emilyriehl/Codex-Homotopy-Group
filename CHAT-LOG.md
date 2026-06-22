@@ -3520,3 +3520,51 @@ scan found only the expected Hopf fiber sequence and stability scaffold holes.
 Related commit:
 
 - This commit - Compose Hopf total spaces to the join-power target.
+
+
+### Build the structural join associator map
+
+Request: Emily asked Codex to stop spending effort on side quests and work hard
+on the real blocker, namely the structural associativity/join-power comparison
+needed for the Hopf total-space objective.
+
+Model context:
+
+- Date: 2026-06-22.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible and used for goal inspection. Final acceptance
+  used raw `./check.sh`.
+
+Actions:
+
+- Added a checked flattening-lemma proof that products preserve join pushouts.
+- Built the structural associator cocone and map
+  `map-associative-join : (A * B) * C -> A * (B * C)`.
+- Proved the nontrivial glue coherence for this associator map by reducing the
+  dependent-function transport to pointwise transport, computing transport in a
+  left identity family, and using the cogap glue computation plus naturality of
+  join glue.
+- Added a generic checked structural comparison
+  `map-join-power-two-two : join-power 2 A * join-power 2 A -> join-power 4 A`
+  and the `Fin 2` specialization.
+- Updated `STATUS-REPORT.md` and `FORMALIZATION-PLAN.md` to record that the
+  map-level structural route is checked and that the remaining blocker is the
+  equivalence/universal-property proof for the associator route.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+./check.sh src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md
+git diff --check
+rg -n "\?|\{!|postulate" src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md
+```
+
+The Agda checks passed. `git diff --check` passed. The touched-file scan found
+no holes or postulates.
+
+Related commit:
+
+- This commit - Build structural join associator map.
