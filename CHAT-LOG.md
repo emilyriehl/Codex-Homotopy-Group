@@ -3237,3 +3237,44 @@ The Agda check passed.
 Related commit:
 
 - This commit - Package Hopf family projection as a fiber sequence.
+
+
+### Add the Hopf shear equivalence on the 1-sphere
+
+Request: Emily asked Codex to keep working after the checked Hopf-family input;
+after packaging the family projection as a fiber sequence, Codex continued into
+the next flattened-descent comparison ingredient.
+
+Model context:
+
+- Date: 2026-06-22.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible at the start of the formalization work. Final
+  acceptance used raw `./check.sh`.
+
+Actions:
+
+- Extended `synthetic-homotopy-theory.h-space-structure-circle` with the Hopf
+  shear equivalence on `S¹ × S¹`.
+- Defined the shear map as `(x , y) ↦ (y , x · y)` and proved it is an
+  equivalence by composing product commutativity with the fiberwise equivalence
+  supplied by right translations on `S¹`.
+- Recorded definitional computation rules for both projections of the shear.
+- Updated `STATUS-REPORT.md` and `FORMALIZATION-PLAN.md` to identify this as
+  the span-equivalence ingredient for comparing the flattened Hopf-family
+  descent span with the standard join span.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-family-circle.lagda.md
+```
+
+Both Agda checks passed.
+
+Related commit:
+
+- This commit - Add Hopf shear equivalence.

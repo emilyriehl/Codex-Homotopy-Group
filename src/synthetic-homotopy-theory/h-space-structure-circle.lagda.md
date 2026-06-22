@@ -8,11 +8,14 @@ module synthetic-homotopy-theory.h-space-structure-circle where
 
 ```agda
 open import foundation.action-on-identifications-functions
+open import foundation.cartesian-product-types
 open import foundation.dependent-pair-types
 open import foundation.equivalences
 open import foundation.function-types
+open import foundation.functoriality-dependent-pair-types
 open import foundation.identity-types
 open import foundation.propositions
+open import foundation.type-arithmetic-cartesian-product-types
 open import foundation.unital-binary-operations
 open import foundation.universe-levels
 
@@ -151,6 +154,31 @@ pr2 (equiv-left-mul-sphere-1 x) = is-equiv-left-mul-sphere-1 x
 equiv-right-mul-sphere-1 : sphere 1 → sphere 1 ≃ sphere 1
 pr1 (equiv-right-mul-sphere-1 x) = λ y → mul-sphere-1 y x
 pr2 (equiv-right-mul-sphere-1 x) = is-equiv-right-mul-sphere-1 x
+```
+
+### The Hopf shear on the product of two 1-spheres
+
+```agda
+equiv-hopf-shear-sphere-1 : (sphere 1 × sphere 1) ≃ (sphere 1 × sphere 1)
+equiv-hopf-shear-sphere-1 =
+  ( equiv-tot (λ y → equiv-right-mul-sphere-1 y)) ∘e
+  ( commutative-product)
+
+hopf-shear-sphere-1 : sphere 1 × sphere 1 → sphere 1 × sphere 1
+hopf-shear-sphere-1 =
+  map-equiv equiv-hopf-shear-sphere-1
+
+compute-pr1-hopf-shear-sphere-1 :
+  (t : sphere 1 × sphere 1) →
+  pr1 (hopf-shear-sphere-1 t) ＝ pr2 t
+compute-pr1-hopf-shear-sphere-1 t =
+  refl
+
+compute-pr2-hopf-shear-sphere-1 :
+  (t : sphere 1 × sphere 1) →
+  pr2 (hopf-shear-sphere-1 t) ＝ mul-sphere-1 (pr1 t) (pr2 t)
+compute-pr2-hopf-shear-sphere-1 t =
+  refl
 ```
 
 ### The H-space structure on the 1-sphere

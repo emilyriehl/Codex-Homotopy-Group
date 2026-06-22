@@ -52,7 +52,8 @@ calculation:
   The module `h-space-structure-circle` packages the standard multiplication
   on `𝕊¹` as `𝕊¹-H-Space` and transports it to the 1-sphere as
   `sphere-1-H-Space`. It now also proves that all left and right translations
-  by circle and 1-sphere points are equivalences.
+  by circle and 1-sphere points are equivalences, and packages the Hopf shear
+  equivalence `(x , y) ↦ (y , x · y)` on `S¹ × S¹`.
 - The first Hopf-construction layer is now checked. The generic module
   `hopf-construction` defines the Hopf map `A * A -> suspension A` and its
   pointed form for any H-space, and `hopf-construction-circle` specializes it
@@ -183,7 +184,7 @@ Hopf fiber sequence itself and the Freudenthal/stability comparison.
 | Boundary maps and LES exactness steps | [`src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md) | Defines the boundary pointed map, induced maps on homotopy groups of a fiber sequence, recursive boundary pointed maps, and boundary homomorphisms. It proves the first fiber-of-the-fiber identification, packages `Ω B ->* fiber g ->* E` as a pointed fiber sequence, proves pointed-set exactness for canonical and packaged `F ->* E ->* B` fiber sequences, proves pointed-set exactness for the packaged boundary segment `Ω B ->* F ->* E`, proves pointed-set exactness for the packaged loop-boundary segment `Ω E ->* Ω B ->* F`, proves pointed-set exactness for the looped packaged segment `Ω F ->* Ω E ->* Ω B`, proves pointed-set exactness for the canonical adjacent triples `Ω B ->* fiber g ->* E`, `Ω E ->* Ω B ->* fiber g`, and `Ω² B ->* Ω (fiber g) ->* Ω E`, transports the last canonical theorem to the packaged looped boundary/fiber-inclusion segment `Ω² B ->* Ω F ->* Ω E`, and bundles the first four packaged exactness proofs as an initial set-truncated LES segment. These are steps toward, not yet the full proof of, Theorem 8.4.6 of the HoTT book. |
 | Higher homotopy groups of 1-types | [`src/synthetic-homotopy-theory/higher-homotopy-groups-truncated-types.lagda.md`](src/synthetic-homotopy-theory/higher-homotopy-groups-truncated-types.lagda.md) | Proves that positive concrete homotopy groups of pointed 1-types are trivial. |
 | Circle and 1-sphere homotopy facts | [`src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md`](src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md) | Proves the loop-space equivalences for the circle and 1-sphere, the 1-type facts, and triviality of their positive concrete homotopy groups. |
-| Circle and 1-sphere H-space structures | [`src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md`](src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md) | Packages the existing circle multiplication as a coherent `𝕊¹-H-Space`, transports it across the circle--1-sphere equivalence, packages the transported multiplication as `sphere-1-H-Space`, and proves that left and right translations on both the circle and 1-sphere are equivalences. |
+| Circle and 1-sphere H-space structures | [`src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md`](src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md) | Packages the existing circle multiplication as a coherent `𝕊¹-H-Space`, transports it across the circle--1-sphere equivalence, packages the transported multiplication as `sphere-1-H-Space`, proves that left and right translations on both the circle and 1-sphere are equivalences, and proves the Hopf shear equivalence on `S¹ × S¹`. |
 | Low homotopy groups of `S³` | [`src/synthetic-homotopy-theory/homotopy-groups-sphere-3.lagda.md`](src/synthetic-homotopy-theory/homotopy-groups-sphere-3.lagda.md) | Proves that inhabited types are `(-1)`-connected, that `1`-connected pointed types have trivial concrete group, that `S³` is 2-connected by iterated suspension connectivity, and that `concrete-homotopy-group 0 (S³)` and `concrete-homotopy-group 1 (S³)` are trivial. |
 | Integer powers of loops | [`src/synthetic-homotopy-theory/computing-integer-powers-of-loops.lagda.md`](src/synthetic-homotopy-theory/computing-integer-powers-of-loops.lagda.md) | Proves successor, predecessor, and automorphism-iteration addition computations for integer powers of loops. |
 | Computing the loop space of the circle | [`src/synthetic-homotopy-theory/computing-loop-space-circle.lagda.md`](src/synthetic-homotopy-theory/computing-loop-space-circle.lagda.md) | Proves the universal-cover encoder concatenation computation, generator and inverse-generator integer-code computations, that integer powers of the circle loop encode to their exponents, and that `compute-loop-space-𝕊¹` sends loop concatenation to integer addition. |
@@ -229,7 +230,7 @@ Hopf fiber sequence itself and the Freudenthal/stability comparison.
 | Higher homotopy groups of the circle vanish | Mostly done | Positive concrete homotopy groups of the circle and 1-sphere are trivial. Further packaging may be needed for the exact Hopf LES endpoints. |
 | Loop space of the circle is the integers | Done | The loop-space equivalence is formalized, the universal-cover encoder is proved additive on loop concatenation, the result is transferred to the 1-sphere, and the concrete group isomorphism `π₁(S¹) ≅ ℤ` is checked. |
 | Circle as an H-space | Done | The checked module [`src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md`](src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md) packages both `𝕊¹-H-Space` and the transported `sphere-1-H-Space`, and proves that circle and 1-sphere translations are equivalences. |
-| Hopf construction and Hopf fibration | Partial | The generic Hopf map `A * A -> suspension A`, the `S¹ * S¹ ->* S²` specialization, the Hopf family over `S²`, the Hopf-family projection fiber sequence with fiber `S¹`, the comparison `Fin 2 * X ≃ suspension X`, join functoriality under equivalences, join commutativity, and the bridge from `S¹ * S¹` to the join of two `join-power 2 (Fin 2)` models are checked. The packaged Hopf fiber sequence target `S^1 -> S^3 -> S^2` is still stubbed pending the family-total-space comparison, the associativity/join-power multiplication comparison from `join-power 2 (Fin 2) * join-power 2 (Fin 2)` to `join-power 4 (Fin 2)`, and transport/packaging of the final fiber-sequence proof. |
+| Hopf construction and Hopf fibration | Partial | The generic Hopf map `A * A -> suspension A`, the `S¹ * S¹ ->* S²` specialization, the Hopf family over `S²`, the Hopf-family projection fiber sequence with fiber `S¹`, the Hopf shear equivalence on `S¹ × S¹`, the comparison `Fin 2 * X ≃ suspension X`, join functoriality under equivalences, join commutativity, and the bridge from `S¹ * S¹` to the join of two `join-power 2 (Fin 2)` models are checked. The packaged Hopf fiber sequence target `S^1 -> S^3 -> S^2` is still stubbed pending the family-total-space comparison, the associativity/join-power multiplication comparison from `join-power 2 (Fin 2) * join-power 2 (Fin 2)` to `join-power 4 (Fin 2)`, and transport/packaging of the final fiber-sequence proof. |
 | Hopf LES consequence `pi_3(S^3) = pi_3(S^2)` | Partially proved | The exactness-to-isomorphism extraction and Hopf LES packaging are proved, and the fibration-boundary exactness now uses the direct checked second shifted boundary theorem rather than the trivial-codomain shortcut. The comparison still depends on the unfinished Hopf fiber sequence scaffold. |
 | Freudenthal suspension theorem | Not started | Still a major missing theorem. |
 | Stability of homotopy groups of spheres | Instance stubbed | The needed comparison `π₂(S²) ≅ π₃(S³)` is recorded as an unfinished theorem depending on Freudenthal/stability. |
@@ -240,8 +241,8 @@ Hopf fiber sequence itself and the Freudenthal/stability comparison.
 
 1. Extend the checked Hopf map `S¹ * S¹ ->* S²` to the Hopf fiber sequence
    `S^1 -> S^3 -> S^2`. The circle translation equivalences, Hopf family over
-   `S²`, Hopf-family projection fiber sequence, suspension-as-join layer,
-   sphere-as-join-power layer, join
+   `S²`, Hopf-family projection fiber sequence, Hopf shear equivalence on
+   `S¹ × S¹`, suspension-as-join layer, sphere-as-join-power layer, join
    functoriality under equivalences, join commutativity, and the bridge from
    `S¹ * S¹` to `join-power 2 (Fin 2) * join-power 2 (Fin 2)` are checked. The
    remaining Hopf work is to compare the checked Hopf-family fiber sequence
@@ -272,6 +273,18 @@ Expected verification for this next step should start with:
 Once the Hopf scaffold is closed, recheck the Hopf LES second and third segment files before moving to the Freudenthal/stability scaffold.
 
 ## Current verification
+
+Later on 2026-06-22, the Hopf shear equivalence on `S¹ × S¹` was added and
+checked with:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-family-circle.lagda.md
+```
+
+Both checks passed. The new checked layer packages the equivalence
+`(x , y) ↦ (y , x · y)`, which is the span-equivalence ingredient needed to
+compare the flattened Hopf-family descent span with the standard join span.
 
 Later on 2026-06-22, the Hopf-family projection was packaged as a pointed
 fiber sequence and checked with:
