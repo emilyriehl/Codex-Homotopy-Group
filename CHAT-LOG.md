@@ -4089,3 +4089,59 @@ pragmas.
 Related commit:
 
 - This commit - Package raw join associativity bridges.
+
+### Identify public join cocone maps with raw equivalences
+
+Request: Emily asked Codex to clean up and pivot from the interrupted direct
+comparison work, commit and push that checkpoint, then continue pursuing the
+new structural universal-property route for join associativity.
+
+Model context:
+
+- Date: 2026-06-23.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible, but raw `./check.sh` remained the proof
+  acceptance gate.
+
+Actions:
+
+- Removed the interrupted direct-square comparison experiment before this
+  checkpoint.
+- Refactored the old AB-first and BC-first dependent-cocone normal-form
+  coherence proofs to use the canonical `cogap`/constant coherence-square
+  bridge maps instead of local path-algebra expansions.
+- Proved the old public maps
+  `cocone-AB-join-C-associative-cocone-data` and
+  `cocone-A-join-BC-associative-cocone-data` are equivalences by identifying
+  their normal-form components with the already checked raw-factor
+  equivalences.
+- Repaired the cross-comparison triangle from the `A * (B * C)` grouping to
+  the `(A * B) * C` grouping by generating the curried coherence in the shape
+  expected by the refactored left cocone.
+- Confirmed the opposite cross-comparison triangle still checks after the
+  canonical-square refactor.
+- Probed the next same-side inverse triangle and removed the incomplete
+  attempt. The probe showed the remaining blocker is a genuine dependent
+  coherence family over `B * C`, not a one-line consequence of the ordinary
+  cogap retraction.
+- Updated `STATUS-REPORT.md` to record that the raw/public map identification
+  checkpoint is complete and to state the new same-side inverse/coherence
+  blocker precisely.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate|lossy-unification" src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+```
+
+The Agda check exited successfully. `git diff --check` passed. The touched-file
+scan found no holes, postulates, unsolved-meta pragmas, or temporary
+lossy-unification pragmas.
+
+Related commit:
+
+- This commit - Identify public join cocone maps with raw equivalences.

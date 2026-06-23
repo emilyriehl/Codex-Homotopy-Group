@@ -135,10 +135,17 @@ calculation:
   normal forms for the AB-first and BC-first groupings, proves the raw
   groupings are equivalent to `associative-cocone-data`, proves the raw-to-
   dependent-cocone normal-form maps are equivalences, and composes these with
-  the existing normal-form-to-cocone equivalences. The remaining associator
-  blocker is to identify these raw-factor cocone maps with the previously
-  checked cocone comparison composites, without disturbing the already checked
-  cocone comparison triangles.
+  the existing normal-form-to-cocone equivalences. The public normal-form maps
+  from `associative-cocone-data` into both iterated-join cocone types have now
+  been refactored to use the canonical coherence-square bridges, and the old
+  public maps `cocone-AB-join-C-associative-cocone-data` and
+  `cocone-A-join-BC-associative-cocone-data` are proved equivalences by
+  identifying their normal-form components with the raw-factor equivalences.
+  The cross-comparison triangles against the opposite grouping also check. The
+  remaining associator blocker is the same-side inverse/coherence triangle
+  showing that the maps back into `associative-cocone-data` are equivalences;
+  a direct probe of the `A * (B * C)` side reduces to a nontrivial dependent
+  coherence family over `B * C`, not merely to the ordinary cogap retraction.
 - The low-dimensional sphere-connectivity facts needed for the lower Hopf
   segment have been formalized: `S³` is 2-connected, and therefore the first
   two concrete homotopy groups of `S³` are trivial.

@@ -2416,56 +2416,22 @@ module _
       ( p)
       ( path-inl-dependent-cocone-H-cocone-A-join-BC d c a)
       ( path-inr-dependent-cocone-H-cocone-A-join-BC d c b)
-      ( equational-reasoning
-        ap F p ∙ path-inr-dependent-cocone-H-cocone-A-join-BC d c b
-        ＝ ap F p ∙ (compute-inr-F b ∙ ap j glueBC)
-          by refl
-        ＝ (ap F p ∙ compute-inr-F b) ∙ ap j glueBC
-          by inv (assoc (ap F p) (compute-inr-F b) (ap j glueBC))
-        ＝ (compute-inl-F a ∙ K (a , inl-join b)) ∙ ap j glueBC
-          by ap (_∙ ap j glueBC) (compute-glue-F (a , b))
-        ＝ compute-inl-F a ∙ (K (a , inl-join b) ∙ ap j glueBC)
-          by assoc (compute-inl-F a) (K (a , inl-join b)) (ap j glueBC)
-        ＝ compute-inl-F a ∙ K (a , inr-join c)
-          by ap
-            ( compute-inl-F a ∙_)
-            ( naturality-coherence-cocone-A-join-BC d a b c)
-        ＝ path-inl-dependent-cocone-H-cocone-A-join-BC d c a
-          by refl
-        ＝ path-inl-dependent-cocone-H-cocone-A-join-BC d c a ∙ refl
-          by inv right-unit
-        ＝
-          path-inl-dependent-cocone-H-cocone-A-join-BC d c a ∙
-          ap (λ _ → j (inr-join c)) p
-          by ap
-            ( path-inl-dependent-cocone-H-cocone-A-join-BC d c a ∙_)
-            ( inv (ap-const (j (inr-join c)) p)))
+      ( coherence-square-cogap-join-constant-data
+        ( cocone-AB-cocone-A-join-BC d)
+        ( j (inr-join c))
+        ( λ b → ap j (glue-join (b , c)))
+        ( λ a → K (a , inr-join c))
+        ( a)
+        ( b)
+        ( naturality-coherence-cocone-A-join-BC d a b c))
     where
     p = glue-join (a , b)
-    glueBC = glue-join (b , c)
 
     j : B * C → _
     j = vertical-map-cocone pr1 pr2 d
 
     K : coherence-square-maps pr2 pr1 j (horizontal-map-cocone pr1 pr2 d)
     K = coherence-square-cocone pr1 pr2 d
-
-    F : A * B → _
-    F = map-AB-cocone-A-join-BC d
-
-    compute-inl-F : F ∘ inl-join ~ horizontal-map-cocone pr1 pr2 d
-    compute-inl-F = compute-inl-map-AB-cocone-A-join-BC d
-
-    compute-inr-F : F ∘ inr-join ~ j ∘ inl-join
-    compute-inr-F = compute-inr-map-AB-cocone-A-join-BC d
-
-    compute-glue-F :
-      statement-coherence-htpy-cocone pr1 pr2
-        ( cocone-map pr1 pr2 cocone-join F)
-        ( cocone-AB-cocone-A-join-BC d)
-        ( compute-inl-F)
-        ( compute-inr-F)
-    compute-glue-F = compute-glue-map-AB-cocone-A-join-BC d
 
   dependent-cocone-H-cocone-A-join-BC :
     {l4 : Level} {X : UU l4} (d : cocone-A-join-BC X)
@@ -2630,51 +2596,16 @@ module _
       ( p)
       ( path-inl-dependent-cocone-K-cocone-AB-join-C e a b)
       ( path-inr-dependent-cocone-K-cocone-AB-join-C e a c)
-      ( equational-reasoning
-        ap (λ _ → F (inl-join a)) p ∙
-          path-inr-dependent-cocone-K-cocone-AB-join-C e a c
-        ＝ refl ∙ path-inr-dependent-cocone-K-cocone-AB-join-C e a c
-          by ap
-            ( _∙ path-inr-dependent-cocone-K-cocone-AB-join-C e a c)
-            ( ap-const (F (inl-join a)) p)
-        ＝ path-inr-dependent-cocone-K-cocone-AB-join-C e a c
-          by left-unit
-        ＝ H (inl-join a , c) ∙ inv (compute-inr-map-BC-cocone-AB-join-C e c)
-          by refl
-        ＝ (ap F glueAB ∙ H (inr-join b , c)) ∙
-          inv (compute-inr-map-BC-cocone-AB-join-C e c)
-          by ap
-            ( _∙ inv (compute-inr-map-BC-cocone-AB-join-C e c))
-            ( inv (naturality-coherence-cocone-AB-join-C e a b c))
-        ＝ ap F glueAB ∙
-          ( H (inr-join b , c) ∙
-            inv (compute-inr-map-BC-cocone-AB-join-C e c))
-          by
-            assoc
-              ( ap F glueAB)
-              ( H (inr-join b , c))
-              ( inv (compute-inr-map-BC-cocone-AB-join-C e c))
-        ＝ ap F glueAB ∙
-          ( inv (compute-inl-map-BC-cocone-AB-join-C e b) ∙
-            ap (map-BC-cocone-AB-join-C e) p)
-          by ap
-            ( ap F glueAB ∙_)
-            ( inv (right-transpose-compute-glue-map-BC-cocone-AB-join-C e b c))
-        ＝ (ap F glueAB ∙
-            inv (compute-inl-map-BC-cocone-AB-join-C e b)) ∙
-          ap (map-BC-cocone-AB-join-C e) p
-          by
-            inv
-              ( assoc
-                ( ap F glueAB)
-                ( inv (compute-inl-map-BC-cocone-AB-join-C e b))
-                ( ap (map-BC-cocone-AB-join-C e) p))
-        ＝ path-inl-dependent-cocone-K-cocone-AB-join-C e a b ∙
-          ap (map-BC-cocone-AB-join-C e) p
-          by refl)
+      ( coherence-square-constant-cogap-join-data
+        ( cocone-BC-cocone-AB-join-C e)
+        ( F (inl-join a))
+        ( λ b → ap F (glue-join (a , b)))
+        ( λ c → H (inl-join a , c))
+        ( b)
+        ( c)
+        ( naturality-coherence-cocone-AB-join-C e a b c))
     where
     p = glue-join (b , c)
-    glueAB = glue-join (a , b)
 
     F : A * B → _
     F = horizontal-map-cocone pr1 pr2 e
@@ -3085,24 +3016,14 @@ module _
         ( p)
         ( path-L-inl a c)
         ( path-L-inr b c)
-        ( equational-reasoning
-          ap F p ∙ path-L-inr b c
-          ＝ ap F p ∙ (compute-inr-F b ∙ K b c)
-            by refl
-          ＝ (ap F p ∙ compute-inr-F b) ∙ K b c
-            by inv (assoc (ap F p) (compute-inr-F b) (K b c))
-          ＝ (compute-inl-F a ∙ H a b) ∙ K b c
-            by ap (_∙ K b c) (compute-glue-F (a , b))
-          ＝ compute-inl-F a ∙ (H a b ∙ K b c)
-            by assoc (compute-inl-F a) (H a b) (K b c)
-          ＝ compute-inl-F a ∙ L a c
-            by ap (compute-inl-F a ∙_) (M a b c)
-          ＝ path-L-inl a c
-            by refl
-          ＝ path-L-inl a c ∙ refl
-            by inv right-unit
-          ＝ path-L-inl a c ∙ ap (λ _ → k c) p
-            by ap (path-L-inl a c ∙_) (inv (ap-const (k c) p)))
+        ( coherence-square-cogap-join-constant-data
+          ( cocone-F)
+          ( k c)
+          ( λ b → K b c)
+          ( λ a → L a c)
+          ( a)
+          ( b)
+          ( M a b c))
       where
       p = glue-join (a , b)
 
@@ -3200,6 +3121,25 @@ module _
       ( cocone-AB-join-C-normal-form-associative-cocone-data)
       ( H)
       ( is-equiv-cocone-AB-join-C-cocone-AB-join-C-normal-form)
+
+  is-equiv-cocone-AB-join-C-normal-form-associative-cocone-data :
+    {l4 : Level} {X : UU l4} →
+    is-equiv
+      ( cocone-AB-join-C-normal-form-associative-cocone-data
+        { X = X})
+  is-equiv-cocone-AB-join-C-normal-form-associative-cocone-data =
+    is-equiv-htpy
+      ( cocone-AB-join-C-normal-form-cocone-AB-join-C-raw-normal-form ∘
+        cocone-AB-join-C-raw-normal-form-associative-cocone-data)
+      ( refl-htpy)
+      ( is-equiv-cocone-AB-join-C-normal-form-associative-cocone-data-raw)
+
+  is-equiv-cocone-AB-join-C-associative-cocone-data :
+    {l4 : Level} {X : UU l4} →
+    is-equiv (cocone-AB-join-C-associative-cocone-data {X = X})
+  is-equiv-cocone-AB-join-C-associative-cocone-data =
+    is-equiv-cocone-AB-join-C-associative-cocone-data-is-equiv-normal-form
+      ( is-equiv-cocone-AB-join-C-normal-form-associative-cocone-data)
 
   associative-cocone-data-cocone-A-join-BC :
     {l4 : Level} {X : UU l4} →
@@ -3358,24 +3298,14 @@ module _
         ( p)
         ( path-H-inl a b)
         ( path-H-inr a c)
-        ( equational-reasoning
-          ap (λ _ → i a) p ∙ path-H-inr a c
-          ＝ refl ∙ path-H-inr a c
-            by ap (_∙ path-H-inr a c) (ap-const (i a) p)
-          ＝ path-H-inr a c
-            by left-unit
-          ＝ L a c ∙ inv (compute-inr-J c)
-            by refl
-          ＝ (H a b ∙ K b c) ∙ inv (compute-inr-J c)
-            by ap (_∙ inv (compute-inr-J c)) (inv (M a b c))
-          ＝ H a b ∙ (K b c ∙ inv (compute-inr-J c))
-            by assoc (H a b) (K b c) (inv (compute-inr-J c))
-          ＝ H a b ∙ (inv (compute-inl-J b) ∙ ap J p)
-            by ap (H a b ∙_) (inv (right-transpose-compute-glue-J b c))
-          ＝ (H a b ∙ inv (compute-inl-J b)) ∙ ap J p
-            by inv (assoc (H a b) (inv (compute-inl-J b)) (ap J p))
-          ＝ path-H-inl a b ∙ ap J p
-            by refl)
+        ( coherence-square-constant-cogap-join-data
+          ( cocone-J)
+          ( i a)
+          ( H a)
+          ( L a)
+          ( b)
+          ( c)
+          ( M a b c))
       where
       p = glue-join (b , c)
 
@@ -3474,6 +3404,25 @@ module _
       ( H)
       ( is-equiv-cocone-A-join-BC-cocone-A-join-BC-normal-form)
 
+  is-equiv-cocone-A-join-BC-normal-form-associative-cocone-data :
+    {l4 : Level} {X : UU l4} →
+    is-equiv
+      ( cocone-A-join-BC-normal-form-associative-cocone-data
+        { X = X})
+  is-equiv-cocone-A-join-BC-normal-form-associative-cocone-data =
+    is-equiv-htpy
+      ( cocone-A-join-BC-normal-form-cocone-A-join-BC-raw-normal-form ∘
+        cocone-A-join-BC-raw-normal-form-associative-cocone-data)
+      ( refl-htpy)
+      ( is-equiv-cocone-A-join-BC-normal-form-associative-cocone-data-raw)
+
+  is-equiv-cocone-A-join-BC-associative-cocone-data :
+    {l4 : Level} {X : UU l4} →
+    is-equiv (cocone-A-join-BC-associative-cocone-data {X = X})
+  is-equiv-cocone-A-join-BC-associative-cocone-data =
+    is-equiv-cocone-A-join-BC-associative-cocone-data-is-equiv-normal-form
+      ( is-equiv-cocone-A-join-BC-normal-form-associative-cocone-data)
+
   triangle-cocone-AB-join-C-cocone-A-join-BC-associative-cocone-data :
     {l4 : Level} {X : UU l4} (d : cocone-A-join-BC X) →
     cocone-AB-join-C-associative-cocone-data
@@ -3487,11 +3436,24 @@ module _
           right-unit ∙
           htpy-eq
             ( htpy-eq
-              ( is-section-map-inv-equiv equiv-ev-pair H)
+              ( is-section-map-inv-equiv equiv-ev-pair H')
               ( x))
             ( c) ∙
           inv left-unit)
     where
+    H' :
+      (x : A * B) (c : C) →
+      map-AB-cocone-A-join-BC d x ＝
+      vertical-map-cocone pr1 pr2 d (inr-join c)
+    H' x c =
+      dependent-cogap-join
+        ( pr2
+          ( pr2
+            ( cocone-AB-join-C-normal-form-associative-cocone-data
+              ( associative-cocone-data-cocone-A-join-BC d)))
+          c)
+        ( x)
+
     H :
       (x : A * B) (c : C) →
       map-AB-cocone-A-join-BC d x ＝
