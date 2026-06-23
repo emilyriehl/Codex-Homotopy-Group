@@ -4145,3 +4145,56 @@ lossy-unification pragmas.
 Related commit:
 
 - This commit - Identify public join cocone maps with raw equivalences.
+
+### Pivot associativity route to raw cocone extraction
+
+Request: Emily asked Codex to clean up and pivot, commit and push the checked
+work, then keep pursuing the new structural universal-property route toward a
+complete join associativity proof.
+
+Model context:
+
+- Date: 2026-06-23.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible, but raw `./check.sh` remained the proof
+  acceptance gate.
+
+Actions:
+
+- Removed the temporary specialized triangle proof attempt for
+  `cocone-A-join-BC-associative-cocone-data` on cocones induced by maps out of
+  `A * (B * C)`. The attempt reduced to the same nontrivial dependent
+  coherence over `B * C` that the pivot was intended to avoid.
+- Added checked inverse-direction equivalence lemmas for the standard join
+  `cocone-map` and `dependent-cocone-map`, both for the ambient `A,B` join and
+  for the `B,C` join.
+- Added the checked inverse equivalence for
+  `associative-cocone-data-cocone-A-join-BC-raw-normal-form`.
+- Added a reusable checked forward map
+  `constant-cogap-join-data-cocone-map-dependent-function`, sending a function
+  `h : (x : A' * B') -> z ＝ j x` to raw constant-cogap data for the cocone
+  induced by `j`.
+- Added the checked raw extraction
+  `cocone-A-join-BC-raw-normal-form-cocone-A-join-BC`, which factors a public
+  `A * (B * C)` cocone into the raw normal form using the new forward map.
+- Tried to prove the needed fiber equivalence through dependent cocones, but
+  the generic proof exposed definitional-alignment issues between the
+  `cocone-map` projections and explicit `inl-join`/`inr-join` endpoints. That
+  incomplete proof was removed before this checkpoint.
+- Updated `STATUS-REPORT.md` with the new checked pivot state and the precise
+  next structural subgoal.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+```
+
+The Agda check passed after removing the non-checking generic equivalence
+attempt.
+
+Related commit:
+
+- This commit - Pivot associativity route to raw cocone extraction.

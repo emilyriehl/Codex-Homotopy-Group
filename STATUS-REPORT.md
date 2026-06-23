@@ -146,6 +146,16 @@ calculation:
   showing that the maps back into `associative-cocone-data` are equivalences;
   a direct probe of the `A * (B * C)` side reduces to a nontrivial dependent
   coherence family over `B * C`, not merely to the ordinary cogap retraction.
+  The current pivot away from that same-side triangle has added checked
+  inverse-direction equivalence lemmas for the standard join `cocone-map` and
+  `dependent-cocone-map`, a checked inverse equivalence for the A-BC raw
+  normal-form/data isomorphism, and a checked forward raw extraction map
+  `cocone-A-join-BC-raw-normal-form-cocone-A-join-BC`. This extraction factors
+  through a reusable naturality-based map from functions `A' * B' -> X` to raw
+  constant-cogap data for `cocone-map`. The next structural subgoal is to prove
+  this fiber map is an equivalence, preferably by comparing it with the
+  dependent-cocone-map equivalence while keeping the `cocone-map` projections
+  and `inl-join`/`inr-join` endpoints definitionally aligned.
 - The low-dimensional sphere-connectivity facts needed for the lower Hopf
   segment have been formalized: `S³` is 2-connected, and therefore the first
   two concrete homotopy groups of `S³` are trivial.
