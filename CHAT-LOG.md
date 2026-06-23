@@ -4028,3 +4028,64 @@ pragmas.
 Related commit:
 
 - This commit - Package AB-side join cocone bridge equivalence.
+
+
+### Package both raw join-associativity normal-form bridges
+
+Request: Emily asked Codex to keep pursuing the new structural
+universal-property route for join associativity after the cleanup/pivot and
+AB-side bridge checkpoint, with emphasis on the real associator blocker rather
+than side work.
+
+Model context:
+
+- Date: 2026-06-23.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible. MCP was tried for an interaction-hole snapshot,
+  but raw `./check.sh` remained the proof acceptance gate.
+
+Actions:
+
+- Added the symmetric `constant-cogap-join-data` coherence-square map and
+  proved it is an equivalence.
+- Refactored the existing constant-cogap dependent-cocone construction to use
+  that named coherence-square map.
+- Packaged
+  `is-equiv-dependent-cocone-constant-cogap-join-data`,
+  `equiv-dependent-cocone-constant-cogap-join-data`, and the pointwise
+  `Π`-lift for the BC-side bridge.
+- Added AB-first and BC-first raw associative cocone normal forms, the maps
+  from `associative-cocone-data` into those raw groupings, and checked
+  inverse maps back to `associative-cocone-data`.
+- Proved both raw-to-dependent-cocone normal-form maps are equivalences using
+  the AB and BC bridge packages, then composed with the existing normal-
+  form-to-cocone equivalences to package raw-factor maps from
+  `associative-cocone-data` into both iterated-join cocone types as
+  equivalences.
+- Attempted the next comparison between the old AB normal-form map and the
+  raw-factor map. The first two normal-form components agree, but the
+  dependent-cocone coherence field requires a nontrivial comparison between
+  the old local square proof and the new generic square proof. The incomplete
+  attempt was removed before this checkpoint.
+- Updated `STATUS-REPORT.md` to record that both bridges and both raw
+  normal-form equivalence packages are checked, and that the remaining blocker
+  is the comparison homotopy from the raw-factor cocone maps to the existing
+  cocone comparison composites.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate|lossy-unification" src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+```
+
+The Agda check passed. `git diff --check` passed. The touched-file scan found
+no holes, postulates, unsolved-meta pragmas, or temporary lossy-unification
+pragmas.
+
+Related commit:
+
+- This commit - Package raw join associativity bridges.

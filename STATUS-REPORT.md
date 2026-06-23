@@ -123,18 +123,22 @@ calculation:
   first associator instance, or an equivalent universal-property proof for the
   associator itself; either route now feeds directly into the checked
   two-sided homotopy packages, then transport to the `S³` model.
-- The universal-property route for join associativity now has a checked
-  reusable bridge equivalence on the `(A * B) * C` side: raw cocone data
-  expressing that a cogap map is constantly `z` is equivalent to the
-  corresponding dependent cocone over the join. The proof factors through a
-  horizontal-first raw-data normal form, Sigma swapping, pointwise path
-  equivalences, `compute-dependent-identification-eq-value-function`, and
-  the product eliminator equivalence `equiv-ev-pair`. This packages the hard
-  coherence-square algebra for the AB-normal-form fiber and provides a
-  pointwise `Π`-lift for later normal-form equivalence proofs. The remaining
-  associator blocker is to prove the symmetric bridge for the `A * (B * C)`
-  side and lift both bridge equivalences through the associative-cocone-data
-  grouping without disturbing the already checked cocone comparison triangles.
+- The universal-property route for join associativity now has checked
+  reusable bridge equivalences on both iterated-join sides. On the
+  `(A * B) * C` side, raw data expressing that a cogap map is constantly `z`
+  is equivalent to the corresponding dependent cocone over the join. On the
+  `A * (B * C)` side, the dual raw data expressing that `z` is constantly a
+  cogap map is equivalent to the corresponding dependent cocone. Both proofs
+  factor through pointwise coherence-square equivalences and
+  `compute-dependent-identification-eq-value-function`, and both provide
+  pointwise `Π`-lifts. The file now also packages raw associative cocone
+  normal forms for the AB-first and BC-first groupings, proves the raw
+  groupings are equivalent to `associative-cocone-data`, proves the raw-to-
+  dependent-cocone normal-form maps are equivalences, and composes these with
+  the existing normal-form-to-cocone equivalences. The remaining associator
+  blocker is to identify these raw-factor cocone maps with the previously
+  checked cocone comparison composites, without disturbing the already checked
+  cocone comparison triangles.
 - The low-dimensional sphere-connectivity facts needed for the lower Hopf
   segment have been formalized: `S³` is 2-connected, and therefore the first
   two concrete homotopy groups of `S³` are trivial.
