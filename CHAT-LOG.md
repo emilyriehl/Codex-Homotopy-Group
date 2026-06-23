@@ -3926,3 +3926,50 @@ pragmas.
 Related commit:
 
 - This commit - Reduce join-power equivalence to first associator squares.
+
+
+## 2026-06-23
+
+### Pivot join associativity toward universal properties
+
+Request: Emily asked Codex to clean up the interrupted associator work,
+commit and push the checked pivot, then pursue the structural proof of join
+associativity using pushout universal properties.
+
+Model context:
+
+- Date: 2026-06-23.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible, but raw `./check.sh` remained the proof
+  acceptance gate.
+
+Actions:
+
+- Removed the failing sphere-local pointwise coherence experiment from
+  `spheres-as-join-powers`, including its temporary imports.
+- Kept the checked generic join-arithmetic infrastructure in
+  `type-arithmetic-joins-of-types`, including the cocone normal forms,
+  `associative-cocone-data`, maps between the two iterated-join cocone
+  presentations, and the conditional associator-equivalence interface.
+- Confirmed that the pivot leaves only the generic arithmetic file modified,
+  so the next route can prove associativity structurally rather than
+  completing the abandoned endpoint path-algebra proof.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md
+./check.sh src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate|lossy-unification" src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md
+```
+
+Both Agda checks passed. `git diff --check` passed. The touched-file scan found
+no holes, postulates, unsolved-meta pragmas, or temporary lossy-unification
+pragmas.
+
+Related commit:
+
+- This commit - Pivot join associativity to cocone data.
