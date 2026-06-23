@@ -20,6 +20,7 @@ open import foundation.equality-cartesian-product-types
 open import foundation.equality-dependent-pair-types
 open import foundation.equivalences
 open import foundation.function-extensionality
+open import foundation.function-extensionality-axiom
 open import foundation.function-types
 open import foundation.functoriality-cartesian-product-types
 open import foundation.functoriality-dependent-pair-types
@@ -27,6 +28,7 @@ open import foundation.functoriality-dependent-function-types
 open import foundation.homotopies
 open import foundation.identity-types
 open import foundation.type-arithmetic-cartesian-product-types
+open import foundation.type-arithmetic-dependent-pair-types
 open import foundation.type-arithmetic-dependent-function-types
 open import foundation.transport-along-identifications
 open import foundation.universal-property-dependent-pair-types
@@ -1018,6 +1020,892 @@ module _
       ( is-retraction-dependent-cogap pr1 pr2)
       ( is-section-dependent-cogap pr1 pr2)
 
+  right-transpose-compute-glue-cogap-join :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X) →
+    (a : A') (b : B') →
+    inv (compute-inl-cogap-join d a) ∙
+    ap (cogap-join X d) (glue-join (a , b)) ＝
+    coherence-square-cocone pr1 pr2 d (a , b) ∙
+    inv (compute-inr-cogap-join d b)
+  right-transpose-compute-glue-cogap-join {A' = A'} {B' = B'} d a b =
+    equational-reasoning
+      inv linl ∙ apF
+      ＝ (inv linl ∙ apF) ∙ refl
+        by inv right-unit
+      ＝ (inv linl ∙ apF) ∙ (rinr ∙ inv rinr)
+        by ap ((inv linl ∙ apF) ∙_) (inv (right-inv rinr))
+      ＝ ((inv linl ∙ apF) ∙ rinr) ∙ inv rinr
+        by inv (assoc (inv linl ∙ apF) rinr (inv rinr))
+      ＝ (inv linl ∙ (apF ∙ rinr)) ∙ inv rinr
+        by ap (_∙ inv rinr) (assoc (inv linl) apF rinr)
+      ＝ (inv linl ∙ (linl ∙ H (a , b))) ∙ inv rinr
+        by ap
+          ( λ q → (inv linl ∙ q) ∙ inv rinr)
+          ( compute-glue-F (a , b))
+      ＝ ((inv linl ∙ linl) ∙ H (a , b)) ∙ inv rinr
+        by ap (_∙ inv rinr) (inv (assoc (inv linl) linl (H (a , b))))
+      ＝ (refl ∙ H (a , b)) ∙ inv rinr
+        by ap (λ q → (q ∙ H (a , b)) ∙ inv rinr) (left-inv linl)
+      ＝ H (a , b) ∙ inv rinr
+        by ap (_∙ inv rinr) left-unit
+    where
+    F : A' * B' → _
+    F = cogap-join _ d
+
+    H = coherence-square-cocone pr1 pr2 d
+
+    linl = compute-inl-cogap-join d a
+    rinr = compute-inr-cogap-join d b
+    apF = ap F (glue-join (a , b))
+
+    compute-glue-F :
+      statement-coherence-htpy-cocone pr1 pr2
+        ( cocone-map pr1 pr2 cocone-join F)
+        ( d)
+        ( compute-inl-cogap-join d)
+        ( compute-inr-cogap-join d)
+    compute-glue-F = compute-glue-cogap-join d
+
+  cogap-join-constant-data :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4} →
+    cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X →
+    X → UU (l1' ⊔ l2' ⊔ l4)
+  cogap-join-constant-data d z =
+    Σ ( (b : _) → vertical-map-cocone pr1 pr2 d b ＝ z)
+      ( λ K →
+        Σ ( (a : _) → horizontal-map-cocone pr1 pr2 d a ＝ z)
+          ( λ L →
+            (a : _) (b : _) →
+            coherence-square-cocone pr1 pr2 d (a , b) ∙ K b ＝ L a))
+
+  coherence-square-cogap-join-constant-data :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4} →
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (z : X)
+    (K : (b : B') → vertical-map-cocone pr1 pr2 d b ＝ z)
+    (L : (a : A') → horizontal-map-cocone pr1 pr2 d a ＝ z) →
+    (a : A') (b : B') →
+    coherence-square-cocone pr1 pr2 d (a , b) ∙ K b ＝ L a →
+    coherence-square-identifications
+      ( compute-inl-cogap-join d a ∙ L a)
+      ( ap (cogap-join X d) (glue-join (a , b)))
+      ( ap (λ _ → z) (glue-join (a , b)))
+      ( compute-inr-cogap-join d b ∙ K b)
+  coherence-square-cogap-join-constant-data
+    { A' = A'}
+    { B' = B'}
+    d z K L a b M =
+    concat Pleft final (concat' middle Pright (ap (concat linl z) M))
+    where
+    F : A' * B' → _
+    F = cogap-join _ d
+
+    H = coherence-square-cocone pr1 pr2 d
+
+    p = glue-join (a , b)
+    linl = compute-inl-cogap-join d a
+    rinr = compute-inr-cogap-join d b
+    apF = ap F p
+
+    start = apF ∙ (rinr ∙ K b)
+    middle = linl ∙ (H (a , b) ∙ K b)
+    final = (linl ∙ L a) ∙ ap (λ _ → z) p
+
+    compute-glue-F :
+      statement-coherence-htpy-cocone pr1 pr2
+        ( cocone-map pr1 pr2 cocone-join F)
+        ( d)
+        ( compute-inl-cogap-join d)
+        ( compute-inr-cogap-join d)
+    compute-glue-F = compute-glue-cogap-join d
+
+    Pleft : start ＝ middle
+    Pleft =
+      inv (assoc apF rinr (K b)) ∙
+      ap (_∙ K b) (compute-glue-F (a , b)) ∙
+      assoc linl (H (a , b)) (K b)
+
+    Pright : linl ∙ L a ＝ final
+    Pright =
+      inv right-unit ∙
+      ap ((linl ∙ L a) ∙_) (inv (ap-const z p))
+
+  is-equiv-coherence-square-cogap-join-constant-data :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (z : X)
+    (K : (b : B') → vertical-map-cocone pr1 pr2 d b ＝ z)
+    (L : (a : A') → horizontal-map-cocone pr1 pr2 d a ＝ z)
+    (a : A') (b : B') →
+    is-equiv (coherence-square-cogap-join-constant-data d z K L a b)
+  is-equiv-coherence-square-cogap-join-constant-data
+    { A' = A'}
+    { B' = B'}
+    d z K L a b =
+    is-equiv-comp
+      ( concat Pleft final)
+      ( concat' middle Pright ∘ ap (concat linl z))
+      ( is-equiv-comp
+        ( concat' middle Pright)
+        ( ap (concat linl z))
+        ( is-emb-is-equiv
+          ( is-equiv-concat linl z)
+          ( H (a , b) ∙ K b)
+          ( L a))
+        ( is-equiv-concat' middle Pright))
+      ( is-equiv-concat Pleft final)
+    where
+    F : A' * B' → _
+    F = cogap-join _ d
+
+    H = coherence-square-cocone pr1 pr2 d
+
+    p = glue-join (a , b)
+    linl = compute-inl-cogap-join d a
+    rinr = compute-inr-cogap-join d b
+    apF = ap F p
+
+    start = apF ∙ (rinr ∙ K b)
+    middle = linl ∙ (H (a , b) ∙ K b)
+    final = (linl ∙ L a) ∙ ap (λ _ → z) p
+
+    compute-glue-F :
+      statement-coherence-htpy-cocone pr1 pr2
+        ( cocone-map pr1 pr2 cocone-join F)
+        ( d)
+        ( compute-inl-cogap-join d)
+        ( compute-inr-cogap-join d)
+    compute-glue-F = compute-glue-cogap-join d
+
+    Pleft : start ＝ middle
+    Pleft =
+      inv (assoc apF rinr (K b)) ∙
+      ap (_∙ K b) (compute-glue-F (a , b)) ∙
+      assoc linl (H (a , b)) (K b)
+
+    Pright : linl ∙ L a ＝ final
+    Pright =
+      inv right-unit ∙
+      ap ((linl ∙ L a) ∙_) (inv (ap-const z p))
+
+  horizontal-first-cogap-join-constant-data :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4} →
+    cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X →
+    X → UU (l1' ⊔ l2' ⊔ l4)
+  horizontal-first-cogap-join-constant-data d z =
+    Σ ( (a : _) → horizontal-map-cocone pr1 pr2 d a ＝ z)
+      ( λ L →
+        Σ ( (b : _) → vertical-map-cocone pr1 pr2 d b ＝ z)
+          ( λ K →
+            (a : _) (b : _) →
+            coherence-square-cocone pr1 pr2 d (a , b) ∙ K b ＝ L a))
+
+  horizontal-first-cogap-join-constant-data-cogap-join-constant-data :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (z : X) →
+    cogap-join-constant-data d z →
+    horizontal-first-cogap-join-constant-data d z
+  horizontal-first-cogap-join-constant-data-cogap-join-constant-data
+    d z (K , L , M) =
+    (L , K , M)
+
+  is-equiv-horizontal-first-cogap-join-constant-data-cogap-join-constant-data :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (z : X) →
+    is-equiv
+      ( horizontal-first-cogap-join-constant-data-cogap-join-constant-data
+        d z)
+  is-equiv-horizontal-first-cogap-join-constant-data-cogap-join-constant-data
+    d z =
+    is-equiv-map-left-swap-Σ
+
+  dependent-cocone-horizontal-first-cogap-join-constant-data :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4} →
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (z : X) →
+    horizontal-first-cogap-join-constant-data d z →
+    dependent-cocone pr1 pr2 (cocone-join {A = A'} {B = B'})
+      ( λ x → cogap-join X d x ＝ z)
+  pr1
+    ( dependent-cocone-horizontal-first-cogap-join-constant-data
+      d z (L , K , M)) a =
+    compute-inl-cogap-join d a ∙ L a
+  pr1
+    ( pr2
+      ( dependent-cocone-horizontal-first-cogap-join-constant-data
+        d z (L , K , M))) b =
+    compute-inr-cogap-join d b ∙ K b
+  pr2
+    ( pr2
+      ( dependent-cocone-horizontal-first-cogap-join-constant-data
+        { A' = A'}
+        { B' = B'}
+        d z (L , K , M)))
+    ( a , b) =
+    map-compute-dependent-identification-eq-value-function
+      ( F)
+      ( λ _ → z)
+      ( glue-join (a , b))
+      ( compute-inl-cogap-join d a ∙ L a)
+      ( compute-inr-cogap-join d b ∙ K b)
+      ( coherence-square-cogap-join-constant-data d z K L a b (M a b))
+    where
+    F : A' * B' → _
+    F = cogap-join _ d
+
+  is-equiv-dependent-cocone-horizontal-first-cogap-join-constant-data :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (z : X) →
+    is-equiv
+      ( dependent-cocone-horizontal-first-cogap-join-constant-data
+        { A' = A'}
+        { B' = B'}
+        d z)
+  is-equiv-dependent-cocone-horizontal-first-cogap-join-constant-data
+    { A' = A'}
+    { B' = B'}
+    d z =
+    is-equiv-htpy
+      ( map-Σ D f g)
+      ( λ (L , K , M) →
+        eq-htpy-dependent-cocone pr1 pr2 cocone-join
+          ( λ x → F x ＝ z)
+          ( dependent-cocone-horizontal-first-cogap-join-constant-data
+            d z (L , K , M))
+          ( map-Σ D f g (L , K , M))
+          ( refl-htpy ,
+            refl-htpy ,
+            λ (a , b) →
+              right-unit ∙
+              inv
+                ( htpy-eq
+                  ( htpy-eq
+                    ( is-section-map-inv-equiv equiv-ev-pair
+                      ( coherence-curried L K M))
+                    ( a))
+                  ( b)) ∙
+              inv left-unit))
+      ( is-equiv-map-Σ D is-equiv-f is-equiv-g)
+    where
+    F : A' * B' → _
+    F = cogap-join _ d
+
+    f :
+      ( (a : A') → horizontal-map-cocone pr1 pr2 d a ＝ z) →
+      ( (a : A') → F (inl-join a) ＝ z)
+    f L a = compute-inl-cogap-join d a ∙ L a
+
+    D :
+      ( (a : A') → F (inl-join a) ＝ z) →
+      UU _
+    D α =
+      Σ ( (b : B') → F (inr-join b) ＝ z)
+        ( λ β →
+          (t : A' × B') →
+          dependent-identification
+            ( λ x → F x ＝ z)
+            ( glue-join t)
+            ( α (pr1 t))
+            ( β (pr2 t)))
+
+    E :
+      (L : (a : A') → horizontal-map-cocone pr1 pr2 d a ＝ z) →
+      ( (b : B') → F (inr-join b) ＝ z) →
+      UU _
+    E L β =
+      (t : A' × B') →
+      dependent-identification
+        ( λ x → F x ＝ z)
+        ( glue-join t)
+        ( compute-inl-cogap-join d (pr1 t) ∙ L (pr1 t))
+        ( β (pr2 t))
+
+    g :
+      (L : (a : A') → horizontal-map-cocone pr1 pr2 d a ＝ z) →
+      Σ ( (b : B') → vertical-map-cocone pr1 pr2 d b ＝ z)
+        ( λ K →
+          (a : A') (b : B') →
+          coherence-square-cocone pr1 pr2 d (a , b) ∙ K b ＝ L a) →
+      D (f L)
+    pr1 (g L (K , M)) b = compute-inr-cogap-join d b ∙ K b
+    pr2 (g L (K , M)) =
+      map-inv-equiv equiv-ev-pair
+        ( λ a b →
+          map-compute-dependent-identification-eq-value-function
+            ( F)
+            ( λ _ → z)
+            ( glue-join (a , b))
+            ( compute-inl-cogap-join d a ∙ L a)
+            ( compute-inr-cogap-join d b ∙ K b)
+            ( coherence-square-cogap-join-constant-data d z K L a b (M a b)))
+
+    coherence-curried :
+      (L : (a : A') → horizontal-map-cocone pr1 pr2 d a ＝ z)
+      (K : (b : B') → vertical-map-cocone pr1 pr2 d b ＝ z)
+      (M :
+        (a : A') (b : B') →
+        coherence-square-cocone pr1 pr2 d (a , b) ∙ K b ＝ L a) →
+      (a : A') (b : B') →
+      dependent-identification
+        ( λ x → F x ＝ z)
+        ( glue-join (a , b))
+        ( compute-inl-cogap-join d a ∙ L a)
+        ( compute-inr-cogap-join d b ∙ K b)
+    coherence-curried L K M a b =
+      map-compute-dependent-identification-eq-value-function
+        ( F)
+        ( λ _ → z)
+        ( glue-join (a , b))
+        ( compute-inl-cogap-join d a ∙ L a)
+        ( compute-inr-cogap-join d b ∙ K b)
+        ( coherence-square-cogap-join-constant-data d z K L a b (M a b))
+
+    is-equiv-f : is-equiv f
+    is-equiv-f =
+      is-equiv-map-Π-is-fiberwise-equiv
+        ( λ a → is-equiv-concat (compute-inl-cogap-join d a) z)
+
+    coherence-map :
+      (L : (a : A') → horizontal-map-cocone pr1 pr2 d a ＝ z)
+      (K : (b : B') → vertical-map-cocone pr1 pr2 d b ＝ z) →
+      ( (a : A') (b : B') →
+        coherence-square-cocone pr1 pr2 d (a , b) ∙ K b ＝ L a) →
+      (t : A' × B') →
+      dependent-identification
+        ( λ x → F x ＝ z)
+        ( glue-join t)
+        ( compute-inl-cogap-join d (pr1 t) ∙ L (pr1 t))
+        ( compute-inr-cogap-join d (pr2 t) ∙ K (pr2 t))
+    coherence-map L K M =
+      map-inv-equiv equiv-ev-pair
+        ( λ a b →
+          map-compute-dependent-identification-eq-value-function
+            ( F)
+            ( λ _ → z)
+            ( glue-join (a , b))
+            ( compute-inl-cogap-join d a ∙ L a)
+            ( compute-inr-cogap-join d b ∙ K b)
+            ( coherence-square-cogap-join-constant-data d z K L a b (M a b)))
+
+    is-equiv-coherence-map :
+      (L : (a : A') → horizontal-map-cocone pr1 pr2 d a ＝ z)
+      (K : (b : B') → vertical-map-cocone pr1 pr2 d b ＝ z) →
+      is-equiv (coherence-map L K)
+    is-equiv-coherence-map L K =
+      is-equiv-comp
+        ( map-inv-equiv equiv-ev-pair)
+        ( λ M a b →
+          map-compute-dependent-identification-eq-value-function
+            ( F)
+            ( λ _ → z)
+            ( glue-join (a , b))
+            ( compute-inl-cogap-join d a ∙ L a)
+            ( compute-inr-cogap-join d b ∙ K b)
+            ( coherence-square-cogap-join-constant-data
+              d z K L a b (M a b)))
+        ( is-equiv-map-Π-is-fiberwise-equiv
+          ( λ a →
+            is-equiv-map-Π-is-fiberwise-equiv
+              ( λ b →
+                is-equiv-comp
+                  ( map-compute-dependent-identification-eq-value-function
+                    ( F)
+                    ( λ _ → z)
+                    ( glue-join (a , b))
+                    ( compute-inl-cogap-join d a ∙ L a)
+                    ( compute-inr-cogap-join d b ∙ K b))
+                  ( coherence-square-cogap-join-constant-data d z K L a b)
+                  ( is-equiv-coherence-square-cogap-join-constant-data
+                    d z K L a b)
+                  ( is-equiv-map-compute-dependent-identification-eq-value-function
+                    ( F)
+                    ( λ _ → z)
+                    ( glue-join (a , b))
+                    ( compute-inl-cogap-join d a ∙ L a)
+                    ( compute-inr-cogap-join d b ∙ K b)))))
+        ( is-equiv-map-inv-equiv equiv-ev-pair)
+
+    is-equiv-g :
+      (L : (a : A') → horizontal-map-cocone pr1 pr2 d a ＝ z) →
+      is-equiv (g L)
+    is-equiv-g L =
+      is-equiv-map-Σ (E L)
+        ( is-equiv-map-Π-is-fiberwise-equiv
+          ( λ b → is-equiv-concat (compute-inr-cogap-join d b) z))
+        ( is-equiv-coherence-map L)
+
+  dependent-cocone-cogap-join-constant :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4} →
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (z : X) →
+    (K : (b : B') → vertical-map-cocone pr1 pr2 d b ＝ z) →
+    (L : (a : A') → horizontal-map-cocone pr1 pr2 d a ＝ z) →
+    ( (a : A') (b : B') →
+      coherence-square-cocone pr1 pr2 d (a , b) ∙ K b ＝ L a) →
+    dependent-cocone pr1 pr2 (cocone-join {A = A'} {B = B'})
+      ( λ x → cogap-join X d x ＝ z)
+  pr1 (dependent-cocone-cogap-join-constant d z K L M) a =
+    compute-inl-cogap-join d a ∙ L a
+  pr1 (pr2 (dependent-cocone-cogap-join-constant d z K L M)) b =
+    compute-inr-cogap-join d b ∙ K b
+  pr2
+    ( pr2
+      ( dependent-cocone-cogap-join-constant
+        { A' = A'}
+        { B' = B'}
+        d z K L M))
+    ( a , b) =
+    map-compute-dependent-identification-eq-value-function
+      ( F)
+      ( λ _ → z)
+      ( p)
+      ( compute-inl-F a ∙ L a)
+      ( compute-inr-F b ∙ K b)
+      ( coherence-square-cogap-join-constant-data d z K L a b (M a b))
+    where
+    F : A' * B' → _
+    F = cogap-join _ d
+
+    p = glue-join (a , b)
+
+    compute-inl-F : F ∘ inl-join ~ horizontal-map-cocone pr1 pr2 d
+    compute-inl-F = compute-inl-cogap-join d
+
+    compute-inr-F : F ∘ inr-join ~ vertical-map-cocone pr1 pr2 d
+    compute-inr-F = compute-inr-cogap-join d
+
+  dependent-cocone-cogap-join-constant-data :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (z : X) →
+    cogap-join-constant-data d z →
+    dependent-cocone pr1 pr2 (cocone-join {A = A'} {B = B'})
+      ( λ x → cogap-join X d x ＝ z)
+  dependent-cocone-cogap-join-constant-data d z (K , L , M) =
+    dependent-cocone-cogap-join-constant d z K L M
+
+  is-equiv-dependent-cocone-cogap-join-constant-data :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (z : X) →
+    is-equiv (dependent-cocone-cogap-join-constant-data d z)
+  is-equiv-dependent-cocone-cogap-join-constant-data d z =
+    is-equiv-htpy
+      ( dependent-cocone-horizontal-first-cogap-join-constant-data d z ∘
+        horizontal-first-cogap-join-constant-data-cogap-join-constant-data
+          d z)
+      ( refl-htpy)
+      ( is-equiv-comp
+        ( dependent-cocone-horizontal-first-cogap-join-constant-data d z)
+        ( horizontal-first-cogap-join-constant-data-cogap-join-constant-data
+          d z)
+        ( is-equiv-horizontal-first-cogap-join-constant-data-cogap-join-constant-data
+          d z)
+        ( is-equiv-dependent-cocone-horizontal-first-cogap-join-constant-data
+          d z))
+
+  equiv-dependent-cocone-cogap-join-constant-data :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (z : X) →
+    cogap-join-constant-data d z ≃
+    dependent-cocone pr1 pr2 (cocone-join {A = A'} {B = B'})
+      ( λ x → cogap-join X d x ＝ z)
+  pr1 (equiv-dependent-cocone-cogap-join-constant-data d z) =
+    dependent-cocone-cogap-join-constant-data d z
+  pr2 (equiv-dependent-cocone-cogap-join-constant-data d z) =
+    is-equiv-dependent-cocone-cogap-join-constant-data d z
+
+  is-equiv-map-Π-dependent-cocone-cogap-join-constant-data :
+    {l1' l2' l3' l4 : Level}
+    {A' : UU l1'} {B' : UU l2'} {C' : UU l3'}
+    {X : UU l4}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (k : C' → X) →
+    is-equiv
+      ( λ (R : (c : C') → cogap-join-constant-data d (k c)) c →
+        dependent-cocone-cogap-join-constant-data d (k c) (R c))
+  is-equiv-map-Π-dependent-cocone-cogap-join-constant-data d k =
+    is-equiv-map-Π-is-fiberwise-equiv
+      ( λ c → is-equiv-dependent-cocone-cogap-join-constant-data d (k c))
+
+  cogap-join-constant-data-dependent-cocone :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (z : X) →
+    dependent-cocone pr1 pr2 (cocone-join {A = A'} {B = B'})
+      ( λ x → cogap-join X d x ＝ z) →
+    cogap-join-constant-data d z
+  pr1 (cogap-join-constant-data-dependent-cocone d z E) b =
+    inv (compute-inr-cogap-join d b) ∙ pr1 (pr2 E) b
+  pr1 (pr2 (cogap-join-constant-data-dependent-cocone d z E)) a =
+    inv (compute-inl-cogap-join d a) ∙ pr1 E a
+  pr2
+    ( pr2
+      ( cogap-join-constant-data-dependent-cocone
+        { A' = A'}
+        { B' = B'}
+        d z E))
+    a b =
+    equational-reasoning
+      H (a , b) ∙ (inv rinr ∙ β)
+      ＝ (H (a , b) ∙ inv rinr) ∙ β
+        by inv (assoc (H (a , b)) (inv rinr) β)
+      ＝ (inv linl ∙ apF) ∙ β
+        by ap (_∙ β) (inv (right-transpose-compute-glue-cogap-join d a b))
+      ＝ inv linl ∙ (apF ∙ β)
+        by assoc (inv linl) apF β
+      ＝ inv linl ∙ (α ∙ ap (λ _ → z) p)
+        by ap (inv linl ∙_) coh-E
+      ＝ (inv linl ∙ α) ∙ ap (λ _ → z) p
+        by inv (assoc (inv linl) α (ap (λ _ → z) p))
+      ＝ (inv linl ∙ α) ∙ refl
+        by ap ((inv linl ∙ α) ∙_) (ap-const z p)
+      ＝ inv linl ∙ α
+        by right-unit
+    where
+    F : A' * B' → _
+    F = cogap-join _ d
+
+    H = coherence-square-cocone pr1 pr2 d
+
+    p = glue-join (a , b)
+    linl = compute-inl-cogap-join d a
+    rinr = compute-inr-cogap-join d b
+    apF = ap F p
+    α = pr1 E a
+    β = pr1 (pr2 E) b
+
+    coh-E :
+      ap F p ∙ β ＝ α ∙ ap (λ _ → z) p
+    coh-E =
+      map-inv-compute-dependent-identification-eq-value-function
+        ( F)
+        ( λ _ → z)
+        ( p)
+        ( α)
+        ( β)
+        ( pr2 (pr2 E) (a , b))
+
+  horizontal-htpy-section-cogap-join-constant-data-dependent-cocone :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (z : X)
+    (E :
+      dependent-cocone pr1 pr2 (cocone-join {A = A'} {B = B'})
+        ( λ x → cogap-join X d x ＝ z)) →
+    pr1
+      ( dependent-cocone-cogap-join-constant-data d z
+        ( cogap-join-constant-data-dependent-cocone d z E)) ~
+    pr1 E
+  horizontal-htpy-section-cogap-join-constant-data-dependent-cocone d z E a =
+    is-section-inv-concat (compute-inl-cogap-join d a) (pr1 E a)
+
+  vertical-htpy-section-cogap-join-constant-data-dependent-cocone :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (z : X)
+    (E :
+      dependent-cocone pr1 pr2 (cocone-join {A = A'} {B = B'})
+        ( λ x → cogap-join X d x ＝ z)) →
+    pr1
+      ( pr2
+        ( dependent-cocone-cogap-join-constant-data d z
+          ( cogap-join-constant-data-dependent-cocone d z E))) ~
+    pr1 (pr2 E)
+  vertical-htpy-section-cogap-join-constant-data-dependent-cocone d z E b =
+    is-section-inv-concat (compute-inr-cogap-join d b) (pr1 (pr2 E) b)
+
+  vertical-htpy-retraction-cogap-join-constant-data-dependent-cocone :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (z : X)
+    (R : cogap-join-constant-data d z) →
+    pr1
+      ( cogap-join-constant-data-dependent-cocone d z
+        ( dependent-cocone-cogap-join-constant-data d z R)) ~
+    pr1 R
+  vertical-htpy-retraction-cogap-join-constant-data-dependent-cocone
+    d z (K , L , M) b =
+    is-retraction-inv-concat (compute-inr-cogap-join d b) (K b)
+
+  horizontal-htpy-retraction-cogap-join-constant-data-dependent-cocone :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (z : X)
+    (R : cogap-join-constant-data d z) →
+    pr1
+      ( pr2
+        ( cogap-join-constant-data-dependent-cocone d z
+          ( dependent-cocone-cogap-join-constant-data d z R))) ~
+    pr1 (pr2 R)
+  horizontal-htpy-retraction-cogap-join-constant-data-dependent-cocone
+    d z (K , L , M) a =
+    is-retraction-inv-concat (compute-inl-cogap-join d a) (L a)
+
+  constant-cogap-join-data :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4} →
+    cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X →
+    X → UU (l1' ⊔ l2' ⊔ l4)
+  constant-cogap-join-data d z =
+    Σ ( (a : _) → z ＝ horizontal-map-cocone pr1 pr2 d a)
+      ( λ H →
+        Σ ( (b : _) → z ＝ vertical-map-cocone pr1 pr2 d b)
+          ( λ L →
+            (a : _) (b : _) →
+            H a ∙ coherence-square-cocone pr1 pr2 d (a , b) ＝ L b))
+
+  dependent-cocone-constant-cogap-join :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4} →
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (z : X) →
+    (H : (a : A') → z ＝ horizontal-map-cocone pr1 pr2 d a) →
+    (L : (b : B') → z ＝ vertical-map-cocone pr1 pr2 d b) →
+    ( (a : A') (b : B') →
+      H a ∙ coherence-square-cocone pr1 pr2 d (a , b) ＝ L b) →
+    dependent-cocone pr1 pr2 (cocone-join {A = A'} {B = B'})
+      ( λ x → z ＝ cogap-join X d x)
+  pr1 (dependent-cocone-constant-cogap-join d z H L M) a =
+    H a ∙ inv (compute-inl-cogap-join d a)
+  pr1 (pr2 (dependent-cocone-constant-cogap-join d z H L M)) b =
+    L b ∙ inv (compute-inr-cogap-join d b)
+  pr2
+    ( pr2
+      ( dependent-cocone-constant-cogap-join
+        { A' = A'}
+        { B' = B'}
+        d z H L M))
+    ( a , b) =
+    map-compute-dependent-identification-eq-value-function
+      ( λ _ → z)
+      ( F)
+      ( p)
+      ( H a ∙ inv (compute-inl-F a))
+      ( L b ∙ inv (compute-inr-F b))
+      ( equational-reasoning
+        ap (λ _ → z) p ∙ (L b ∙ inv (compute-inr-F b))
+        ＝ refl ∙ (L b ∙ inv (compute-inr-F b))
+          by ap (_∙ (L b ∙ inv (compute-inr-F b))) (ap-const z p)
+        ＝ L b ∙ inv (compute-inr-F b)
+          by left-unit
+        ＝ (H a ∙ H' (a , b)) ∙ inv (compute-inr-F b)
+          by ap (_∙ inv (compute-inr-F b)) (inv (M a b))
+        ＝ H a ∙ (H' (a , b) ∙ inv (compute-inr-F b))
+          by assoc (H a) (H' (a , b)) (inv (compute-inr-F b))
+        ＝ H a ∙ (inv (compute-inl-F a) ∙ ap F p)
+          by ap (H a ∙_) (inv (right-transpose-compute-glue-F a b))
+        ＝ (H a ∙ inv (compute-inl-F a)) ∙ ap F p
+          by inv (assoc (H a) (inv (compute-inl-F a)) (ap F p)))
+    where
+    F : A' * B' → _
+    F = cogap-join _ d
+
+    H' = coherence-square-cocone pr1 pr2 d
+
+    p = glue-join (a , b)
+
+    compute-inl-F : F ∘ inl-join ~ horizontal-map-cocone pr1 pr2 d
+    compute-inl-F = compute-inl-cogap-join d
+
+    compute-inr-F : F ∘ inr-join ~ vertical-map-cocone pr1 pr2 d
+    compute-inr-F = compute-inr-cogap-join d
+
+    compute-glue-F :
+      statement-coherence-htpy-cocone pr1 pr2
+        ( cocone-map pr1 pr2 cocone-join F)
+        ( d)
+        ( compute-inl-F)
+        ( compute-inr-F)
+    compute-glue-F = compute-glue-cogap-join d
+
+    right-transpose-compute-glue-F :
+      (a : A') (b : B') →
+      inv (compute-inl-F a) ∙ ap F (glue-join (a , b)) ＝
+      H' (a , b) ∙ inv (compute-inr-F b)
+    right-transpose-compute-glue-F a b =
+      equational-reasoning
+        inv linl ∙ apF
+        ＝ (inv linl ∙ apF) ∙ refl
+          by inv right-unit
+        ＝ (inv linl ∙ apF) ∙ (rinr ∙ inv rinr)
+          by ap ((inv linl ∙ apF) ∙_) (inv (right-inv rinr))
+        ＝ ((inv linl ∙ apF) ∙ rinr) ∙ inv rinr
+          by inv (assoc (inv linl ∙ apF) rinr (inv rinr))
+        ＝ (inv linl ∙ (apF ∙ rinr)) ∙ inv rinr
+          by ap (_∙ inv rinr) (assoc (inv linl) apF rinr)
+        ＝ (inv linl ∙ (linl ∙ H' (a , b))) ∙ inv rinr
+          by ap (λ q → (inv linl ∙ q) ∙ inv rinr) (compute-glue-F (a , b))
+        ＝ ((inv linl ∙ linl) ∙ H' (a , b)) ∙ inv rinr
+          by ap (_∙ inv rinr) (inv (assoc (inv linl) linl (H' (a , b))))
+        ＝ (refl ∙ H' (a , b)) ∙ inv rinr
+          by ap (λ q → (q ∙ H' (a , b)) ∙ inv rinr) (left-inv linl)
+        ＝ H' (a , b) ∙ inv rinr
+          by ap (_∙ inv rinr) left-unit
+      where
+      linl = compute-inl-F a
+      rinr = compute-inr-F b
+      apF = ap F (glue-join (a , b))
+
+  dependent-cocone-constant-cogap-join-data :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (z : X) →
+    constant-cogap-join-data d z →
+    dependent-cocone pr1 pr2 (cocone-join {A = A'} {B = B'})
+      ( λ x → z ＝ cogap-join X d x)
+  dependent-cocone-constant-cogap-join-data d z (H , L , M) =
+    dependent-cocone-constant-cogap-join d z H L M
+
+  constant-cogap-join-data-dependent-cocone :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (z : X) →
+    dependent-cocone pr1 pr2 (cocone-join {A = A'} {B = B'})
+      ( λ x → z ＝ cogap-join X d x) →
+    constant-cogap-join-data d z
+  pr1 (constant-cogap-join-data-dependent-cocone d z E) a =
+    pr1 E a ∙ compute-inl-cogap-join d a
+  pr1 (pr2 (constant-cogap-join-data-dependent-cocone d z E)) b =
+    pr1 (pr2 E) b ∙ compute-inr-cogap-join d b
+  pr2
+    ( pr2
+      ( constant-cogap-join-data-dependent-cocone
+        { A' = A'}
+        { B' = B'}
+        d z E))
+    a b =
+    equational-reasoning
+      (α ∙ linl) ∙ H (a , b)
+      ＝ α ∙ (linl ∙ H (a , b))
+        by assoc α linl (H (a , b))
+      ＝ α ∙ (apF ∙ rinr)
+        by ap (α ∙_) (inv (compute-glue-F (a , b)))
+      ＝ (α ∙ apF) ∙ rinr
+        by inv (assoc α apF rinr)
+      ＝ (ap (λ _ → z) p ∙ β) ∙ rinr
+        by ap (_∙ rinr) (inv coh-E)
+      ＝ (refl ∙ β) ∙ rinr
+        by ap (λ q → (q ∙ β) ∙ rinr) (ap-const z p)
+      ＝ β ∙ rinr
+        by ap (_∙ rinr) left-unit
+    where
+    F : A' * B' → _
+    F = cogap-join _ d
+
+    H = coherence-square-cocone pr1 pr2 d
+
+    p = glue-join (a , b)
+    linl = compute-inl-cogap-join d a
+    rinr = compute-inr-cogap-join d b
+    apF = ap F p
+    α = pr1 E a
+    β = pr1 (pr2 E) b
+
+    compute-glue-F :
+      statement-coherence-htpy-cocone pr1 pr2
+        ( cocone-map pr1 pr2 cocone-join F)
+        ( d)
+        ( compute-inl-cogap-join d)
+        ( compute-inr-cogap-join d)
+    compute-glue-F = compute-glue-cogap-join d
+
+    coh-E :
+      ap (λ _ → z) p ∙ β ＝ α ∙ ap F p
+    coh-E =
+      map-inv-compute-dependent-identification-eq-value-function
+        ( λ _ → z)
+        ( F)
+        ( p)
+        ( α)
+        ( β)
+        ( pr2 (pr2 E) (a , b))
+
+  horizontal-htpy-section-constant-cogap-join-data-dependent-cocone :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (z : X)
+    (E :
+      dependent-cocone pr1 pr2 (cocone-join {A = A'} {B = B'})
+        ( λ x → z ＝ cogap-join X d x)) →
+    pr1
+      ( dependent-cocone-constant-cogap-join-data d z
+        ( constant-cogap-join-data-dependent-cocone d z E)) ~
+    pr1 E
+  horizontal-htpy-section-constant-cogap-join-data-dependent-cocone d z E a =
+    is-retraction-inv-concat' (compute-inl-cogap-join d a) (pr1 E a)
+
+  vertical-htpy-section-constant-cogap-join-data-dependent-cocone :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (z : X)
+    (E :
+      dependent-cocone pr1 pr2 (cocone-join {A = A'} {B = B'})
+        ( λ x → z ＝ cogap-join X d x)) →
+    pr1
+      ( pr2
+        ( dependent-cocone-constant-cogap-join-data d z
+          ( constant-cogap-join-data-dependent-cocone d z E))) ~
+    pr1 (pr2 E)
+  vertical-htpy-section-constant-cogap-join-data-dependent-cocone d z E b =
+    is-retraction-inv-concat' (compute-inr-cogap-join d b) (pr1 (pr2 E) b)
+
+  horizontal-htpy-retraction-constant-cogap-join-data-dependent-cocone :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (z : X)
+    (R : constant-cogap-join-data d z) →
+    pr1
+      ( constant-cogap-join-data-dependent-cocone d z
+        ( dependent-cocone-constant-cogap-join-data d z R)) ~
+    pr1 R
+  horizontal-htpy-retraction-constant-cogap-join-data-dependent-cocone
+    d z (H , L , M) a =
+    is-section-inv-concat' (compute-inl-cogap-join d a) (H a)
+
+  vertical-htpy-retraction-constant-cogap-join-data-dependent-cocone :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (z : X)
+    (R : constant-cogap-join-data d z) →
+    pr1
+      ( pr2
+        ( constant-cogap-join-data-dependent-cocone d z
+          ( dependent-cocone-constant-cogap-join-data d z R))) ~
+    pr1 (pr2 R)
+  vertical-htpy-retraction-constant-cogap-join-data-dependent-cocone
+    d z (H , L , M) b =
+    is-section-inv-concat' (compute-inr-cogap-join d b) (L b)
+
   cocone-A-join-BC :
     {l4 : Level} → UU l4 → UU (l1 ⊔ l2 ⊔ l3 ⊔ l4)
   cocone-A-join-BC X =
@@ -1648,31 +2536,28 @@ module _
     H : coherence-square-maps pr2 pr1 G F
     H = coherence-square-cocone pr1 pr2 e
 
-  cocone-AB-join-C-associative-cocone-data :
+  cocone-AB-join-C-normal-form-associative-cocone-data :
     {l4 : Level} {X : UU l4} →
-    associative-cocone-data X → cocone-AB-join-C X
+    associative-cocone-data X → cocone-AB-join-C-normal-form X
   pr1
-    ( cocone-AB-join-C-associative-cocone-data
+    ( cocone-AB-join-C-normal-form-associative-cocone-data
       ( i , j , k , H , K , L , M)) =
-    F
+    cocone-F
     where
     cocone-F : cocone pr1 pr2 _
     pr1 cocone-F = i
     pr1 (pr2 cocone-F) = j
     pr2 (pr2 cocone-F) (a , b) = H a b
-
-    F : A * B → _
-    F = cogap-join _ cocone-F
   pr1
     ( pr2
-      ( cocone-AB-join-C-associative-cocone-data
+      ( cocone-AB-join-C-normal-form-associative-cocone-data
         ( i , j , k , H , K , L , M))) =
     k
   pr2
     ( pr2
-      ( cocone-AB-join-C-associative-cocone-data
-        ( i , j , k , H , K , L , M))) (x , c) =
-    dependent-cogap-join (dependent-cocone-L c) x
+      ( cocone-AB-join-C-normal-form-associative-cocone-data
+        ( i , j , k , H , K , L , M))) =
+    dependent-cocone-L
     where
     cocone-F : cocone pr1 pr2 _
     pr1 cocone-F = i
@@ -1749,6 +2634,93 @@ module _
     pr1 (pr2 (dependent-cocone-L c)) b = path-L-inr b c
     pr2 (pr2 (dependent-cocone-L c)) (a , b) = coherence-L c a b
 
+  associative-cocone-data-cocone-AB-join-C-normal-form :
+    {l4 : Level} {X : UU l4} →
+    cocone-AB-join-C-normal-form X → associative-cocone-data X
+  pr1
+    ( associative-cocone-data-cocone-AB-join-C-normal-form
+      ( d , k , K)) =
+    horizontal-map-cocone pr1 pr2 d
+  pr1
+    ( pr2
+      ( associative-cocone-data-cocone-AB-join-C-normal-form
+        ( d , k , K))) =
+    vertical-map-cocone pr1 pr2 d
+  pr1
+    ( pr2
+      ( pr2
+        ( associative-cocone-data-cocone-AB-join-C-normal-form
+          ( d , k , K)))) =
+    k
+  pr1
+    ( pr2
+      ( pr2
+        ( pr2
+          ( associative-cocone-data-cocone-AB-join-C-normal-form
+            ( d , k , K))))) =
+    λ a b → coherence-square-cocone pr1 pr2 d (a , b)
+  pr1
+    ( pr2
+      ( pr2
+        ( pr2
+          ( pr2
+            ( associative-cocone-data-cocone-AB-join-C-normal-form
+              ( d , k , K)))))) =
+    λ b c → pr1 (raw c) b
+    where
+    raw :
+      (c : C) → cogap-join-constant-data d (k c)
+    raw c =
+      cogap-join-constant-data-dependent-cocone d (k c) (K c)
+  pr1
+    ( pr2
+      ( pr2
+        ( pr2
+          ( pr2
+            ( pr2
+              ( associative-cocone-data-cocone-AB-join-C-normal-form
+                ( d , k , K))))))) =
+    λ a c → pr1 (pr2 (raw c)) a
+    where
+    raw :
+      (c : C) → cogap-join-constant-data d (k c)
+    raw c =
+      cogap-join-constant-data-dependent-cocone d (k c) (K c)
+  pr2
+    ( pr2
+      ( pr2
+        ( pr2
+          ( pr2
+            ( pr2
+              ( associative-cocone-data-cocone-AB-join-C-normal-form
+                ( d , k , K))))))) a b c =
+    pr2 (pr2 (raw c)) a b
+    where
+    raw :
+      (c : C) → cogap-join-constant-data d (k c)
+    raw c =
+      cogap-join-constant-data-dependent-cocone d (k c) (K c)
+
+  cocone-AB-join-C-associative-cocone-data :
+    {l4 : Level} {X : UU l4} →
+    associative-cocone-data X → cocone-AB-join-C X
+  cocone-AB-join-C-associative-cocone-data =
+    cocone-AB-join-C-cocone-AB-join-C-normal-form ∘
+    cocone-AB-join-C-normal-form-associative-cocone-data
+
+  is-equiv-cocone-AB-join-C-associative-cocone-data-is-equiv-normal-form :
+    {l4 : Level} {X : UU l4} →
+    is-equiv
+      ( cocone-AB-join-C-normal-form-associative-cocone-data
+        { X = X}) →
+    is-equiv (cocone-AB-join-C-associative-cocone-data {X = X})
+  is-equiv-cocone-AB-join-C-associative-cocone-data-is-equiv-normal-form H =
+    is-equiv-comp
+      ( cocone-AB-join-C-cocone-AB-join-C-normal-form)
+      ( cocone-AB-join-C-normal-form-associative-cocone-data)
+      ( H)
+      ( is-equiv-cocone-AB-join-C-cocone-AB-join-C-normal-form)
+
   associative-cocone-data-cocone-A-join-BC :
     {l4 : Level} {X : UU l4} →
     cocone-A-join-BC X → associative-cocone-data X
@@ -1809,31 +2781,28 @@ module _
 
     H = coherence-square-cocone pr1 pr2 d
 
-  cocone-A-join-BC-associative-cocone-data :
+  cocone-A-join-BC-normal-form-associative-cocone-data :
     {l4 : Level} {X : UU l4} →
-    associative-cocone-data X → cocone-A-join-BC X
+    associative-cocone-data X → cocone-A-join-BC-normal-form X
   pr1
-    ( cocone-A-join-BC-associative-cocone-data
+    ( cocone-A-join-BC-normal-form-associative-cocone-data
       ( i , j , k , H , K , L , M)) =
     i
   pr1
     ( pr2
-      ( cocone-A-join-BC-associative-cocone-data
+      ( cocone-A-join-BC-normal-form-associative-cocone-data
         ( i , j , k , H , K , L , M))) =
-    J
+    cocone-J
     where
     cocone-J : cocone pr1 pr2 _
     pr1 cocone-J = j
     pr1 (pr2 cocone-J) = k
     pr2 (pr2 cocone-J) (b , c) = K b c
-
-    J : B * C → _
-    J = cogap-join _ cocone-J
   pr2
     ( pr2
-      ( cocone-A-join-BC-associative-cocone-data
-        ( i , j , k , H , K , L , M))) (a , y) =
-    dependent-cogap-join (dependent-cocone-H a) y
+      ( cocone-A-join-BC-normal-form-associative-cocone-data
+        ( i , j , k , H , K , L , M))) =
+    dependent-cocone-H
     where
     cocone-J : cocone pr1 pr2 _
     pr1 cocone-J = j
@@ -1938,13 +2907,117 @@ module _
     pr1 (pr2 (dependent-cocone-H a)) c = path-H-inr a c
     pr2 (pr2 (dependent-cocone-H a)) (b , c) = coherence-H a b c
 
+  associative-cocone-data-cocone-A-join-BC-normal-form :
+    {l4 : Level} {X : UU l4} →
+    cocone-A-join-BC-normal-form X → associative-cocone-data X
+  pr1
+    ( associative-cocone-data-cocone-A-join-BC-normal-form
+      ( i , d , H)) =
+    i
+  pr1
+    ( pr2
+      ( associative-cocone-data-cocone-A-join-BC-normal-form
+        ( i , d , H))) =
+    horizontal-map-cocone pr1 pr2 d
+  pr1
+    ( pr2
+      ( pr2
+        ( associative-cocone-data-cocone-A-join-BC-normal-form
+          ( i , d , H)))) =
+    vertical-map-cocone pr1 pr2 d
+  pr1
+    ( pr2
+      ( pr2
+        ( pr2
+          ( associative-cocone-data-cocone-A-join-BC-normal-form
+            ( i , d , H))))) =
+    λ a b → pr1 (raw a) b
+    where
+    raw :
+      (a : A) → constant-cogap-join-data d (i a)
+    raw a =
+      constant-cogap-join-data-dependent-cocone d (i a) (H a)
+  pr1
+    ( pr2
+      ( pr2
+        ( pr2
+          ( pr2
+            ( associative-cocone-data-cocone-A-join-BC-normal-form
+              ( i , d , H)))))) =
+    λ b c → coherence-square-cocone pr1 pr2 d (b , c)
+  pr1
+    ( pr2
+      ( pr2
+        ( pr2
+          ( pr2
+            ( pr2
+              ( associative-cocone-data-cocone-A-join-BC-normal-form
+                ( i , d , H))))))) =
+    λ a c → pr1 (pr2 (raw a)) c
+    where
+    raw :
+      (a : A) → constant-cogap-join-data d (i a)
+    raw a =
+      constant-cogap-join-data-dependent-cocone d (i a) (H a)
+  pr2
+    ( pr2
+      ( pr2
+        ( pr2
+          ( pr2
+            ( pr2
+              ( associative-cocone-data-cocone-A-join-BC-normal-form
+                ( i , d , H))))))) a b c =
+    pr2 (pr2 (raw a)) b c
+    where
+    raw :
+      (a : A) → constant-cogap-join-data d (i a)
+    raw a =
+      constant-cogap-join-data-dependent-cocone d (i a) (H a)
+
+  cocone-A-join-BC-associative-cocone-data :
+    {l4 : Level} {X : UU l4} →
+    associative-cocone-data X → cocone-A-join-BC X
+  cocone-A-join-BC-associative-cocone-data =
+    cocone-A-join-BC-cocone-A-join-BC-normal-form ∘
+    cocone-A-join-BC-normal-form-associative-cocone-data
+
+  is-equiv-cocone-A-join-BC-associative-cocone-data-is-equiv-normal-form :
+    {l4 : Level} {X : UU l4} →
+    is-equiv
+      ( cocone-A-join-BC-normal-form-associative-cocone-data
+        { X = X}) →
+    is-equiv (cocone-A-join-BC-associative-cocone-data {X = X})
+  is-equiv-cocone-A-join-BC-associative-cocone-data-is-equiv-normal-form H =
+    is-equiv-comp
+      ( cocone-A-join-BC-cocone-A-join-BC-normal-form)
+      ( cocone-A-join-BC-normal-form-associative-cocone-data)
+      ( H)
+      ( is-equiv-cocone-A-join-BC-cocone-A-join-BC-normal-form)
+
   triangle-cocone-AB-join-C-cocone-A-join-BC-associative-cocone-data :
     {l4 : Level} {X : UU l4} (d : cocone-A-join-BC X) →
     cocone-AB-join-C-associative-cocone-data
       ( associative-cocone-data-cocone-A-join-BC d) ＝
     cocone-AB-join-C-cocone-A-join-BC d
   triangle-cocone-AB-join-C-cocone-A-join-BC-associative-cocone-data d =
-    refl
+    eq-htpy-cocone pr1 pr2 _ _
+      ( refl-htpy ,
+        refl-htpy ,
+        λ (x , c) →
+          right-unit ∙
+          htpy-eq
+            ( htpy-eq
+              ( is-section-map-inv-equiv equiv-ev-pair H)
+              ( x))
+            ( c) ∙
+          inv left-unit)
+    where
+    H :
+      (x : A * B) (c : C) →
+      map-AB-cocone-A-join-BC d x ＝
+      vertical-map-cocone pr1 pr2 d (inr-join c)
+    H x c =
+      dependent-cogap-join (dependent-cocone-H-cocone-A-join-BC d c) x
 
   triangle-cocone-A-join-BC-cocone-AB-join-C-associative-cocone-data :
     {l4 : Level} {X : UU l4} (e : cocone-AB-join-C X) →
@@ -1952,7 +3025,64 @@ module _
       ( associative-cocone-data-cocone-AB-join-C e) ＝
     cocone-A-join-BC-cocone-AB-join-C e
   triangle-cocone-A-join-BC-cocone-AB-join-C-associative-cocone-data e =
-    refl
+    eq-htpy-cocone pr1 pr2 _ _
+      ( refl-htpy ,
+        refl-htpy ,
+        λ (a , y) →
+          right-unit ∙
+          htpy-eq
+            ( htpy-eq
+              ( is-section-map-inv-equiv equiv-ev-pair H)
+              ( a))
+            ( y) ∙
+          inv left-unit)
+    where
+    H :
+      (a : A) (y : B * C) →
+      horizontal-map-cocone pr1 pr2 e (inl-join a) ＝
+      map-BC-cocone-AB-join-C e y
+    H a y =
+      dependent-cogap-join (dependent-cocone-K-cocone-AB-join-C e a) y
+
+  is-equiv-cocone-AB-join-C-cocone-A-join-BC-is-equiv-associative-cocone-data :
+    {l4 : Level} {X : UU l4} →
+    is-equiv (associative-cocone-data-cocone-A-join-BC {X = X}) →
+    is-equiv (cocone-AB-join-C-associative-cocone-data {X = X}) →
+    is-equiv (cocone-AB-join-C-cocone-A-join-BC {X = X})
+  is-equiv-cocone-AB-join-C-cocone-A-join-BC-is-equiv-associative-cocone-data
+    is-equiv-data is-equiv-cocone =
+    is-equiv-htpy
+      ( cocone-AB-join-C-associative-cocone-data ∘
+        associative-cocone-data-cocone-A-join-BC)
+      ( λ d →
+        inv
+          ( triangle-cocone-AB-join-C-cocone-A-join-BC-associative-cocone-data
+            d))
+      ( is-equiv-comp
+        ( cocone-AB-join-C-associative-cocone-data)
+        ( associative-cocone-data-cocone-A-join-BC)
+        ( is-equiv-data)
+        ( is-equiv-cocone))
+
+  is-equiv-cocone-A-join-BC-cocone-AB-join-C-is-equiv-associative-cocone-data :
+    {l4 : Level} {X : UU l4} →
+    is-equiv (associative-cocone-data-cocone-AB-join-C {X = X}) →
+    is-equiv (cocone-A-join-BC-associative-cocone-data {X = X}) →
+    is-equiv (cocone-A-join-BC-cocone-AB-join-C {X = X})
+  is-equiv-cocone-A-join-BC-cocone-AB-join-C-is-equiv-associative-cocone-data
+    is-equiv-data is-equiv-cocone =
+    is-equiv-htpy
+      ( cocone-A-join-BC-associative-cocone-data ∘
+        associative-cocone-data-cocone-AB-join-C)
+      ( λ e →
+        inv
+          ( triangle-cocone-A-join-BC-cocone-AB-join-C-associative-cocone-data
+            e))
+      ( is-equiv-comp
+        ( cocone-A-join-BC-associative-cocone-data)
+        ( associative-cocone-data-cocone-AB-join-C)
+        ( is-equiv-data)
+        ( is-equiv-cocone))
 
   vertical-htpy-section-cocone-A-join-BC-cocone-AB-join-C :
     {l4 : Level} {X : UU l4} (e : cocone-AB-join-C X) →

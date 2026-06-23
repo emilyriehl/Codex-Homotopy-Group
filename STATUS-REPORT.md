@@ -7,7 +7,7 @@ Update this file whenever significant progress is made, for example when a
 new theorem is proved, an important definition is formalized, a planned module
 is added, or a major blocked item is resolved or re-scoped.
 
-Last updated: 2026-06-22.
+Last updated: 2026-06-23.
 
 ## Current summary
 
@@ -123,6 +123,18 @@ calculation:
   first associator instance, or an equivalent universal-property proof for the
   associator itself; either route now feeds directly into the checked
   two-sided homotopy packages, then transport to the `S³` model.
+- The universal-property route for join associativity now has a checked
+  reusable bridge equivalence on the `(A * B) * C` side: raw cocone data
+  expressing that a cogap map is constantly `z` is equivalent to the
+  corresponding dependent cocone over the join. The proof factors through a
+  horizontal-first raw-data normal form, Sigma swapping, pointwise path
+  equivalences, `compute-dependent-identification-eq-value-function`, and
+  the product eliminator equivalence `equiv-ev-pair`. This packages the hard
+  coherence-square algebra for the AB-normal-form fiber and provides a
+  pointwise `Π`-lift for later normal-form equivalence proofs. The remaining
+  associator blocker is to prove the symmetric bridge for the `A * (B * C)`
+  side and lift both bridge equivalences through the associative-cocone-data
+  grouping without disturbing the already checked cocone comparison triangles.
 - The low-dimensional sphere-connectivity facts needed for the lower Hopf
   segment have been formalized: `S³` is 2-connected, and therefore the first
   two concrete homotopy groups of `S³` are trivial.

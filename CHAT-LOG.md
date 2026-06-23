@@ -3973,3 +3973,58 @@ pragmas.
 Related commit:
 
 - This commit - Pivot join associativity to cocone data.
+
+
+### Package AB-side raw/dependent cocone bridge equivalence
+
+Request: Emily asked Codex to clean up and pivot, commit and push the pivot,
+then pursue the structural universal-property route for join associativity and
+work hard toward the complete proof.
+
+Model context:
+
+- Date: 2026-06-23.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible. MCP was useful for load snapshots, but raw
+  `./check.sh` remained the proof acceptance gate.
+
+Actions:
+
+- Preserved the already pushed cleanup/pivot commit `f80698c`.
+- Added a reusable coherence-square map from raw
+  `cogap-join-constant-data` into the dependent-identification square used by
+  dependent cocones over joins.
+- Proved that coherence-square map is an equivalence by factoring it into
+  concatenation equivalences, the action on paths of the equivalence
+  `concat (compute-inl-cogap-join d a) z`, and the existing
+  `compute-dependent-identification-eq-value-function` equivalence.
+- Introduced a horizontal-first raw-data normal form, proved it equivalent to
+  the original raw-data order by Sigma swapping, then proved the raw-to-
+  dependent cocone bridge is an equivalence.
+- Packaged the bridge as
+  `equiv-dependent-cocone-cogap-join-constant-data` and added the pointwise
+  `Π`-lift needed for the AB-normal-form associativity proof.
+- Attempted to refactor the existing AB normal-form map through the generic
+  bridge, found that this changes the propositional shape expected by the
+  already checked triangle comparisons, and restored the local construction
+  while keeping the bridge equivalence available as a separate reusable lemma.
+- Updated `STATUS-REPORT.md` to record the checked AB-side bridge and the
+  remaining symmetric bridge / normal-form lifting tasks.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate|lossy-unification" src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+```
+
+The Agda check passed. `git diff --check` passed. The touched-file scan found
+no holes, postulates, unsolved-meta pragmas, or temporary lossy-unification
+pragmas.
+
+Related commit:
+
+- This commit - Package AB-side join cocone bridge equivalence.
