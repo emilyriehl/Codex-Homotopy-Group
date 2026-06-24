@@ -7,7 +7,7 @@ Update this file whenever significant progress is made, for example when a
 new theorem is proved, an important definition is formalized, a planned module
 is added, or a major blocked item is resolved or re-scoped.
 
-Last updated: 2026-06-23.
+Last updated: 2026-06-24.
 
 ## Current summary
 
@@ -158,7 +158,16 @@ calculation:
   `cocone-AB-join-C-cocone-A-join-BC`, with the cocone-map of
   `cocone-associative-join`. That triangle should package the checked cocone
   comparison equivalence into the universal-property proof for the associator
-  cocone, and hence into `is-equiv map-associative-join`.
+  cocone, and hence into `is-equiv map-associative-join`. After comparing this
+  direct path-algebra approach with the Rocq HoTT `JoinAssoc.v` proof, the
+  current checked pivot begins a triple-join recursion-data route: it adds
+  `tri-join-rec-data`, its functorial postcomposition and variable
+  precomposition operations, the data-level twist swapping the first two
+  variables, canonical triple-join recursion data for `A * (B * C)`, and the
+  cocone-to-triple-data extraction map for cocones over `A` and `B * C`. This
+  shifts the next associator work toward packaging the symmetric triple-join
+  recursion principle rather than filling the old stripped raw-tail boundary
+  directly.
 - The low-dimensional sphere-connectivity facts needed for the lower Hopf
   segment have been formalized: `S³` is 2-connected, and therefore the first
   two concrete homotopy groups of `S³` are trivial.

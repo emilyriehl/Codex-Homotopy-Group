@@ -4250,3 +4250,57 @@ The Agda check passed.
 Related commit:
 
 - This commit - Prove A-BC raw extraction equivalence.
+
+### Pivot join associativity toward the Rocq HoTT triple-join route
+
+Request: Emily pointed to the successful Rocq HoTT `JoinAssoc.v`
+formalization and asked Codex to stop spending time on the direct stripped-tail
+approach and pivot to using that proof as a guide.
+
+Model context:
+
+- Date: 2026-06-24.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible and useful for quick feedback, but
+  `./check.sh` remained the final proof acceptance gate. In this session MCP
+  initially missed a wrapper-level parse/implicit-argument issue, which was
+  caught and fixed by `./check.sh`.
+
+Actions:
+
+- Reverted the incomplete direct associator checkpoint commit on the active
+  line, preserving it in git history while returning the file to a checked
+  baseline.
+- Added `naturality-constant-homotopy`, now used to express the triangle
+  coherence of cocone glue families rather than to continue the old raw-tail
+  proof.
+- Added a Rocq HoTT-style `tri-join-rec-data` record with three point maps,
+  three edge paths, and one triangular coherence.
+- Added functorial postcomposition `map-tri-join-rec-data`, variable
+  precomposition `precomp-tri-join-rec-data`, and the data-level twist
+  `twist-tri-join-rec-data` swapping the first two variables.
+- Added canonical triple-join recursion data for `A * (B * C)`.
+- Added the checked extraction
+  `tri-join-rec-data-cocone-A-join-BC` from cocones over `A` and `B * C` to
+  triple-join recursion data; its triangular coherence is exactly
+  `naturality-constant-homotopy`.
+- Updated `STATUS-REPORT.md` to record the checked Rocq-guided pivot and the
+  new structural next step.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate|lossy-unification" src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+```
+
+The Agda check passed. `git diff --check` passed. The touched-file scan found
+no holes, postulates, unsolved-meta pragmas, or temporary lossy-unification
+pragmas.
+
+Related commit:
+
+- This commit - Start Rocq-guided triple join associator route.

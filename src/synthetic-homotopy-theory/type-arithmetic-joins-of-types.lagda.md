@@ -67,6 +67,16 @@ naturality-homotopy :
   ap f p ∙ H y ＝ H x ∙ ap g p
 naturality-homotopy H p = inv (nat-htpy H p)
 
+naturality-constant-homotopy :
+  {l1 l2 : Level} {A : UU l1} {B : UU l2}
+  {x : B} {j : A → B} (H : (a : A) → x ＝ j a)
+  {a a' : A} (p : a ＝ a') →
+  H a ∙ ap j p ＝ H a'
+naturality-constant-homotopy {x = x} H p =
+  inv (naturality-homotopy H p) ∙
+  ap (_∙ H _) (ap-const x p) ∙
+  left-unit
+
 compute-dependent-identification-eq-value-function-naturality :
   {l1 l2 : Level} {X : UU l1} {Y : UU l2} {f g : X → Y}
   (H : f ~ g) {x y : X} (p : x ＝ y) →
@@ -683,6 +693,96 @@ module _
       ( a)
 ```
 
+### Triple join recursion data
+
+```agda
+record tri-join-rec-data
+  {l1 l2 l3 l4 : Level}
+  (A : UU l1) (B : UU l2) (C : UU l3) (X : UU l4) :
+  UU (l1 ⊔ l2 ⊔ l3 ⊔ l4)
+  where
+  constructor make-tri-join-rec-data
+  field
+    point-1-tri-join-rec-data : A → X
+    point-2-tri-join-rec-data : B → X
+    point-3-tri-join-rec-data : C → X
+    path-12-tri-join-rec-data :
+      (a : A) (b : B) →
+      point-1-tri-join-rec-data a ＝ point-2-tri-join-rec-data b
+    path-13-tri-join-rec-data :
+      (a : A) (c : C) →
+      point-1-tri-join-rec-data a ＝ point-3-tri-join-rec-data c
+    path-23-tri-join-rec-data :
+      (b : B) (c : C) →
+      point-2-tri-join-rec-data b ＝ point-3-tri-join-rec-data c
+    coherence-triangle-tri-join-rec-data :
+      (a : A) (b : B) (c : C) →
+      path-12-tri-join-rec-data a b ∙
+      path-23-tri-join-rec-data b c ＝
+      path-13-tri-join-rec-data a c
+
+open tri-join-rec-data public
+
+map-tri-join-rec-data :
+  {l1 l2 l3 l4 l5 : Level}
+  {A : UU l1} {B : UU l2} {C : UU l3} {X : UU l4} {Y : UU l5} →
+  (X → Y) → tri-join-rec-data A B C X → tri-join-rec-data A B C Y
+map-tri-join-rec-data f d =
+  make-tri-join-rec-data
+    ( f ∘ point-1-tri-join-rec-data d)
+    ( f ∘ point-2-tri-join-rec-data d)
+    ( f ∘ point-3-tri-join-rec-data d)
+    ( λ a b → ap f (path-12-tri-join-rec-data d a b))
+    ( λ a c → ap f (path-13-tri-join-rec-data d a c))
+    ( λ b c → ap f (path-23-tri-join-rec-data d b c))
+    ( λ a b c →
+      inv
+        ( ap-concat
+          ( f)
+          ( path-12-tri-join-rec-data d a b)
+          ( path-23-tri-join-rec-data d b c)) ∙
+      ap
+        ( ap f)
+        ( coherence-triangle-tri-join-rec-data d a b c))
+
+twist-tri-join-rec-data :
+  {l1 l2 l3 l4 : Level}
+  {A : UU l1} {B : UU l2} {C : UU l3} {X : UU l4} →
+  tri-join-rec-data A B C X → tri-join-rec-data B A C X
+twist-tri-join-rec-data d =
+  make-tri-join-rec-data
+    ( point-2-tri-join-rec-data d)
+    ( point-1-tri-join-rec-data d)
+    ( point-3-tri-join-rec-data d)
+    ( λ b a → inv (path-12-tri-join-rec-data d a b))
+    ( path-23-tri-join-rec-data d)
+    ( path-13-tri-join-rec-data d)
+    ( λ b a c →
+      inv
+        ( left-transpose-eq-concat
+          ( path-12-tri-join-rec-data d a b)
+          ( path-23-tri-join-rec-data d b c)
+          ( path-13-tri-join-rec-data d a c)
+          ( coherence-triangle-tri-join-rec-data d a b c)))
+
+precomp-tri-join-rec-data :
+  {l1 l2 l3 l1' l2' l3' l4 : Level}
+  {A : UU l1} {B : UU l2} {C : UU l3}
+  {A' : UU l1'} {B' : UU l2'} {C' : UU l3'} {X : UU l4} →
+  tri-join-rec-data A' B' C' X →
+  (A → A') → (B → B') → (C → C') →
+  tri-join-rec-data A B C X
+precomp-tri-join-rec-data d f g h =
+  make-tri-join-rec-data
+    ( point-1-tri-join-rec-data d ∘ f)
+    ( point-2-tri-join-rec-data d ∘ g)
+    ( point-3-tri-join-rec-data d ∘ h)
+    ( λ a b → path-12-tri-join-rec-data d (f a) (g b))
+    ( λ a c → path-13-tri-join-rec-data d (f a) (h c))
+    ( λ b c → path-23-tri-join-rec-data d (g b) (h c))
+    ( λ a b c → coherence-triangle-tri-join-rec-data d (f a) (g b) (h c))
+```
+
 ### Associativity of joins
 
 ```agda
@@ -737,6 +837,38 @@ module _
     ap
       ( λ p → p ∙ glue-join (a , inr-join c))
       ( ap-const (inl-join {A = A} {B = B * C} a) (glue-join (b , c)))
+
+  canonical-tri-join-rec-data :
+    tri-join-rec-data A B C (A * (B * C))
+  canonical-tri-join-rec-data =
+    make-tri-join-rec-data
+      ( inl-join)
+      ( inr-join ∘ inl-join)
+      ( inr-join ∘ inr-join)
+      ( λ a b → glue-join (a , inl-join b))
+      ( λ a c → glue-join (a , inr-join c))
+      ( λ b c → ap inr-join (glue-join (b , c)))
+      ( naturality-glue-left-join)
+
+  tri-join-rec-data-cocone-A-join-BC :
+    {l4 : Level} {X : UU l4} →
+    cocone
+      ( λ (t : A × (B * C)) → pr1 t)
+      ( λ (t : A × (B * C)) → pr2 t)
+      ( X) →
+    tri-join-rec-data A B C X
+  tri-join-rec-data-cocone-A-join-BC d =
+    make-tri-join-rec-data
+      ( horizontal-map-cocone pr1 pr2 d)
+      ( vertical-map-cocone pr1 pr2 d ∘ inl-join)
+      ( vertical-map-cocone pr1 pr2 d ∘ inr-join)
+      ( λ a b → coherence-square-cocone pr1 pr2 d (a , inl-join b))
+      ( λ a c → coherence-square-cocone pr1 pr2 d (a , inr-join c))
+      ( λ b c → ap (vertical-map-cocone pr1 pr2 d) (glue-join (b , c)))
+      ( λ a b c →
+        naturality-constant-homotopy
+          ( λ y → coherence-square-cocone pr1 pr2 d (a , y))
+          ( glue-join (b , c)))
 
   tr-dependent-function-type-fixed-domain :
     {l4 l5 l6 : Level} {X : UU l4} {D : UU l5}
