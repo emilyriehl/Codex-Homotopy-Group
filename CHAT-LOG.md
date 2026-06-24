@@ -4250,3 +4250,48 @@ The Agda check passed.
 Related commit:
 
 - This commit - Prove A-BC raw extraction equivalence.
+
+### Checkpoint incomplete associator boundary work
+
+Request: Emily asked Codex to work hard on the last associator hole, then asked
+to stop at a discussion point and preserve the work before deciding whether the
+current strategy is right.
+
+Model context:
+
+- Date: 2026-06-24.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible, but did not expose the literate hole as a
+  visible goal; raw Agda interaction was used for goal inspection.
+
+Actions:
+
+- Preserved the current WIP on the structural join associator route in
+  `src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md`.
+- Added generic path-algebra infrastructure for horizontal pasting,
+  postcomposition of coherence squares, and cancellation/factorization lemmas
+  used by the associator boundary proof.
+- Refactored the associator proof through raw endpoint-corrected
+  `G-naturality` data and reduced the remaining obstruction to the single
+  comparison
+  `stripped-raw-G-tail ＝ ap (concat linl-constant z') M'`.
+- Left one intentional hole at `stripped-raw-G-tail-M'`; the file is not
+  currently accepted by final `./check.sh`.
+- Stopped the running raw Agda interaction after the pause request, with no
+  background proof process left running.
+
+Verification:
+
+```sh
+rg -n "\{!!\}" src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+```
+
+The scan reports the one remaining hole at `stripped-raw-G-tail-M'`. A final
+`./check.sh` pass was not run for this checkpoint because the file is knowingly
+incomplete.
+
+Related commit:
+
+- This commit - Checkpoint incomplete associator boundary work.

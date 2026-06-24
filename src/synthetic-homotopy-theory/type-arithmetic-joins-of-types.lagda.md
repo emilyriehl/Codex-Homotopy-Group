@@ -67,6 +67,28 @@ naturality-homotopy :
   ap f p ∙ H y ＝ H x ∙ ap g p
 naturality-homotopy H p = inv (nat-htpy H p)
 
+naturality-constant-homotopy :
+  {l1 l2 : Level} {A : UU l1} {B : UU l2}
+  {x : B} {j : A → B} (H : (a : A) → x ＝ j a)
+  {a a' : A} (p : a ＝ a') →
+  H a ∙ ap j p ＝ H a'
+naturality-constant-homotopy {x = x} H p =
+  inv (naturality-homotopy H p) ∙
+  ap (_∙ H _) (ap-const x p) ∙
+  left-unit
+
+postcompose-naturality-constant-homotopy :
+  {l1 l2 l3 : Level} {A : UU l1} {B : UU l2} {C : UU l3}
+  {x : B} {j : A → B} (h : B → C) (H : (a : A) → x ＝ j a)
+  {a a' : A} (p : a ＝ a') →
+  naturality-constant-homotopy (λ y → ap h (H y)) p ＝
+  ap (ap h (H a) ∙_) (ap-comp h j p) ∙
+  inv (ap-concat h (H a) (ap j p)) ∙
+  ap (ap h) (naturality-constant-homotopy H p)
+postcompose-naturality-constant-homotopy {j = j} h H {a} refl
+  with H a
+... | refl = refl
+
 compute-dependent-identification-eq-value-function-naturality :
   {l1 l2 : Level} {X : UU l1} {Y : UU l2} {f g : X → Y}
   (H : f ~ g) {x y : X} (p : x ＝ y) →
@@ -221,6 +243,600 @@ apd-concat-dependent-identification-eq-value-function :
   apd (λ z → H z ∙ K z) p ＝
   concat-dependent-identification-eq-value-function H K p (apd H p) (apd K p)
 apd-concat-dependent-identification-eq-value-function H K refl = refl
+
+base-map-horizontal-pasting-compute-dependent-identification-eq-value-function :
+  {l : Level} {B : UU l} {u v w : B}
+  (H : u ＝ v) (K : v ＝ w) →
+  inv
+    ( horizontal-pasting-coherence-square-identifications
+      ( H)
+      ( K)
+      ( refl)
+      ( refl)
+      ( refl)
+      ( H ∙ refl)
+      ( K ∙ refl)
+      ( refl)
+      ( refl) ∙
+      right-unit) ＝
+  ap (λ r → r ∙ K) (inv right-unit) ∙
+  ap (_∙_ (H ∙ refl)) (inv right-unit)
+base-map-horizontal-pasting-compute-dependent-identification-eq-value-function
+  refl refl =
+  refl
+
+map-horizontal-pasting-compute-dependent-identification-eq-value-function :
+  {l1 l2 : Level} {A : UU l1} {B : UU l2}
+  {f g k : A → B} {x y : A} (p : x ＝ y)
+  {H₀ : f x ＝ g x} {H₁ : f y ＝ g y}
+  {K₀ : g x ＝ k x} {K₁ : g y ＝ k y}
+  (L :
+    coherence-square-identifications
+      ( H₀)
+      ( ap f p)
+      ( ap g p)
+      ( H₁))
+  (M :
+    coherence-square-identifications
+      ( K₀)
+      ( ap g p)
+      ( ap k p)
+      ( K₁)) →
+  map-compute-dependent-identification-eq-value-function
+    ( f)
+    ( k)
+    ( p)
+    ( H₀ ∙ K₀)
+    ( H₁ ∙ K₁)
+    ( horizontal-pasting-coherence-square-identifications
+      ( H₀)
+      ( K₀)
+      ( ap f p)
+      ( ap g p)
+      ( ap k p)
+      ( H₁)
+      ( K₁)
+      ( L)
+      ( M)) ＝
+  concat-dependent-identification-eq-value
+    ( p)
+    ( map-compute-dependent-identification-eq-value-function
+      ( f)
+      ( g)
+      ( p)
+      ( H₀)
+      ( H₁)
+      ( L))
+    ( map-compute-dependent-identification-eq-value-function
+      ( g)
+      ( k)
+      ( p)
+      ( K₀)
+      ( K₁)
+      ( M))
+map-horizontal-pasting-compute-dependent-identification-eq-value-function
+  refl {H₀ = H₀} {K₀ = K₀} refl refl =
+  base-map-horizontal-pasting-compute-dependent-identification-eq-value-function
+    H₀ K₀
+
+map-inv-concat-dependent-identification-eq-value-function :
+  {l1 l2 : Level} {A : UU l1} {B : UU l2}
+  {f g k : A → B} {x y : A} (p : x ＝ y)
+  {H₀ : f x ＝ g x} {H₁ : f y ＝ g y}
+  {K₀ : g x ＝ k x} {K₁ : g y ＝ k y}
+  (L : dependent-identification (eq-value-function f g) p H₀ H₁)
+  (M : dependent-identification (eq-value-function g k) p K₀ K₁) →
+  map-inv-compute-dependent-identification-eq-value-function
+    ( f)
+    ( k)
+    ( p)
+    ( H₀ ∙ K₀)
+    ( H₁ ∙ K₁)
+    ( concat-dependent-identification-eq-value p L M) ＝
+  horizontal-pasting-coherence-square-identifications
+    ( H₀)
+    ( K₀)
+    ( ap f p)
+    ( ap g p)
+    ( ap k p)
+    ( H₁)
+    ( K₁)
+    ( map-inv-compute-dependent-identification-eq-value-function
+      ( f)
+      ( g)
+      ( p)
+      ( H₀)
+      ( H₁)
+      ( L))
+    ( map-inv-compute-dependent-identification-eq-value-function
+      ( g)
+      ( k)
+      ( p)
+      ( K₀)
+      ( K₁)
+      ( M))
+map-inv-concat-dependent-identification-eq-value-function
+  {f = f} {g = g} {k = k}
+  p {H₀ = H₀} {H₁ = H₁} {K₀ = K₀} {K₁ = K₁} L M =
+  equational-reasoning
+    map-inv-equiv E (concat-dependent-identification-eq-value p L M)
+    ＝
+      map-inv-equiv E
+        ( concat-dependent-identification-eq-value
+          ( p)
+          ( map-equiv E-left raw-left)
+          ( map-equiv E-right raw-right))
+      by ap (map-inv-equiv E)
+        ( inv
+          ( ap-binary
+            ( concat-dependent-identification-eq-value p)
+            ( is-section-map-inv-equiv E-left L)
+            ( is-section-map-inv-equiv E-right M)))
+    ＝ map-inv-equiv E (map-equiv E raw-pasted)
+      by ap (map-inv-equiv E)
+        ( inv
+          ( map-horizontal-pasting-compute-dependent-identification-eq-value-function
+            ( p)
+            ( raw-left)
+            ( raw-right)))
+    ＝ raw-pasted
+      by is-retraction-map-inv-equiv E raw-pasted
+  where
+  E =
+    compute-dependent-identification-eq-value-function
+      ( f)
+      ( k)
+      ( p)
+      ( H₀ ∙ K₀)
+      ( H₁ ∙ K₁)
+
+  E-left =
+    compute-dependent-identification-eq-value-function
+      ( f)
+      ( g)
+      ( p)
+      ( H₀)
+      ( H₁)
+
+  E-right =
+    compute-dependent-identification-eq-value-function
+      ( g)
+      ( k)
+      ( p)
+      ( K₀)
+      ( K₁)
+
+  raw-left = map-inv-equiv E-left L
+  raw-right = map-inv-equiv E-right M
+
+  raw-pasted =
+    horizontal-pasting-coherence-square-identifications
+      ( H₀)
+      ( K₀)
+      ( ap f p)
+      ( ap g p)
+      ( ap k p)
+      ( H₁)
+      ( K₁)
+      ( raw-left)
+      ( raw-right)
+
+map-inv-concat-bottom-dependent-identification-eq-value-function :
+  {l1 l2 : Level} {A : UU l1} {B : UU l2}
+  {f g : A → B} {x y : A} (p : x ＝ y)
+  (q : f x ＝ g x) {r r' : f y ＝ g y}
+  (M : dependent-identification (eq-value-function f g) p q r)
+  (s : r ＝ r') →
+  map-inv-compute-dependent-identification-eq-value-function
+    ( f)
+    ( g)
+    ( p)
+    ( q)
+    ( r')
+    ( M ∙ s) ＝
+  concat-bottom-identification-coherence-square-identifications
+    ( q)
+    ( ap f p)
+    ( ap g p)
+    ( r)
+    ( s)
+    ( map-inv-compute-dependent-identification-eq-value-function
+      ( f)
+      ( g)
+      ( p)
+      ( q)
+      ( r)
+      ( M))
+map-inv-concat-bottom-dependent-identification-eq-value-function p q M refl =
+  ap
+    ( map-inv-compute-dependent-identification-eq-value-function _ _ p q _)
+    ( right-unit) ∙
+  inv left-unit
+
+map-inv-inv-concat-bottom-dependent-identification-eq-value-function :
+  {l1 l2 : Level} {A : UU l1} {B : UU l2}
+  {f g : A → B} {x y : A} (p : x ＝ y)
+  (q : f x ＝ g x) {r r' : f y ＝ g y}
+  (M : dependent-identification (eq-value-function f g) p q r')
+  (s : r ＝ r') →
+  map-inv-compute-dependent-identification-eq-value-function
+    ( f)
+    ( g)
+    ( p)
+    ( q)
+    ( r)
+    ( M ∙ inv s) ＝
+  inv-concat-bottom-identification-coherence-square-identifications
+    ( q)
+    ( ap f p)
+    ( ap g p)
+    ( r)
+    ( s)
+    ( map-inv-compute-dependent-identification-eq-value-function
+      ( f)
+      ( g)
+      ( p)
+      ( q)
+      ( r')
+      ( M))
+map-inv-inv-concat-bottom-dependent-identification-eq-value-function
+  p q M refl =
+  ap
+    ( map-inv-compute-dependent-identification-eq-value-function _ _ p q _)
+    ( right-unit) ∙
+  inv left-unit
+
+map-inv-concat-top-identification-coherence-square-identifications :
+  {l1 l2 : Level} {A : UU l1} {B : UU l2}
+  {f g : A → B} {x y : A} (p : x ＝ y)
+  {q q' : f x ＝ g x} (s : q ＝ q') (r : f y ＝ g y)
+  (S :
+    coherence-square-identifications
+      ( q')
+      ( ap f p)
+      ( ap g p)
+      ( r)) →
+  map-compute-dependent-identification-eq-value-function
+    ( f)
+    ( g)
+    ( p)
+    ( q)
+    ( r)
+    ( inv-concat-top-identification-coherence-square-identifications
+      ( q)
+      ( ap f p)
+      ( ap g p)
+      ( r)
+      ( s)
+      ( S)) ＝
+  ap (tr (eq-value-function f g) p) s ∙
+  map-compute-dependent-identification-eq-value-function
+    ( f)
+    ( g)
+    ( p)
+    ( q')
+    ( r)
+    ( S)
+map-inv-concat-top-identification-coherence-square-identifications
+  p refl r S =
+  ap
+    ( map-compute-dependent-identification-eq-value-function _ _ p _ r)
+    ( right-unit) ∙
+  inv left-unit
+
+map-inv-concat-bottom-identification-coherence-square-identifications :
+  {l1 l2 : Level} {A : UU l1} {B : UU l2}
+  {f g : A → B} {x y : A} (p : x ＝ y)
+  (q : f x ＝ g x) {r r' : f y ＝ g y}
+  (s : r ＝ r')
+  (S :
+    coherence-square-identifications
+      ( q)
+      ( ap f p)
+      ( ap g p)
+      ( r')) →
+  map-compute-dependent-identification-eq-value-function
+    ( f)
+    ( g)
+    ( p)
+    ( q)
+    ( r)
+    ( inv-concat-bottom-identification-coherence-square-identifications
+      ( q)
+      ( ap f p)
+      ( ap g p)
+      ( r)
+      ( s)
+      ( S)) ＝
+  map-compute-dependent-identification-eq-value-function
+    ( f)
+    ( g)
+    ( p)
+    ( q)
+    ( r')
+    ( S) ∙
+  inv s
+map-inv-concat-bottom-identification-coherence-square-identifications
+  p q refl S =
+  ap
+    ( map-compute-dependent-identification-eq-value-function _ _ p q _)
+    ( left-unit) ∙
+  inv right-unit
+
+map-inv-concat-top-dependent-identification-eq-value-function :
+  {l1 l2 : Level} {A : UU l1} {B : UU l2}
+  {f g : A → B} {x y : A} (p : x ＝ y)
+  {q q' : f x ＝ g x} (s : q ＝ q') (r : f y ＝ g y)
+  (M : dependent-identification (eq-value-function f g) p q' r) →
+  map-inv-compute-dependent-identification-eq-value-function
+    ( f)
+    ( g)
+    ( p)
+    ( q)
+    ( r)
+    ( ap (tr (eq-value-function f g) p) s ∙ M) ＝
+  inv-concat-top-identification-coherence-square-identifications
+    ( q)
+    ( ap f p)
+    ( ap g p)
+    ( r)
+    ( s)
+    ( map-inv-compute-dependent-identification-eq-value-function
+      ( f)
+      ( g)
+      ( p)
+      ( q')
+      ( r)
+      ( M))
+map-inv-concat-top-dependent-identification-eq-value-function p refl r M =
+  ap
+    ( map-inv-compute-dependent-identification-eq-value-function _ _ p _ r)
+    ( left-unit) ∙
+  inv right-unit
+
+ap-dependent-identification-eq-value-function :
+  {l1 l2 l3 : Level} {A : UU l1} {B : UU l2} {C : UU l3}
+  {f g : A → B} (h : B → C) {x y : A} (p : x ＝ y)
+  {u : f x ＝ g x} {v : f y ＝ g y} →
+  dependent-identification (eq-value-function f g) p u v →
+  dependent-identification
+    ( eq-value-function (h ∘ f) (h ∘ g))
+    ( p)
+    ( ap h u)
+    ( ap h v)
+ap-dependent-identification-eq-value-function h refl M = ap (ap h) M
+
+postcompose-coherence-square-identifications :
+  {l1 l2 l3 : Level} {A : UU l1} {B : UU l2} {C : UU l3}
+  {f g : A → B} (h : B → C) {x y : A} (p : x ＝ y)
+  {u : f x ＝ g x} {v : f y ＝ g y} →
+  coherence-square-identifications u (ap f p) (ap g p) v →
+  coherence-square-identifications
+    ( ap h u)
+    ( ap (h ∘ f) p)
+    ( ap (h ∘ g) p)
+    ( ap h v)
+postcompose-coherence-square-identifications
+  {f = f} {g = g} h p {u = u} {v = v} S =
+  concat-right-identification-coherence-square-identifications
+    ( ap h u)
+    ( ap (h ∘ f) p)
+    ( ap h (ap g p))
+    ( ap h v)
+    ( inv (ap-comp h g p))
+    ( concat-left-identification-coherence-square-identifications
+      ( ap h u)
+      ( ap h (ap f p))
+      ( ap h (ap g p))
+      ( ap h v)
+      ( inv (ap-comp h f p))
+      ( map-coherence-square-identifications
+        ( h)
+        ( u)
+        ( ap f p)
+        ( ap g p)
+        ( v)
+        ( S)))
+
+base-postcompose-coherence-square-identifications :
+  {l1 l2 l3 : Level} {A : UU l1} {B : UU l2} {C : UU l3}
+  {f g : A → B} (h : B → C) {x : A} (u : f x ＝ g x) →
+  postcompose-coherence-square-identifications
+    { f = f}
+    { g = g}
+    ( h)
+    ( refl)
+    { u = u}
+    ( refl) ＝
+  map-coherence-square-identifications
+    ( h)
+    ( u)
+    ( refl)
+    ( refl)
+    ( u ∙ refl)
+    ( refl)
+base-postcompose-coherence-square-identifications h u =
+  right-unit
+
+base-map-postcompose-coherence-square-compute-dependent-identification-eq-value-function :
+  {l1 l2 : Level} {B : UU l1} {C : UU l2} (h : B → C)
+  {x y : B} (u : x ＝ y) →
+  inv
+    ( map-coherence-square-identifications
+      ( h)
+      ( u)
+      ( refl)
+      ( refl)
+      ( u ∙ refl)
+      ( refl) ∙
+      right-unit) ＝
+  ap (ap h) (inv right-unit)
+base-map-postcompose-coherence-square-compute-dependent-identification-eq-value-function
+  h refl =
+  refl
+
+map-postcompose-coherence-square-compute-dependent-identification-eq-value-function :
+  {l1 l2 l3 : Level} {A : UU l1} {B : UU l2} {C : UU l3}
+  {f g : A → B} (h : B → C) {x y : A} (p : x ＝ y)
+  {u : f x ＝ g x} {v : f y ＝ g y}
+  (S : coherence-square-identifications u (ap f p) (ap g p) v) →
+  map-compute-dependent-identification-eq-value-function
+    ( h ∘ f)
+    ( h ∘ g)
+    ( p)
+    ( ap h u)
+    ( ap h v)
+    ( postcompose-coherence-square-identifications h p S) ＝
+  ap-dependent-identification-eq-value-function h p
+    ( map-compute-dependent-identification-eq-value-function
+      ( f)
+      ( g)
+      ( p)
+      ( u)
+      ( v)
+      ( S))
+map-postcompose-coherence-square-compute-dependent-identification-eq-value-function
+  {f = f} {g = g} h refl {u = u} refl =
+  ap
+    ( map-compute-dependent-identification-eq-value-function
+      ( h ∘ f)
+      ( h ∘ g)
+      ( refl)
+      ( ap h u)
+      ( ap h (u ∙ ap g refl)))
+    ( base-postcompose-coherence-square-identifications
+      { f = f}
+      { g = g}
+      ( h)
+      ( u)) ∙
+  base-map-postcompose-coherence-square-compute-dependent-identification-eq-value-function
+    h u
+
+map-inv-ap-dependent-identification-eq-value-function :
+  {l1 l2 l3 : Level} {A : UU l1} {B : UU l2} {C : UU l3}
+  {f g : A → B} (h : B → C) {x y : A} (p : x ＝ y)
+  {u : f x ＝ g x} {v : f y ＝ g y}
+  (M : dependent-identification (eq-value-function f g) p u v) →
+  map-inv-compute-dependent-identification-eq-value-function
+    ( h ∘ f)
+    ( h ∘ g)
+    ( p)
+    ( ap h u)
+    ( ap h v)
+    ( ap-dependent-identification-eq-value-function h p M) ＝
+  postcompose-coherence-square-identifications
+    ( h)
+    ( p)
+    ( map-inv-compute-dependent-identification-eq-value-function
+      ( f)
+      ( g)
+      ( p)
+      ( u)
+      ( v)
+      ( M))
+map-inv-ap-dependent-identification-eq-value-function
+  {f = f} {g = g} h p {u = u} {v = v} M =
+  equational-reasoning
+    map-inv-equiv E
+      ( ap-dependent-identification-eq-value-function h p M)
+    ＝
+      map-inv-equiv E
+        ( ap-dependent-identification-eq-value-function h p
+          ( map-equiv E₀ raw))
+      by ap (map-inv-equiv E)
+        ( ap
+          ( ap-dependent-identification-eq-value-function h p)
+          ( inv (is-section-map-inv-equiv E₀ M)))
+    ＝ map-inv-equiv E (map-equiv E raw-post)
+      by ap (map-inv-equiv E)
+        ( inv
+          ( map-postcompose-coherence-square-compute-dependent-identification-eq-value-function
+            ( h)
+            ( p)
+            ( raw)))
+    ＝ raw-post
+      by is-retraction-map-inv-equiv E raw-post
+  where
+  E =
+    compute-dependent-identification-eq-value-function
+      ( h ∘ f)
+      ( h ∘ g)
+      ( p)
+      ( ap h u)
+      ( ap h v)
+
+  E₀ =
+    compute-dependent-identification-eq-value-function
+      ( f)
+      ( g)
+      ( p)
+      ( u)
+      ( v)
+
+  raw = map-inv-equiv E₀ M
+
+  raw-post = postcompose-coherence-square-identifications h p raw
+
+base-postcompose-naturality-homotopy :
+  {l1 l2 l3 : Level} {A : UU l1} {B : UU l2} {C : UU l3}
+  {f g : A → B} (h : B → C) {x : A} (u : f x ＝ g x) →
+  postcompose-coherence-square-identifications
+    { f = f}
+    { g = g}
+    ( h)
+    ( refl)
+    { u = u}
+    ( inv right-unit) ＝
+  inv right-unit
+base-postcompose-naturality-homotopy {f = f} {g = g} h {x} u
+  with f x | g x | u
+... | y | .y | refl = refl
+
+postcompose-naturality-homotopy :
+  {l1 l2 l3 : Level} {A : UU l1} {B : UU l2} {C : UU l3}
+  {f g : A → B} (h : B → C) (H : f ~ g) {x y : A} (p : x ＝ y) →
+  postcompose-coherence-square-identifications h p
+    ( naturality-homotopy H p) ＝
+  naturality-homotopy (λ z → ap h (H z)) p
+postcompose-naturality-homotopy {f = f} {g = g} h H {x} refl =
+  base-postcompose-naturality-homotopy {f = f} {g = g} h {x} (H x)
+
+coherence-ap-dependent-identification-eq-value-function :
+  {l1 l2 l3 : Level} {A : UU l1} {B : UU l2} {C : UU l3}
+  {f g : A → B} (h : B → C) (H : f ~ g)
+  {x y : A} (p : x ＝ y)
+  {H₀ : f x ＝ g x} {H₁ : f y ＝ g y}
+  (α₀ : H x ＝ H₀) (α₁ : H y ＝ H₁)
+  (M : dependent-identification (eq-value-function f g) p H₀ H₁) →
+  apd H p ∙ α₁ ＝
+  ap (tr (eq-value-function f g) p) α₀ ∙ M →
+  apd (λ z → ap h (H z)) p ∙ ap (ap h) α₁ ＝
+  ap
+    ( tr (eq-value-function (h ∘ f) (h ∘ g)) p)
+    ( ap (ap h) α₀) ∙
+  ap-dependent-identification-eq-value-function h p M
+coherence-ap-dependent-identification-eq-value-function
+  h H refl refl refl refl refl =
+  refl
+
+right-factor-ap :
+  {l1 l2 : Level} {A : UU l1} {B : UU l2} (f : A → B)
+  {x y z : A} (p : x ＝ y) (q : z ＝ y) →
+  ap f p ＝ ap f (p ∙ inv q) ∙ ap f q
+right-factor-ap f p refl =
+  ap (ap f) (inv right-unit) ∙ inv right-unit
+
+right-cancel-concat :
+  {l1 : Level} {A : UU l1} {x y z : A}
+  (p : x ＝ y) (q : y ＝ z) →
+  (p ∙ q) ∙ inv q ＝ p
+right-cancel-concat p refl = right-unit ∙ right-unit
+
+right-cancel-inv-concat :
+  {l1 : Level} {A : UU l1} {x y z : A}
+  (p : x ＝ y) (q : z ＝ y) →
+  (p ∙ inv q) ∙ q ＝ p
+right-cancel-inv-concat p refl = right-unit ∙ right-unit
 
 compute-ap-map-commutative-product-eq-pair-Σ :
   {l1 l2 : Level} {A : UU l1} {B : UU l2}
@@ -914,76 +1530,6 @@ module _
   pr2 (pr2 dependent-cocone-left-map-associative-join) =
     coherence-left-map-associative-join
 
-  coherence-map-associative-join :
-    (x : A * B) (c : C) →
-    map-left-associative-join x ＝ inr-join (inr-join c)
-  coherence-map-associative-join =
-    dependent-cogap-join dependent-cocone-left-map-associative-join
-
-  compute-inl-coherence-map-associative-join :
-    (a : A) (c : C) →
-    coherence-map-associative-join (inl-join a) c ＝
-    compute-inl-map-left-associative-join a ∙ glue-join (a , inr-join c)
-  compute-inl-coherence-map-associative-join a c =
-    ap (λ h → h c) (compute-inl-dependent-cogap-join
-      dependent-cocone-left-map-associative-join a)
-
-  compute-inr-coherence-map-associative-join :
-    (b : B) (c : C) →
-    coherence-map-associative-join (inr-join b) c ＝
-    compute-inr-map-left-associative-join b ∙ ap inr-join (glue-join (b , c))
-  compute-inr-coherence-map-associative-join b c =
-    ap (λ h → h c) (compute-inr-dependent-cogap-join
-      dependent-cocone-left-map-associative-join b)
-
-  cocone-associative-join :
-    cocone pr1 pr2 (A * (B * C))
-  pr1 cocone-associative-join =
-    map-left-associative-join
-  pr1 (pr2 cocone-associative-join) =
-    inr-join ∘ inr-join
-  pr2 (pr2 cocone-associative-join) (x , c) =
-    coherence-map-associative-join x c
-
-  map-associative-join : (A * B) * C → A * (B * C)
-  map-associative-join =
-    cogap-join (A * (B * C)) cocone-associative-join
-
-  compute-inl-map-associative-join :
-    map-associative-join ∘ inl-join ~ map-left-associative-join
-  compute-inl-map-associative-join =
-    compute-inl-cogap-join cocone-associative-join
-
-  compute-inr-map-associative-join :
-    map-associative-join ∘ inr-join ~ inr-join ∘ inr-join
-  compute-inr-map-associative-join =
-    compute-inr-cogap-join cocone-associative-join
-
-  compute-glue-map-associative-join :
-    statement-coherence-htpy-cocone pr1 pr2
-      ( cocone-map pr1 pr2 cocone-join map-associative-join)
-      ( cocone-associative-join)
-      ( compute-inl-map-associative-join)
-      ( compute-inr-map-associative-join)
-  compute-glue-map-associative-join =
-    compute-glue-cogap-join cocone-associative-join
-
-  is-equiv-map-associative-join-universal-property-pushout :
-    universal-property-pushout pr1 pr2 cocone-associative-join →
-    is-equiv map-associative-join
-  is-equiv-map-associative-join-universal-property-pushout up-assoc =
-    is-equiv-up-pushout-up-pushout
-      ( pr1)
-      ( pr2)
-      ( cocone-join)
-      ( cocone-associative-join)
-      ( map-associative-join)
-      ( ( compute-inl-map-associative-join) ,
-        ( ( compute-inr-map-associative-join) ,
-          ( compute-glue-map-associative-join)))
-      ( up-join)
-      ( up-assoc)
-
   is-equiv-cogap-join :
     {l4 : Level} (X : UU l4) →
     is-equiv (cogap-join {A = A} {B = B} X)
@@ -1130,6 +1676,149 @@ module _
         ( compute-inr-cogap-join d)
     compute-glue-F = compute-glue-cogap-join d
 
+  path-inl-htpy-cogap-join-cocone-map :
+    {l1' l2' l4 l5 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4} {Y : UU l5}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (h : X → Y) (a : A') →
+    cogap-join Y (cocone-map pr1 pr2 d h) (inl-join a) ＝
+    h (cogap-join X d (inl-join a))
+  path-inl-htpy-cogap-join-cocone-map d h a =
+    compute-inl-cogap-join (cocone-map pr1 pr2 d h) a ∙
+    inv (ap h (compute-inl-cogap-join d a))
+
+  path-inr-htpy-cogap-join-cocone-map :
+    {l1' l2' l4 l5 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4} {Y : UU l5}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (h : X → Y) (b : B') →
+    cogap-join Y (cocone-map pr1 pr2 d h) (inr-join b) ＝
+    h (cogap-join X d (inr-join b))
+  path-inr-htpy-cogap-join-cocone-map d h b =
+    compute-inr-cogap-join (cocone-map pr1 pr2 d h) b ∙
+    inv (ap h (compute-inr-cogap-join d b))
+
+  coherence-square-htpy-cogap-join-cocone-map :
+    {l1' l2' l4 l5 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4} {Y : UU l5}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (h : X → Y) (a : A') (b : B') →
+    coherence-square-identifications
+      ( path-inl-htpy-cogap-join-cocone-map d h a)
+      ( ap
+        ( cogap-join Y (cocone-map pr1 pr2 d h))
+        ( glue-join (a , b)))
+      ( ap (h ∘ cogap-join X d) (glue-join (a , b)))
+      ( path-inr-htpy-cogap-join-cocone-map d h b)
+  coherence-square-htpy-cogap-join-cocone-map
+    {A' = A'} {B' = B'} d h a b =
+    equational-reasoning
+      ap F' p ∙ (rinr' ∙ inv (ap h rinr))
+      ＝ (ap F' p ∙ rinr') ∙ inv (ap h rinr)
+        by inv (assoc (ap F' p) rinr' (inv (ap h rinr)))
+      ＝ (linl' ∙ ap h H) ∙ inv (ap h rinr)
+        by ap (_∙ inv (ap h rinr)) (compute-glue-F' (a , b))
+      ＝ linl' ∙ (ap h H ∙ inv (ap h rinr))
+        by assoc linl' (ap h H) (inv (ap h rinr))
+      ＝ linl' ∙ (ap h H ∙ ap h (inv rinr))
+        by ap (λ q → linl' ∙ (ap h H ∙ q)) (inv (ap-inv h rinr))
+      ＝ linl' ∙ ap h (H ∙ inv rinr)
+        by ap (linl' ∙_) (inv (ap-concat h H (inv rinr)))
+      ＝ linl' ∙ ap h (inv linl ∙ ap F p)
+        by ap (λ q → linl' ∙ ap h q) (inv right-transpose-glue-F)
+      ＝ linl' ∙ (ap h (inv linl) ∙ ap h (ap F p))
+        by ap (linl' ∙_) (ap-concat h (inv linl) (ap F p))
+      ＝ linl' ∙ (inv (ap h linl) ∙ ap h (ap F p))
+        by ap (λ q → linl' ∙ (q ∙ ap h (ap F p))) (ap-inv h linl)
+      ＝ (linl' ∙ inv (ap h linl)) ∙ ap h (ap F p)
+        by inv (assoc linl' (inv (ap h linl)) (ap h (ap F p)))
+      ＝ (linl' ∙ inv (ap h linl)) ∙ ap (h ∘ F) p
+        by ap ((linl' ∙ inv (ap h linl)) ∙_) (inv (ap-comp h F p))
+    where
+    F : A' * B' → _
+    F = cogap-join _ d
+
+    F' : A' * B' → _
+    F' = cogap-join _ (cocone-map pr1 pr2 d h)
+
+    p = glue-join (a , b)
+
+    H = coherence-square-cocone pr1 pr2 d (a , b)
+
+    linl = compute-inl-cogap-join d a
+    rinr = compute-inr-cogap-join d b
+    linl' = compute-inl-cogap-join (cocone-map pr1 pr2 d h) a
+    rinr' = compute-inr-cogap-join (cocone-map pr1 pr2 d h) b
+
+    compute-glue-F' :
+      statement-coherence-htpy-cocone pr1 pr2
+        ( cocone-map pr1 pr2 cocone-join F')
+        ( cocone-map pr1 pr2 d h)
+        ( compute-inl-cogap-join (cocone-map pr1 pr2 d h))
+        ( compute-inr-cogap-join (cocone-map pr1 pr2 d h))
+    compute-glue-F' =
+      compute-glue-cogap-join (cocone-map pr1 pr2 d h)
+
+    right-transpose-glue-F :
+      inv linl ∙ ap F p ＝ H ∙ inv rinr
+    right-transpose-glue-F =
+      right-transpose-compute-glue-cogap-join d a b
+
+  coherence-htpy-cogap-join-cocone-map :
+    {l1' l2' l4 l5 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4} {Y : UU l5}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (h : X → Y) (a : A') (b : B') →
+    dependent-identification
+      ( λ z →
+        cogap-join Y (cocone-map pr1 pr2 d h) z ＝
+        h (cogap-join X d z))
+      ( glue-join (a , b))
+      ( path-inl-htpy-cogap-join-cocone-map d h a)
+      ( path-inr-htpy-cogap-join-cocone-map d h b)
+  coherence-htpy-cogap-join-cocone-map
+    {A' = A'} {B' = B'} d h a b =
+    map-compute-dependent-identification-eq-value-function
+      ( F')
+      ( h ∘ F)
+      ( p)
+      ( path-inl-htpy-cogap-join-cocone-map d h a)
+      ( path-inr-htpy-cogap-join-cocone-map d h b)
+      ( coherence-square-htpy-cogap-join-cocone-map d h a b)
+    where
+    F : A' * B' → _
+    F = cogap-join _ d
+
+    F' : A' * B' → _
+    F' = cogap-join _ (cocone-map pr1 pr2 d h)
+
+    p = glue-join (a , b)
+
+  dependent-cocone-htpy-cogap-join-cocone-map :
+    {l1' l2' l4 l5 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4} {Y : UU l5}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (h : X → Y) →
+    dependent-cocone pr1 pr2 cocone-join
+      ( λ z →
+        cogap-join Y (cocone-map pr1 pr2 d h) z ＝
+        h (cogap-join X d z))
+  pr1 (dependent-cocone-htpy-cogap-join-cocone-map d h) =
+    path-inl-htpy-cogap-join-cocone-map d h
+  pr1 (pr2 (dependent-cocone-htpy-cogap-join-cocone-map d h)) =
+    path-inr-htpy-cogap-join-cocone-map d h
+  pr2 (pr2 (dependent-cocone-htpy-cogap-join-cocone-map d h)) (a , b) =
+    coherence-htpy-cogap-join-cocone-map d h a b
+
+  htpy-cogap-join-cocone-map-compute :
+    {l1' l2' l4 l5 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4} {Y : UU l5}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (h : X → Y) →
+    cogap-join Y (cocone-map pr1 pr2 d h) ~ h ∘ cogap-join X d
+  htpy-cogap-join-cocone-map-compute d h =
+    dependent-cogap-join (dependent-cocone-htpy-cogap-join-cocone-map d h)
+
   htpy-cogap-join-cocone-map :
     {l1' l2' l4 l5 : Level} {A' : UU l1'} {B' : UU l2'}
     {X : UU l4} {Y : UU l5}
@@ -1238,6 +1927,147 @@ module _
       inv right-unit ∙
       ap ((linl ∙ L a) ∙_) (inv (ap-const z p))
 
+  map-inv-coherence-square-cogap-join-constant-data :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4} →
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (z : X)
+    (K : (b : B') → vertical-map-cocone pr1 pr2 d b ＝ z)
+    (L : (a : A') → horizontal-map-cocone pr1 pr2 d a ＝ z) →
+    (a : A') (b : B') →
+    coherence-square-identifications
+      ( compute-inl-cogap-join d a ∙ L a)
+      ( ap (cogap-join X d) (glue-join (a , b)))
+      ( ap (λ _ → z) (glue-join (a , b)))
+      ( compute-inr-cogap-join d b ∙ K b) →
+    coherence-square-cocone pr1 pr2 d (a , b) ∙ K b ＝ L a
+  map-inv-coherence-square-cogap-join-constant-data
+    { A' = A'}
+    { B' = B'}
+    d z K L a b S =
+    is-injective-concat linl ((inv Pleft ∙ S) ∙ inv Pright)
+    where
+    F : A' * B' → _
+    F = cogap-join _ d
+
+    H = coherence-square-cocone pr1 pr2 d
+
+    p = glue-join (a , b)
+    linl = compute-inl-cogap-join d a
+    rinr = compute-inr-cogap-join d b
+    apF = ap F p
+
+    start = apF ∙ (rinr ∙ K b)
+    middle = linl ∙ (H (a , b) ∙ K b)
+    final = (linl ∙ L a) ∙ ap (λ _ → z) p
+
+    compute-glue-F :
+      statement-coherence-htpy-cocone pr1 pr2
+        ( cocone-map pr1 pr2 cocone-join F)
+        ( d)
+        ( compute-inl-cogap-join d)
+        ( compute-inr-cogap-join d)
+    compute-glue-F = compute-glue-cogap-join d
+
+    Pleft : start ＝ middle
+    Pleft =
+      inv (assoc apF rinr (K b)) ∙
+      ap (_∙ K b) (compute-glue-F (a , b)) ∙
+      assoc linl (H (a , b)) (K b)
+
+    Pright : linl ∙ L a ＝ final
+    Pright =
+      inv right-unit ∙
+      ap ((linl ∙ L a) ∙_) (inv (ap-const z p))
+
+  stripped-coherence-square-cogap-join-constant-data :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (z : X)
+    (K : (b : B') → vertical-map-cocone pr1 pr2 d b ＝ z)
+    (L : (a : A') → horizontal-map-cocone pr1 pr2 d a ＝ z)
+    (a : A') (b : B') →
+    (M : coherence-square-cocone pr1 pr2 d (a , b) ∙ K b ＝ L a) →
+    ( inv
+      ( inv
+        ( assoc
+          ( ap (cogap-join X d) (glue-join (a , b)))
+          ( compute-inr-cogap-join d b)
+          ( K b)) ∙
+        ap (_∙ K b) (compute-glue-cogap-join d (a , b)) ∙
+        assoc
+          ( compute-inl-cogap-join d a)
+          ( coherence-square-cocone pr1 pr2 d (a , b))
+          ( K b)) ∙
+      coherence-square-cogap-join-constant-data d z K L a b M) ∙
+      inv
+        ( inv right-unit ∙
+          ap
+            ( (compute-inl-cogap-join d a ∙ L a) ∙_)
+            ( inv (ap-const z (glue-join (a , b))))) ＝
+    ap (concat (compute-inl-cogap-join d a) z) M
+  stripped-coherence-square-cogap-join-constant-data
+    { A' = A'}
+    { B' = B'}
+    d z K L a b M =
+    equational-reasoning
+      (inv Pleft ∙
+        coherence-square-cogap-join-constant-data d z K L a b M) ∙
+        inv Pright
+      ＝
+        (inv Pleft ∙
+          (Pleft ∙
+            (ap (concat linl z) M ∙ Pright))) ∙
+        inv Pright
+        by refl
+      ＝
+        (ap (concat linl z) M ∙ Pright) ∙ inv Pright
+        by
+          ap
+            (_∙ inv Pright)
+            ( is-retraction-inv-concat
+              ( Pleft)
+              ( ap (concat linl z) M ∙ Pright))
+      ＝ ap (concat linl z) M
+        by
+          is-retraction-inv-concat'
+            ( Pright)
+            ( ap (concat linl z) M)
+    where
+    F : A' * B' → _
+    F = cogap-join _ d
+
+    H = coherence-square-cocone pr1 pr2 d
+
+    p = glue-join (a , b)
+    linl = compute-inl-cogap-join d a
+    rinr = compute-inr-cogap-join d b
+    apF = ap F p
+
+    start = apF ∙ (rinr ∙ K b)
+    middle = linl ∙ (H (a , b) ∙ K b)
+    final = (linl ∙ L a) ∙ ap (λ _ → z) p
+
+    compute-glue-F :
+      statement-coherence-htpy-cocone pr1 pr2
+        ( cocone-map pr1 pr2 cocone-join F)
+        ( d)
+        ( compute-inl-cogap-join d)
+        ( compute-inr-cogap-join d)
+    compute-glue-F = compute-glue-cogap-join d
+
+    Pleft : start ＝ middle
+    Pleft =
+      inv (assoc apF rinr (K b)) ∙
+      ap (_∙ K b) (compute-glue-F (a , b)) ∙
+      assoc linl (H (a , b)) (K b)
+
+    Pright : linl ∙ L a ＝ final
+    Pright =
+      inv right-unit ∙
+      ap ((linl ∙ L a) ∙_) (inv (ap-const z p))
+
   is-equiv-coherence-square-cogap-join-constant-data :
     {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
     {X : UU l4}
@@ -1263,6 +2093,169 @@ module _
           ( L a))
         ( is-equiv-concat' middle Pright))
       ( is-equiv-concat Pleft final)
+    where
+    F : A' * B' → _
+    F = cogap-join _ d
+
+    H = coherence-square-cocone pr1 pr2 d
+
+    p = glue-join (a , b)
+    linl = compute-inl-cogap-join d a
+    rinr = compute-inr-cogap-join d b
+    apF = ap F p
+
+    start = apF ∙ (rinr ∙ K b)
+    middle = linl ∙ (H (a , b) ∙ K b)
+    final = (linl ∙ L a) ∙ ap (λ _ → z) p
+
+    compute-glue-F :
+      statement-coherence-htpy-cocone pr1 pr2
+        ( cocone-map pr1 pr2 cocone-join F)
+        ( d)
+        ( compute-inl-cogap-join d)
+        ( compute-inr-cogap-join d)
+    compute-glue-F = compute-glue-cogap-join d
+
+    Pleft : start ＝ middle
+    Pleft =
+      inv (assoc apF rinr (K b)) ∙
+      ap (_∙ K b) (compute-glue-F (a , b)) ∙
+      assoc linl (H (a , b)) (K b)
+
+    Pright : linl ∙ L a ＝ final
+    Pright =
+      inv right-unit ∙
+      ap ((linl ∙ L a) ∙_) (inv (ap-const z p))
+
+  is-section-map-inv-coherence-square-cogap-join-constant-data :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (z : X)
+    (K : (b : B') → vertical-map-cocone pr1 pr2 d b ＝ z)
+    (L : (a : A') → horizontal-map-cocone pr1 pr2 d a ＝ z)
+    (a : A') (b : B') →
+    (S :
+      coherence-square-identifications
+        ( compute-inl-cogap-join d a ∙ L a)
+        ( ap (cogap-join X d) (glue-join (a , b)))
+        ( ap (λ _ → z) (glue-join (a , b)))
+        ( compute-inr-cogap-join d b ∙ K b)) →
+    coherence-square-cogap-join-constant-data d z K L a b
+      ( map-inv-coherence-square-cogap-join-constant-data d z K L a b S) ＝
+    S
+  is-section-map-inv-coherence-square-cogap-join-constant-data
+    { A' = A'}
+    { B' = B'}
+    d z K L a b S =
+    equational-reasoning
+      coherence-square-cogap-join-constant-data d z K L a b
+        ( map-inv-coherence-square-cogap-join-constant-data
+          d z K L a b S)
+      ＝
+        concat Pleft final
+          ( concat' middle Pright
+            ( (inv Pleft ∙ S) ∙ inv Pright))
+        by
+          ap
+            ( λ T →
+              concat Pleft final (concat' middle Pright T))
+            ( is-section-is-injective-concat
+              ( linl)
+              ( (inv Pleft ∙ S) ∙ inv Pright))
+      ＝ Pleft ∙ (((inv Pleft ∙ S) ∙ inv Pright) ∙ Pright)
+        by refl
+      ＝ Pleft ∙ (inv Pleft ∙ S)
+        by
+          ap
+            ( Pleft ∙_)
+            ( is-section-inv-concat' Pright (inv Pleft ∙ S))
+      ＝ S
+        by is-section-inv-concat Pleft S
+    where
+    F : A' * B' → _
+    F = cogap-join _ d
+
+    H = coherence-square-cocone pr1 pr2 d
+
+    p = glue-join (a , b)
+    linl = compute-inl-cogap-join d a
+    rinr = compute-inr-cogap-join d b
+    apF = ap F p
+
+    start = apF ∙ (rinr ∙ K b)
+    middle = linl ∙ (H (a , b) ∙ K b)
+    final = (linl ∙ L a) ∙ ap (λ _ → z) p
+
+    compute-glue-F :
+      statement-coherence-htpy-cocone pr1 pr2
+        ( cocone-map pr1 pr2 cocone-join F)
+        ( d)
+        ( compute-inl-cogap-join d)
+        ( compute-inr-cogap-join d)
+    compute-glue-F = compute-glue-cogap-join d
+
+    Pleft : start ＝ middle
+    Pleft =
+      inv (assoc apF rinr (K b)) ∙
+      ap (_∙ K b) (compute-glue-F (a , b)) ∙
+      assoc linl (H (a , b)) (K b)
+
+    Pright : linl ∙ L a ＝ final
+    Pright =
+      inv right-unit ∙
+      ap ((linl ∙ L a) ∙_) (inv (ap-const z p))
+
+  is-retraction-map-inv-coherence-square-cogap-join-constant-data :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (z : X)
+    (K : (b : B') → vertical-map-cocone pr1 pr2 d b ＝ z)
+    (L : (a : A') → horizontal-map-cocone pr1 pr2 d a ＝ z)
+    (a : A') (b : B') →
+    (M : coherence-square-cocone pr1 pr2 d (a , b) ∙ K b ＝ L a) →
+    map-inv-coherence-square-cogap-join-constant-data d z K L a b
+      ( coherence-square-cogap-join-constant-data d z K L a b M) ＝
+    M
+  is-retraction-map-inv-coherence-square-cogap-join-constant-data
+    { A' = A'}
+    { B' = B'}
+    d z K L a b M =
+    equational-reasoning
+      map-inv-coherence-square-cogap-join-constant-data d z K L a b
+        ( coherence-square-cogap-join-constant-data d z K L a b M)
+      ＝
+        is-injective-concat linl
+          ( ap (concat linl z) M)
+        by
+          ap
+            ( is-injective-concat linl)
+            ( equational-reasoning
+              (inv Pleft ∙
+                coherence-square-cogap-join-constant-data d z K L a b M) ∙
+                inv Pright
+              ＝
+                (inv Pleft ∙
+                  (Pleft ∙
+                    (ap (concat linl z) M ∙ Pright))) ∙
+                inv Pright
+                by refl
+              ＝
+                (ap (concat linl z) M ∙ Pright) ∙ inv Pright
+                by
+                  ap
+                    (_∙ inv Pright)
+                    ( is-retraction-inv-concat
+                      ( Pleft)
+                      ( ap (concat linl z) M ∙ Pright))
+              ＝ ap (concat linl z) M
+                by
+                  is-retraction-inv-concat'
+                    ( Pright)
+                    ( ap (concat linl z) M))
+      ＝ M
+        by is-retraction-is-injective-concat linl M
     where
     F : A' * B' → _
     F = cogap-join _ d
@@ -2805,14 +3798,7 @@ module _
     ap (vertical-map-cocone pr1 pr2 d) (glue-join (b , c)) ＝
     coherence-square-cocone pr1 pr2 d (a , inr-join c)
   naturality-coherence-cocone-A-join-BC d a b c =
-    equational-reasoning
-      K (a , inl-join b) ∙ ap j p
-      ＝ ap (λ _ → i a) p ∙ K (a , inr-join c)
-        by inv (naturality-homotopy (λ y → K (a , y)) p)
-      ＝ refl ∙ K (a , inr-join c)
-        by ap (_∙ K (a , inr-join c)) (ap-const (i a) p)
-      ＝ K (a , inr-join c)
-        by left-unit
+    naturality-constant-homotopy (λ y → K (a , y)) p
     where
     p = glue-join (b , c)
 
@@ -4041,6 +5027,1973 @@ module _
     is-equiv-cocone-AB-join-C-cocone-A-join-BC-is-equiv-associative-cocone-data
       ( is-equiv-associative-cocone-data-cocone-A-join-BC)
       ( is-equiv-cocone-AB-join-C-associative-cocone-data)
+
+  cocone-associative-join :
+    cocone pr1 pr2 (A * (B * C))
+  cocone-associative-join =
+    cocone-AB-join-C-cocone-A-join-BC cocone-join
+
+  coherence-map-associative-join :
+    (x : A * B) (c : C) →
+    map-left-associative-join x ＝ inr-join (inr-join c)
+  coherence-map-associative-join x c =
+    coherence-square-cocone pr1 pr2 cocone-associative-join (x , c)
+
+  compute-inl-coherence-map-associative-join :
+    (a : A) (c : C) →
+    coherence-map-associative-join (inl-join a) c ＝
+    compute-inl-map-left-associative-join a ∙ glue-join (a , inr-join c)
+  compute-inl-coherence-map-associative-join a c =
+    compute-inl-dependent-cogap-join
+      ( dependent-cocone-H-cocone-A-join-BC cocone-join c)
+      ( a)
+
+  compute-inr-coherence-map-associative-join :
+    (b : B) (c : C) →
+    coherence-map-associative-join (inr-join b) c ＝
+    compute-inr-map-left-associative-join b ∙
+    ap inr-join (glue-join (b , c))
+  compute-inr-coherence-map-associative-join b c =
+    compute-inr-dependent-cogap-join
+      ( dependent-cocone-H-cocone-A-join-BC cocone-join c)
+      ( b)
+
+  compute-inl-naturality-coherence-map-associative-join :
+    {l4 : Level} {X : UU l4} (h : A * (B * C) → X)
+    (a : A) (c : C) →
+    path-inl-dependent-cocone-H-cocone-A-join-BC
+      ( cocone-map pr1 pr2 cocone-join h)
+      ( c)
+      ( a) ＝
+    path-inl-htpy-cogap-join-cocone-map
+      ( cocone-left-map-associative-join)
+      ( h)
+      ( a) ∙
+    ap h
+      ( path-inl-dependent-cocone-H-cocone-A-join-BC cocone-join c a)
+  compute-inl-naturality-coherence-map-associative-join h a c =
+    equational-reasoning
+      path-inl-dependent-cocone-H-cocone-A-join-BC
+        ( cocone-map pr1 pr2 cocone-join h)
+        ( c)
+        ( a)
+      ＝ α ∙ ap h glue
+        by refl
+      ＝ α ∙ (refl ∙ ap h glue)
+        by ap (α ∙_) (inv left-unit)
+      ＝ α ∙ ((inv (ap h linl) ∙ ap h linl) ∙ ap h glue)
+        by ap (λ q → α ∙ (q ∙ ap h glue)) (inv (left-inv (ap h linl)))
+      ＝ α ∙ (inv (ap h linl) ∙ (ap h linl ∙ ap h glue))
+        by ap (α ∙_) (assoc (inv (ap h linl)) (ap h linl) (ap h glue))
+      ＝ α ∙ (inv (ap h linl) ∙ ap h (linl ∙ glue))
+        by ap (λ q → α ∙ (inv (ap h linl) ∙ q))
+          ( inv (ap-concat h linl glue))
+      ＝ (α ∙ inv (ap h linl)) ∙ ap h (linl ∙ glue)
+        by inv (assoc α (inv (ap h linl)) (ap h (linl ∙ glue)))
+      ＝
+        path-inl-htpy-cogap-join-cocone-map
+          ( cocone-left-map-associative-join)
+          ( h)
+          ( a) ∙
+        ap h
+          ( path-inl-dependent-cocone-H-cocone-A-join-BC cocone-join c a)
+        by refl
+    where
+    linl = compute-inl-map-left-associative-join a
+    glue = glue-join (a , inr-join c)
+    α =
+      compute-inl-cogap-join
+        ( cocone-map pr1 pr2 cocone-left-map-associative-join h)
+        ( a)
+
+  compute-inr-naturality-coherence-map-associative-join :
+    {l4 : Level} {X : UU l4} (h : A * (B * C) → X)
+    (b : B) (c : C) →
+    path-inr-dependent-cocone-H-cocone-A-join-BC
+      ( cocone-map pr1 pr2 cocone-join h)
+      ( c)
+      ( b) ＝
+    path-inr-htpy-cogap-join-cocone-map
+      ( cocone-left-map-associative-join)
+      ( h)
+      ( b) ∙
+    ap h
+      ( path-inr-dependent-cocone-H-cocone-A-join-BC cocone-join c b)
+  compute-inr-naturality-coherence-map-associative-join h b c =
+    equational-reasoning
+      path-inr-dependent-cocone-H-cocone-A-join-BC
+        ( cocone-map pr1 pr2 cocone-join h)
+        ( c)
+        ( b)
+      ＝ β ∙ ap (h ∘ inr-join) glue
+        by refl
+      ＝ β ∙ ap h (ap inr-join glue)
+        by ap (β ∙_) (ap-comp h inr-join glue)
+      ＝ β ∙ (refl ∙ ap h (ap inr-join glue))
+        by ap (β ∙_) (inv left-unit)
+      ＝
+        β ∙
+        ((inv (ap h rinr) ∙ ap h rinr) ∙ ap h (ap inr-join glue))
+        by ap (λ q → β ∙ (q ∙ ap h (ap inr-join glue)))
+          ( inv (left-inv (ap h rinr)))
+      ＝
+        β ∙
+        (inv (ap h rinr) ∙
+          (ap h rinr ∙ ap h (ap inr-join glue)))
+        by ap (β ∙_)
+          ( assoc (inv (ap h rinr)) (ap h rinr) (ap h (ap inr-join glue)))
+      ＝ β ∙ (inv (ap h rinr) ∙ ap h (rinr ∙ ap inr-join glue))
+        by ap (λ q → β ∙ (inv (ap h rinr) ∙ q))
+          ( inv (ap-concat h rinr (ap inr-join glue)))
+      ＝ (β ∙ inv (ap h rinr)) ∙ ap h (rinr ∙ ap inr-join glue)
+        by inv (assoc β (inv (ap h rinr)) (ap h (rinr ∙ ap inr-join glue)))
+      ＝
+        path-inr-htpy-cogap-join-cocone-map
+          ( cocone-left-map-associative-join)
+          ( h)
+          ( b) ∙
+        ap h
+          ( path-inr-dependent-cocone-H-cocone-A-join-BC cocone-join c b)
+        by refl
+    where
+    rinr = compute-inr-map-left-associative-join b
+    glue = glue-join (b , c)
+    β =
+      compute-inr-cogap-join
+        ( cocone-map pr1 pr2 cocone-left-map-associative-join h)
+        ( b)
+
+  family-naturality-coherence-map-associative-join :
+    {l4 : Level} {X : UU l4} (h : A * (B * C) → X)
+    (c : C) (x : A * B) → UU l4
+  family-naturality-coherence-map-associative-join h c x =
+    dependent-cogap-join
+      ( dependent-cocone-H-cocone-A-join-BC
+        ( cocone-map pr1 pr2 cocone-join h)
+        ( c))
+      ( x) ＝
+    htpy-cogap-join-cocone-map-compute
+      ( cocone-left-map-associative-join)
+      ( h)
+      ( x) ∙
+    ap h
+      ( dependent-cogap-join
+        ( dependent-cocone-H-cocone-A-join-BC cocone-join c)
+        ( x))
+
+  path-inl-naturality-coherence-map-associative-join :
+    {l4 : Level} {X : UU l4} (h : A * (B * C) → X)
+    (c : C) (a : A) →
+    family-naturality-coherence-map-associative-join h c (inl-join a)
+  path-inl-naturality-coherence-map-associative-join h c a =
+    compute-inl-dependent-cogap-join D' a ∙
+    ( compute-inl-naturality-coherence-map-associative-join h a c ∙
+      inv
+        ( ap-binary _∙_
+          ( compute-inl-dependent-cogap-join Dhtpy a)
+          ( ap (ap h) (compute-inl-dependent-cogap-join D a))))
+    where
+    D =
+      dependent-cocone-H-cocone-A-join-BC cocone-join c
+
+    D' =
+      dependent-cocone-H-cocone-A-join-BC
+        ( cocone-map pr1 pr2 cocone-join h)
+        ( c)
+
+    Dhtpy =
+      dependent-cocone-htpy-cogap-join-cocone-map
+        ( cocone-left-map-associative-join)
+        ( h)
+
+  path-inr-naturality-coherence-map-associative-join :
+    {l4 : Level} {X : UU l4} (h : A * (B * C) → X)
+    (c : C) (b : B) →
+    family-naturality-coherence-map-associative-join h c (inr-join b)
+  path-inr-naturality-coherence-map-associative-join h c b =
+    compute-inr-dependent-cogap-join D' b ∙
+    ( compute-inr-naturality-coherence-map-associative-join h b c ∙
+      inv
+        ( ap-binary _∙_
+          ( compute-inr-dependent-cogap-join Dhtpy b)
+          ( ap (ap h) (compute-inr-dependent-cogap-join D b))))
+    where
+    D =
+      dependent-cocone-H-cocone-A-join-BC cocone-join c
+
+    D' =
+      dependent-cocone-H-cocone-A-join-BC
+        ( cocone-map pr1 pr2 cocone-join h)
+        ( c)
+
+    Dhtpy =
+      dependent-cocone-htpy-cogap-join-cocone-map
+        ( cocone-left-map-associative-join)
+        ( h)
+
+  coherence-concat-naturality-coherence-map-associative-join :
+    {l4 : Level} {X : UU l4} (h : A * (B * C) → X)
+    (c : C) (a : A) (b : B) →
+    apd
+      ( λ x →
+        htpy-cogap-join-cocone-map-compute
+          ( cocone-left-map-associative-join)
+          ( h)
+          ( x) ∙
+        ap h
+          ( dependent-cogap-join
+            ( dependent-cocone-H-cocone-A-join-BC cocone-join c)
+            ( x)))
+      ( glue-join (a , b)) ∙
+    ap-binary _∙_
+      ( compute-inr-dependent-cogap-join
+        ( dependent-cocone-htpy-cogap-join-cocone-map
+          ( cocone-left-map-associative-join)
+          ( h))
+        ( b))
+      ( ap
+        ( ap h)
+        ( compute-inr-dependent-cogap-join
+          ( dependent-cocone-H-cocone-A-join-BC cocone-join c)
+          ( b))) ＝
+    ap
+      ( tr
+        ( eq-value-function
+          ( map-AB-cocone-A-join-BC
+            ( cocone-map pr1 pr2 cocone-join h))
+          ( λ _ → h (inr-join (inr-join c))))
+        ( glue-join (a , b)))
+      ( ap-binary _∙_
+        ( compute-inl-dependent-cogap-join
+          ( dependent-cocone-htpy-cogap-join-cocone-map
+            ( cocone-left-map-associative-join)
+            ( h))
+          ( a))
+        ( ap
+          ( ap h)
+          ( compute-inl-dependent-cogap-join
+            ( dependent-cocone-H-cocone-A-join-BC cocone-join c)
+            ( a)))) ∙
+    concat-dependent-identification-eq-value
+      ( glue-join (a , b))
+      ( coherence-htpy-cogap-join-cocone-map
+        ( cocone-left-map-associative-join)
+        ( h)
+        ( a)
+        ( b))
+      ( ap-dependent-identification-eq-value-function
+        ( h)
+        ( glue-join (a , b))
+        ( coherence-dependent-cocone-H-cocone-A-join-BC cocone-join c a b))
+  coherence-concat-naturality-coherence-map-associative-join h c a b =
+    equational-reasoning
+      apd G p ∙ binr
+      ＝ concat-dependent-identification-eq-value-function
+          H K p (apd H p) (apd K p) ∙ binr
+        by ap (_∙ binr)
+          ( apd-concat-dependent-identification-eq-value-function H K p)
+      ＝ ap (tr P p) binl ∙ concat-dependent-identification-eq-value p L M
+        by
+          coherence-concat-dependent-identification-eq-value
+            H K p
+            Hinl Hinr
+            Kinl Kinr
+            L M
+            CH CK
+    where
+    p = glue-join (a , b)
+
+    D =
+      dependent-cocone-H-cocone-A-join-BC cocone-join c
+
+    Dhtpy =
+      dependent-cocone-htpy-cogap-join-cocone-map
+        ( cocone-left-map-associative-join)
+        ( h)
+
+    P : A * B → UU _
+    P =
+      eq-value-function
+        ( map-AB-cocone-A-join-BC
+          ( cocone-map pr1 pr2 cocone-join h))
+        ( λ _ → h (inr-join (inr-join c)))
+
+    H :
+      (x : A * B) →
+      map-AB-cocone-A-join-BC
+        ( cocone-map pr1 pr2 cocone-join h)
+        ( x) ＝
+      h (map-left-associative-join x)
+    H =
+      htpy-cogap-join-cocone-map-compute
+        ( cocone-left-map-associative-join)
+        ( h)
+
+    K :
+      (x : A * B) →
+      h (map-left-associative-join x) ＝
+      h (inr-join (inr-join c))
+    K x =
+      ap h (dependent-cogap-join D x)
+
+    G : (x : A * B) → P x
+    G x = H x ∙ K x
+
+    Hinl = compute-inl-dependent-cogap-join Dhtpy a
+    Hinr = compute-inr-dependent-cogap-join Dhtpy b
+    Kinl = ap (ap h) (compute-inl-dependent-cogap-join D a)
+    Kinr = ap (ap h) (compute-inr-dependent-cogap-join D b)
+    binl = ap-binary _∙_ Hinl Kinl
+    binr = ap-binary _∙_ Hinr Kinr
+
+    L =
+      coherence-htpy-cogap-join-cocone-map
+        ( cocone-left-map-associative-join)
+        ( h)
+        ( a)
+        ( b)
+
+    M =
+      ap-dependent-identification-eq-value-function
+        ( h)
+        ( p)
+        ( coherence-dependent-cocone-H-cocone-A-join-BC cocone-join c a b)
+
+    CH =
+      compute-glue-dependent-cogap-join Dhtpy (a , b)
+
+    CK =
+      coherence-ap-dependent-identification-eq-value-function
+        ( h)
+        ( dependent-cogap-join D)
+        ( p)
+        ( compute-inl-dependent-cogap-join D a)
+        ( compute-inr-dependent-cogap-join D b)
+        ( coherence-dependent-cocone-H-cocone-A-join-BC cocone-join c a b)
+        ( compute-glue-dependent-cogap-join D (a , b))
+
+  boundary-naturality-coherence-map-associative-join :
+    {l4 : Level} {X : UU l4} (h : A * (B * C) → X)
+    (c : C) (a : A) (b : B) →
+    coherence-dependent-cocone-H-cocone-A-join-BC
+      ( cocone-map pr1 pr2 cocone-join h)
+      ( c)
+      ( a)
+      ( b) ∙
+    compute-inr-naturality-coherence-map-associative-join h b c ＝
+    ap
+      ( tr
+        ( eq-value-function
+          ( map-AB-cocone-A-join-BC
+            ( cocone-map pr1 pr2 cocone-join h))
+          ( λ _ → h (inr-join (inr-join c))))
+        ( glue-join (a , b)))
+      ( compute-inl-naturality-coherence-map-associative-join h a c) ∙
+    concat-dependent-identification-eq-value
+      ( glue-join (a , b))
+      ( coherence-htpy-cogap-join-cocone-map
+        ( cocone-left-map-associative-join)
+        ( h)
+        ( a)
+        ( b))
+      ( ap-dependent-identification-eq-value-function
+        ( h)
+        ( glue-join (a , b))
+        ( coherence-dependent-cocone-H-cocone-A-join-BC cocone-join c a b))
+  boundary-naturality-coherence-map-associative-join h c a b =
+    equational-reasoning
+      lhs
+      ＝ map-equiv E (map-inv-equiv E lhs)
+        by inv (is-section-map-inv-equiv E lhs)
+      ＝ map-equiv E (map-inv-equiv E rhs)
+        by ap (map-equiv E) raw-boundary
+      ＝ rhs
+        by is-section-map-inv-equiv E rhs
+    where
+    p = glue-join (a , b)
+
+    f =
+      map-AB-cocone-A-join-BC
+        ( cocone-map pr1 pr2 cocone-join h)
+
+    k : A * B → _
+    k _ = h (inr-join (inr-join c))
+
+    q₀ =
+      path-inl-dependent-cocone-H-cocone-A-join-BC
+        ( cocone-map pr1 pr2 cocone-join h)
+        ( c)
+        ( a)
+
+    r₀ =
+      path-inr-dependent-cocone-H-cocone-A-join-BC
+        ( cocone-map pr1 pr2 cocone-join h)
+        ( c)
+        ( b)
+
+    q₁ =
+      path-inl-htpy-cogap-join-cocone-map
+        ( cocone-left-map-associative-join)
+        ( h)
+        ( a) ∙
+      ap h (path-inl-dependent-cocone-H-cocone-A-join-BC cocone-join c a)
+
+    r₁ =
+      path-inr-htpy-cogap-join-cocone-map
+        ( cocone-left-map-associative-join)
+        ( h)
+        ( b) ∙
+      ap h (path-inr-dependent-cocone-H-cocone-A-join-BC cocone-join c b)
+
+    natl =
+      compute-inl-naturality-coherence-map-associative-join h a c
+
+    natr =
+      compute-inr-naturality-coherence-map-associative-join h b c
+
+    L =
+      coherence-htpy-cogap-join-cocone-map
+        ( cocone-left-map-associative-join)
+        ( h)
+        ( a)
+        ( b)
+
+    M =
+      ap-dependent-identification-eq-value-function
+        ( h)
+        ( p)
+        ( coherence-dependent-cocone-H-cocone-A-join-BC cocone-join c a b)
+
+    D =
+      dependent-cocone-H-cocone-A-join-BC cocone-join c
+
+    Dhtpy =
+      dependent-cocone-htpy-cogap-join-cocone-map
+        ( cocone-left-map-associative-join)
+        ( h)
+
+    G-naturality : (x : A * B) → f x ＝ k x
+    G-naturality x =
+      htpy-cogap-join-cocone-map-compute
+        ( cocone-left-map-associative-join)
+        ( h)
+        ( x) ∙
+      ap h (dependent-cogap-join D x)
+
+    Hinl = compute-inl-dependent-cogap-join Dhtpy a
+
+    Hinr = compute-inr-dependent-cogap-join Dhtpy b
+
+    Kinl = ap (ap h) (compute-inl-dependent-cogap-join D a)
+
+    Kinr = ap (ap h) (compute-inr-dependent-cogap-join D b)
+
+    binl = ap-binary _∙_ Hinl Kinl
+
+    binr = ap-binary _∙_ Hinr Kinr
+
+    αtail = natl ∙ inv binl
+
+    βtail = natr ∙ inv binr
+
+    lhs =
+      coherence-dependent-cocone-H-cocone-A-join-BC
+        ( cocone-map pr1 pr2 cocone-join h)
+        ( c)
+        ( a)
+        ( b) ∙
+      natr
+
+    rhs =
+      ap (tr (eq-value-function f k) p) natl ∙
+      concat-dependent-identification-eq-value p L M
+
+    E =
+      compute-dependent-identification-eq-value-function f k p q₀ r₁
+
+    cohD' =
+      coherence-dependent-cocone-H-cocone-A-join-BC
+        ( cocone-map pr1 pr2 cocone-join h)
+        ( c)
+        ( a)
+        ( b)
+
+    E₀ =
+      compute-dependent-identification-eq-value-function f k p q₀ r₀
+
+    E₁ =
+      compute-dependent-identification-eq-value-function f k p q₁ r₁
+
+    g : A * B → _
+    g = h ∘ map-left-associative-join
+
+    dAB' =
+      cocone-AB-cocone-A-join-BC
+        ( cocone-map pr1 pr2 cocone-join h)
+
+    dAB'-as-cocone-map-left-test :
+      dAB' ＝ cocone-map pr1 pr2 cocone-left-map-associative-join h
+    dAB'-as-cocone-map-left-test = refl
+
+    z' = h (inr-join (inr-join c))
+
+    K' : (b' : B) → vertical-map-cocone pr1 pr2 dAB' b' ＝ z'
+    K' b' = ap (h ∘ inr-join) (glue-join (b' , c))
+
+    L' : (a' : A) → horizontal-map-cocone pr1 pr2 dAB' a' ＝ z'
+    L' a' = ap h (glue-join (a' , inr-join c))
+
+    M' =
+      naturality-coherence-cocone-A-join-BC
+        ( cocone-map pr1 pr2 cocone-join h)
+        ( a)
+        ( b)
+        ( c)
+
+    H-original : (y : B * C) → inl-join a ＝ inr-join y
+    H-original y =
+      coherence-square-cocone pr1 pr2 cocone-join (a , y)
+
+    M-post-solved :
+      coherence-square-cocone pr1 pr2 dAB' (a , b) ∙ K' b ＝ L' a
+    M-post-solved =
+      ( ap
+          ( ap h (H-original (inl-join b)) ∙_)
+          ( ap-comp h inr-join (glue-join (b , c))) ∙
+        inv
+          ( ap-concat
+            ( h)
+            ( H-original (inl-join b))
+            ( ap inr-join (glue-join (b , c))))) ∙
+      ap
+        ( ap h)
+        ( naturality-constant-homotopy H-original (glue-join (b , c)))
+
+    M-post-apcomp =
+      ap
+        ( ap h (H-original (inl-join b)) ∙_)
+        ( ap-comp h inr-join (glue-join (b , c)))
+
+    M-post-apconcat =
+      inv
+        ( ap-concat
+          ( h)
+          ( H-original (inl-join b))
+          ( ap inr-join (glue-join (b , c))))
+
+    M-post-nat =
+      ap
+        ( ap h)
+        ( naturality-constant-homotopy H-original (glue-join (b , c)))
+
+    direct-raw-left-base =
+      coherence-square-cogap-join-constant-data
+        ( dAB')
+        ( z')
+        ( K')
+        ( L')
+        ( a)
+        ( b)
+        ( M')
+
+    raw-left-base-test :
+      map-inv-equiv E₀ cohD' ＝ direct-raw-left-base
+    raw-left-base-test =
+      is-retraction-map-inv-equiv E₀ direct-raw-left-base
+
+    raw-left = map-inv-equiv E lhs
+    raw-right = map-inv-equiv E rhs
+
+    concatLM =
+      concat-dependent-identification-eq-value p L M
+
+    raw-left-expected =
+      concat-bottom-identification-coherence-square-identifications
+        ( q₀)
+        ( ap f p)
+        ( ap k p)
+        ( r₀)
+        ( natr)
+        ( map-inv-equiv E₀ cohD')
+
+    raw-left-expected-direct =
+      concat-bottom-identification-coherence-square-identifications
+        ( q₀)
+        ( ap f p)
+        ( ap k p)
+        ( r₀)
+        ( natr)
+        ( direct-raw-left-base)
+
+    raw-left-expected-direct-test :
+      raw-left-expected ＝ raw-left-expected-direct
+    raw-left-expected-direct-test =
+      ap
+        ( concat-bottom-identification-coherence-square-identifications
+          ( q₀)
+          ( ap f p)
+          ( ap k p)
+          ( r₀)
+          ( natr))
+        ( raw-left-base-test)
+
+    raw-left-test : raw-left ＝ raw-left-expected
+    raw-left-test =
+      map-inv-concat-bottom-dependent-identification-eq-value-function
+        ( p)
+        ( q₀)
+        ( cohD')
+        ( natr)
+
+    raw-right-expected =
+      inv-concat-top-identification-coherence-square-identifications
+        ( q₀)
+        ( ap f p)
+        ( ap k p)
+        ( r₁)
+        ( natl)
+        ( map-inv-equiv E₁ concatLM)
+
+    raw-L =
+      map-inv-compute-dependent-identification-eq-value-function
+        ( f)
+        ( g)
+        ( p)
+        ( path-inl-htpy-cogap-join-cocone-map
+          ( cocone-left-map-associative-join)
+          ( h)
+          ( a))
+        ( path-inr-htpy-cogap-join-cocone-map
+          ( cocone-left-map-associative-join)
+          ( h)
+          ( b))
+        ( L)
+
+    E-L =
+      compute-dependent-identification-eq-value-function
+        ( f)
+        ( g)
+        ( p)
+        ( path-inl-htpy-cogap-join-cocone-map
+          ( cocone-left-map-associative-join)
+          ( h)
+          ( a))
+        ( path-inr-htpy-cogap-join-cocone-map
+          ( cocone-left-map-associative-join)
+          ( h)
+          ( b))
+
+    raw-L-base =
+      coherence-square-htpy-cogap-join-cocone-map
+        ( cocone-left-map-associative-join)
+        ( h)
+        ( a)
+        ( b)
+
+    raw-L-test : raw-L ＝ raw-L-base
+    raw-L-test =
+      is-retraction-map-inv-equiv E-L raw-L-base
+
+    raw-M =
+      map-inv-compute-dependent-identification-eq-value-function
+        ( g)
+        ( k)
+        ( p)
+        ( ap h (path-inl-dependent-cocone-H-cocone-A-join-BC
+          cocone-join c a))
+        ( ap h (path-inr-dependent-cocone-H-cocone-A-join-BC
+          cocone-join c b))
+        ( M)
+
+    f₀ = map-left-associative-join
+
+    k₀ : A * B → _
+    k₀ _ = inr-join (inr-join c)
+
+    E-M₀ =
+      compute-dependent-identification-eq-value-function
+        ( f₀)
+        ( k₀)
+        ( p)
+        ( path-inl-dependent-cocone-H-cocone-A-join-BC
+          ( cocone-join)
+          ( c)
+          ( a))
+        ( path-inr-dependent-cocone-H-cocone-A-join-BC
+          ( cocone-join)
+          ( c)
+          ( b))
+
+    raw-M-base =
+      coherence-square-cogap-join-constant-data
+        ( cocone-AB-cocone-A-join-BC cocone-join)
+        ( inr-join (inr-join c))
+        ( λ b' → ap inr-join (glue-join (b' , c)))
+        ( λ a' → glue-join (a' , inr-join c))
+        ( a)
+        ( b)
+        ( naturality-coherence-cocone-A-join-BC cocone-join a b c)
+
+    raw-M-post =
+      postcompose-coherence-square-identifications h p raw-M-base
+
+    raw-M-test : raw-M ＝ raw-M-post
+    raw-M-test =
+      map-inv-ap-dependent-identification-eq-value-function
+        ( h)
+        ( p)
+        ( coherence-dependent-cocone-H-cocone-A-join-BC
+          cocone-join c a b) ∙
+      ap
+        ( postcompose-coherence-square-identifications h p)
+        ( is-retraction-map-inv-equiv E-M₀ raw-M-base)
+
+    raw-right-pasted =
+      horizontal-pasting-coherence-square-identifications
+        ( path-inl-htpy-cogap-join-cocone-map
+          ( cocone-left-map-associative-join)
+          ( h)
+          ( a))
+        ( ap h (path-inl-dependent-cocone-H-cocone-A-join-BC
+          cocone-join c a))
+        ( ap f p)
+        ( ap g p)
+        ( ap k p)
+        ( path-inr-htpy-cogap-join-cocone-map
+          ( cocone-left-map-associative-join)
+          ( h)
+          ( b))
+        ( ap h (path-inr-dependent-cocone-H-cocone-A-join-BC
+          cocone-join c b))
+        ( raw-L)
+        ( raw-M)
+
+    raw-right-pasted-post =
+      horizontal-pasting-coherence-square-identifications
+        ( path-inl-htpy-cogap-join-cocone-map
+          ( cocone-left-map-associative-join)
+          ( h)
+          ( a))
+        ( ap h (path-inl-dependent-cocone-H-cocone-A-join-BC
+          cocone-join c a))
+        ( ap f p)
+        ( ap g p)
+        ( ap k p)
+        ( path-inr-htpy-cogap-join-cocone-map
+          ( cocone-left-map-associative-join)
+          ( h)
+          ( b))
+        ( ap h (path-inr-dependent-cocone-H-cocone-A-join-BC
+          cocone-join c b))
+        ( raw-L)
+        ( raw-M-post)
+
+    raw-right-pasted-post-M-test : raw-right-pasted ＝ raw-right-pasted-post
+    raw-right-pasted-post-M-test =
+      ap
+        ( horizontal-pasting-coherence-square-identifications
+          ( path-inl-htpy-cogap-join-cocone-map
+            ( cocone-left-map-associative-join)
+            ( h)
+            ( a))
+          ( ap h (path-inl-dependent-cocone-H-cocone-A-join-BC
+            cocone-join c a))
+          ( ap f p)
+          ( ap g p)
+          ( ap k p)
+          ( path-inr-htpy-cogap-join-cocone-map
+            ( cocone-left-map-associative-join)
+            ( h)
+            ( b))
+          ( ap h (path-inr-dependent-cocone-H-cocone-A-join-BC
+            cocone-join c b))
+          ( raw-L))
+        ( raw-M-test)
+
+    raw-right-pasted-base =
+      horizontal-pasting-coherence-square-identifications
+        ( path-inl-htpy-cogap-join-cocone-map
+          ( cocone-left-map-associative-join)
+          ( h)
+          ( a))
+        ( ap h (path-inl-dependent-cocone-H-cocone-A-join-BC
+          cocone-join c a))
+        ( ap f p)
+        ( ap g p)
+        ( ap k p)
+        ( path-inr-htpy-cogap-join-cocone-map
+          ( cocone-left-map-associative-join)
+          ( h)
+          ( b))
+        ( ap h (path-inr-dependent-cocone-H-cocone-A-join-BC
+          cocone-join c b))
+        ( raw-L-base)
+        ( raw-M-post)
+
+    raw-right-pasted-post-L-test :
+      raw-right-pasted-post ＝ raw-right-pasted-base
+    raw-right-pasted-post-L-test =
+      ap
+        ( λ S →
+          horizontal-pasting-coherence-square-identifications
+            ( path-inl-htpy-cogap-join-cocone-map
+              ( cocone-left-map-associative-join)
+              ( h)
+              ( a))
+            ( ap h (path-inl-dependent-cocone-H-cocone-A-join-BC
+              cocone-join c a))
+            ( ap f p)
+            ( ap g p)
+            ( ap k p)
+            ( path-inr-htpy-cogap-join-cocone-map
+              ( cocone-left-map-associative-join)
+              ( h)
+              ( b))
+            ( ap h (path-inr-dependent-cocone-H-cocone-A-join-BC
+              cocone-join c b))
+            ( S)
+            ( raw-M-post))
+        ( raw-L-test)
+
+    raw-right-pasted-base-test : raw-right-pasted ＝ raw-right-pasted-base
+    raw-right-pasted-base-test =
+      raw-right-pasted-post-M-test ∙ raw-right-pasted-post-L-test
+
+    raw-right-pasted-test :
+      map-inv-equiv E₁ concatLM ＝ raw-right-pasted
+    raw-right-pasted-test =
+      map-inv-concat-dependent-identification-eq-value-function
+        ( p)
+        ( L)
+        ( M)
+
+    raw-right-expected-pasted-base =
+      inv-concat-top-identification-coherence-square-identifications
+        ( q₀)
+        ( ap f p)
+        ( ap k p)
+        ( r₁)
+        ( natl)
+        ( raw-right-pasted-base)
+
+    top-correction-raw-right-pasted-base =
+      ap (concat' _ (ap k p)) natl
+
+    raw-right-expected-pasted-base-bottom =
+      inv-concat-bottom-identification-coherence-square-identifications
+        ( q₀)
+        ( ap f p)
+        ( ap k p)
+        ( r₀)
+        ( natr)
+        ( raw-right-expected-pasted-base)
+
+    bottom-correction-raw-right-pasted-base =
+      ap (concat (ap f p) _) natr
+
+    rhs-cancel =
+      ( ap (tr (eq-value-function f k) p) natl ∙ concatLM) ∙
+      inv natr
+
+    G-tail-rhs-cancel :
+      ( ap (tr (eq-value-function f k) p) αtail ∙
+        apd G-naturality p) ∙
+      inv βtail ＝
+      rhs-cancel
+    G-tail-rhs-cancel =
+      equational-reasoning
+        ( ap (tr (eq-value-function f k) p) αtail ∙
+          apd G-naturality p) ∙
+        inv βtail
+        ＝
+          ( ap (tr (eq-value-function f k) p) αtail ∙
+            apd G-naturality p) ∙
+          ( binr ∙ inv natr)
+          by
+            ap
+              ( ( ap (tr (eq-value-function f k) p) αtail ∙
+                  apd G-naturality p) ∙_)
+              ( distributive-inv-concat natr (inv binr) ∙
+                ap (_∙ inv natr) (inv-inv binr))
+        ＝
+          ( ( ap (tr (eq-value-function f k) p) αtail ∙
+              apd G-naturality p) ∙
+            binr) ∙
+          inv natr
+          by
+            inv
+              ( assoc
+                ( ap (tr (eq-value-function f k) p) αtail ∙
+                  apd G-naturality p)
+                ( binr)
+                ( inv natr))
+        ＝
+          ( ap (tr (eq-value-function f k) p) αtail ∙
+            (apd G-naturality p ∙ binr)) ∙
+          inv natr
+          by
+            ap
+              ( _∙ inv natr)
+              ( assoc
+                ( ap (tr (eq-value-function f k) p) αtail)
+                ( apd G-naturality p)
+                ( binr))
+        ＝
+          ( ap (tr (eq-value-function f k) p) αtail ∙
+            ( ap (tr (eq-value-function f k) p) binl ∙
+              concatLM)) ∙
+          inv natr
+          by
+            ap
+              ( λ q →
+                ( ap (tr (eq-value-function f k) p) αtail ∙ q) ∙
+                inv natr)
+              ( coherence-concat-naturality-coherence-map-associative-join
+                ( h)
+                ( c)
+                ( a)
+                ( b))
+        ＝
+          ( ( ap (tr (eq-value-function f k) p) αtail ∙
+              ap (tr (eq-value-function f k) p) binl) ∙
+            concatLM) ∙
+          inv natr
+          by
+            ap
+              ( _∙ inv natr)
+              ( inv
+                ( assoc
+                  ( ap (tr (eq-value-function f k) p) αtail)
+                  ( ap (tr (eq-value-function f k) p) binl)
+                  ( concatLM)))
+        ＝
+          ( ap (tr (eq-value-function f k) p) (αtail ∙ binl) ∙
+            concatLM) ∙
+          inv natr
+          by
+            ap
+              ( λ q → (q ∙ concatLM) ∙ inv natr)
+              ( inv
+                ( ap-concat
+                  ( tr (eq-value-function f k) p)
+                  ( αtail)
+                  ( binl)))
+        ＝
+          ( ap (tr (eq-value-function f k) p) natl ∙ concatLM) ∙
+          inv natr
+          by
+            ap
+              ( λ q →
+                (ap (tr (eq-value-function f k) p) q ∙ concatLM) ∙
+                inv natr)
+              ( right-cancel-inv-concat natl binl)
+
+    raw-right-expected-pasted-base-bottom-as-map-inv :
+      raw-right-expected-pasted-base-bottom ＝
+      map-inv-compute-dependent-identification-eq-value-function
+        ( f)
+        ( k)
+        ( p)
+        ( q₀)
+        ( r₀)
+        ( rhs-cancel)
+    raw-right-expected-pasted-base-bottom-as-map-inv =
+      equational-reasoning
+        raw-right-expected-pasted-base-bottom
+        ＝
+          inv-concat-bottom-identification-coherence-square-identifications
+            ( q₀)
+            ( ap f p)
+            ( ap k p)
+            ( r₀)
+            ( natr)
+            ( inv-concat-top-identification-coherence-square-identifications
+              ( q₀)
+              ( ap f p)
+              ( ap k p)
+              ( r₁)
+              ( natl)
+              ( raw-right-pasted))
+        by
+          ap
+            ( inv-concat-bottom-identification-coherence-square-identifications
+              ( q₀)
+              ( ap f p)
+              ( ap k p)
+              ( r₀)
+              ( natr))
+            ( ap
+              ( inv-concat-top-identification-coherence-square-identifications
+                ( q₀)
+                ( ap f p)
+                ( ap k p)
+                ( r₁)
+                ( natl))
+              ( inv raw-right-pasted-base-test))
+        ＝
+          inv-concat-bottom-identification-coherence-square-identifications
+            ( q₀)
+            ( ap f p)
+            ( ap k p)
+            ( r₀)
+            ( natr)
+            ( inv-concat-top-identification-coherence-square-identifications
+              ( q₀)
+              ( ap f p)
+              ( ap k p)
+              ( r₁)
+              ( natl)
+              ( map-inv-compute-dependent-identification-eq-value-function
+                ( f)
+                ( k)
+                ( p)
+                ( q₁)
+                ( r₁)
+                ( concatLM)))
+        by
+          ap
+            ( λ S →
+              inv-concat-bottom-identification-coherence-square-identifications
+                ( q₀)
+                ( ap f p)
+                ( ap k p)
+                ( r₀)
+                ( natr)
+                ( inv-concat-top-identification-coherence-square-identifications
+                  ( q₀)
+                  ( ap f p)
+                  ( ap k p)
+                  ( r₁)
+                  ( natl)
+                  ( S)))
+            ( inv raw-right-pasted-test)
+        ＝
+          inv-concat-bottom-identification-coherence-square-identifications
+            ( q₀)
+            ( ap f p)
+            ( ap k p)
+            ( r₀)
+            ( natr)
+            ( map-inv-compute-dependent-identification-eq-value-function
+              ( f)
+              ( k)
+              ( p)
+              ( q₀)
+              ( r₁)
+              ( ap (tr (eq-value-function f k) p) natl ∙ concatLM))
+        by
+          ap
+            ( inv-concat-bottom-identification-coherence-square-identifications
+              ( q₀)
+              ( ap f p)
+              ( ap k p)
+              ( r₀)
+              ( natr))
+            ( inv
+              ( map-inv-concat-top-dependent-identification-eq-value-function
+                ( p)
+                ( natl)
+                ( r₁)
+                ( concatLM)))
+        ＝
+          map-inv-compute-dependent-identification-eq-value-function
+            ( f)
+            ( k)
+            ( p)
+            ( q₀)
+            ( r₀)
+            ( rhs-cancel)
+        by
+          inv
+            ( map-inv-inv-concat-bottom-dependent-identification-eq-value-function
+              ( p)
+              ( q₀)
+            ( ap (tr (eq-value-function f k) p) natl ∙ concatLM)
+            ( natr))
+
+    linl-constant = compute-inl-cogap-join dAB' a
+
+    F-constant = cogap-join _ dAB'
+
+    H-constant = coherence-square-cocone pr1 pr2 dAB'
+
+    rinr-constant = compute-inr-cogap-join dAB' b
+
+    apF-constant = ap F-constant p
+
+    compute-glue-F-constant =
+      compute-glue-cogap-join dAB'
+
+    Pleft-constant :
+      apF-constant ∙ (rinr-constant ∙ K' b) ＝
+      linl-constant ∙ (H-constant (a , b) ∙ K' b)
+    Pleft-constant =
+      inv (assoc apF-constant rinr-constant (K' b)) ∙
+      ap (_∙ K' b) (compute-glue-F-constant (a , b)) ∙
+      assoc linl-constant (H-constant (a , b)) (K' b)
+
+    Pright-constant :
+      linl-constant ∙ L' a ＝
+      (linl-constant ∙ L' a) ∙ ap (λ _ → z') p
+    Pright-constant =
+      inv right-unit ∙
+      ap ((linl-constant ∙ L' a) ∙_) (inv (ap-const z' p))
+
+    direct-raw-M-post =
+      coherence-square-cogap-join-constant-data
+        ( dAB')
+        ( z')
+        ( K')
+        ( L')
+        ( a)
+        ( b)
+        ( M-post-solved)
+
+    raw-G-tail =
+      inv-concat-bottom-identification-coherence-square-identifications
+        ( q₀)
+        ( ap f p)
+        ( ap k p)
+        ( r₀)
+        ( βtail)
+        ( inv-concat-top-identification-coherence-square-identifications
+          ( q₀)
+          ( ap f p)
+          ( ap k p)
+          ( G-naturality (inr-join b))
+          ( αtail)
+          ( naturality-homotopy G-naturality p))
+
+    raw-G-tail-as-map :
+      map-compute-dependent-identification-eq-value-function
+        ( f)
+        ( k)
+        ( p)
+        ( q₀)
+        ( r₀)
+        ( raw-G-tail) ＝
+      ( ap (tr (eq-value-function f k) p) αtail ∙
+        apd G-naturality p) ∙
+      inv βtail
+    raw-G-tail-as-map =
+      equational-reasoning
+        map-compute-dependent-identification-eq-value-function
+          ( f)
+          ( k)
+          ( p)
+          ( q₀)
+          ( r₀)
+          ( raw-G-tail)
+        ＝
+          map-compute-dependent-identification-eq-value-function
+            ( f)
+            ( k)
+            ( p)
+            ( q₀)
+            ( G-naturality (inr-join b))
+            ( inv-concat-top-identification-coherence-square-identifications
+              ( q₀)
+              ( ap f p)
+              ( ap k p)
+              ( G-naturality (inr-join b))
+              ( αtail)
+              ( naturality-homotopy G-naturality p)) ∙
+          inv βtail
+          by
+            map-inv-concat-bottom-identification-coherence-square-identifications
+              ( p)
+              ( q₀)
+              ( βtail)
+              ( inv-concat-top-identification-coherence-square-identifications
+                ( q₀)
+                ( ap f p)
+                ( ap k p)
+                ( G-naturality (inr-join b))
+                ( αtail)
+                ( naturality-homotopy G-naturality p))
+        ＝
+          ( ap (tr (eq-value-function f k) p) αtail ∙
+            map-compute-dependent-identification-eq-value-function
+              ( f)
+              ( k)
+              ( p)
+              ( G-naturality (inl-join a))
+              ( G-naturality (inr-join b))
+              ( naturality-homotopy G-naturality p)) ∙
+          inv βtail
+          by
+            ap
+              ( _∙ inv βtail)
+              ( map-inv-concat-top-identification-coherence-square-identifications
+                ( p)
+                ( αtail)
+                ( G-naturality (inr-join b))
+                ( naturality-homotopy G-naturality p))
+        ＝
+          ( ap (tr (eq-value-function f k) p) αtail ∙
+            apd G-naturality p) ∙
+          inv βtail
+          by
+            ap
+              ( λ u →
+                ( ap (tr (eq-value-function f k) p) αtail ∙ u) ∙
+                inv βtail)
+              ( compute-dependent-identification-eq-value-function-naturality
+                ( G-naturality)
+                ( p))
+
+    direct-raw-M-post-raw-G-tail :
+      direct-raw-M-post ＝ raw-G-tail
+    direct-raw-M-post-raw-G-tail =
+      equational-reasoning
+        direct-raw-M-post
+        ＝
+          coherence-square-cogap-join-constant-data
+            ( dAB')
+            ( z')
+            ( K')
+            ( L')
+            ( a)
+            ( b)
+            ( map-inv-coherence-square-cogap-join-constant-data
+              ( dAB')
+              ( z')
+              ( K')
+              ( L')
+              ( a)
+              ( b)
+              ( raw-G-tail))
+          by
+            ap
+              ( coherence-square-cogap-join-constant-data
+                ( dAB')
+                ( z')
+                ( K')
+                ( L')
+                ( a)
+                ( b))
+              ( inv raw-G-tail-inv-explicit-M-post)
+        ＝ raw-G-tail
+          by
+            is-section-map-inv-coherence-square-cogap-join-constant-data
+              ( dAB')
+              ( z')
+              ( K')
+              ( L')
+              ( a)
+              ( b)
+              ( raw-G-tail)
+      where
+      stripped-raw-G-tail =
+        ( inv Pleft-constant ∙ raw-G-tail) ∙ inv Pright-constant
+
+      stripped-raw-G-tail-M' :
+        stripped-raw-G-tail ＝
+        ap (concat linl-constant z') M'
+      stripped-raw-G-tail-M' = {!!}
+
+      stripped-raw-G-tail-M-post :
+        stripped-raw-G-tail ＝
+        ap (concat linl-constant z') M-post-solved
+      stripped-raw-G-tail-M-post =
+        equational-reasoning
+          stripped-raw-G-tail
+          ＝ ap (concat linl-constant z') M'
+            by stripped-raw-G-tail-M'
+          ＝ ap (concat linl-constant z') M-post-solved
+            by
+              ap
+                ( ap (concat linl-constant z'))
+                ( postcompose-naturality-constant-homotopy
+                  ( h)
+                  ( H-original)
+                  ( glue-join (b , c)))
+
+      raw-G-tail-inv-explicit-M-post :
+        map-inv-coherence-square-cogap-join-constant-data
+          ( dAB')
+          ( z')
+          ( K')
+          ( L')
+          ( a)
+          ( b)
+          ( raw-G-tail) ＝
+        M-post-solved
+      raw-G-tail-inv-explicit-M-post =
+        equational-reasoning
+          map-inv-coherence-square-cogap-join-constant-data
+            ( dAB')
+            ( z')
+            ( K')
+            ( L')
+            ( a)
+            ( b)
+            ( raw-G-tail)
+          ＝ is-injective-concat linl-constant stripped-raw-G-tail
+            by refl
+          ＝
+            is-injective-concat linl-constant
+              ( ap (concat linl-constant z') M-post-solved)
+            by ap
+              ( is-injective-concat linl-constant)
+              ( stripped-raw-G-tail-M-post)
+          ＝ M-post-solved
+            by is-retraction-is-injective-concat linl-constant M-post-solved
+
+    direct-raw-M-post-as-map :
+      map-compute-dependent-identification-eq-value-function
+        ( f)
+        ( k)
+        ( p)
+        ( q₀)
+        ( r₀)
+        ( direct-raw-M-post) ＝
+      rhs-cancel
+    direct-raw-M-post-as-map =
+      equational-reasoning
+        map-compute-dependent-identification-eq-value-function
+          ( f)
+          ( k)
+          ( p)
+          ( q₀)
+          ( r₀)
+          ( direct-raw-M-post)
+        ＝
+          map-compute-dependent-identification-eq-value-function
+            ( f)
+            ( k)
+            ( p)
+            ( q₀)
+            ( r₀)
+            ( raw-G-tail)
+          by
+            ap
+              ( map-compute-dependent-identification-eq-value-function
+                ( f)
+                ( k)
+                ( p)
+                ( q₀)
+                ( r₀))
+              ( direct-raw-M-post-raw-G-tail)
+        ＝
+          ( ap (tr (eq-value-function f k) p) αtail ∙
+            apd G-naturality p) ∙
+          inv βtail
+          by raw-G-tail-as-map
+        ＝ rhs-cancel
+          by G-tail-rhs-cancel
+
+    direct-raw-M-post-square-test :
+      bottom-correction-raw-right-pasted-base ∙
+      ( raw-right-pasted-base ∙ inv top-correction-raw-right-pasted-base) ＝
+      direct-raw-M-post
+    direct-raw-M-post-square-test =
+      equational-reasoning
+        bottom-correction-raw-right-pasted-base ∙
+        ( raw-right-pasted-base ∙ inv top-correction-raw-right-pasted-base)
+        ＝ map-inv-compute-dependent-identification-eq-value-function
+          ( f)
+          ( k)
+          ( p)
+          ( q₀)
+          ( r₀)
+          ( rhs-cancel)
+          by raw-right-expected-pasted-base-bottom-as-map-inv
+        ＝
+          map-inv-compute-dependent-identification-eq-value-function
+            ( f)
+            ( k)
+            ( p)
+            ( q₀)
+            ( r₀)
+            ( map-compute-dependent-identification-eq-value-function
+              ( f)
+              ( k)
+              ( p)
+              ( q₀)
+              ( r₀)
+              ( direct-raw-M-post))
+          by
+            ap
+              ( map-inv-compute-dependent-identification-eq-value-function
+                ( f)
+                ( k)
+                ( p)
+                ( q₀)
+                ( r₀))
+              ( inv direct-raw-M-post-as-map)
+        ＝ direct-raw-M-post
+          by is-retraction-map-inv-equiv E₀ direct-raw-M-post
+
+    raw-right-expected-pasted-base-bottom-inv-explicit =
+      map-inv-coherence-square-cogap-join-constant-data
+        ( dAB')
+        ( z')
+        ( K')
+        ( L')
+        ( a)
+        ( b)
+        ( raw-right-expected-pasted-base-bottom)
+
+    stripped-raw-right-expected-pasted-base-bottom =
+      ( inv Pleft-constant ∙ raw-right-expected-pasted-base-bottom) ∙
+      inv Pright-constant
+
+    stripped-M' =
+      ap (concat linl-constant z') M'
+
+    split-M-post =
+      ( ap (concat linl-constant z') M-post-apcomp ∙
+        ap (concat linl-constant z') M-post-apconcat) ∙
+      ap (concat linl-constant z') M-post-nat
+
+    stripped-raw-split-direct-test :
+      ( inv Pleft-constant ∙
+        ( bottom-correction-raw-right-pasted-base ∙
+          ( raw-right-pasted-base ∙
+            inv top-correction-raw-right-pasted-base))) ∙
+      inv Pright-constant ＝
+      split-M-post
+    stripped-raw-split-direct-test =
+      equational-reasoning
+        ( inv Pleft-constant ∙
+          ( bottom-correction-raw-right-pasted-base ∙
+            ( raw-right-pasted-base ∙
+              inv top-correction-raw-right-pasted-base))) ∙
+        inv Pright-constant
+        ＝
+          ( inv Pleft-constant ∙ direct-raw-M-post) ∙
+          inv Pright-constant
+          by
+            ap
+              ( λ S → (inv Pleft-constant ∙ S) ∙ inv Pright-constant)
+              ( direct-raw-M-post-square-test)
+        ＝ ap (concat linl-constant z') M-post-solved
+          by
+            stripped-coherence-square-cogap-join-constant-data
+              ( dAB')
+              ( z')
+              ( K')
+              ( L')
+              ( a)
+              ( b)
+              ( M-post-solved)
+        ＝ split-M-post
+          by
+            ap-concat
+              ( concat linl-constant z')
+              ( M-post-apcomp ∙ M-post-apconcat)
+              ( M-post-nat) ∙
+            ap
+              ( _∙ ap (concat linl-constant z') M-post-nat)
+              ( ap-concat
+                ( concat linl-constant z')
+                ( M-post-apcomp)
+                ( M-post-apconcat))
+
+    raw-right-expected-pasted-base-bottom-inv-explicit-M-post :
+      raw-right-expected-pasted-base-bottom-inv-explicit ＝ M-post-solved
+    raw-right-expected-pasted-base-bottom-inv-explicit-M-post =
+      equational-reasoning
+        raw-right-expected-pasted-base-bottom-inv-explicit
+        ＝ is-injective-concat linl-constant split-M-post
+          by
+            ap
+              ( is-injective-concat linl-constant)
+              ( stripped-raw-split-direct-test)
+        ＝
+          is-injective-concat linl-constant
+            ( ap (concat linl-constant z') M-post-solved)
+          by
+            ap
+              ( is-injective-concat linl-constant)
+              ( ap
+                ( _∙ ap (concat linl-constant z') M-post-nat)
+                ( inv
+                  ( ap-concat
+                    ( concat linl-constant z')
+                    ( M-post-apcomp)
+                    ( M-post-apconcat))) ∙
+                inv
+                  ( ap-concat
+                    ( concat linl-constant z')
+                    ( M-post-apcomp ∙ M-post-apconcat)
+                    ( M-post-nat)))
+        ＝ M-post-solved
+          by is-retraction-is-injective-concat linl-constant M-post-solved
+
+    stripped-raw-split :
+      ( inv Pleft-constant ∙
+        ( bottom-correction-raw-right-pasted-base ∙
+          ( raw-right-pasted-base ∙
+            inv top-correction-raw-right-pasted-base))) ∙
+      inv Pright-constant ＝
+      split-M-post
+    stripped-raw-split = stripped-raw-split-direct-test
+
+    stripped-raw-right-expected-pasted-base-bottom-test :
+      stripped-raw-right-expected-pasted-base-bottom ＝ stripped-M'
+    stripped-raw-right-expected-pasted-base-bottom-test =
+      equational-reasoning
+        stripped-raw-right-expected-pasted-base-bottom
+        ＝
+          ( inv Pleft-constant ∙
+            ( bottom-correction-raw-right-pasted-base ∙
+              ( raw-right-pasted-base ∙
+                inv top-correction-raw-right-pasted-base))) ∙
+          inv Pright-constant
+          by refl
+        ＝ split-M-post
+          by stripped-raw-split
+        ＝ ap (concat linl-constant z') M-post-solved
+          by
+            ap
+              ( _∙ ap (concat linl-constant z') M-post-nat)
+              ( inv
+                ( ap-concat
+                  ( concat linl-constant z')
+                  ( M-post-apcomp)
+                  ( M-post-apconcat))) ∙
+            inv
+              ( ap-concat
+                ( concat linl-constant z')
+                ( M-post-apcomp ∙ M-post-apconcat)
+                ( M-post-nat))
+        ＝ stripped-M'
+          by
+            ap
+              ( ap (concat linl-constant z'))
+              ( inv
+                ( postcompose-naturality-constant-homotopy
+                  ( h)
+                  ( H-original)
+                  ( glue-join (b , c))))
+
+    raw-right-expected-pasted-base-bottom-inv-explicit-test :
+      raw-right-expected-pasted-base-bottom-inv-explicit ＝ M'
+    raw-right-expected-pasted-base-bottom-inv-explicit-test =
+      equational-reasoning
+        raw-right-expected-pasted-base-bottom-inv-explicit
+        ＝ is-injective-concat linl-constant stripped-M'
+          by
+            ap
+              ( is-injective-concat linl-constant)
+              ( stripped-raw-right-expected-pasted-base-bottom-test)
+        ＝ M'
+          by is-retraction-is-injective-concat linl-constant M'
+
+    raw-expected-direct-pasted-base-bottom-test :
+      raw-right-expected-pasted-base-bottom ＝ direct-raw-left-base
+    raw-expected-direct-pasted-base-bottom-test =
+      equational-reasoning
+        raw-right-expected-pasted-base-bottom
+        ＝
+          coherence-square-cogap-join-constant-data
+            ( dAB')
+            ( z')
+            ( K')
+            ( L')
+            ( a)
+            ( b)
+            ( raw-right-expected-pasted-base-bottom-inv-explicit)
+          by inv
+            ( is-section-map-inv-coherence-square-cogap-join-constant-data
+              ( dAB')
+              ( z')
+              ( K')
+              ( L')
+              ( a)
+              ( b)
+              ( raw-right-expected-pasted-base-bottom))
+        ＝
+          coherence-square-cogap-join-constant-data
+            ( dAB')
+            ( z')
+            ( K')
+            ( L')
+            ( a)
+            ( b)
+            ( M')
+          by
+            ap
+              ( coherence-square-cogap-join-constant-data
+                ( dAB')
+                ( z')
+                ( K')
+                ( L')
+                ( a)
+                ( b))
+              ( raw-right-expected-pasted-base-bottom-inv-explicit-test)
+        ＝ direct-raw-left-base
+          by refl
+
+    raw-expected-direct-pasted-base-test :
+      raw-left-expected-direct ＝ raw-right-expected-pasted-base
+    raw-expected-direct-pasted-base-test =
+      equational-reasoning
+        raw-left-expected-direct
+        ＝
+          concat-bottom-identification-coherence-square-identifications
+            ( q₀)
+            ( ap f p)
+            ( ap k p)
+            ( r₀)
+            ( natr)
+            ( raw-right-expected-pasted-base-bottom)
+          by
+            ap
+              ( concat-bottom-identification-coherence-square-identifications
+                ( q₀)
+                ( ap f p)
+                ( ap k p)
+                ( r₀)
+                ( natr))
+              ( inv raw-expected-direct-pasted-base-bottom-test)
+        ＝ raw-right-expected-pasted-base
+          by
+            is-section-inv-concat-bottom-identification-coherence-square-identifications
+              ( q₀)
+              ( ap f p)
+              ( ap k p)
+              ( r₀)
+              ( natr)
+              ( raw-right-expected-pasted-base)
+
+    raw-right-expected-pasted =
+      inv-concat-top-identification-coherence-square-identifications
+        ( q₀)
+        ( ap f p)
+        ( ap k p)
+        ( r₁)
+        ( natl)
+        ( raw-right-pasted)
+
+    raw-expected-direct-pasted-test :
+      raw-left-expected-direct ＝ raw-right-expected-pasted
+    raw-expected-direct-pasted-test =
+      raw-expected-direct-pasted-base-test ∙
+      inv
+        ( ap
+          ( inv-concat-top-identification-coherence-square-identifications
+            ( q₀)
+            ( ap f p)
+            ( ap k p)
+            ( r₁)
+            ( natl))
+          ( raw-right-pasted-base-test))
+
+    raw-right-test : raw-right ＝ raw-right-expected
+    raw-right-test =
+      map-inv-concat-top-dependent-identification-eq-value-function
+        ( p)
+        ( natl)
+        ( r₁)
+        ( concatLM)
+
+    raw-expected-direct-test :
+      raw-left-expected-direct ＝ raw-right-expected
+    raw-expected-direct-test =
+      raw-expected-direct-pasted-test ∙
+      ap
+        ( inv-concat-top-identification-coherence-square-identifications
+          ( q₀)
+          ( ap f p)
+          ( ap k p)
+          ( r₁)
+          ( natl))
+        ( inv raw-right-pasted-test)
+
+    raw-expected-test : raw-left-expected ＝ raw-right-expected
+    raw-expected-test =
+      raw-left-expected-direct-test ∙ raw-expected-direct-test
+
+    raw-boundary : raw-left ＝ raw-right
+    raw-boundary =
+      raw-left-test ∙ raw-expected-test ∙ inv raw-right-test
+
+  coherence-naturality-coherence-map-associative-join :
+    {l4 : Level} {X : UU l4} (h : A * (B * C) → X)
+    (c : C) (a : A) (b : B) →
+    dependent-identification
+      ( family-naturality-coherence-map-associative-join h c)
+      ( glue-join (a , b))
+      ( path-inl-naturality-coherence-map-associative-join h c a)
+      ( path-inr-naturality-coherence-map-associative-join h c b)
+  coherence-naturality-coherence-map-associative-join h c a b =
+    map-compute-dependent-identification-eq-value
+      { P = P}
+      ( F)
+      ( G)
+      ( p)
+      ( α)
+      ( β)
+      ( equational-reasoning
+        apd F p ∙ β
+        ＝ apd F p ∙ (finr ∙ βtail)
+          by refl
+        ＝ (apd F p ∙ finr) ∙ βtail
+          by inv (assoc (apd F p) finr βtail)
+        ＝ (ap (tr P p) finl ∙ cohD') ∙ βtail
+          by ap (_∙ βtail) (compute-glue-dependent-cogap-join D' (a , b))
+        ＝ ap (tr P p) finl ∙ (cohD' ∙ βtail)
+          by assoc (ap (tr P p) finl) cohD' βtail
+        ＝ ap (tr P p) finl ∙ ((cohD' ∙ natr) ∙ inv binr)
+          by ap (ap (tr P p) finl ∙_)
+            ( inv (assoc cohD' natr (inv binr)))
+        ＝
+          ap (tr P p) finl ∙
+          ((ap (tr P p) natl ∙ concatLM) ∙ inv binr)
+          by ap
+            ( λ q → ap (tr P p) finl ∙ (q ∙ inv binr))
+            ( boundary-naturality-coherence-map-associative-join h c a b)
+        ＝
+          ap (tr P p) finl ∙
+          (((ap (tr P p) αtail ∙ ap (tr P p) binl) ∙ concatLM) ∙
+            inv binr)
+          by ap
+            ( λ q →
+              ap (tr P p) finl ∙ ((q ∙ concatLM) ∙ inv binr))
+            ( right-factor-ap (tr P p) natl binl)
+        ＝
+          ap (tr P p) finl ∙
+          ((ap (tr P p) αtail ∙
+            (ap (tr P p) binl ∙ concatLM)) ∙
+            inv binr)
+          by ap (ap (tr P p) finl ∙_)
+            ( ap (_∙ inv binr)
+              ( assoc (ap (tr P p) αtail) (ap (tr P p) binl) concatLM))
+        ＝
+          ap (tr P p) finl ∙
+          ((ap (tr P p) αtail ∙ (apd G p ∙ binr)) ∙ inv binr)
+          by ap
+            ( λ q →
+              ap (tr P p) finl ∙
+              ((ap (tr P p) αtail ∙ q) ∙ inv binr))
+            ( inv
+              ( coherence-concat-naturality-coherence-map-associative-join
+                h c a b))
+        ＝
+          ap (tr P p) finl ∙
+          (ap (tr P p) αtail ∙ ((apd G p ∙ binr) ∙ inv binr))
+          by ap (ap (tr P p) finl ∙_)
+            ( assoc (ap (tr P p) αtail) (apd G p ∙ binr) (inv binr))
+        ＝
+          ap (tr P p) finl ∙
+          (ap (tr P p) αtail ∙ apd G p)
+          by ap
+            ( λ q →
+              ap (tr P p) finl ∙ (ap (tr P p) αtail ∙ q))
+            ( right-cancel-concat (apd G p) binr)
+        ＝ (ap (tr P p) finl ∙ ap (tr P p) αtail) ∙ apd G p
+          by inv (assoc (ap (tr P p) finl) (ap (tr P p) αtail) (apd G p))
+        ＝ ap (tr P p) (finl ∙ αtail) ∙ apd G p
+          by ap (_∙ apd G p)
+            ( inv (ap-concat (tr P p) finl αtail))
+        ＝ ap (tr P p) α ∙ apd G p
+          by refl)
+    where
+    p = glue-join (a , b)
+
+    D =
+      dependent-cocone-H-cocone-A-join-BC cocone-join c
+
+    D' =
+      dependent-cocone-H-cocone-A-join-BC
+        ( cocone-map pr1 pr2 cocone-join h)
+        ( c)
+
+    Dhtpy =
+      dependent-cocone-htpy-cogap-join-cocone-map
+        ( cocone-left-map-associative-join)
+        ( h)
+
+    P : A * B → UU _
+    P x =
+      map-AB-cocone-A-join-BC
+        ( cocone-map pr1 pr2 cocone-join h)
+        ( x) ＝
+      h (inr-join (inr-join c))
+
+    F : (x : A * B) → P x
+    F x =
+      dependent-cogap-join D' x
+
+    H :
+      (x : A * B) →
+      map-AB-cocone-A-join-BC
+        ( cocone-map pr1 pr2 cocone-join h)
+        ( x) ＝
+      h (map-left-associative-join x)
+    H =
+      htpy-cogap-join-cocone-map-compute
+        ( cocone-left-map-associative-join)
+        ( h)
+
+    K : (x : A * B) →
+      h (map-left-associative-join x) ＝
+      h (inr-join (inr-join c))
+    K x =
+      ap h (dependent-cogap-join D x)
+
+    G : (x : A * B) → P x
+    G x = H x ∙ K x
+
+    α =
+      path-inl-naturality-coherence-map-associative-join h c a
+
+    β =
+      path-inr-naturality-coherence-map-associative-join h c b
+
+    finl = compute-inl-dependent-cogap-join D' a
+    finr = compute-inr-dependent-cogap-join D' b
+
+    natl =
+      compute-inl-naturality-coherence-map-associative-join h a c
+
+    natr =
+      compute-inr-naturality-coherence-map-associative-join h b c
+
+    Hinl = compute-inl-dependent-cogap-join Dhtpy a
+    Hinr = compute-inr-dependent-cogap-join Dhtpy b
+    Kinl = ap (ap h) (compute-inl-dependent-cogap-join D a)
+    Kinr = ap (ap h) (compute-inr-dependent-cogap-join D b)
+    binl = ap-binary _∙_ Hinl Kinl
+    binr = ap-binary _∙_ Hinr Kinr
+
+    αtail = natl ∙ inv binl
+    βtail = natr ∙ inv binr
+
+    cohD' =
+      coherence-dependent-cocone-H-cocone-A-join-BC
+        ( cocone-map pr1 pr2 cocone-join h)
+        ( c)
+        ( a)
+        ( b)
+
+    concatLM =
+      concat-dependent-identification-eq-value
+        ( p)
+        ( coherence-htpy-cogap-join-cocone-map
+          ( cocone-left-map-associative-join)
+          ( h)
+          ( a)
+          ( b))
+        ( ap-dependent-identification-eq-value-function
+          ( h)
+          ( p)
+          ( coherence-dependent-cocone-H-cocone-A-join-BC
+            cocone-join c a b))
+
+  dependent-cocone-naturality-coherence-map-associative-join :
+    {l4 : Level} {X : UU l4} (h : A * (B * C) → X) (c : C) →
+    dependent-cocone pr1 pr2 cocone-join
+      ( family-naturality-coherence-map-associative-join h c)
+  pr1 (dependent-cocone-naturality-coherence-map-associative-join h c) =
+    path-inl-naturality-coherence-map-associative-join h c
+  pr1
+    ( pr2
+      ( dependent-cocone-naturality-coherence-map-associative-join h c)) =
+    path-inr-naturality-coherence-map-associative-join h c
+  pr2
+    ( pr2
+      ( dependent-cocone-naturality-coherence-map-associative-join h c))
+    ( a , b) =
+    coherence-naturality-coherence-map-associative-join h c a b
+
+  naturality-coherence-map-associative-join :
+    {l4 : Level} {X : UU l4} (h : A * (B * C) → X)
+    (x : A * B) (c : C) →
+    family-naturality-coherence-map-associative-join h c x
+  naturality-coherence-map-associative-join h x c =
+    dependent-cogap-join
+      ( dependent-cocone-naturality-coherence-map-associative-join h c)
+      ( x)
+
+  map-associative-join : (A * B) * C → A * (B * C)
+  map-associative-join =
+    cogap-join (A * (B * C)) cocone-associative-join
+
+  compute-inl-map-associative-join :
+    map-associative-join ∘ inl-join ~ map-left-associative-join
+  compute-inl-map-associative-join =
+    compute-inl-cogap-join cocone-associative-join
+
+  compute-inr-map-associative-join :
+    map-associative-join ∘ inr-join ~ inr-join ∘ inr-join
+  compute-inr-map-associative-join =
+    compute-inr-cogap-join cocone-associative-join
+
+  compute-glue-map-associative-join :
+    statement-coherence-htpy-cocone pr1 pr2
+      ( cocone-map pr1 pr2 cocone-join map-associative-join)
+      ( cocone-associative-join)
+      ( compute-inl-map-associative-join)
+      ( compute-inr-map-associative-join)
+  compute-glue-map-associative-join =
+    compute-glue-cogap-join cocone-associative-join
+
+  is-equiv-map-associative-join-universal-property-pushout :
+    universal-property-pushout pr1 pr2 cocone-associative-join →
+    is-equiv map-associative-join
+  is-equiv-map-associative-join-universal-property-pushout up-assoc =
+    is-equiv-up-pushout-up-pushout
+      ( pr1)
+      ( pr2)
+      ( cocone-join)
+      ( cocone-associative-join)
+      ( map-associative-join)
+      ( ( compute-inl-map-associative-join) ,
+        ( ( compute-inr-map-associative-join) ,
+          ( compute-glue-map-associative-join)))
+      ( up-join)
+      ( up-assoc)
+
+  triangle-cocone-AB-join-C-cocone-A-join-BC-cocone-join :
+    cocone-AB-join-C-cocone-A-join-BC cocone-join ＝
+    cocone-associative-join
+  triangle-cocone-AB-join-C-cocone-A-join-BC-cocone-join =
+    refl
+
+  triangle-cocone-map-cocone-associative-join :
+    {l4 : Level} {X : UU l4} (h : A * (B * C) → X) →
+    cocone-AB-join-C-cocone-A-join-BC
+      ( cocone-map pr1 pr2 cocone-join h) ＝
+    cocone-map pr1 pr2 cocone-associative-join h
+  triangle-cocone-map-cocone-associative-join h =
+    eq-htpy-cocone pr1 pr2
+      ( cocone-AB-join-C-cocone-A-join-BC
+        ( cocone-map pr1 pr2 cocone-join h))
+      ( cocone-map pr1 pr2 cocone-associative-join h)
+      ( htpy-cogap-join-cocone-map-compute cocone-left-map-associative-join h ,
+        refl-htpy ,
+        λ (x , c) →
+          right-unit ∙
+          naturality-coherence-map-associative-join h x c)
+
+  universal-property-pushout-cocone-associative-join :
+    universal-property-pushout pr1 pr2 cocone-associative-join
+  universal-property-pushout-cocone-associative-join X =
+    is-equiv-htpy
+      ( cocone-AB-join-C-cocone-A-join-BC ∘
+        cocone-map pr1 pr2 cocone-join)
+      ( λ h → inv (triangle-cocone-map-cocone-associative-join h))
+      ( is-equiv-comp
+        ( cocone-AB-join-C-cocone-A-join-BC)
+        ( cocone-map pr1 pr2 cocone-join)
+        ( up-join X)
+        ( is-equiv-cocone-AB-join-C-cocone-A-join-BC))
+
+  is-equiv-map-associative-join :
+    is-equiv map-associative-join
+  is-equiv-map-associative-join =
+    is-equiv-map-associative-join-universal-property-pushout
+      ( universal-property-pushout-cocone-associative-join)
+
+  equiv-associative-join : ((A * B) * C) ≃ (A * (B * C))
+  pr1 equiv-associative-join =
+    map-associative-join
+  pr2 equiv-associative-join =
+    is-equiv-map-associative-join
 
   is-equiv-cocone-A-join-BC-cocone-AB-join-C-is-equiv-associative-cocone-data :
     {l4 : Level} {X : UU l4} →
