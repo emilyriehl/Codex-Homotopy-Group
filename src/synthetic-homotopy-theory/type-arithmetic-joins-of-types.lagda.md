@@ -4174,6 +4174,288 @@ module _
       ( is-equiv-associative-cocone-data-cocone-A-join-BC)
       ( is-equiv-cocone-AB-join-C-associative-cocone-data)
 
+  path-inl-htpy-horizontal-cocone-map-associative-join :
+    {l4 : Level} {X : UU l4} (h : A * (B * C) → X)
+    (a : A) →
+    h (map-left-associative-join (inl-join a)) ＝
+    map-AB-cocone-A-join-BC
+      ( cocone-map pr1 pr2
+        ( cocone-join {A = A} {B = B * C})
+        ( h))
+      ( inl-join a)
+  path-inl-htpy-horizontal-cocone-map-associative-join h a =
+    ap h (compute-inl-map-left-associative-join a) ∙
+    inv
+      ( compute-inl-map-AB-cocone-A-join-BC
+        ( cocone-map pr1 pr2
+          ( cocone-join {A = A} {B = B * C})
+          ( h))
+        ( a))
+
+  path-inr-htpy-horizontal-cocone-map-associative-join :
+    {l4 : Level} {X : UU l4} (h : A * (B * C) → X)
+    (b : B) →
+    h (map-left-associative-join (inr-join b)) ＝
+    map-AB-cocone-A-join-BC
+      ( cocone-map pr1 pr2
+        ( cocone-join {A = A} {B = B * C})
+        ( h))
+      ( inr-join b)
+  path-inr-htpy-horizontal-cocone-map-associative-join h b =
+    ap h (compute-inr-map-left-associative-join b) ∙
+    inv
+      ( compute-inr-map-AB-cocone-A-join-BC
+        ( cocone-map pr1 pr2
+          ( cocone-join {A = A} {B = B * C})
+          ( h))
+        ( b))
+
+  coherence-htpy-horizontal-cocone-map-associative-join :
+    {l4 : Level} {X : UU l4} (h : A * (B * C) → X)
+    (a : A) (b : B) →
+    dependent-identification
+      ( λ x →
+        h (map-left-associative-join x) ＝
+        map-AB-cocone-A-join-BC
+          ( cocone-map pr1 pr2
+            ( cocone-join {A = A} {B = B * C})
+            ( h))
+          ( x))
+      ( glue-join (a , b))
+      ( path-inl-htpy-horizontal-cocone-map-associative-join h a)
+      ( path-inr-htpy-horizontal-cocone-map-associative-join h b)
+  coherence-htpy-horizontal-cocone-map-associative-join {X = X} h a b =
+    map-compute-dependent-identification-eq-value-function
+      ( h ∘ map-left-associative-join)
+      ( map-AB-cocone-A-join-BC
+        ( cocone-map pr1 pr2
+          ( cocone-join {A = A} {B = B * C})
+          ( h)))
+      ( glue-join (a , b))
+      ( path-inl-htpy-horizontal-cocone-map-associative-join h a)
+      ( path-inr-htpy-horizontal-cocone-map-associative-join h b)
+      ( equational-reasoning
+        ap (h ∘ map-left-associative-join) p ∙
+        (ap h linrL ∙ inv linrG)
+        ＝
+        (ap (h ∘ map-left-associative-join) p ∙ ap h linrL) ∙
+        inv linrG
+          by inv (assoc (ap (h ∘ map-left-associative-join) p)
+            (ap h linrL)
+            (inv linrG))
+        ＝ (ap h (ap map-left-associative-join p) ∙ ap h linrL) ∙
+          inv linrG
+          by ap (λ q → (q ∙ ap h linrL) ∙ inv linrG)
+            ( ap-comp h map-left-associative-join p)
+        ＝ ap h (ap map-left-associative-join p ∙ linrL) ∙
+          inv linrG
+          by ap (_∙ inv linrG)
+            ( inv
+              ( ap-concat h (ap map-left-associative-join p) linrL))
+        ＝ ap h (linlL ∙ glueOuter) ∙ inv linrG
+          by ap (λ q → ap h q ∙ inv linrG)
+            ( compute-glue-map-left-associative-join (a , b))
+        ＝ (ap h linlL ∙ ap h glueOuter) ∙ inv linrG
+          by ap (_∙ inv linrG) (ap-concat h linlL glueOuter)
+        ＝ ap h linlL ∙ (ap h glueOuter ∙ inv linrG)
+          by assoc (ap h linlL) (ap h glueOuter) (inv linrG)
+        ＝ ap h linlL ∙ (inv linlG ∙ apG)
+          by ap (ap h linlL ∙_)
+            ( inv (right-transpose-compute-glue-cogap-join dAB a b))
+        ＝ (ap h linlL ∙ inv linlG) ∙ apG
+          by inv (assoc (ap h linlL) (inv linlG) apG))
+    where
+    d :
+      cocone
+        ( λ (t : A × (B * C)) → pr1 t)
+        ( λ (t : A × (B * C)) → pr2 t)
+        ( X)
+    d =
+      cocone-map pr1 pr2
+        ( cocone-join {A = A} {B = B * C})
+        ( h)
+
+    dAB : cocone {S = A × B} {A = A} {B = B} pr1 pr2 X
+    dAB = cocone-AB-cocone-A-join-BC d
+
+    G : A * B → X
+    G = map-AB-cocone-A-join-BC d
+
+    p = glue-join (a , b)
+    glueOuter = glue-join (a , inl-join b)
+    linlL = compute-inl-map-left-associative-join a
+    linrL = compute-inr-map-left-associative-join b
+    linlG = compute-inl-map-AB-cocone-A-join-BC d a
+    linrG = compute-inr-map-AB-cocone-A-join-BC d b
+    apG = ap G p
+
+  dependent-cocone-htpy-horizontal-cocone-map-associative-join :
+    {l4 : Level} {X : UU l4} (h : A * (B * C) → X) →
+    dependent-cocone pr1 pr2 cocone-join
+      ( λ x →
+        h (map-left-associative-join x) ＝
+        map-AB-cocone-A-join-BC
+          ( cocone-map pr1 pr2
+            ( cocone-join {A = A} {B = B * C})
+            ( h))
+          ( x))
+  pr1 (dependent-cocone-htpy-horizontal-cocone-map-associative-join h) =
+    path-inl-htpy-horizontal-cocone-map-associative-join h
+  pr1 (pr2 (dependent-cocone-htpy-horizontal-cocone-map-associative-join h)) =
+    path-inr-htpy-horizontal-cocone-map-associative-join h
+  pr2 (pr2 (dependent-cocone-htpy-horizontal-cocone-map-associative-join h))
+    ( a , b) =
+    coherence-htpy-horizontal-cocone-map-associative-join h a b
+
+  htpy-horizontal-cocone-map-associative-join :
+    {l4 : Level} {X : UU l4} (h : A * (B * C) → X) →
+    (h ∘ map-left-associative-join) ~
+    horizontal-map-cocone pr1 pr2
+      ( cocone-AB-join-C-cocone-A-join-BC
+        ( cocone-map pr1 pr2
+          ( cocone-join {A = A} {B = B * C})
+          ( h)))
+  htpy-horizontal-cocone-map-associative-join h =
+    dependent-cogap-join
+      ( dependent-cocone-htpy-horizontal-cocone-map-associative-join h)
+
+  htpy-vertical-cocone-map-associative-join :
+    {l4 : Level} {X : UU l4} (h : A * (B * C) → X) →
+    (h ∘ inr-join ∘ inr-join) ~
+    vertical-map-cocone pr1 pr2
+      ( cocone-AB-join-C-cocone-A-join-BC
+        ( cocone-map pr1 pr2
+          ( cocone-join {A = A} {B = B * C})
+          ( h)))
+  htpy-vertical-cocone-map-associative-join h = refl-htpy
+
+  path-inl-coherence-htpy-cocone-map-associative-join :
+    {l4 : Level} {X : UU l4} (h : A * (B * C) → X)
+    (a : A) (c : C) →
+    ap h (coherence-map-associative-join (inl-join a) c) ∙ refl ＝
+    htpy-horizontal-cocone-map-associative-join h (inl-join a) ∙
+    dependent-cogap-join
+      ( dependent-cocone-H-cocone-A-join-BC
+        ( cocone-map pr1 pr2
+          ( cocone-join {A = A} {B = B * C})
+          ( h))
+        ( c))
+      ( inl-join a)
+  path-inl-coherence-htpy-cocone-map-associative-join {X = X} h a c =
+    equational-reasoning
+      ap h coh ∙ refl
+      ＝ ap h coh
+        by right-unit
+      ＝ ap h (linlL ∙ glueOuter)
+        by ap (ap h) (compute-inl-coherence-map-associative-join a c)
+      ＝ ap h linlL ∙ ap h glueOuter
+        by ap-concat h linlL glueOuter
+      ＝ ap h linlL ∙ (refl ∙ ap h glueOuter)
+        by ap (ap h linlL ∙_) (inv left-unit)
+      ＝ ap h linlL ∙ ((inv linlG ∙ linlG) ∙ ap h glueOuter)
+        by ap (λ q → ap h linlL ∙ (q ∙ ap h glueOuter))
+          ( inv (left-inv linlG))
+      ＝ ap h linlL ∙ (inv linlG ∙ (linlG ∙ ap h glueOuter))
+        by ap (ap h linlL ∙_) (assoc (inv linlG) linlG (ap h glueOuter))
+      ＝ (ap h linlL ∙ inv linlG) ∙ (linlG ∙ ap h glueOuter)
+        by inv (assoc (ap h linlL) (inv linlG) (linlG ∙ ap h glueOuter))
+      ＝ htpy-horizontal-cocone-map-associative-join h (inl-join a) ∙
+        dependent-cogap-join
+          ( dependent-cocone-H-cocone-A-join-BC d c)
+          ( inl-join a)
+        by inv
+          ( ap-binary
+            ( _∙_)
+            ( compute-inl-dependent-cogap-join
+              ( dependent-cocone-htpy-horizontal-cocone-map-associative-join h)
+              ( a))
+            ( compute-inl-dependent-cogap-join
+              ( dependent-cocone-H-cocone-A-join-BC d c)
+              ( a)))
+    where
+    d :
+      cocone
+        ( λ (t : A × (B * C)) → pr1 t)
+        ( λ (t : A × (B * C)) → pr2 t)
+        ( X)
+    d =
+      cocone-map pr1 pr2
+        ( cocone-join {A = A} {B = B * C})
+        ( h)
+
+    coh = coherence-map-associative-join (inl-join a) c
+    linlL = compute-inl-map-left-associative-join a
+    glueOuter = glue-join (a , inr-join c)
+    linlG = compute-inl-map-AB-cocone-A-join-BC d a
+
+  path-inr-coherence-htpy-cocone-map-associative-join :
+    {l4 : Level} {X : UU l4} (h : A * (B * C) → X)
+    (b : B) (c : C) →
+    ap h (coherence-map-associative-join (inr-join b) c) ∙ refl ＝
+    htpy-horizontal-cocone-map-associative-join h (inr-join b) ∙
+    dependent-cogap-join
+      ( dependent-cocone-H-cocone-A-join-BC
+        ( cocone-map pr1 pr2
+          ( cocone-join {A = A} {B = B * C})
+          ( h))
+        ( c))
+      ( inr-join b)
+  path-inr-coherence-htpy-cocone-map-associative-join {X = X} h b c =
+    equational-reasoning
+      ap h coh ∙ refl
+      ＝ ap h coh
+        by right-unit
+      ＝ ap h (linrL ∙ apinr)
+        by ap (ap h) (compute-inr-coherence-map-associative-join b c)
+      ＝ ap h linrL ∙ ap h apinr
+        by ap-concat h linrL apinr
+      ＝ ap h linrL ∙ ap (h ∘ inr-join) p
+        by ap (ap h linrL ∙_) (inv (ap-comp h inr-join p))
+      ＝ ap h linrL ∙ (refl ∙ ap (h ∘ inr-join) p)
+        by ap (ap h linrL ∙_) (inv left-unit)
+      ＝ ap h linrL ∙ ((inv linrG ∙ linrG) ∙ ap (h ∘ inr-join) p)
+        by ap (λ q → ap h linrL ∙ (q ∙ ap (h ∘ inr-join) p))
+          ( inv (left-inv linrG))
+      ＝ ap h linrL ∙ (inv linrG ∙ (linrG ∙ ap (h ∘ inr-join) p))
+        by ap (ap h linrL ∙_)
+          ( assoc (inv linrG) linrG (ap (h ∘ inr-join) p))
+      ＝ (ap h linrL ∙ inv linrG) ∙
+        (linrG ∙ ap (h ∘ inr-join) p)
+        by inv
+          ( assoc
+            ( ap h linrL)
+            ( inv linrG)
+            ( linrG ∙ ap (h ∘ inr-join) p))
+      ＝ htpy-horizontal-cocone-map-associative-join h (inr-join b) ∙
+        dependent-cogap-join
+          ( dependent-cocone-H-cocone-A-join-BC d c)
+          ( inr-join b)
+        by inv
+          ( ap-binary
+            ( _∙_)
+            ( compute-inr-dependent-cogap-join
+              ( dependent-cocone-htpy-horizontal-cocone-map-associative-join h)
+              ( b))
+            ( compute-inr-dependent-cogap-join
+              ( dependent-cocone-H-cocone-A-join-BC d c)
+              ( b)))
+    where
+    d :
+      cocone
+        ( λ (t : A × (B * C)) → pr1 t)
+        ( λ (t : A × (B * C)) → pr2 t)
+        ( X)
+    d =
+      cocone-map pr1 pr2
+        ( cocone-join {A = A} {B = B * C})
+        ( h)
+
+    coh = coherence-map-associative-join (inr-join b) c
+    p = glue-join (b , c)
+    linrL = compute-inr-map-left-associative-join b
+    apinr = ap inr-join p
+    linrG = compute-inr-map-AB-cocone-A-join-BC d b
+
   is-equiv-cocone-A-join-BC-cocone-AB-join-C-is-equiv-associative-cocone-data :
     {l4 : Level} {X : UU l4} →
     is-equiv (associative-cocone-data-cocone-AB-join-C {X = X}) →

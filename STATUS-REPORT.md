@@ -1726,3 +1726,35 @@ The checked command was:
 ```
 
 The Agda check passed with no holes.
+
+Later on 2026-06-24, the Rocq-guided associator route made another checked
+structural step. The file now proves an explicit horizontal comparison
+
+```text
+h ∘ map-left-associative-join ~
+horizontal-map-cocone
+  (cocone-AB-join-C-cocone-A-join-BC (cocone-map cocone-join h))
+```
+
+with checked endpoint and glue computation over `A * B`. The vertical
+comparison for the same cocone naturality square is definitionally `refl-htpy`.
+The same pass also proves the two endpoint reductions for the next outer
+coherence square, at `inl-join a` and `inr-join b` in `A * B`.
+
+The remaining Rocq-guided universal-property route is now isolated to one
+higher dependent-identification over the `glue-join (a , b)` path in `A * B`.
+Solving that coherence should assemble the full homotopy between
+`cocone-map cocone-associative-join h` and the transformed cocone map through
+the shared triple normal form.
+
+The checked commands were:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate|lossy-unification" src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+```
+
+The Agda check passed. `git diff --check` passed. The touched-file scan found
+no holes, postulates, unsolved-meta pragmas, or temporary lossy-unification
+pragmas.

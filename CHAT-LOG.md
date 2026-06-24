@@ -4304,3 +4304,48 @@ pragmas.
 Related commit:
 
 - This commit - Start Rocq-guided triple join associator route.
+
+### Isolate the structural cocone naturality square
+
+Request: Emily asked Codex to keep pushing hard on the promising
+Rocq-guided route toward join associativity.
+
+Model context:
+
+- Date: 2026-06-24.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible, but they again failed to report wrapper-level
+  issues reliably; `./check.sh` was used as the acceptance gate.
+
+Actions:
+
+- Added a checked, computable horizontal comparison between
+  `h ∘ map-left-associative-join` and the horizontal map of
+  `cocone-AB-join-C-cocone-A-join-BC (cocone-map cocone-join h)`.
+- Proved the horizontal comparison endpoints and its `A * B` glue coherence
+  using `compute-glue-map-left-associative-join` and
+  `right-transpose-compute-glue-cogap-join`.
+- Added the corresponding vertical comparison, which is `refl-htpy`.
+- Proved the two endpoint reductions for the remaining full cocone naturality
+  square at `inl-join a` and `inr-join b`.
+- Probed the final higher dependent-identification over `glue-join (a , b)`;
+  it remains the single isolated blocker needed to assemble the full cocone
+  homotopy and hence the universal-property proof.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate|lossy-unification" src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+```
+
+The Agda check passed. `git diff --check` passed. The touched-file scan found
+no holes, postulates, unsolved-meta pragmas, or temporary lossy-unification
+pragmas.
+
+Related commit:
+
+- This commit - Isolate structural associator cocone naturality.
