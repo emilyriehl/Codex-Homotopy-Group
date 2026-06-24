@@ -4198,3 +4198,55 @@ attempt.
 Related commit:
 
 - This commit - Pivot associativity route to raw cocone extraction.
+
+### Prove the A-BC raw extraction and cocone comparison equivalence
+
+Request: Emily asked Codex to keep pursuing the new structural route after the
+cleanup/pivot checkpoint, with emphasis on overcoming the real associator
+blocker rather than side lemmas.
+
+Model context:
+
+- Date: 2026-06-23.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible; final acceptance was checked with `./check.sh`.
+
+Actions:
+
+- Added generic inverse-direction equivalence for `cocone-map` over any
+  standard join, complementing the dependent version.
+- Added the checked postcomposition homotopy
+  `htpy-cogap-join-cocone-map`, proved by comparing cocone images via
+  `cocone-map-comp`, `is-section-cogap`, and embedding of the standard
+  `cocone-map`.
+- Proved raw constant-cogap data for a `cocone-map j` is equivalent to a
+  dependent cocone over the family `z = j x`.
+- Factored the direct naturality-based map
+  `constant-cogap-join-data-cocone-map-dependent-function` through
+  `dependent-cocone-map` and proved it is an equivalence; the direct and
+  structural maps are compared using `nat-htpy-apd-htpy`.
+- Lifted this fiber result to prove
+  `is-equiv-cocone-A-join-BC-raw-normal-form-cocone-A-join-BC`.
+- Used the raw normal form to prove
+  `is-equiv-associative-cocone-data-cocone-A-join-BC`.
+- Instantiated the existing triangle argument to prove
+  `is-equiv-cocone-AB-join-C-cocone-A-join-BC`.
+- Probed the next final triangle between the composite
+  `cocone-AB-join-C-cocone-A-join-BC ∘ cocone-map cocone-join` and
+  `cocone-map cocone-associative-join`. The horizontal component is supplied
+  by `htpy-cogap-join-cocone-map`; the remaining coherence is a separate glue
+  triangle and was not left in the checked code.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+```
+
+The Agda check passed.
+
+Related commit:
+
+- This commit - Prove A-BC raw extraction equivalence.

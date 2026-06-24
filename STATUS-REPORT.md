@@ -142,20 +142,23 @@ calculation:
   `cocone-A-join-BC-associative-cocone-data` are proved equivalences by
   identifying their normal-form components with the raw-factor equivalences.
   The cross-comparison triangles against the opposite grouping also check. The
-  remaining associator blocker is the same-side inverse/coherence triangle
-  showing that the maps back into `associative-cocone-data` are equivalences;
-  a direct probe of the `A * (B * C)` side reduces to a nontrivial dependent
-  coherence family over `B * C`, not merely to the ordinary cogap retraction.
-  The current pivot away from that same-side triangle has added checked
-  inverse-direction equivalence lemmas for the standard join `cocone-map` and
-  `dependent-cocone-map`, a checked inverse equivalence for the A-BC raw
-  normal-form/data isomorphism, and a checked forward raw extraction map
-  `cocone-A-join-BC-raw-normal-form-cocone-A-join-BC`. This extraction factors
-  through a reusable naturality-based map from functions `A' * B' -> X` to raw
-  constant-cogap data for `cocone-map`. The next structural subgoal is to prove
-  this fiber map is an equivalence, preferably by comparing it with the
-  dependent-cocone-map equivalence while keeping the `cocone-map` projections
-  and `inl-join`/`inr-join` endpoints definitionally aligned.
+  former same-side inverse blocker on the `A * (B * C)` side has now been
+  bypassed structurally: the file proves the raw/structured fiber comparison
+  for `constant-cogap-join-data` over a `cocone-map`, proves the direct
+  naturality-based function-to-raw map is an equivalence by comparison with
+  `dependent-cocone-map`, proves
+  `cocone-A-join-BC-raw-normal-form-cocone-A-join-BC` is an equivalence,
+  proves `associative-cocone-data-cocone-A-join-BC` is an equivalence through
+  the raw normal form, and instantiates this to prove
+  `is-equiv-cocone-AB-join-C-cocone-A-join-BC`. It also adds the generic
+  checked postcomposition homotopy
+  `htpy-cogap-join-cocone-map`. The remaining associator target is no longer
+  the raw fiber equivalence; it is the cocone-map/postcomposition triangle
+  identifying the standard join cocone-map for `A * (B * C)`, followed by
+  `cocone-AB-join-C-cocone-A-join-BC`, with the cocone-map of
+  `cocone-associative-join`. That triangle should package the checked cocone
+  comparison equivalence into the universal-property proof for the associator
+  cocone, and hence into `is-equiv map-associative-join`.
 - The low-dimensional sphere-connectivity facts needed for the lower Hopf
   segment have been formalized: `S³` is 2-connected, and therefore the first
   two concrete homotopy groups of `S³` are trivial.

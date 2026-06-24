@@ -1039,6 +1039,18 @@ module _
       ( is-section-cogap pr1 pr2)
       ( is-retraction-cogap pr1 pr2)
 
+  is-equiv-cocone-map-standard-join :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'} →
+    (X : UU l4) →
+    is-equiv
+      ( cocone-map pr1 pr2 {Y = X}
+        ( cocone-join {A = A'} {B = B'}))
+  is-equiv-cocone-map-standard-join X =
+    is-equiv-is-invertible
+      ( cogap-join X)
+      ( is-section-cogap pr1 pr2)
+      ( is-retraction-cogap pr1 pr2)
+
   is-equiv-dependent-cogap-join-BC :
     {l4 : Level} {P : B * C → UU l4} →
     is-equiv (dependent-cogap-join {A = B} {B = C} {P = P})
@@ -1053,6 +1065,18 @@ module _
     is-equiv
       ( dependent-cocone-map pr1 pr2 (cocone-join {A = B} {B = C}) P)
   is-equiv-dependent-cocone-map-join-BC {P = P} =
+    is-equiv-is-invertible
+      ( dependent-cogap-join)
+      ( is-section-dependent-cogap pr1 pr2)
+      ( is-retraction-dependent-cogap pr1 pr2)
+
+  is-equiv-dependent-cocone-map-standard-join :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {P : A' * B' → UU l4} →
+    is-equiv
+      ( dependent-cocone-map pr1 pr2
+        ( cocone-join {A = A'} {B = B'}) P)
+  is-equiv-dependent-cocone-map-standard-join =
     is-equiv-is-invertible
       ( dependent-cogap-join)
       ( is-section-dependent-cogap pr1 pr2)
@@ -1105,6 +1129,48 @@ module _
         ( compute-inl-cogap-join d)
         ( compute-inr-cogap-join d)
     compute-glue-F = compute-glue-cogap-join d
+
+  htpy-cogap-join-cocone-map :
+    {l1' l2' l4 l5 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4} {Y : UU l5}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (h : X → Y) →
+    cogap-join Y (cocone-map pr1 pr2 d h) ~ h ∘ cogap-join X d
+  htpy-cogap-join-cocone-map {A' = A'} {B' = B'} {X = X} {Y = Y} d h =
+    htpy-eq
+      ( map-inv-is-equiv
+        ( is-emb-is-equiv
+          ( is-equiv-cocone-map-standard-join Y)
+          ( cogap-join Y (cocone-map pr1 pr2 d h))
+          ( h ∘ cogap-join X d))
+        ( eq-cocone-maps))
+    where
+    eq-cocone-map-left :
+      cocone-map pr1 pr2 (cocone-join {A = A'} {B = B'})
+        ( cogap-join Y (cocone-map pr1 pr2 d h)) ＝
+      cocone-map pr1 pr2 d h
+    eq-cocone-map-left =
+      is-section-cogap pr1 pr2 (cocone-map pr1 pr2 d h)
+
+    eq-cocone-map-right :
+      cocone-map pr1 pr2 (cocone-join {A = A'} {B = B'})
+        ( h ∘ cogap-join X d) ＝
+      cocone-map pr1 pr2 d h
+    eq-cocone-map-right =
+      cocone-map-comp pr1 pr2
+        ( cocone-join {A = A'} {B = B'})
+        ( cogap-join X d)
+        ( h) ∙
+      ap (λ e → cocone-map pr1 pr2 e h)
+        ( is-section-cogap pr1 pr2 d)
+
+    eq-cocone-maps :
+      cocone-map pr1 pr2 (cocone-join {A = A'} {B = B'})
+        ( cogap-join Y (cocone-map pr1 pr2 d h)) ＝
+      cocone-map pr1 pr2 (cocone-join {A = A'} {B = B'})
+        ( h ∘ cogap-join X d)
+    eq-cocone-maps =
+      eq-cocone-map-left ∙ inv eq-cocone-map-right
 
   cogap-join-constant-data :
     {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
@@ -1761,6 +1827,300 @@ module _
         by left-unit
     where
     p = glue-join {A = A'} {B = B'} (a , b)
+
+  coherence-constant-cogap-join-data-dependent-cocone-cocone-map :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (j : A' * B' → X) (z : X)
+    (H : (a : A') → z ＝ j (inl-join a))
+    (L : (b : B') → z ＝ j (inr-join b)) →
+    (a : A') (b : B') →
+    dependent-identification
+      ( λ x → z ＝ j x)
+      ( glue-join (a , b))
+      ( H a)
+      ( L b) →
+    H a ∙ ap j (glue-join (a , b)) ＝ L b
+  coherence-constant-cogap-join-data-dependent-cocone-cocone-map
+    j z H L a b M =
+    inv coh-M ∙
+    ( ap (λ q → q ∙ L b) (ap-const z p) ∙
+      left-unit)
+    where
+    p = glue-join (a , b)
+
+    coh-M :
+      ap (λ _ → z) p ∙ L b ＝ H a ∙ ap j p
+    coh-M =
+      map-inv-compute-dependent-identification-eq-value-function
+        ( λ _ → z)
+        ( j)
+        ( p)
+        ( H a)
+        ( L b)
+        ( M)
+
+  is-equiv-coherence-constant-cogap-join-data-dependent-cocone-cocone-map :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (j : A' * B' → X) (z : X)
+    (H : (a : A') → z ＝ j (inl-join a))
+    (L : (b : B') → z ＝ j (inr-join b))
+    (a : A') (b : B') →
+    is-equiv
+      ( coherence-constant-cogap-join-data-dependent-cocone-cocone-map
+        j z H L a b)
+  is-equiv-coherence-constant-cogap-join-data-dependent-cocone-cocone-map
+    j z H L a b =
+    is-equiv-comp
+      ( concat' (H a ∙ ap j p) simplify-left)
+      ( inv ∘
+        map-inv-compute-dependent-identification-eq-value-function
+          ( λ _ → z)
+          ( j)
+          ( p)
+          ( H a)
+          ( L b))
+      ( is-equiv-comp
+        ( inv)
+        ( map-inv-compute-dependent-identification-eq-value-function
+          ( λ _ → z)
+          ( j)
+          ( p)
+          ( H a)
+          ( L b))
+        ( is-equiv-map-inv-equiv
+          ( compute-dependent-identification-eq-value-function
+            ( λ _ → z)
+            ( j)
+            ( p)
+            ( H a)
+            ( L b)))
+        ( is-equiv-inv
+          ( ap (λ _ → z) p ∙ L b)
+          ( H a ∙ ap j p)))
+      ( is-equiv-concat' (H a ∙ ap j p) simplify-left)
+    where
+    p = glue-join (a , b)
+
+    simplify-left : ap (λ _ → z) p ∙ L b ＝ L b
+    simplify-left =
+      ap (λ q → q ∙ L b) (ap-const z p) ∙
+      left-unit
+
+  constant-cogap-join-data-dependent-cocone-cocone-map :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (j : A' * B' → X) (z : X) →
+    dependent-cocone pr1 pr2 (cocone-join {A = A'} {B = B'})
+      ( λ x → z ＝ j x) →
+    constant-cogap-join-data
+      ( cocone-map
+        { S = A' × B'}
+        { A = A'}
+        { B = B'}
+        pr1 pr2
+        { X = A' * B'}
+        { Y = X}
+        ( cocone-join {A = A'} {B = B'}) j)
+      ( z)
+  pr1 (constant-cogap-join-data-dependent-cocone-cocone-map j z E) =
+    pr1 E
+  pr1 (pr2 (constant-cogap-join-data-dependent-cocone-cocone-map j z E)) =
+    pr1 (pr2 E)
+  pr2
+    ( pr2 (constant-cogap-join-data-dependent-cocone-cocone-map j z E))
+    a b =
+    coherence-constant-cogap-join-data-dependent-cocone-cocone-map
+      j z
+      ( pr1 E)
+      ( pr1 (pr2 E))
+      ( a)
+      ( b)
+      ( pr2 (pr2 E) (a , b))
+
+  is-equiv-constant-cogap-join-data-dependent-cocone-cocone-map :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (j : A' * B' → X) (z : X) →
+    is-equiv (constant-cogap-join-data-dependent-cocone-cocone-map j z)
+  is-equiv-constant-cogap-join-data-dependent-cocone-cocone-map
+    { A' = A'}
+    { B' = B'}
+    j z =
+    is-equiv-map-Σ D is-equiv-id is-equiv-g
+    where
+    D :
+      ((a : A') → z ＝ j (inl-join a)) →
+      UU _
+    D H =
+      Σ ( (b : B') → z ＝ j (inr-join b))
+        ( λ L →
+          (a : A') (b : B') →
+          H a ∙ ap j (glue-join (a , b)) ＝ L b)
+
+    E :
+      ((a : A') → z ＝ j (inl-join a)) →
+      ((b : B') → z ＝ j (inr-join b)) →
+      UU _
+    E H L =
+      (t : A' × B') →
+      dependent-identification
+        ( λ x → z ＝ j x)
+        ( glue-join t)
+        ( H (pr1 t))
+        ( L (pr2 t))
+
+    coherence-map :
+      (H : (a : A') → z ＝ j (inl-join a))
+      (L : (b : B') → z ＝ j (inr-join b)) →
+      E H L →
+      (a : A') (b : B') →
+      H a ∙ ap j (glue-join (a , b)) ＝ L b
+    coherence-map H L M a b =
+      coherence-constant-cogap-join-data-dependent-cocone-cocone-map
+        j z H L a b (M (a , b))
+
+    is-equiv-coherence-map :
+      (H : (a : A') → z ＝ j (inl-join a))
+      (L : (b : B') → z ＝ j (inr-join b)) →
+      is-equiv (coherence-map H L)
+    is-equiv-coherence-map H L =
+      is-equiv-comp
+        ( λ M a b →
+          coherence-constant-cogap-join-data-dependent-cocone-cocone-map
+            j z H L a b (M a b))
+        ( map-equiv equiv-ev-pair)
+        ( is-equiv-map-equiv equiv-ev-pair)
+        ( is-equiv-map-Π-is-fiberwise-equiv
+          ( λ a →
+            is-equiv-map-Π-is-fiberwise-equiv
+              ( λ b →
+                is-equiv-coherence-constant-cogap-join-data-dependent-cocone-cocone-map
+                  j z H L a b)))
+
+    g :
+      (H : (a : A') → z ＝ j (inl-join a)) →
+      Σ ( (b : B') → z ＝ j (inr-join b))
+        ( λ L → E H L) →
+      D H
+    pr1 (g H (L , M)) = L
+    pr2 (g H (L , M)) = coherence-map H L M
+
+    is-equiv-g :
+      (H : (a : A') → z ＝ j (inl-join a)) →
+      is-equiv (g H)
+    is-equiv-g H =
+      is-equiv-map-Σ (λ L → (a : A') (b : B') →
+        H a ∙ ap j (glue-join (a , b)) ＝ L b)
+        ( is-equiv-id)
+        ( is-equiv-coherence-map H)
+
+  constant-cogap-join-data-dependent-cocone-map-dependent-function :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (j : A' * B' → X) (z : X) →
+    ((x : A' * B') → z ＝ j x) →
+    constant-cogap-join-data
+      ( cocone-map
+        { S = A' × B'}
+        { A = A'}
+        { B = B'}
+        pr1 pr2
+        { X = A' * B'}
+        { Y = X}
+        ( cocone-join {A = A'} {B = B'}) j)
+      ( z)
+  constant-cogap-join-data-dependent-cocone-map-dependent-function
+    { A' = A'}
+    { B' = B'}
+    j z H =
+    constant-cogap-join-data-dependent-cocone-cocone-map j z
+      ( dependent-cocone-map pr1 pr2
+        ( cocone-join {A = A'} {B = B'})
+        ( λ x → z ＝ j x)
+        ( H))
+
+  is-equiv-constant-cogap-join-data-dependent-cocone-map-dependent-function :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (j : A' * B' → X) (z : X) →
+    is-equiv
+      ( constant-cogap-join-data-dependent-cocone-map-dependent-function
+        j z)
+  is-equiv-constant-cogap-join-data-dependent-cocone-map-dependent-function
+    { A' = A'}
+    { B' = B'}
+    j z =
+    is-equiv-comp
+      ( constant-cogap-join-data-dependent-cocone-cocone-map j z)
+      ( dependent-cocone-map pr1 pr2
+        ( cocone-join {A = A'} {B = B'})
+        ( λ x → z ＝ j x))
+      ( is-equiv-dependent-cocone-map-standard-join)
+      ( is-equiv-constant-cogap-join-data-dependent-cocone-cocone-map j z)
+
+  htpy-constant-cogap-join-data-dependent-cocone-map-dependent-function :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (j : A' * B' → X) (z : X) →
+    constant-cogap-join-data-dependent-cocone-map-dependent-function j z ~
+    constant-cogap-join-data-cocone-map-dependent-function j z
+  htpy-constant-cogap-join-data-dependent-cocone-map-dependent-function
+    { A' = A'}
+    { B' = B'}
+    j z H =
+    eq-pair-eq-fiber
+      ( eq-pair-eq-fiber
+        ( eq-htpy
+          ( λ a →
+            eq-htpy
+              ( λ b →
+                inv
+                  ( assoc
+                    ( inv (coh {a} {b}))
+                    ( simplify-left a b)
+                    ( left-unit)) ∙
+                ap
+                  ( λ q →
+                    ( inv q ∙ simplify-left a b) ∙ left-unit)
+                  ( nat-htpy-apd-htpy (λ _ → z) j H (p a b))))))
+    where
+    p : (a : A') (b : B') → inl-join a ＝ inr-join b
+    p a b = glue-join (a , b)
+
+    simplify-left :
+      (a : A') (b : B') →
+      ap (λ _ → z) (p a b) ∙ H (inr-join b) ＝
+      refl ∙ H (inr-join b)
+    simplify-left a b =
+      ap (λ r → r ∙ H (inr-join b)) (ap-const z (p a b))
+
+    coh :
+      {a : A'} {b : B'} →
+      ap (λ _ → z) (p a b) ∙ H (inr-join b) ＝
+      H (inl-join a) ∙ ap j (p a b)
+    coh {a} {b} =
+      map-inv-compute-dependent-identification-eq-value-function
+        ( λ _ → z)
+        ( j)
+        ( p a b)
+        ( H (inl-join a))
+        ( H (inr-join b))
+        ( apd H (p a b))
+
+  is-equiv-constant-cogap-join-data-cocone-map-dependent-function :
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (j : A' * B' → X) (z : X) →
+    is-equiv (constant-cogap-join-data-cocone-map-dependent-function j z)
+  is-equiv-constant-cogap-join-data-cocone-map-dependent-function j z =
+    is-equiv-htpy'
+      ( constant-cogap-join-data-dependent-cocone-map-dependent-function j z)
+      ( htpy-constant-cogap-join-data-dependent-cocone-map-dependent-function
+        j z)
+      ( is-equiv-constant-cogap-join-data-dependent-cocone-map-dependent-function
+        j z)
 
   coherence-square-constant-cogap-join-data :
     {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
@@ -2851,6 +3211,52 @@ module _
       ( horizontal-map-cocone pr1 pr2 d a)
       ( λ y → coherence-square-cocone pr1 pr2 d (a , y))
 
+  is-equiv-cocone-A-join-BC-raw-normal-form-cocone-A-join-BC-fiber :
+    {l4 : Level} {X : UU l4}
+    (i : A → X) (j : B * C → X) →
+    is-equiv
+      ( λ (H : (t : A × (B * C)) → i (pr1 t) ＝ j (pr2 t)) a →
+        constant-cogap-join-data-cocone-map-dependent-function
+          ( j)
+          ( i a)
+          ( λ y → H (a , y)))
+  is-equiv-cocone-A-join-BC-raw-normal-form-cocone-A-join-BC-fiber
+    i j =
+    is-equiv-comp
+      ( λ H a →
+        constant-cogap-join-data-cocone-map-dependent-function
+          ( j)
+          ( i a)
+          ( H a))
+      ( map-equiv equiv-ev-pair)
+      ( is-equiv-map-equiv equiv-ev-pair)
+      ( is-equiv-map-Π-is-fiberwise-equiv
+        ( λ a →
+          is-equiv-constant-cogap-join-data-cocone-map-dependent-function
+            ( j)
+            ( i a)))
+
+  is-equiv-cocone-A-join-BC-raw-normal-form-cocone-A-join-BC :
+    {l4 : Level} {X : UU l4} →
+    is-equiv
+      ( cocone-A-join-BC-raw-normal-form-cocone-A-join-BC
+        { X = X})
+  is-equiv-cocone-A-join-BC-raw-normal-form-cocone-A-join-BC =
+    is-equiv-map-Σ
+      ( λ i →
+        Σ ( cocone {S = B × C} {A = B} {B = C} pr1 pr2 _)
+          ( λ d →
+            (a : A) → constant-cogap-join-data d (i a)))
+      ( is-equiv-id)
+      ( λ i →
+        is-equiv-map-Σ
+          ( λ d →
+            (a : A) → constant-cogap-join-data d (i a))
+          ( is-equiv-cocone-map-join-BC _)
+          ( λ j →
+            is-equiv-cocone-A-join-BC-raw-normal-form-cocone-A-join-BC-fiber
+              i j))
+
   cocone-A-join-BC-raw-normal-form-associative-cocone-data :
     {l4 : Level} {X : UU l4} →
     associative-cocone-data X → cocone-A-join-BC-raw-normal-form X
@@ -3309,6 +3715,20 @@ module _
 
     H = coherence-square-cocone pr1 pr2 d
 
+  is-equiv-associative-cocone-data-cocone-A-join-BC :
+    {l4 : Level} {X : UU l4} →
+    is-equiv (associative-cocone-data-cocone-A-join-BC {X = X})
+  is-equiv-associative-cocone-data-cocone-A-join-BC =
+    is-equiv-htpy
+      ( associative-cocone-data-cocone-A-join-BC-raw-normal-form ∘
+        cocone-A-join-BC-raw-normal-form-cocone-A-join-BC)
+      ( refl-htpy)
+      ( is-equiv-comp
+        ( associative-cocone-data-cocone-A-join-BC-raw-normal-form)
+        ( cocone-A-join-BC-raw-normal-form-cocone-A-join-BC)
+        ( is-equiv-cocone-A-join-BC-raw-normal-form-cocone-A-join-BC)
+        ( is-equiv-associative-cocone-data-cocone-A-join-BC-raw-normal-form))
+
   cocone-A-join-BC-normal-form-associative-cocone-data :
     {l4 : Level} {X : UU l4} →
     associative-cocone-data X → cocone-A-join-BC-normal-form X
@@ -3613,6 +4033,14 @@ module _
         ( associative-cocone-data-cocone-A-join-BC)
         ( is-equiv-data)
         ( is-equiv-cocone))
+
+  is-equiv-cocone-AB-join-C-cocone-A-join-BC :
+    {l4 : Level} {X : UU l4} →
+    is-equiv (cocone-AB-join-C-cocone-A-join-BC {X = X})
+  is-equiv-cocone-AB-join-C-cocone-A-join-BC =
+    is-equiv-cocone-AB-join-C-cocone-A-join-BC-is-equiv-associative-cocone-data
+      ( is-equiv-associative-cocone-data-cocone-A-join-BC)
+      ( is-equiv-cocone-AB-join-C-associative-cocone-data)
 
   is-equiv-cocone-A-join-BC-cocone-AB-join-C-is-equiv-associative-cocone-data :
     {l4 : Level} {X : UU l4} →
