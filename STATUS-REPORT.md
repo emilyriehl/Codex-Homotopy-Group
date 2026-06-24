@@ -167,14 +167,19 @@ calculation:
   cocone-to-triple-data extraction map for cocones over `A` and `B * C`. This
   shifts the next associator work toward packaging the symmetric triple-join
   recursion principle rather than filling the old stripped raw-tail boundary
-  directly. The current associator-naturalness layer now also has a checked
-  computable postcomposition homotopy for join cogap maps, a reusable stripping
-  lemma for the fixed whiskers in
-  `coherence-square-cogap-join-constant-data`, and left-oriented endpoint
-  reductions for the remaining associator cocone square. The unresolved
-  associator blocker is now isolated to the higher glue compatibility over
-  `glue-join (a , b)`, equivalently the raw square comparison left after the
-  fixed cogap-square whiskers are stripped.
+  directly. The file now also packages the map-out normal form
+  `(A * (B * C) -> X) ≃ tri-join-rec-data A B C X`, exposes the corresponding
+  triple-join recursor and its section/retraction laws, constructs the swapped
+  canonical triple-join data for `B * (A * C)`, and defines the forward
+  Rocq-style twist map `A * (B * C) -> B * (A * C)`. The data-level double
+  twist has been reduced to one explicit transport computation along the
+  pointwise `inv-inv` proof for the `path-12` field. Proving that transport
+  computation should package the twist on triple-join recursion data as
+  self-inverse; after that the plan is to obtain the twist equivalence by
+  representability and compose symmetry/twist/symmetry for join associativity.
+  The earlier associator-naturalness layer remains checked context, but the
+  active route is the Rocq-style recursion-data route, not the old stripped
+  raw-tail cocone square.
 - The low-dimensional sphere-connectivity facts needed for the lower Hopf
   segment have been formalized: `S³` is 2-connected, and therefore the first
   two concrete homotopy groups of `S³` are trivial.
@@ -365,7 +370,7 @@ Hopf fiber sequence itself and the Freudenthal/stability comparison.
 
 The arbitrary-index LES bridge is complete. The circle/1-sphere H-space input and translation equivalences are checked in `src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md`. The generic Hopf map is checked in `src/synthetic-homotopy-theory/hopf-construction.lagda.md`, the sphere-1 specialization is checked in `src/synthetic-homotopy-theory/hopf-construction-circle.lagda.md`, the canonical Hopf-construction source sequence is checked in `src/synthetic-homotopy-theory/hopf-construction-fiber-sequence.lagda.md`, and the Hopf family over `S²` is checked in `src/synthetic-homotopy-theory/hopf-family-circle.lagda.md`, including the pointed fiber sequence given by projecting its total space to `S²`, the flattening-lemma pushout for its actual total space, the proof that `S¹ * S¹` is a pushout of the explicit flattened Hopf-family descent span, the completed two-leg comparison between those flattened spans, the canonical equivalence `total-space-hopf-family-sphere-1 ≃ S¹ * S¹`, and the composed comparison of the Hopf-family total space with `join-power 2 (Fin 2) * join-power 2 (Fin 2)`.
 
-The next upstream-shaped target is to turn the checked pointed Hopf map `S¹ * S¹ ->* S²` into the packaged Hopf fiber sequence. The structural route now has one main total-space comparison target: prove the checked join associator map `((A * B) * C) -> A * (B * C)` is an equivalence, using either the checked inverse-direction map or a universal-property proof. The inverse-homotopy route now reduces this to two ordinary dependent-function coherence squares; in the Hopf-facing `join-power 2 A * join-power 2 A -> join-power 4 A` comparison, the second associator instance has middle factor `raise-empty`, so its square coherences are vacuous. The checked lemma in `spheres-as-join-powers` therefore turns the two ordinary square coherences for the first associator instance into the equivalence of `join-power 2 (Fin 2) * join-power 2 (Fin 2) -> join-power 4 (Fin 2)`. After that, compose with the checked `S¹ * S¹` and `join-power 4 (Fin 2) ≃ S³` comparisons, transport the Hopf map across the `S³` comparison as needed, and fill `src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md` with the actual pointed maps and fiber-sequence proof.
+The next upstream-shaped target is to turn the checked pointed Hopf map `S¹ * S¹ ->* S²` into the packaged Hopf fiber sequence. The structural route now has one main total-space comparison target: prove the join associator equivalence. The active plan is the Rocq HoTT triple-join route, not the older direct inverse-homotopy route. Start by finishing the data-level theorem that `twist-tri-join-rec-data` is self-inverse: the remaining checked subgoal has been reduced to computing transport along the global `eq-htpy` proof in `path-12-twist-twist-tri-join-rec-data` and then applying the path-algebra lemma `coherence-twist-twist-identification`. Once that is proved, package the twist on triple-join recursion data as an equivalence, use the checked representability equivalence `(A * (B * C) -> X) ≃ tri-join-rec-data A B C X` and its swapped instance to obtain the twist equivalence `A * (B * C) ≃ B * (A * C)`, and then compose join commutativity with this twist equivalence to recover the associator. After that, compose with the checked `S¹ * S¹` and `join-power 4 (Fin 2) ≃ S³` comparisons, transport the Hopf map across the `S³` comparison as needed, and fill `src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md` with the actual pointed maps and fiber-sequence proof.
 
 Expected verification for this next step should start with:
 
@@ -1782,6 +1787,40 @@ associative-cocone-data X
 and packages them as `equiv-associative-cocone-data-tri-join-rec-data`. This
 lets later work use the readable record interface from the Rocq HoTT proof
 while reusing the already-checked equivalences for the Sigma normal form.
+
+The checked commands were:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate|lossy-unification" src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+```
+
+The Agda check passed. `git diff --check` passed. The touched-file scan found
+no holes, postulates, unsolved-meta pragmas, or temporary lossy-unification
+pragmas.
+
+Later on 2026-06-24, the Rocq-style route was pushed from record packaging to
+representability and the first concrete twist map. The file now packages the
+map-out normal form
+
+```text
+(A * (B * C) -> X) ≃ tri-join-rec-data A B C X
+```
+
+and exposes the inverse recursor `rec-tri-join` with its checked section and
+retraction laws. It also defines the swapped canonical triple-join recursion
+data for `B * (A * C)`, constructs the forward twist map
+
+```text
+map-twist-tri-join : A * (B * C) -> B * (A * C)
+```
+
+and proves its triple-recursion-data computation rule. The same pass added the
+path-algebra and dependent-function transport scaffolding needed for the
+data-level theorem `twist (twist d) = d`; this theorem is reduced to the
+remaining pointwise transport computation along the `eq-htpy` proof for the
+`path-12` field.
 
 The checked commands were:
 

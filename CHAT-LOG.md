@@ -4438,3 +4438,56 @@ pragmas.
 Related commit:
 
 - This commit - Narrow associator naturality to stripped raw square.
+
+### Package Rocq-style join twist through representable recursion data
+
+Request: Emily asked Codex to make a plan following the new Rocq HoTT
+`JoinAssoc.v` approach, get to work, and avoid returning to the old direct
+route until the new approach had been fully explored.
+
+Model context:
+
+- Date: 2026-06-24.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible and used during proof development. The final
+  acceptance gate remained `./check.sh`.
+
+Actions:
+
+- Followed the Rocq-style plan: triple-join recursion data first, data-level
+  twist, representability/Yoneda-style map-out equivalence, and then the
+  intended symmetry/twist/symmetry associator.
+- Added pure path algebra for the double-twist identification and reusable
+  dependent-function transport helpers.
+- Added fieldwise double-twist infrastructure for `tri-join-rec-data`,
+  reducing `twist-tri-join-rec-data (twist-tri-join-rec-data d) = d` to one
+  explicit pointwise transport computation.
+- Packaged the map-out normal form
+  `(A * (B * C) -> X) ≃ tri-join-rec-data A B C X` and exposed the inverse
+  recursor `rec-tri-join` with section and retraction laws.
+- Defined the swapped canonical triple-join recursion data for
+  `B * (A * C)`.
+- Constructed the forward Rocq-style twist map
+  `map-twist-tri-join : A * (B * C) -> B * (A * C)` and proved its
+  triple-recursion-data computation rule.
+- Updated `STATUS-REPORT.md` to make the active next blocker the Rocq-style
+  double-twist transport computation, while retaining the older cocone-square
+  route only as checked context.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate|lossy-unification" src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+```
+
+The Agda check passed. `git diff --check` passed. The touched-file scan found
+no holes, postulates, unsolved-meta pragmas, or temporary lossy-unification
+pragmas.
+
+Related commit:
+
+- This commit - Package Rocq-style triple join twist.
