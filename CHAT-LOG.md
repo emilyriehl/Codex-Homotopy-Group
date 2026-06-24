@@ -4349,3 +4349,44 @@ pragmas.
 Related commit:
 
 - This commit - Isolate structural associator cocone naturality.
+
+### Bridge triple-join record data to the checked Sigma normal form
+
+Request: Continuing the same Rocq-guided associator push, Codex looked for a
+checked step that materially supports the twist/Yoneda route without reopening
+the higher cocone coherence hole.
+
+Model context:
+
+- Date: 2026-06-24.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible, but `./check.sh` remained the final acceptance
+  gate.
+
+Actions:
+
+- Added conversions between `tri-join-rec-data A B C X` and the existing
+  nested-Sigma `associative-cocone-data X`.
+- Proved the conversions are mutually inverse by definitional equality.
+- Packaged the result as
+  `equiv-associative-cocone-data-tri-join-rec-data`, making the readable
+  Rocq-style record interface interchangeable with the already-checked normal
+  form equivalences.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate|lossy-unification" src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+```
+
+The Agda check passed. `git diff --check` passed. The touched-file scan found
+no holes, postulates, unsolved-meta pragmas, or temporary lossy-unification
+pragmas.
+
+Related commit:
+
+- This commit - Bridge triple join record data to normal form.

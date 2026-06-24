@@ -1758,3 +1758,32 @@ rg -n "\{!!\}|allow-unsolved-metas|postulate|lossy-unification" src/synthetic-ho
 The Agda check passed. `git diff --check` passed. The touched-file scan found
 no holes, postulates, unsolved-meta pragmas, or temporary lossy-unification
 pragmas.
+
+The same day, the Rocq-style record layer was connected to the existing
+checked triple normal form. The file now defines mutually inverse maps between
+
+```text
+tri-join-rec-data A B C X
+```
+
+and
+
+```text
+associative-cocone-data X
+```
+
+and packages them as `equiv-associative-cocone-data-tri-join-rec-data`. This
+lets later work use the readable record interface from the Rocq HoTT proof
+while reusing the already-checked equivalences for the Sigma normal form.
+
+The checked commands were:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate|lossy-unification" src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+```
+
+The Agda check passed. `git diff --check` passed. The touched-file scan found
+no holes, postulates, unsolved-meta pragmas, or temporary lossy-unification
+pragmas.

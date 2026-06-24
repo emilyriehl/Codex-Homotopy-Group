@@ -3230,6 +3230,56 @@ module _
                             (a : A) (b : B) (c : C) →
                             (H a b ∙ K b c) ＝ L a c))))))
 
+  associative-cocone-data-tri-join-rec-data :
+    {l4 : Level} {X : UU l4} →
+    tri-join-rec-data A B C X → associative-cocone-data X
+  associative-cocone-data-tri-join-rec-data d =
+    ( point-1-tri-join-rec-data d ,
+      point-2-tri-join-rec-data d ,
+      point-3-tri-join-rec-data d ,
+      path-12-tri-join-rec-data d ,
+      path-23-tri-join-rec-data d ,
+      path-13-tri-join-rec-data d ,
+      coherence-triangle-tri-join-rec-data d)
+
+  tri-join-rec-data-associative-cocone-data :
+    {l4 : Level} {X : UU l4} →
+    associative-cocone-data X → tri-join-rec-data A B C X
+  tri-join-rec-data-associative-cocone-data (i , j , k , H , K , L , M) =
+    make-tri-join-rec-data i j k H L K M
+
+  is-section-associative-cocone-data-tri-join-rec-data :
+    {l4 : Level} {X : UU l4} →
+    associative-cocone-data-tri-join-rec-data ∘
+    tri-join-rec-data-associative-cocone-data {X = X} ~ id
+  is-section-associative-cocone-data-tri-join-rec-data
+    ( i , j , k , H , K , L , M) =
+    refl
+
+  is-retraction-associative-cocone-data-tri-join-rec-data :
+    {l4 : Level} {X : UU l4} →
+    tri-join-rec-data-associative-cocone-data ∘
+    associative-cocone-data-tri-join-rec-data {X = X} ~ id
+  is-retraction-associative-cocone-data-tri-join-rec-data d =
+    refl
+
+  is-equiv-associative-cocone-data-tri-join-rec-data :
+    {l4 : Level} {X : UU l4} →
+    is-equiv (associative-cocone-data-tri-join-rec-data {X = X})
+  is-equiv-associative-cocone-data-tri-join-rec-data =
+    is-equiv-is-invertible
+      ( tri-join-rec-data-associative-cocone-data)
+      ( is-section-associative-cocone-data-tri-join-rec-data)
+      ( is-retraction-associative-cocone-data-tri-join-rec-data)
+
+  equiv-associative-cocone-data-tri-join-rec-data :
+    {l4 : Level} {X : UU l4} →
+    tri-join-rec-data A B C X ≃ associative-cocone-data X
+  pr1 equiv-associative-cocone-data-tri-join-rec-data =
+    associative-cocone-data-tri-join-rec-data
+  pr2 equiv-associative-cocone-data-tri-join-rec-data =
+    is-equiv-associative-cocone-data-tri-join-rec-data
+
   cocone-AB-join-C-raw-normal-form :
     {l4 : Level} → UU l4 → UU (l1 ⊔ l2 ⊔ l3 ⊔ l4)
   cocone-AB-join-C-raw-normal-form X =
