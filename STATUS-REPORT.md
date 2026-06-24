@@ -167,7 +167,14 @@ calculation:
   cocone-to-triple-data extraction map for cocones over `A` and `B * C`. This
   shifts the next associator work toward packaging the symmetric triple-join
   recursion principle rather than filling the old stripped raw-tail boundary
-  directly.
+  directly. The current associator-naturalness layer now also has a checked
+  computable postcomposition homotopy for join cogap maps, a reusable stripping
+  lemma for the fixed whiskers in
+  `coherence-square-cogap-join-constant-data`, and left-oriented endpoint
+  reductions for the remaining associator cocone square. The unresolved
+  associator blocker is now isolated to the higher glue compatibility over
+  `glue-join (a , b)`, equivalently the raw square comparison left after the
+  fixed cogap-square whiskers are stripped.
 - The low-dimensional sphere-connectivity facts needed for the lower Hopf
   segment have been formalized: `S³` is 2-connected, and therefore the first
   two concrete homotopy groups of `S³` are trivial.

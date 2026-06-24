@@ -77,6 +77,18 @@ naturality-constant-homotopy {x = x} H p =
   ap (_∙ H _) (ap-const x p) ∙
   left-unit
 
+postcompose-naturality-constant-homotopy :
+  {l1 l2 l3 : Level} {A : UU l1} {B : UU l2} {C : UU l3}
+  {x : B} {j : A → B} (h : B → C) (H : (a : A) → x ＝ j a)
+  {a a' : A} (p : a ＝ a') →
+  naturality-constant-homotopy (λ y → ap h (H y)) p ＝
+  ap (ap h (H a) ∙_) (ap-comp h j p) ∙
+  inv (ap-concat h (H a) (ap j p)) ∙
+  ap (ap h) (naturality-constant-homotopy H p)
+postcompose-naturality-constant-homotopy {j = j} h H {a} refl
+  with H a
+... | refl = refl
+
 compute-dependent-identification-eq-value-function-naturality :
   {l1 l2 : Level} {X : UU l1} {Y : UU l2} {f g : X → Y}
   (H : f ~ g) {x y : X} (p : x ＝ y) →
@@ -1262,6 +1274,149 @@ module _
         ( compute-inr-cogap-join d)
     compute-glue-F = compute-glue-cogap-join d
 
+  path-inl-htpy-cogap-join-cocone-map :
+    {l1' l2' l4 l5 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4} {Y : UU l5}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (h : X → Y) (a : A') →
+    cogap-join Y (cocone-map pr1 pr2 d h) (inl-join a) ＝
+    h (cogap-join X d (inl-join a))
+  path-inl-htpy-cogap-join-cocone-map d h a =
+    compute-inl-cogap-join (cocone-map pr1 pr2 d h) a ∙
+    inv (ap h (compute-inl-cogap-join d a))
+
+  path-inr-htpy-cogap-join-cocone-map :
+    {l1' l2' l4 l5 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4} {Y : UU l5}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (h : X → Y) (b : B') →
+    cogap-join Y (cocone-map pr1 pr2 d h) (inr-join b) ＝
+    h (cogap-join X d (inr-join b))
+  path-inr-htpy-cogap-join-cocone-map d h b =
+    compute-inr-cogap-join (cocone-map pr1 pr2 d h) b ∙
+    inv (ap h (compute-inr-cogap-join d b))
+
+  coherence-square-htpy-cogap-join-cocone-map :
+    {l1' l2' l4 l5 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4} {Y : UU l5}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (h : X → Y) (a : A') (b : B') →
+    coherence-square-identifications
+      ( path-inl-htpy-cogap-join-cocone-map d h a)
+      ( ap
+        ( cogap-join Y (cocone-map pr1 pr2 d h))
+        ( glue-join (a , b)))
+      ( ap (h ∘ cogap-join X d) (glue-join (a , b)))
+      ( path-inr-htpy-cogap-join-cocone-map d h b)
+  coherence-square-htpy-cogap-join-cocone-map
+    {A' = A'} {B' = B'} d h a b =
+    equational-reasoning
+      ap F' p ∙ (rinr' ∙ inv (ap h rinr))
+      ＝ (ap F' p ∙ rinr') ∙ inv (ap h rinr)
+        by inv (assoc (ap F' p) rinr' (inv (ap h rinr)))
+      ＝ (linl' ∙ ap h H) ∙ inv (ap h rinr)
+        by ap (_∙ inv (ap h rinr)) (compute-glue-F' (a , b))
+      ＝ linl' ∙ (ap h H ∙ inv (ap h rinr))
+        by assoc linl' (ap h H) (inv (ap h rinr))
+      ＝ linl' ∙ (ap h H ∙ ap h (inv rinr))
+        by ap (λ q → linl' ∙ (ap h H ∙ q)) (inv (ap-inv h rinr))
+      ＝ linl' ∙ ap h (H ∙ inv rinr)
+        by ap (linl' ∙_) (inv (ap-concat h H (inv rinr)))
+      ＝ linl' ∙ ap h (inv linl ∙ ap F p)
+        by ap (λ q → linl' ∙ ap h q) (inv right-transpose-glue-F)
+      ＝ linl' ∙ (ap h (inv linl) ∙ ap h (ap F p))
+        by ap (linl' ∙_) (ap-concat h (inv linl) (ap F p))
+      ＝ linl' ∙ (inv (ap h linl) ∙ ap h (ap F p))
+        by ap (λ q → linl' ∙ (q ∙ ap h (ap F p))) (ap-inv h linl)
+      ＝ (linl' ∙ inv (ap h linl)) ∙ ap h (ap F p)
+        by inv (assoc linl' (inv (ap h linl)) (ap h (ap F p)))
+      ＝ (linl' ∙ inv (ap h linl)) ∙ ap (h ∘ F) p
+        by ap ((linl' ∙ inv (ap h linl)) ∙_) (inv (ap-comp h F p))
+    where
+    F : A' * B' → _
+    F = cogap-join _ d
+
+    F' : A' * B' → _
+    F' = cogap-join _ (cocone-map pr1 pr2 d h)
+
+    p = glue-join (a , b)
+
+    H = coherence-square-cocone pr1 pr2 d (a , b)
+
+    linl = compute-inl-cogap-join d a
+    rinr = compute-inr-cogap-join d b
+    linl' = compute-inl-cogap-join (cocone-map pr1 pr2 d h) a
+    rinr' = compute-inr-cogap-join (cocone-map pr1 pr2 d h) b
+
+    compute-glue-F' :
+      statement-coherence-htpy-cocone pr1 pr2
+        ( cocone-map pr1 pr2 cocone-join F')
+        ( cocone-map pr1 pr2 d h)
+        ( compute-inl-cogap-join (cocone-map pr1 pr2 d h))
+        ( compute-inr-cogap-join (cocone-map pr1 pr2 d h))
+    compute-glue-F' =
+      compute-glue-cogap-join (cocone-map pr1 pr2 d h)
+
+    right-transpose-glue-F :
+      inv linl ∙ ap F p ＝ H ∙ inv rinr
+    right-transpose-glue-F =
+      right-transpose-compute-glue-cogap-join d a b
+
+  coherence-htpy-cogap-join-cocone-map :
+    {l1' l2' l4 l5 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4} {Y : UU l5}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (h : X → Y) (a : A') (b : B') →
+    dependent-identification
+      ( λ z →
+        cogap-join Y (cocone-map pr1 pr2 d h) z ＝
+        h (cogap-join X d z))
+      ( glue-join (a , b))
+      ( path-inl-htpy-cogap-join-cocone-map d h a)
+      ( path-inr-htpy-cogap-join-cocone-map d h b)
+  coherence-htpy-cogap-join-cocone-map
+    {A' = A'} {B' = B'} d h a b =
+    map-compute-dependent-identification-eq-value-function
+      ( F')
+      ( h ∘ F)
+      ( p)
+      ( path-inl-htpy-cogap-join-cocone-map d h a)
+      ( path-inr-htpy-cogap-join-cocone-map d h b)
+      ( coherence-square-htpy-cogap-join-cocone-map d h a b)
+    where
+    F : A' * B' → _
+    F = cogap-join _ d
+
+    F' : A' * B' → _
+    F' = cogap-join _ (cocone-map pr1 pr2 d h)
+
+    p = glue-join (a , b)
+
+  dependent-cocone-htpy-cogap-join-cocone-map :
+    {l1' l2' l4 l5 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4} {Y : UU l5}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (h : X → Y) →
+    dependent-cocone pr1 pr2 cocone-join
+      ( λ z →
+        cogap-join Y (cocone-map pr1 pr2 d h) z ＝
+        h (cogap-join X d z))
+  pr1 (dependent-cocone-htpy-cogap-join-cocone-map d h) =
+    path-inl-htpy-cogap-join-cocone-map d h
+  pr1 (pr2 (dependent-cocone-htpy-cogap-join-cocone-map d h)) =
+    path-inr-htpy-cogap-join-cocone-map d h
+  pr2 (pr2 (dependent-cocone-htpy-cogap-join-cocone-map d h)) (a , b) =
+    coherence-htpy-cogap-join-cocone-map d h a b
+
+  htpy-cogap-join-cocone-map-compute :
+    {l1' l2' l4 l5 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4} {Y : UU l5}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (h : X → Y) →
+    cogap-join Y (cocone-map pr1 pr2 d h) ~ h ∘ cogap-join X d
+  htpy-cogap-join-cocone-map-compute d h =
+    dependent-cogap-join (dependent-cocone-htpy-cogap-join-cocone-map d h)
+
   htpy-cogap-join-cocone-map :
     {l1' l2' l4 l5 : Level} {A' : UU l1'} {B' : UU l2'}
     {X : UU l4} {Y : UU l5}
@@ -1428,6 +1583,74 @@ module _
     Pright =
       inv right-unit ∙
       ap ((linl ∙ L a) ∙_) (inv (ap-const z p))
+
+  module _
+    {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
+    {X : UU l4}
+    (d : cocone {S = A' × B'} {A = A'} {B = B'} pr1 pr2 X)
+    (z : X)
+    (K : (b : B') → vertical-map-cocone pr1 pr2 d b ＝ z)
+    (L : (a : A') → horizontal-map-cocone pr1 pr2 d a ＝ z)
+    (a : A') (b : B')
+    (M : coherence-square-cocone pr1 pr2 d (a , b) ∙ K b ＝ L a)
+    where
+
+    private
+      F : A' * B' → _
+      F = cogap-join _ d
+
+      H = coherence-square-cocone pr1 pr2 d
+
+      p = glue-join (a , b)
+      linl = compute-inl-cogap-join d a
+      rinr = compute-inr-cogap-join d b
+      apF = ap F p
+
+      middle = linl ∙ (H (a , b) ∙ K b)
+      final = (linl ∙ L a) ∙ ap (λ _ → z) p
+      apM = ap (concat linl z) M
+
+      compute-glue-F :
+        statement-coherence-htpy-cocone pr1 pr2
+          ( cocone-map pr1 pr2 cocone-join F)
+          ( d)
+          ( compute-inl-cogap-join d)
+          ( compute-inr-cogap-join d)
+      compute-glue-F = compute-glue-cogap-join d
+
+      Pleft : apF ∙ (rinr ∙ K b) ＝ middle
+      Pleft =
+        inv (assoc apF rinr (K b)) ∙
+        ap (_∙ K b) (compute-glue-F (a , b)) ∙
+        assoc linl (H (a , b)) (K b)
+
+      Pright : linl ∙ L a ＝ final
+      Pright =
+        inv right-unit ∙
+        ap ((linl ∙ L a) ∙_) (inv (ap-const z p))
+
+    stripped-coherence-square-cogap-join-constant-data :
+      ((inv Pleft ∙
+        coherence-square-cogap-join-constant-data d z K L a b M) ∙
+        inv Pright) ＝
+      ap (concat linl z) M
+    stripped-coherence-square-cogap-join-constant-data =
+      equational-reasoning
+        (inv Pleft ∙ (Pleft ∙ (apM ∙ Pright))) ∙ inv Pright
+        ＝ ((inv Pleft ∙ Pleft) ∙ (apM ∙ Pright)) ∙ inv Pright
+          by ap (_∙ inv Pright)
+            ( inv (assoc (inv Pleft) Pleft (apM ∙ Pright)))
+        ＝ (refl ∙ (apM ∙ Pright)) ∙ inv Pright
+          by ap (λ q → (q ∙ (apM ∙ Pright)) ∙ inv Pright)
+            ( left-inv Pleft)
+        ＝ (apM ∙ Pright) ∙ inv Pright
+          by ap (_∙ inv Pright) left-unit
+        ＝ apM ∙ (Pright ∙ inv Pright)
+          by assoc apM Pright (inv Pright)
+        ＝ apM ∙ refl
+          by ap (apM ∙_) (right-inv Pright)
+        ＝ apM
+          by right-unit
 
   horizontal-first-cogap-join-constant-data :
     {l1' l2' l4 : Level} {A' : UU l1'} {B' : UU l2'}
@@ -4369,6 +4592,20 @@ module _
     dependent-cogap-join
       ( dependent-cocone-htpy-horizontal-cocone-map-associative-join h)
 
+  htpy-horizontal-cocone-map-associative-join-compute :
+    {l4 : Level} {X : UU l4} (h : A * (B * C) → X) →
+    (h ∘ map-left-associative-join) ~
+    horizontal-map-cocone pr1 pr2
+      ( cocone-AB-join-C-cocone-A-join-BC
+        ( cocone-map pr1 pr2
+          ( cocone-join {A = A} {B = B * C})
+          ( h)))
+  htpy-horizontal-cocone-map-associative-join-compute h =
+    inv-htpy
+      ( htpy-cogap-join-cocone-map-compute
+        ( cocone-left-map-associative-join)
+        ( h))
+
   htpy-vertical-cocone-map-associative-join :
     {l4 : Level} {X : UU l4} (h : A * (B * C) → X) →
     (h ∘ inr-join ∘ inr-join) ~
@@ -4378,6 +4615,169 @@ module _
           ( cocone-join {A = A} {B = B * C})
           ( h)))
   htpy-vertical-cocone-map-associative-join h = refl-htpy
+
+  target-to-source-htpy-horizontal-cocone-map-associative-join :
+    {l4 : Level} {X : UU l4} (h : A * (B * C) → X) →
+    horizontal-map-cocone pr1 pr2
+      ( cocone-AB-join-C-cocone-A-join-BC
+        ( cocone-map pr1 pr2
+          ( cocone-join {A = A} {B = B * C})
+          ( h))) ~
+    (h ∘ map-left-associative-join)
+  target-to-source-htpy-horizontal-cocone-map-associative-join h =
+    htpy-cogap-join-cocone-map-compute
+      ( cocone-left-map-associative-join)
+      ( h)
+
+  path-inl-target-to-source-coherence-htpy-cocone-map-associative-join :
+    {l4 : Level} {X : UU l4} (h : A * (B * C) → X)
+    (a : A) (c : C) →
+    target-to-source-htpy-horizontal-cocone-map-associative-join h
+      ( inl-join a) ∙
+    ( ap h (coherence-map-associative-join (inl-join a) c) ∙ refl) ＝
+    dependent-cogap-join
+      ( dependent-cocone-H-cocone-A-join-BC
+        ( cocone-map pr1 pr2
+          ( cocone-join {A = A} {B = B * C})
+          ( h))
+        ( c))
+      ( inl-join a)
+  path-inl-target-to-source-coherence-htpy-cocone-map-associative-join
+    {X = X} h a c =
+    equational-reasoning
+      H (inl-join a) ∙ (ap h coh ∙ refl)
+      ＝ pH ∙ (ap h coh ∙ refl)
+        by ap (_∙ (ap h coh ∙ refl)) compute-inl-H
+      ＝ pH ∙ ap h coh
+        by ap (pH ∙_) right-unit
+      ＝ (linlG ∙ inv (ap h linlL)) ∙
+        ap h (linlL ∙ glueOuter)
+        by ap (pH ∙_) (ap (ap h) compute-coh)
+      ＝ (linlG ∙ inv (ap h linlL)) ∙
+        (ap h linlL ∙ ap h glueOuter)
+        by ap (pH ∙_) (ap-concat h linlL glueOuter)
+      ＝ linlG ∙
+        (inv (ap h linlL) ∙ (ap h linlL ∙ ap h glueOuter))
+        by assoc linlG (inv (ap h linlL)) (ap h linlL ∙ ap h glueOuter)
+      ＝ linlG ∙ ((inv (ap h linlL) ∙ ap h linlL) ∙ ap h glueOuter)
+        by ap (linlG ∙_)
+          ( inv (assoc (inv (ap h linlL)) (ap h linlL) (ap h glueOuter)))
+      ＝ linlG ∙ (refl ∙ ap h glueOuter)
+        by ap (λ q → linlG ∙ (q ∙ ap h glueOuter))
+          ( left-inv (ap h linlL))
+      ＝ linlG ∙ ap h glueOuter
+        by ap (linlG ∙_) left-unit
+      ＝ dependent-cogap-join
+        ( dependent-cocone-H-cocone-A-join-BC d c)
+        ( inl-join a)
+        by inv compute-inl-target
+    where
+    d :
+      cocone
+        ( λ (t : A × (B * C)) → pr1 t)
+        ( λ (t : A × (B * C)) → pr2 t)
+        ( X)
+    d =
+      cocone-map pr1 pr2
+        ( cocone-join {A = A} {B = B * C})
+        ( h)
+
+    H = target-to-source-htpy-horizontal-cocone-map-associative-join h
+    coh = coherence-map-associative-join (inl-join a) c
+    linlL = compute-inl-map-left-associative-join a
+    glueOuter = glue-join (a , inr-join c)
+    linlG = compute-inl-map-AB-cocone-A-join-BC d a
+    pH = path-inl-htpy-cogap-join-cocone-map
+      cocone-left-map-associative-join h a
+
+    compute-inl-H =
+      compute-inl-dependent-cogap-join
+        ( dependent-cocone-htpy-cogap-join-cocone-map
+          cocone-left-map-associative-join h)
+        ( a)
+
+    compute-coh = compute-inl-coherence-map-associative-join a c
+
+    compute-inl-target =
+      compute-inl-dependent-cogap-join
+        ( dependent-cocone-H-cocone-A-join-BC d c)
+        ( a)
+
+  path-inr-target-to-source-coherence-htpy-cocone-map-associative-join :
+    {l4 : Level} {X : UU l4} (h : A * (B * C) → X)
+    (b : B) (c : C) →
+    target-to-source-htpy-horizontal-cocone-map-associative-join h
+      ( inr-join b) ∙
+    ( ap h (coherence-map-associative-join (inr-join b) c) ∙ refl) ＝
+    dependent-cogap-join
+      ( dependent-cocone-H-cocone-A-join-BC
+        ( cocone-map pr1 pr2
+          ( cocone-join {A = A} {B = B * C})
+          ( h))
+        ( c))
+      ( inr-join b)
+  path-inr-target-to-source-coherence-htpy-cocone-map-associative-join
+    {X = X} h b c =
+    equational-reasoning
+      H (inr-join b) ∙ (ap h coh ∙ refl)
+      ＝ pH ∙ (ap h coh ∙ refl)
+        by ap (_∙ (ap h coh ∙ refl)) compute-inr-H
+      ＝ pH ∙ ap h coh
+        by ap (pH ∙_) right-unit
+      ＝ (linrG ∙ inv (ap h linrL)) ∙ ap h (linrL ∙ apinr)
+        by ap (pH ∙_) (ap (ap h) compute-coh)
+      ＝ (linrG ∙ inv (ap h linrL)) ∙
+        (ap h linrL ∙ ap h apinr)
+        by ap (pH ∙_) (ap-concat h linrL apinr)
+      ＝ linrG ∙
+        (inv (ap h linrL) ∙ (ap h linrL ∙ ap h apinr))
+        by assoc linrG (inv (ap h linrL)) (ap h linrL ∙ ap h apinr)
+      ＝ linrG ∙ ((inv (ap h linrL) ∙ ap h linrL) ∙ ap h apinr)
+        by ap (linrG ∙_)
+          ( inv (assoc (inv (ap h linrL)) (ap h linrL) (ap h apinr)))
+      ＝ linrG ∙ (refl ∙ ap h apinr)
+        by ap (λ q → linrG ∙ (q ∙ ap h apinr))
+          ( left-inv (ap h linrL))
+      ＝ linrG ∙ ap h apinr
+        by ap (linrG ∙_) left-unit
+      ＝ linrG ∙ ap (h ∘ inr-join) p
+        by ap (linrG ∙_) (inv (ap-comp h inr-join p))
+      ＝ dependent-cogap-join
+        ( dependent-cocone-H-cocone-A-join-BC d c)
+        ( inr-join b)
+        by inv compute-inr-target
+    where
+    d :
+      cocone
+        ( λ (t : A × (B * C)) → pr1 t)
+        ( λ (t : A × (B * C)) → pr2 t)
+        ( X)
+    d =
+      cocone-map pr1 pr2
+        ( cocone-join {A = A} {B = B * C})
+        ( h)
+
+    H = target-to-source-htpy-horizontal-cocone-map-associative-join h
+    coh = coherence-map-associative-join (inr-join b) c
+    p = glue-join (b , c)
+    linrL = compute-inr-map-left-associative-join b
+    apinr = ap inr-join p
+    linrG = compute-inr-map-AB-cocone-A-join-BC d b
+    pH = path-inr-htpy-cogap-join-cocone-map
+      cocone-left-map-associative-join h b
+
+    compute-inr-H =
+      compute-inr-dependent-cogap-join
+        ( dependent-cocone-htpy-cogap-join-cocone-map
+          cocone-left-map-associative-join h)
+        ( b)
+
+    compute-coh = compute-inr-coherence-map-associative-join b c
+
+    compute-inr-target =
+      compute-inr-dependent-cogap-join
+        ( dependent-cocone-H-cocone-A-join-BC d c)
+        ( b)
 
   path-inl-coherence-htpy-cocone-map-associative-join :
     {l4 : Level} {X : UU l4} (h : A * (B * C) → X)

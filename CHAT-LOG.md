@@ -4390,3 +4390,51 @@ pragmas.
 Related commit:
 
 - This commit - Bridge triple join record data to normal form.
+
+### Narrow associator naturality to a stripped raw square
+
+Request: The user asked Codex to keep working hard on the real associator
+blocker after the Rocq-guided pivot, rather than spending time on unrelated
+side tasks.
+
+Model context:
+
+- Date: 2026-06-24.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible. MCP successfully loaded the file, but the real
+  acceptance gate remained `./check.sh`.
+
+Actions:
+
+- Transplanted and checked a computable postcomposition homotopy for join
+  cogap maps, including endpoint paths, glue coherence, dependent-cocone data,
+  and the pointwise homotopy
+  `htpy-cogap-join-cocone-map-compute`.
+- Added `postcompose-naturality-constant-homotopy`, the small path-algebra
+  lemma comparing naturality before and after postcomposition.
+- Added a reusable checked stripping lemma for
+  `coherence-square-cogap-join-constant-data`, exposing the raw middle square
+  after the constructor's fixed left and right whiskers are removed.
+- Proved the target-to-source horizontal comparison for the associator cocone
+  by instantiating the computable cogap/postcomposition homotopy with
+  `cocone-left-map-associative-join`.
+- Proved the two left-oriented endpoint reductions for the remaining full
+  associator cocone naturality square. Temporary probes showed that neither
+  the cocone-normal-form route nor the structural cocone equality route is
+  definitional; both reduce to the same recursor-computation issue.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+```
+
+The Agda check passed. `git diff --check` passed. The touched-file scan found
+no holes, postulates, unsolved-meta pragmas, or temporary lossy-unification
+pragmas.
+
+Related commit:
+
+- This commit - Narrow associator naturality to stripped raw square.
