@@ -33,6 +33,7 @@ open import structured-types.pointed-types
 open import synthetic-homotopy-theory.cocones-under-spans
 open import synthetic-homotopy-theory.descent-data-pushouts
 open import synthetic-homotopy-theory.flattening-lemma-pushouts
+open import synthetic-homotopy-theory.functoriality-joins-of-types
 open import synthetic-homotopy-theory.h-space-structure-circle
 open import synthetic-homotopy-theory.hopf-construction-circle
 open import synthetic-homotopy-theory.join-powers-of-types
@@ -480,6 +481,72 @@ pr1 pointed-total-space-hopf-family-sphere-1 =
   total-space-hopf-family-sphere-1
 pr2 pointed-total-space-hopf-family-sphere-1 =
   north-sphere 2 , point-hopf-family-sphere-1
+
+point-domain-flattening-hopf-family-sphere-1 :
+  domain-span-diagram span-diagram-flattening-hopf-family-sphere-1
+point-domain-flattening-hopf-family-sphere-1 =
+  map-equiv equiv-domain-comparison-flattening-hopf-family-sphere-1
+    ( star , point-hopf-family-sphere-1)
+
+compute-point-horizontal-map-cocone-total-space-flattening-hopf-family-sphere-1 :
+  horizontal-map-cocone
+    ( left-map-span-diagram span-diagram-flattening-hopf-family-sphere-1)
+    ( right-map-span-diagram span-diagram-flattening-hopf-family-sphere-1)
+    ( cocone-total-space-flattening-hopf-family-sphere-1)
+    ( point-domain-flattening-hopf-family-sphere-1) ＝
+  point-Pointed-Type pointed-total-space-hopf-family-sphere-1
+compute-point-horizontal-map-cocone-total-space-flattening-hopf-family-sphere-1 =
+  ap
+    ( horizontal-map-cocone
+      ( left-map-span-diagram
+        span-diagram-flattening-family-hopf-family-sphere-1)
+      ( right-map-span-diagram
+        span-diagram-flattening-family-hopf-family-sphere-1)
+      ( cocone-flattening-family-hopf-family-sphere-1))
+    ( is-retraction-map-inv-equiv
+      ( equiv-domain-comparison-flattening-hopf-family-sphere-1)
+      ( star , point-hopf-family-sphere-1))
+
+compute-point-domain-flattening-hopf-family-sphere-1 :
+  map-equiv equiv-domain-flattening-hopf-family-sphere-1
+    point-domain-flattening-hopf-family-sphere-1 ＝
+  north-sphere 1
+compute-point-domain-flattening-hopf-family-sphere-1 =
+  is-section-map-inv-equiv
+    ( equiv-eq compute-north-hopf-family-sphere-1)
+    ( north-sphere 1)
+
+compute-point-map-total-space-hopf-family-sphere-1-join-sphere-1 :
+  map-total-space-hopf-family-sphere-1-join-sphere-1
+    ( point-Pointed-Type pointed-total-space-hopf-family-sphere-1) ＝
+  inl-join (north-sphere 1)
+compute-point-map-total-space-hopf-family-sphere-1-join-sphere-1 =
+  ap
+    ( map-total-space-hopf-family-sphere-1-join-sphere-1)
+    ( inv
+      ( compute-point-horizontal-map-cocone-total-space-flattening-hopf-family-sphere-1)) ∙
+  horizontal-htpy-cocone-map-universal-property-pushout
+    ( left-map-span-diagram span-diagram-flattening-hopf-family-sphere-1)
+    ( right-map-span-diagram span-diagram-flattening-hopf-family-sphere-1)
+    ( cocone-total-space-flattening-hopf-family-sphere-1)
+    ( universal-property-pushout-cocone-total-space-flattening-hopf-family-sphere-1)
+    ( cocone-join-flattening-hopf-family-sphere-1)
+    ( point-domain-flattening-hopf-family-sphere-1) ∙
+  ap inl-join compute-point-domain-flattening-hopf-family-sphere-1
+
+compute-point-equiv-total-space-hopf-family-sphere-1-join-power-Fin-2 :
+  map-equiv equiv-total-space-hopf-family-sphere-1-join-power-Fin-2
+    ( point-Pointed-Type pointed-total-space-hopf-family-sphere-1) ＝
+  inl-join (point-join-power-Fin-2 1)
+compute-point-equiv-total-space-hopf-family-sphere-1-join-power-Fin-2 =
+  ( ap
+    ( map-equiv equiv-join-sphere-1-join-power-Fin-2)
+    ( compute-point-map-total-space-hopf-family-sphere-1-join-sphere-1)) ∙
+  ( compute-inl-map-join
+    ( map-inv-equiv equiv-sphere-1-join-power-Fin-2)
+    ( map-inv-equiv equiv-sphere-1-join-power-Fin-2)
+    ( north-sphere 1)) ∙
+  ap inl-join compute-point-inv-equiv-sphere-1-join-power-Fin-2
 
 projection-hopf-family-sphere-1 :
   total-space-hopf-family-sphere-1 → sphere 2

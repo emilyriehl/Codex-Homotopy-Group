@@ -172,6 +172,17 @@ calculation:
   boundary/fiber-inclusion exactness statement and the triviality of the two
   outer `S³` groups are also checked. The Hopf-derived comparison
   `π₂(S²) ≅ π₁(S¹)` now has a checked proof body and no local scaffold hole.
+- The packaged Hopf fiber sequence `S¹ ->* S³ ->* S²` is now checked. The
+  proof transports the Hopf-family projection fiber sequence across a pointed
+  equivalence from the Hopf-family total space to `S³`. The point-preservation
+  proof is structural: it uses the flattening comparison point computation,
+  the join-power/sphere basepoint computations, and the named
+  Rocq-guided associator/twist point computations in the `Fin 2` join-power
+  reassociation.
+- The Hopf LES consequences through the third homotopy group comparison now
+  check against the packaged Hopf fiber sequence. In particular the
+  `π₃(S³) ≅ π₃(S²)` comparison and the lower `π₂(S²) ≅ π₁(S¹)` comparison
+  have no local holes, postulates, or weakening pragmas.
 
 The final theorem `pi_3(S^2) = Z` is not yet proved. The top-level Agda file
 now assembles the final isomorphism through two next-level files that themselves
@@ -188,8 +199,8 @@ fibration-boundary group exactness case now check. The
 `π₃(S³) ≅ ℤ` calculation is reduced to the stability comparison
 `π₂(S²) ≅ π₃(S³)`, the now-checked Hopf base computation
 `π₂(S²) ≅ π₁(S¹)`, and the checked group-level circle calculation
-`π₁(S¹) ≅ ℤ`. The remaining imported scaffolds for the final theorem are the
-Hopf fiber sequence itself and the Freudenthal/stability comparison.
+`π₁(S¹) ≅ ℤ`. The remaining imported scaffold for the final theorem is the
+Freudenthal/stability comparison.
 
 ## Implemented Agda code
 
@@ -232,8 +243,8 @@ Hopf fiber sequence itself and the Freudenthal/stability comparison.
 | Suspensions as joins | [`src/synthetic-homotopy-theory/suspensions-as-joins.lagda.md`](src/synthetic-homotopy-theory/suspensions-as-joins.lagda.md) | Defines the `Fin 2 × X` join span, maps both directions between `Fin 2 * X` and `suspension X`, proves cocones over that span equivalent to suspension structures, derives the pushout universal property for the suspension cocone, and packages the checked equivalence `Fin 2 * X ≃ suspension X`. |
 | Functoriality of joins | [`src/synthetic-homotopy-theory/functoriality-joins-of-types.lagda.md`](src/synthetic-homotopy-theory/functoriality-joins-of-types.lagda.md) | Defines the map induced on joins by maps in both factors, proves its constructor computation rules, proves that it preserves equivalences by pushout invariance under equivalences of spans, and packages the resulting `equiv-join`. |
 | Type arithmetic for joins | [`src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md`](src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md) | Proves commutativity of joins, `A * B ≃ B * A`, using the pushout-swap theorem and the commutativity equivalence of cartesian products. It now also contains the older checked cocone/inverse-homotopy associator infrastructure and the completed Rocq HoTT-guided triple-join route: triple-join recursion data, functorial postcomposition, the self-inverse first-two-variable data twist, the map-out normal form `(A * (B * C) -> X) ≃ tri-join-rec-data A B C X`, the representability proof that the Rocq-style twist map `A * (B * C) -> B * (A * C)` is an equivalence, and the checked associator equivalence `((A * B) * C) ≃ A * (B * C)` obtained by symmetry/twist/symmetry. |
-| Spheres as join powers | [`src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md`](src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md) | Proves by induction that the nonzero join powers of `Fin 2` are spheres, packaged as `join-power (succ n) (Fin 2) ≃ sphere n`, with named `S¹` and `S³` instances, proves the Hopf-facing comparison from `S¹ * S¹` to the join of two `join-power 2 (Fin 2)` models, and now packages the checked associator-based equivalence `join-power 2 A * join-power 2 A ≃ join-power 4 A` with the `Fin 2` specialization. |
-| Hopf fiber sequence | [`src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md`](src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md) | Records the unfinished packaged fiber sequence with fiber `S¹`, total space `S³`, and base `S²` fixed definitionally. |
+| Spheres as join powers | [`src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md`](src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md) | Proves by induction that the nonzero join powers of `Fin 2` are spheres, packaged as `join-power (succ n) (Fin 2) ≃ sphere n`, with named `S¹` and `S³` instances, proves the Hopf-facing comparison from `S¹ * S¹` to the join of two `join-power 2 (Fin 2)` models, packages the checked associator-based equivalence `join-power 2 A * join-power 2 A ≃ join-power 4 A` with the `Fin 2` specialization, and now exposes the basepoint computations needed to make the `S¹ * S¹ ≃ S³` comparison pointed. |
+| Hopf fiber sequence | [`src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md`](src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md) | Packages the checked fiber sequence `S¹ ->* S³ ->* S²` by transporting the Hopf-family projection fiber sequence across the pointed equivalence `pointed-total-space-hopf-family-sphere-1 ≃* sphere-Pointed-Type 3`. It has no local holes or `--allow-unsolved-metas`. |
 | Hopf LES comparison for second homotopy groups | [`src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md) | Proves the right-hand boundary/fiber-inclusion exactness statement for the lower Hopf segment, the left fibration-boundary exactness statement by applying `is-exact-set-truncation-loop-fiber-sequence` to `fiber-sequence-boundary-fiber-sequence-direct-Pointed-Type` instantiated at the Hopf fiber sequence, and the algebraic extraction identifying `π₂(S²)` with `π₁(S¹)` from the two exactness statements and the checked trivial outer `S³` groups. |
 | Hopf LES comparison for third homotopy groups | [`src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md) | Builds the Hopf comparison isomorphism from the Hopf fibration homomorphism, the checked total-space exactness theorem, the new direct fibration-boundary exactness theorem for the second shifted segment, and the two trivial endpoint hypotheses. The exactness proof no longer uses triviality of `π₂(S¹)` as a shortcut. |
 | Hopf comparison for third homotopy groups | [`src/synthetic-homotopy-theory/hopf-fibration-third-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/hopf-fibration-third-homotopy-groups.lagda.md) | Delegates `π₃(S³) ≅ π₃(S²)` to the Hopf LES comparison scaffold and has no direct proof hole. |
@@ -254,49 +265,80 @@ Hopf fiber sequence itself and the Freudenthal/stability comparison.
 | Higher homotopy groups of the circle vanish | Mostly done | Positive concrete homotopy groups of the circle and 1-sphere are trivial. Further packaging may be needed for the exact Hopf LES endpoints. |
 | Loop space of the circle is the integers | Done | The loop-space equivalence is formalized, the universal-cover encoder is proved additive on loop concatenation, the result is transferred to the 1-sphere, and the concrete group isomorphism `π₁(S¹) ≅ ℤ` is checked. |
 | Circle as an H-space | Done | The checked module [`src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md`](src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md) packages both `𝕊¹-H-Space` and the transported `sphere-1-H-Space`, and proves that circle and 1-sphere translations are equivalences. |
-| Hopf construction and Hopf fibration | Partial | The generic Hopf map `A * A -> suspension A`, the `S¹ * S¹ ->* S²` specialization, the canonical Hopf-construction source fiber sequence, the Hopf family over `S²`, the Hopf-family projection fiber sequence with fiber `S¹`, the Hopf shear equivalence on `S¹ × S¹`, the proof that the actual Hopf-family total space is a pushout of the family-induced flattened span, the proof that `S¹ * S¹` is a pushout of the explicit flattened Hopf-family descent span, the completed two-leg comparison between these flattened spans, the canonical equivalence `total-space-hopf-family-sphere-1 ≃ S¹ * S¹`, the comparison `Fin 2 * X ≃ suspension X`, join functoriality under equivalences, join commutativity, the Rocq-guided checked associator equivalence for joins, the bridge from `S¹ * S¹` to the join of two `join-power 2 (Fin 2)` models, the equivalence from that join to `join-power 4 (Fin 2)`, the `join-power 4 (Fin 2) ≃ S³` model, and the total-space equivalences `total-space-hopf-family-sphere-1 ≃ sphere 3` and `total-space-hopf-construction-sphere-1 ≃ sphere 3` are checked. The packaged Hopf fiber sequence target `S^1 -> S^3 -> S^2` is still stubbed pending transport/packaging of the final fiber-sequence proof. |
-| Hopf LES consequence `pi_3(S^3) = pi_3(S^2)` | Partially proved | The exactness-to-isomorphism extraction and Hopf LES packaging are proved, and the fibration-boundary exactness now uses the direct checked second shifted boundary theorem rather than the trivial-codomain shortcut. The comparison still depends on the unfinished Hopf fiber sequence scaffold. |
+| Hopf construction and Hopf fibration | Done | The generic Hopf map `A * A -> suspension A`, the `S¹ * S¹ ->* S²` specialization, the canonical Hopf-construction source fiber sequence, the Hopf family over `S²`, the Hopf-family projection fiber sequence with fiber `S¹`, the Hopf shear equivalence on `S¹ × S¹`, the actual-family flattening pushout, the explicit flattened-span pushout comparison with `S¹ * S¹`, the completed two-leg span comparison, the canonical equivalence `total-space-hopf-family-sphere-1 ≃ S¹ * S¹`, the comparison `Fin 2 * X ≃ suspension X`, join functoriality under equivalences, join commutativity, the Rocq-guided checked associator equivalence for joins, the bridge from `S¹ * S¹` to the join of two `join-power 2 (Fin 2)` models, the equivalence from that join to `join-power 4 (Fin 2)`, the `join-power 4 (Fin 2) ≃ S³` model, the pointed total-space comparison with `S³`, and the packaged Hopf fiber sequence `S¹ ->* S³ ->* S²` are checked. |
+| Hopf LES consequence `pi_3(S^3) = pi_3(S^2)` | Done | The exactness-to-isomorphism extraction, Hopf LES packaging, direct second shifted fibration-boundary exactness, and packaged Hopf fiber sequence input are all checked. The comparison has no local proof hole. |
 | Freudenthal suspension theorem | Not started | Still a major missing theorem. |
 | Stability of homotopy groups of spheres | Instance stubbed | The needed comparison `π₂(S²) ≅ π₃(S³)` is recorded as an unfinished theorem depending on Freudenthal/stability. |
 | Diagonal theorem `pi_n(S^n) = Z` | Reduced to lower stubs | The `n = 3` file now composes the stability scaffold, the checked `π₂(S²) ≅ π₁(S¹)` comparison, and the checked `π₁(S¹) ≅ ℤ` calculation. The general theorem remains unproved. |
-| Final theorem `pi_3(S^2) = Z` | Assembled from stubs | The target statement in [`src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md`](src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md) is now a formal composition of the two next-level stubs. It has no direct proof hole but remains mathematically unfinished until those imported stubs are proved. |
+| Final theorem `pi_3(S^2) = Z` | Reduced to Freudenthal/stability | The target statement in [`src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md`](src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md) now checks as a formal composition of the checked Hopf comparison and the `π₃(S³) ≅ ℤ` file. It has no direct proof hole but remains mathematically unfinished until the imported Freudenthal/stability scaffold is proved. |
 
 ## Remaining tasks
 
-1. Extend the checked Hopf map `S¹ * S¹ ->* S²` to the Hopf fiber sequence
-   `S^1 -> S^3 -> S^2`. The circle translation equivalences, Hopf family over
-   `S²`, Hopf-family projection fiber sequence, Hopf shear equivalence on
-   `S¹ × S¹`, actual-family flattening pushout, explicit flattened-span
-   pushout comparison with `S¹ * S¹`, suspension-as-join layer,
-   sphere-as-join-power layer, join functoriality under equivalences, join
-   commutativity, Rocq-guided join associator equivalence, and both
-   Hopf-family/Hopf-construction total-space equivalences with `S³` are
-   checked. The remaining Hopf work is to transport/package this checked
-   total-space comparison into the final `S^1 -> S^3 -> S^2` fiber sequence.
-2. Prove the stability comparison `π₂(S²) ≅ π₃(S³)` from Freudenthal and sphere
+1. Prove the stability comparison `π₂(S²) ≅ π₃(S³)` from Freudenthal and sphere
    stability.
-3. Recheck `π₃(S³) ≅ ℤ` and `π₃(S²) ≅ ℤ` after their imported lower stubs are
-   proved; their proof bodies should remain short compositions.
+2. Recheck `π₃(S³) ≅ ℤ` and `π₃(S²) ≅ ℤ` after the imported
+   Freudenthal/stability scaffold is proved; their proof bodies should remain
+   short compositions.
 
 ## Next agent handoff
 
-The arbitrary-index LES bridge is complete. The circle/1-sphere H-space input and translation equivalences are checked in `src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md`. The generic Hopf map is checked in `src/synthetic-homotopy-theory/hopf-construction.lagda.md`, the sphere-1 specialization is checked in `src/synthetic-homotopy-theory/hopf-construction-circle.lagda.md`, the canonical Hopf-construction source sequence is checked in `src/synthetic-homotopy-theory/hopf-construction-fiber-sequence.lagda.md`, and the Hopf family over `S²` is checked in `src/synthetic-homotopy-theory/hopf-family-circle.lagda.md`, including the pointed fiber sequence given by projecting its total space to `S²`, the flattening-lemma pushout for its actual total space, the proof that `S¹ * S¹` is a pushout of the explicit flattened Hopf-family descent span, the completed two-leg comparison between those flattened spans, the canonical equivalence `total-space-hopf-family-sphere-1 ≃ S¹ * S¹`, and the checked total-space equivalences from the Hopf-family and Hopf-construction total spaces to `sphere 3`.
+The arbitrary-index LES bridge is complete. The circle/1-sphere H-space input
+and translation equivalences are checked in
+`src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md`. The generic
+Hopf map is checked in
+`src/synthetic-homotopy-theory/hopf-construction.lagda.md`, the sphere-1
+specialization is checked in
+`src/synthetic-homotopy-theory/hopf-construction-circle.lagda.md`, the
+canonical Hopf-construction source sequence is checked in
+`src/synthetic-homotopy-theory/hopf-construction-fiber-sequence.lagda.md`, and
+the Hopf family over `S²` is checked in
+`src/synthetic-homotopy-theory/hopf-family-circle.lagda.md`. The Hopf-family
+file now includes the basepoint computations through flattening and the
+comparison with `S¹ * S¹`; `spheres-as-join-powers` includes the
+join-power/sphere basepoint computations and the named `Fin 2` reassociation
+stages; and `hopf-fiber-sequence` packages the transported fiber sequence
+`S¹ ->* S³ ->* S²` with no local hole.
 
-The next upstream-shaped target is to turn the checked pointed Hopf map `S¹ * S¹ ->* S²` and the checked total-space comparison with `S³` into the packaged Hopf fiber sequence. The old join associator blocker is closed by the Rocq HoTT triple-join route: `twist-tri-join-rec-data` is self-inverse, the Rocq-style twist map is an equivalence by representability, and `equiv-associative-join-twist` is checked by symmetry/twist/symmetry. Start in `src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md` by deciding the cleanest pointed transport of the Hopf-construction/family fiber sequence across `equiv-total-space-hopf-construction-sphere-1-sphere-3` or `equiv-total-space-hopf-family-sphere-1-sphere-3`, then fill the packaged maps and fiber-sequence proof.
+The Hopf LES second- and third-homotopy comparison files also check against
+that packaged Hopf fiber sequence. Excluding Freudenthal, there is no remaining
+local Hopf scaffold in the current `π₃(S²)` route. The next upstream-shaped
+target for the overall theorem is now the Freudenthal/sphere-stability
+comparison in
+`src/synthetic-homotopy-theory/stability-third-homotopy-group-sphere-3.lagda.md`.
 
-Expected verification for this next step should start with:
+Expected verification after the stability scaffold is replaced by a proof
+should start with:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md
-./check.sh src/synthetic-homotopy-theory/hopf-construction.lagda.md
-./check.sh src/synthetic-homotopy-theory/hopf-construction-circle.lagda.md
-./check.sh src/synthetic-homotopy-theory/hopf-family-circle.lagda.md
-./check.sh src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md
+./check.sh src/synthetic-homotopy-theory/stability-third-homotopy-group-sphere-3.lagda.md
+./check.sh src/synthetic-homotopy-theory/third-homotopy-group-sphere-3.lagda.md
+./check.sh src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md
 ```
 
-Once the Hopf scaffold is closed, recheck the Hopf LES second and third segment files before moving to the Freudenthal/stability scaffold.
-
 ## Current verification
+
+On 2026-06-25, the packaged Hopf fiber sequence and its second- and
+third-homotopy LES consumers were checked with:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-family-circle.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-fibration-third-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/second-homotopy-group-sphere-2.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate|lossy-unification" src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md src/synthetic-homotopy-theory/hopf-fibration-third-homotopy-groups.lagda.md src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md src/synthetic-homotopy-theory/second-homotopy-group-sphere-2.lagda.md
+rg -n "allow-unsolved-metas|\{!!\}" src/synthetic-homotopy-theory src/group-theory src/structured-types -g "*.lagda.md"
+```
+
+All Agda checks passed. `git diff --check` passed. The targeted Hopf scan found
+no holes, postulates, unsolved-meta pragmas, or temporary lossy-unification
+pragmas. The broader scaffold scan now finds only the expected
+Freudenthal/stability stub in
+`src/synthetic-homotopy-theory/stability-third-homotopy-group-sphere-3.lagda.md`.
 
 On 2026-06-25, the Rocq HoTT-guided join associativity route and the Hopf
 total-space comparison to `S³` were checked with:
@@ -312,9 +354,9 @@ rg -n "\{!!\}|allow-unsolved-metas" src/synthetic-homotopy-theory/hopf-fiber-seq
 
 All three Agda checks passed. `git diff --check` passed. The touched-file scan
 found no holes, postulates, unsolved-meta pragmas, or temporary
-lossy-unification pragmas. The broader scaffold scan still finds exactly the
-expected unfinished Hopf fiber sequence and Freudenthal/stability comparison
-holes.
+lossy-unification pragmas. At that stage, the broader scaffold scan still found
+exactly the expected unfinished Hopf fiber sequence and Freudenthal/stability
+comparison holes.
 
 Later on 2026-06-22, the flattened Hopf-family span comparison was completed
 and the family total space was compared with the join:
@@ -731,9 +773,9 @@ comparison remains open for nontrivial targets. The checked commands were:
 ./check.sh src/synthetic-homotopy-theory/hopf-fibration-third-homotopy-groups.lagda.md
 ```
 
-All checks passed. The edited LES and Hopf comparison files have no new holes
-or postulates, and `git diff --check` passed. The Hopf comparison still depends
-on the unfinished Hopf fiber sequence scaffold.
+All checks passed. The edited LES and Hopf comparison files had no new holes
+or postulates, and `git diff --check` passed. At that stage, the Hopf
+comparison still depended on the unfinished Hopf fiber sequence scaffold.
 
 Later on 2026-06-19, the `π₁(S¹) ≅ ℤ` scaffold was narrowed. A new
 underlying-type module proves the carrier equivalence from the ordinary
@@ -795,9 +837,9 @@ closed with no `--allow-unsolved-metas`. The checked commands were:
 ./check.sh src/synthetic-homotopy-theory/fundamental-group-sphere-1.lagda.md
 ```
 
-All checks passed. The next direct target for the final theorem is now the
-Hopf-derived comparison `π₂(S²) ≅ π₁(S¹)` or the Hopf fiber sequence itself;
-the circle endpoint is checked.
+All checks passed. At that point, the next direct target for the final theorem
+was the Hopf-derived comparison `π₂(S²) ≅ π₁(S¹)` or the Hopf fiber sequence
+itself; the circle endpoint was checked.
 
 Later on 2026-06-19, progress was made on the lower Hopf LES segment. Pointed
 set exactness gained a transport theorem across an injective comparison of the

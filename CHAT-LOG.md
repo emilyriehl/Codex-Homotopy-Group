@@ -4552,3 +4552,66 @@ unfinished Hopf fiber sequence and Freudenthal/stability comparison holes.
 Related commit:
 
 - This commit - Complete Rocq-guided join associativity.
+
+### Complete packaged Hopf fiber sequence and Hopf LES consumers
+
+Request: Emily asked Codex to tackle items 3 and 4 from the current next-step
+list, essentially everything except Freudenthal.
+
+Model context:
+
+- Date: 2026-06-25.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible, but `./check.sh` remained the final acceptance
+  gate.
+
+Actions:
+
+- Removed the local `--allow-unsolved-metas` scaffold from
+  `hopf-fiber-sequence`.
+- Added reusable basepoint computations in `hopf-family-circle` for the
+  flattening comparison, the map to `S¹ * S¹`, and the composite comparison
+  to the join-power model.
+- Added join-power/sphere basepoint computations in `spheres-as-join-powers`,
+  including named `Fin 2` reassociation stages and point computations for the
+  Rocq-guided associator/twist route.
+- Changed the `Fin 2` specialization of
+  `join-power 2 A * join-power 2 A ≃ join-power 4 A` to use the named staged
+  equivalence, so the Hopf basepoint calculation is tractable.
+- Constructed the pointed equivalence
+  `pointed-total-space-hopf-family-sphere-1 ≃* sphere-Pointed-Type 3`.
+- Transported the Hopf-family projection fiber sequence across that pointed
+  equivalence to package the checked Hopf fiber sequence
+  `S¹ ->* S³ ->* S²`.
+- Rechecked the second- and third-homotopy Hopf LES consumers and the
+  top-level `π₃(S²)` assembly, leaving only the Freudenthal/stability scaffold
+  as the known imported hole in this route.
+- Updated `STATUS-REPORT.md` to record that the Hopf fiber sequence and Hopf
+  LES comparison are no longer blockers.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-family-circle.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-fibration-third-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/second-homotopy-group-sphere-2.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate|lossy-unification" src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md src/synthetic-homotopy-theory/hopf-fibration-third-homotopy-groups.lagda.md src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md src/synthetic-homotopy-theory/second-homotopy-group-sphere-2.lagda.md
+rg -n "allow-unsolved-metas|\{!!\}" src/synthetic-homotopy-theory src/group-theory src/structured-types -g "*.lagda.md"
+```
+
+All Agda checks passed. `git diff --check` passed. The targeted Hopf scan
+found no holes, postulates, unsolved-meta pragmas, or temporary
+lossy-unification pragmas. The broader scaffold scan found only the expected
+Freudenthal/stability stub.
+
+Related commit:
+
+- This commit - Complete packaged Hopf fiber sequence.
