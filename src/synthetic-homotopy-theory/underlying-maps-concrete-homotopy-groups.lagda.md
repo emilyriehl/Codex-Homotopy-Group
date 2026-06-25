@@ -309,6 +309,17 @@ module _
     ( is-section-map-inv-underlying-type-concrete-group-Pointed-Type B
       ( map-set-trunc-loop-map-Pointed-Type f
         ( map-underlying-type-concrete-group-Pointed-Type A x)))
+
+  is-equiv-map-underlying-hom-concrete-group-Pointed-Type-is-equiv-map-set-trunc-loop-map-Pointed-Type :
+    (f : A →∗ B) →
+    is-equiv (map-set-trunc-loop-map-Pointed-Type f) →
+    is-equiv (map-underlying-hom-concrete-group-Pointed-Type f)
+  is-equiv-map-underlying-hom-concrete-group-Pointed-Type-is-equiv-map-set-trunc-loop-map-Pointed-Type
+    f =
+    is-equiv-equiv
+      ( equiv-underlying-type-concrete-group-Pointed-Type A)
+      ( equiv-underlying-type-concrete-group-Pointed-Type B)
+      ( naturality-map-underlying-type-concrete-group-Pointed-Type f)
 ```
 
 ## Definitions for homotopy groups

@@ -4671,3 +4671,46 @@ range.
 Related commit:
 
 - This commit - Start Freudenthal stabilization interface.
+
+### Add equivalence bridge for homotopy-group underlying maps
+
+Request: Emily asked why type checking the WIP bridge file was slow, then asked
+Codex to convert the WIP into something trustworthy and reusable.
+
+Model context:
+
+- Date: 2026-06-25.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible, but `./check.sh` remained the final acceptance
+  gate.
+
+Actions:
+
+- Diagnosed two separate sources of slowness: top-level cache rebuilding for
+  imported agda-unimath modules, and an over-expanded direct inverse/path
+  algebra proof in the WIP file.
+- Rejected the direct proof term after isolating the expensive section proof.
+- Added the reusable pointed-type bridge in
+  `underlying-maps-concrete-homotopy-groups`: an equivalence on the
+  set-truncated loop map induces an equivalence on the ordinary underlying map
+  of the concrete-group homomorphism.
+- Reworked the new `isomorphisms-homotopy-groups` module to specialize that
+  pointed-type bridge to concrete homotopy groups, replacing the expensive WIP
+  path algebra with a small structural theorem.
+- Updated `STATUS-REPORT.md` to record the new checked bridge.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/isomorphisms-homotopy-groups.lagda.md
+rg -n "\?|\\{!|postulate" src/synthetic-homotopy-theory/isomorphisms-homotopy-groups.lagda.md src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md
+```
+
+Both Agda checks passed. The touched-file scan found no holes or postulates.
+
+Related commit:
+
+- This commit - Add homotopy group equivalence bridge.
