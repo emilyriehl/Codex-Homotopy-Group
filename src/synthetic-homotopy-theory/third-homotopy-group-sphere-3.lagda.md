@@ -13,6 +13,7 @@ open import elementary-number-theory.natural-numbers
 open import group-theory.concrete-groups
 open import group-theory.isomorphisms-groups
 
+open import synthetic-homotopy-theory.freudenthal-suspension-theorem
 open import synthetic-homotopy-theory.fundamental-group-sphere-1
 open import synthetic-homotopy-theory.homotopy-groups
 open import synthetic-homotopy-theory.second-homotopy-group-sphere-2
@@ -43,11 +44,12 @@ the index `2` denotes the ordinary third homotopy group.
 
 ```agda
 iso-third-homotopy-group-sphere-3-ℤ :
+  is-connected-map-Freudenthal-suspension 0 (sphere-Pointed-Type 2) →
   iso-Group
     ( group-Concrete-Group
       ( concrete-homotopy-group 2 (sphere-Pointed-Type 3)))
     ( ℤ-Group)
-iso-third-homotopy-group-sphere-3-ℤ =
+iso-third-homotopy-group-sphere-3-ℤ H =
   comp-iso-Group
     ( group-Concrete-Group
       ( concrete-homotopy-group 2 (sphere-Pointed-Type 3)))
@@ -68,5 +70,6 @@ iso-third-homotopy-group-sphere-3-ℤ =
           ( concrete-homotopy-group 1 (sphere-Pointed-Type 2)))
         ( group-Concrete-Group
           ( concrete-homotopy-group 2 (sphere-Pointed-Type 3)))
-        ( iso-suspension-second-third-homotopy-group-sphere-2-sphere-3)))
+        ( iso-suspension-second-third-homotopy-group-sphere-2-sphere-3-is-connected-map-Freudenthal-suspension
+          ( H))))
 ```

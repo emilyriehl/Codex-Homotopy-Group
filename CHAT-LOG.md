@@ -4714,3 +4714,53 @@ Both Agda checks passed. The touched-file scan found no holes or postulates.
 Related commit:
 
 - This commit - Add homotopy group equivalence bridge.
+
+### Check Freudenthal-to-stability bridge through loop connectivity
+
+Request: Emily asked Codex to continue with the plan after clarifying that
+`is-connected-map-Freudenthal-suspension` is only a theorem statement unless a
+proof is supplied.
+
+Model context:
+
+- Date: 2026-06-25.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible, but an MCP load of the stability file timed out;
+  `./check.sh` remained the acceptance gate.
+
+Actions:
+
+- Removed the `--allow-unsolved-metas` pragma and hole from
+  `stability-third-homotopy-group-sphere-3`.
+- Added `connected-maps-loop-spaces`, proving the reusable loop-lowering
+  theorem: a `(k+1)`-connected pointed map induces a `k`-connected loop map.
+- Used the loop-lowering theorem twice to turn the Freudenthal `S²`
+  connected-map instance into the double-loop connectedness needed for the
+  set-truncated stabilization map.
+- Used the checked homotopy-group equivalence bridge to package the canonical
+  stabilization homomorphism `π₂(S²) -> π₃(S³)` as a group isomorphism
+  conditionally on `is-connected-map-Freudenthal-suspension 0
+  (sphere-Pointed-Type 2)`.
+- Threaded that same Freudenthal hypothesis through the `π₃(S³) ≅ ℤ` and
+  `π₃(S²) ≅ ℤ` calculations.
+- Updated `STATUS-REPORT.md` to record that the remaining blocker is now the
+  actual Freudenthal theorem instance for `S²`, not the stability bridge.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/connected-maps-loop-spaces.lagda.md
+./check.sh src/synthetic-homotopy-theory/stability-third-homotopy-group-sphere-3.lagda.md
+./check.sh src/synthetic-homotopy-theory/third-homotopy-group-sphere-3.lagda.md
+./check.sh src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md
+rg -n "\{!!\}|postulate|allow-unsolved-metas" src/synthetic-homotopy-theory/connected-maps-loop-spaces.lagda.md src/synthetic-homotopy-theory/stability-third-homotopy-group-sphere-3.lagda.md src/synthetic-homotopy-theory/third-homotopy-group-sphere-3.lagda.md src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md
+```
+
+All four Agda checks passed. The touched-file scan found no holes, postulates,
+or local `--allow-unsolved-metas`.
+
+Related commit:
+
+- This commit - Bridge Freudenthal stability through loop connectivity.
