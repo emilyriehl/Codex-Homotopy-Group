@@ -5144,3 +5144,50 @@ All four Agda checks passed. MCP typechecks also reported no goals for the edite
 Related commit:
 
 - This commit - Complete Freudenthal specialization and unconditional pi_3(S^2).
+
+
+### Refactor final homotopy group isomorphisms as direct composites
+
+Request: Emily asked Codex to cut the relative final theorem versions that
+concluded the main isomorphism theorems from a Freudenthal hypothesis, and to
+make the main theorems direct unconditional composites.
+
+Model context:
+
+- Date: 2026-06-25.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible; `./check.sh` remained the final acceptance gate.
+
+Actions:
+
+- Removed the top-level conditional exports
+  `iso-third-homotopy-group-sphere-3-ℤ-is-connected-map-Freudenthal-suspension`
+  and
+  `iso-third-homotopy-group-sphere-2-ℤ-is-connected-map-Freudenthal-suspension`.
+- Rewrote `iso-third-homotopy-group-sphere-3-ℤ` as the direct composite of the
+  Blakers-Massey/Freudenthal stabilization isomorphism, the lower Hopf
+  comparison, and the fundamental-group computation of `S¹`.
+- Rewrote `iso-third-homotopy-group-sphere-2-ℤ` as the direct composite of the
+  inverse Hopf-fibration comparison with `iso-third-homotopy-group-sphere-3-ℤ`.
+- Cleaned the final theorem files so they no longer import Freudenthal directly.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/third-homotopy-group-sphere-3.lagda.md
+./check.sh src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md
+rg -n "iso-third-homotopy-group-sphere-[23]-ℤ-is-connected-map-Freudenthal-suspension" src STATUS-REPORT.md FORMALIZATION-PLAN.md
+rg -n "\{!!\}|\?\}|allow-unsolved-metas|postulate|TERMINATING|NON_TERMINATING|REWRITE|rewriting" src/synthetic-homotopy-theory/third-homotopy-group-sphere-3.lagda.md src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md
+git diff --check
+```
+
+Both Agda checks passed. The deleted relative theorem names no longer occur in
+source, status, or plan files. The touched-file scan found no holes, postulates,
+unsolved metas, unsafe termination pragmas, or rewrite-rule dependency.
+`git diff --check` passed.
+
+Related commit:
+
+- This commit - Direct final homotopy group isomorphisms.

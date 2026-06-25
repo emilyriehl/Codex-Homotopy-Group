@@ -13,7 +13,6 @@ open import elementary-number-theory.natural-numbers
 open import group-theory.concrete-groups
 open import group-theory.isomorphisms-groups
 
-open import synthetic-homotopy-theory.freudenthal-suspension-theorem
 open import synthetic-homotopy-theory.fundamental-group-sphere-1
 open import synthetic-homotopy-theory.homotopy-groups
 open import synthetic-homotopy-theory.second-homotopy-group-sphere-2
@@ -33,6 +32,7 @@ integers.
 This file now delegates the calculation to the next layer: stability identifies
 `π₂(S²)` with `π₃(S³)`, the Hopf fibration identifies `π₂(S²)` with `π₁(S¹)`,
 and the loop-space computation of the circle identifies `π₁(S¹)` with `ℤ`.
+The proof below is the direct composite of these three isomorphisms.
 
 In the current indexing convention for
 [`concrete-homotopy-group`](synthetic-homotopy-theory.homotopy-groups.md),
@@ -43,13 +43,12 @@ the index `2` denotes the ordinary third homotopy group.
 ### The third homotopy group of the 3-sphere is the integers
 
 ```agda
-iso-third-homotopy-group-sphere-3-ℤ-is-connected-map-Freudenthal-suspension :
-  is-connected-map-Freudenthal-suspension 0 (sphere-Pointed-Type 2) →
+iso-third-homotopy-group-sphere-3-ℤ :
   iso-Group
     ( group-Concrete-Group
       ( concrete-homotopy-group 2 (sphere-Pointed-Type 3)))
     ( ℤ-Group)
-iso-third-homotopy-group-sphere-3-ℤ-is-connected-map-Freudenthal-suspension H =
+iso-third-homotopy-group-sphere-3-ℤ =
   comp-iso-Group
     ( group-Concrete-Group
       ( concrete-homotopy-group 2 (sphere-Pointed-Type 3)))
@@ -70,21 +69,5 @@ iso-third-homotopy-group-sphere-3-ℤ-is-connected-map-Freudenthal-suspension H 
           ( concrete-homotopy-group 1 (sphere-Pointed-Type 2)))
         ( group-Concrete-Group
           ( concrete-homotopy-group 2 (sphere-Pointed-Type 3)))
-        ( iso-suspension-second-third-homotopy-group-sphere-2-sphere-3-is-connected-map-Freudenthal-suspension
-          ( H))))
-```
-
-### The unconditional third homotopy group of the 3-sphere
-
-```agda
-iso-third-homotopy-group-sphere-3-ℤ :
-  iso-Group
-    ( group-Concrete-Group
-      ( concrete-homotopy-group 2 (sphere-Pointed-Type 3)))
-    ( ℤ-Group)
-iso-third-homotopy-group-sphere-3-ℤ =
-  iso-third-homotopy-group-sphere-3-ℤ-is-connected-map-Freudenthal-suspension
-    ( is-connected-map-Freudenthal-suspension-Blakers-Massey
-      ( 0)
-      ( sphere-Pointed-Type 2))
+        ( iso-suspension-second-third-homotopy-group-sphere-2-sphere-3-Blakers-Massey)))
 ```
