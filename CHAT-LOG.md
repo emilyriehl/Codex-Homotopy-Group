@@ -4915,3 +4915,52 @@ question-mark placeholders.
 Related commit:
 
 - This commit - Add Freudenthal gap route infrastructure.
+
+### Reduce ordinary pushout gaps to relation-span gaps
+
+Request: Emily asked Codex to keep working on the real Freudenthal blocker after
+the Freudenthal gap-route infrastructure was checked.
+
+Model context:
+
+- Date: 2026-06-25.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible; `./check.sh` was used as the final acceptance
+  gate.
+
+Actions:
+
+- Extended `span-pushouts` with the checked equivalence between an ordinary
+  pushout `pushout f g` and the relation-indexed span pushout for
+  `Σ a b s, f s = a × g s = b`.
+- Constructed the induced equivalence between the standard pullbacks of the two
+  pushout inclusions and proved the triangle comparing the relation-span gap
+  with the transported gap into the ordinary pushout pullback.
+- Proved the connectedness transfer theorem:
+  connectedness of the relation-span gap map implies connectedness of the
+  ordinary pushout gap map.
+- Extended `freudenthal-suspension-theorem` with a Freudenthal-facing bridge:
+  connectedness of the relation-span gap for the suspension span
+  `unit <- A -> unit` now implies the existing Freudenthal connected-map target
+  in the checked `add+2-𝕋` range.
+- Updated `STATUS-REPORT.md` to mark the ordinary pushout-square reduction as
+  checked and narrow the remaining Freudenthal blocker to generalized
+  Blakers-Massey connectedness for span-pushout gap maps.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/span-pushouts.lagda.md
+./check.sh src/synthetic-homotopy-theory/freudenthal-suspension-theorem.lagda.md
+rg -n "\{!!\}|!\}|\\?|allow-unsolved-metas|postulate|TERMINATING|NON_TERMINATING|rewriting" src/synthetic-homotopy-theory/span-pushouts.lagda.md src/synthetic-homotopy-theory/freudenthal-suspension-theorem.lagda.md
+```
+
+Both Agda checks passed. The touched-file scan found no holes, postulates,
+unsolved-meta pragmas, unsafe termination pragmas, rewrite-rule dependency, or
+question-mark placeholders.
+
+Related commit:
+
+- This commit - Reduce pushout gaps to relation spans.

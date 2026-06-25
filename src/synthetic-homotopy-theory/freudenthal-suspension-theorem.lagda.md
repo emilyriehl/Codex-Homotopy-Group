@@ -31,6 +31,7 @@ open import structured-types.pointed-types
 
 open import synthetic-homotopy-theory.loop-spaces
 open import synthetic-homotopy-theory.gap-maps-pushouts
+open import synthetic-homotopy-theory.span-pushouts
 open import synthetic-homotopy-theory.suspensions-of-pointed-types
 open import synthetic-homotopy-theory.suspensions-of-types
 open import synthetic-homotopy-theory.universal-property-suspensions-of-pointed-types
@@ -323,6 +324,24 @@ module _
               ( terminal-map (type-Pointed-Type A))
               ( cocone-suspension (type-Pointed-Type A))))
         ( inv (compute-freudenthal-connectivity-level-add+2-𝕋 n))
+        ( H))
+
+  is-connected-map-Freudenthal-suspension-is-connected-map-gap-span-pushout-suspension-add+2 :
+    is-connected-map
+      ( add+2-𝕋 (truncation-level-ℕ n) (truncation-level-ℕ n))
+      ( gap-span-pushout
+        ( relation-map-span-pushout
+          ( terminal-map (type-Pointed-Type A))
+          ( terminal-map (type-Pointed-Type A)))) →
+    is-connected-map
+      ( truncation-level-ℕ (freudenthal-connectivity-level-ℕ n))
+      ( map-Freudenthal-suspension A)
+  is-connected-map-Freudenthal-suspension-is-connected-map-gap-span-pushout-suspension-add+2 H =
+    is-connected-map-Freudenthal-suspension-is-connected-map-gap-pushout-suspension-add+2
+      ( is-connected-map-gap-pushout-is-connected-map-gap-span-pushout
+        ( terminal-map (type-Pointed-Type A))
+        ( terminal-map (type-Pointed-Type A))
+        ( add+2-𝕋 (truncation-level-ℕ n) (truncation-level-ℕ n))
         ( H))
 ```
 
