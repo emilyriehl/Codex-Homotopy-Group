@@ -4491,3 +4491,64 @@ pragmas.
 Related commit:
 
 - This commit - Package Rocq-style triple join twist.
+
+### Complete Rocq-guided join associativity and Hopf total-space comparison
+
+Request: Emily asked Codex to use the Rocq HoTT `JoinAssoc.v` formalization as
+the guide for join associativity, to get a local copy of the Coq-HoTT source if
+useful, to pursue that newer route rather than the older direct associator
+route, and then to commit the recent checked progress and update the status
+report.
+
+Model context:
+
+- Date: 2026-06-25.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible during the formalization work. The final
+  acceptance gate remained `./check.sh`.
+
+Actions:
+
+- Cloned the referenced Coq-HoTT/Rocq source locally at
+  `/private/tmp/Coq-HoTT-ref` and verified it was at commit
+  `a030184c0bfc9d61f3bcd33c67660b800e106427`.
+- Used `JoinAssoc.v`, `TriJoin.v`, and the Yoneda/representability style as
+  proof architecture guidance rather than mechanically porting Coq tactics.
+- Completed the data-level double-twist proof for `tri-join-rec-data`.
+- Proved the twist on triple-join recursion data is an equivalence.
+- Proved the Rocq-style twist map
+  `A * (B * C) -> B * (A * C)` is an equivalence by representability of maps
+  out of `A * (B * C)`.
+- Packaged the checked associator equivalence
+  `((A * B) * C) ≃ A * (B * C)` as symmetry/twist/symmetry.
+- Used the checked associator to package
+  `join-power 2 A * join-power 2 A ≃ join-power 4 A`, including the `Fin 2`
+  instance.
+- Composed the Hopf-family and Hopf-construction total-space comparisons with
+  the join-power `S³` model, producing checked equivalences from both total
+  spaces to `sphere 3`.
+- Updated `STATUS-REPORT.md` to record that the associator blocker is closed
+  and that the remaining Hopf work is the packaged fiber-sequence transport,
+  not the total-space comparison.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md
+./check.sh src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-family-circle.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate|lossy-unification" src/synthetic-homotopy-theory/type-arithmetic-joins-of-types.lagda.md src/synthetic-homotopy-theory/spheres-as-join-powers.lagda.md src/synthetic-homotopy-theory/hopf-family-circle.lagda.md
+rg -n "\{!!\}|allow-unsolved-metas" src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md src/synthetic-homotopy-theory/stability-third-homotopy-group-sphere-3.lagda.md
+```
+
+All three Agda checks passed. `git diff --check` passed. The touched-file scan
+found no holes, postulates, unsolved-meta pragmas, or temporary
+lossy-unification pragmas. The broader scaffold scan found only the expected
+unfinished Hopf fiber sequence and Freudenthal/stability comparison holes.
+
+Related commit:
+
+- This commit - Complete Rocq-guided join associativity.

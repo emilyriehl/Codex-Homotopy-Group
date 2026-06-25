@@ -131,6 +131,31 @@ is-equiv-map-join-power-two-two-is-equiv-map-associative-join A H1 H2 =
         ( id-equiv)
         ( inv-equiv (left-unit-law-join-is-empty is-empty-raise-empty))))
 
+equiv-join-power-two-two :
+  {l : Level} (A : UU l) →
+  (join-power 2 A * join-power 2 A) ≃ join-power 4 A
+equiv-join-power-two-two A =
+  equiv-join
+    ( id-equiv)
+    ( equiv-join
+      ( id-equiv)
+      ( inv-equiv (left-unit-law-join-is-empty is-empty-raise-empty))) ∘e
+  equiv-join
+    ( id-equiv)
+    ( equiv-associative-join-twist
+      {A = A}
+      {B = raise-empty _}
+      {C = join-power 2 A}) ∘e
+  equiv-associative-join-twist
+    {A = A}
+    {B = join-power 1 A}
+    {C = join-power 2 A}
+
+equiv-join-power-two-two-Fin-2 :
+  join-power 2 (Fin 2) * join-power 2 (Fin 2) ≃ join-power 4 (Fin 2)
+equiv-join-power-two-two-Fin-2 =
+  equiv-join-power-two-two (Fin 2)
+
 is-equiv-map-join-power-two-two-coherence-squares :
   {l : Level} (A : UU l) →
   coherence-square-triangle-map-inv-coherence-product-join

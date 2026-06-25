@@ -26,6 +26,7 @@ open import foundation.functoriality-cartesian-product-types
 open import foundation.functoriality-dependent-pair-types
 open import foundation.functoriality-dependent-function-types
 open import foundation.homotopies
+open import foundation.homotopy-induction
 open import foundation.identity-types
 open import foundation.type-arithmetic-cartesian-product-types
 open import foundation.type-arithmetic-dependent-pair-types
@@ -33,12 +34,14 @@ open import foundation.type-arithmetic-dependent-function-types
 open import foundation.transport-along-homotopies
 open import foundation.transport-along-identifications
 open import foundation.universal-property-dependent-pair-types
+open import foundation.universal-property-equivalences
 open import foundation.universe-levels
 
 open import synthetic-homotopy-theory.cocones-under-spans
 open import synthetic-homotopy-theory.dependent-cocones-under-spans
 open import synthetic-homotopy-theory.dependent-universal-property-pushouts
 open import synthetic-homotopy-theory.flattening-lemma-pushouts
+open import synthetic-homotopy-theory.functoriality-joins-of-types
 open import synthetic-homotopy-theory.joins-of-types
 open import synthetic-homotopy-theory.pushouts
 open import synthetic-homotopy-theory.universal-property-pushouts
@@ -90,6 +93,20 @@ postcompose-naturality-constant-homotopy {j = j} h H {a} refl
   with H a
 ... | refl = refl
 
+tr-postcompose-naturality-constant-homotopy :
+  {l1 l2 l3 : Level} {A : UU l1} {B : UU l2} {C : UU l3}
+  {x : B} {j : A → B} (h : B → C) (H : (a : A) → x ＝ j a)
+  {a a' : A} (p : a ＝ a') →
+  tr
+    ( λ r → ap h (H a) ∙ r ＝ ap h (H a'))
+    ( ap-comp h j p)
+    ( naturality-constant-homotopy (λ y → ap h (H y)) p) ＝
+  inv (ap-concat h (H a) (ap j p)) ∙
+  ap (ap h) (naturality-constant-homotopy H p)
+tr-postcompose-naturality-constant-homotopy {j = j} h H {a} refl
+  with H a
+... | refl = refl
+
 coherence-twist-twist-identification :
   {l1 : Level} {X : UU l1} {x y z : X}
   (p : x ＝ y) (q : y ＝ z) (r : x ＝ z) →
@@ -105,6 +122,64 @@ coherence-twist-twist-identification :
         ( inv (left-transpose-eq-concat p q r s)))) ＝
   s
 coherence-twist-twist-identification refl q r s = inv-inv s
+
+coherence-map-twist-identification :
+  {l1 l2 : Level} {X : UU l1} {Y : UU l2} (f : X → Y)
+  {x y z : X} (p : x ＝ y) (q : y ＝ z) (r : x ＝ z) →
+  (s : p ∙ q ＝ r) →
+  tr
+    ( λ h → h ∙ ap f r ＝ ap f q)
+    ( ap-inv f p)
+    ( inv (ap-concat f (inv p) r) ∙
+      ap (ap f) (inv (left-transpose-eq-concat p q r s))) ＝
+  inv
+    ( left-transpose-eq-concat
+      ( ap f p)
+      ( ap f q)
+      ( ap f r)
+      ( inv (ap-concat f p q) ∙ ap (ap f) s))
+coherence-map-twist-identification f refl refl refl refl = refl
+
+compute-tr-eq-htpy-ev :
+  {l1 l2 l3 : Level} {A : UU l1} {B : A → UU l2}
+  (C : (a : A) → B a → UU l3)
+  {f g : (a : A) → B a} (H : f ~ g) (a : A)
+  (x : C a (f a)) →
+  tr (λ h → C a (h a)) (eq-htpy H) x ＝ tr (C a) (H a) x
+compute-tr-eq-htpy-ev {A = A} C {f} =
+  ind-htpy
+    ( f)
+    ( λ g H →
+      (a : A) (x : C a (f a)) →
+      tr (λ h → C a (h a)) (eq-htpy H) x ＝ tr (C a) (H a) x)
+    ( λ a x →
+      ap
+        ( λ p → tr (λ h → C a (h a)) p x)
+        ( eq-htpy-refl-htpy f))
+
+compute-tr-eq-htpy-ev-two-fixed-domains :
+  {l1 l2 l3 l4 : Level}
+  {A : UU l1} {B : UU l2} {C : A → B → UU l3}
+  (D : (a : A) (b : B) → C a b → UU l4)
+  {f g : (a : A) (b : B) → C a b} →
+  (H : (a : A) (b : B) → f a b ＝ g a b) →
+  (a : A) (b : B) (x : D a b (f a b)) →
+  tr
+    ( λ h → D a b (h a b))
+    ( eq-htpy (λ a' → eq-htpy (H a')))
+    ( x) ＝
+  tr (D a b) (H a b) x
+compute-tr-eq-htpy-ev-two-fixed-domains D {f} H a b x =
+  compute-tr-eq-htpy-ev
+    ( λ a' k → D a' b (k b))
+    ( λ a' → eq-htpy (H a'))
+    ( a)
+    ( x) ∙
+  compute-tr-eq-htpy-ev
+    ( D a)
+    ( H a)
+    ( b)
+    ( x)
 
 compute-dependent-identification-eq-value-function-naturality :
   {l1 l2 : Level} {X : UU l1} {Y : UU l2} {f g : X → Y}
@@ -907,6 +982,116 @@ eq-tri-join-rec-data-path-12 :
   make-tri-join-rec-data i j k H' L K M'
 eq-tri-join-rec-data-path-12 refl refl = refl
 
+eq-tri-join-rec-data-path-23 :
+  {l1 l2 l3 l4 : Level}
+  {A : UU l1} {B : UU l2} {C : UU l3} {X : UU l4}
+  {i : A → X} {j : B → X} {k : C → X}
+  {H : (a : A) (b : B) → i a ＝ j b}
+  {L : (a : A) (c : C) → i a ＝ k c}
+  {K K' : (b : B) (c : C) → j b ＝ k c}
+  {M : (a : A) (b : B) (c : C) → H a b ∙ K b c ＝ L a c}
+  {M' : (a : A) (b : B) (c : C) → H a b ∙ K' b c ＝ L a c} →
+  (p : K ＝ K') →
+  dependent-identification
+    ( λ R →
+      (a : A) (b : B) (c : C) → H a b ∙ R b c ＝ L a c)
+    ( p)
+    ( M)
+    ( M') →
+  make-tri-join-rec-data i j k H L K M ＝
+  make-tri-join-rec-data i j k H L K' M'
+eq-tri-join-rec-data-path-23 refl refl = refl
+
+abstract
+  eq-tri-join-rec-data-path-23-htpy :
+    {l1 l2 l3 l4 : Level}
+    {A : UU l1} {B : UU l2} {C : UU l3} {X : UU l4}
+    {i : A → X} {j : B → X} {k : C → X}
+    {H : (a : A) (b : B) → i a ＝ j b}
+    {L : (a : A) (c : C) → i a ＝ k c}
+    {K K' : (b : B) (c : C) → j b ＝ k c}
+    {M : (a : A) (b : B) (c : C) → H a b ∙ K b c ＝ L a c}
+    {M' : (a : A) (b : B) (c : C) → H a b ∙ K' b c ＝ L a c} →
+    (α : (b : B) (c : C) → K b c ＝ K' b c) →
+    ( (a : A) (b : B) (c : C) →
+      tr (λ r → H a b ∙ r ＝ L a c) (α b c) (M a b c) ＝
+      M' a b c) →
+    make-tri-join-rec-data i j k H L K M ＝
+    make-tri-join-rec-data i j k H L K' M'
+  eq-tri-join-rec-data-path-23-htpy
+    {H = H} {L = L} {M = M} {M' = M'} α β =
+    eq-tri-join-rec-data-path-23
+      ( eq-htpy (λ b → eq-htpy (α b)))
+      ( map-compute-dependent-identification-dependent-function-type-three-fixed-domains
+        ( λ K a b c → H a b ∙ K b c ＝ L a c)
+        ( eq-htpy (λ b → eq-htpy (α b)))
+        ( M)
+        ( M')
+        ( λ a b c →
+          compute-tr-eq-htpy-ev-two-fixed-domains
+            ( λ b' c' r → H a b' ∙ r ＝ L a c')
+            ( α)
+            ( b)
+            ( c)
+            ( M a b c) ∙
+          β a b c))
+
+map-twist-tri-join-rec-data :
+  {l1 l2 l3 l4 l5 : Level}
+  {A : UU l1} {B : UU l2} {C : UU l3} {X : UU l4} {Y : UU l5}
+  (f : X → Y) (d : tri-join-rec-data A B C X) →
+  map-tri-join-rec-data f (twist-tri-join-rec-data d) ＝
+  twist-tri-join-rec-data (map-tri-join-rec-data f d)
+map-twist-tri-join-rec-data f d =
+  eq-tri-join-rec-data-path-12
+    ( p)
+    ( map-compute-dependent-identification-dependent-function-type-three-fixed-domains
+      ( λ H b a c →
+        H b a ∙ ap f (path-13-tri-join-rec-data d a c) ＝
+        ap f (path-23-tri-join-rec-data d b c))
+      ( p)
+      ( coherence-triangle-tri-join-rec-data
+        ( map-tri-join-rec-data f (twist-tri-join-rec-data d)))
+      ( coherence-triangle-tri-join-rec-data
+        ( twist-tri-join-rec-data (map-tri-join-rec-data f d)))
+      ( λ b a c →
+        compute-tr-eq-htpy-ev
+          ( λ b' H →
+            H a ∙ ap f (path-13-tri-join-rec-data d a c) ＝
+            ap f (path-23-tri-join-rec-data d b' c))
+          ( λ b' →
+            eq-htpy
+              ( λ a' → ap-inv f (path-12-tri-join-rec-data d a' b')))
+          ( b)
+          ( coherence-triangle-tri-join-rec-data
+            ( map-tri-join-rec-data f (twist-tri-join-rec-data d))
+            b a c) ∙
+        compute-tr-eq-htpy-ev
+          ( λ a' h →
+            h ∙ ap f (path-13-tri-join-rec-data d a' c) ＝
+            ap f (path-23-tri-join-rec-data d b c))
+          ( λ a' → ap-inv f (path-12-tri-join-rec-data d a' b))
+          ( a)
+          ( coherence-triangle-tri-join-rec-data
+            ( map-tri-join-rec-data f (twist-tri-join-rec-data d))
+            b a c) ∙
+        coherence-map-twist-identification
+          ( f)
+          ( path-12-tri-join-rec-data d a b)
+          ( path-23-tri-join-rec-data d b c)
+          ( path-13-tri-join-rec-data d a c)
+          ( coherence-triangle-tri-join-rec-data d a b c)))
+  where
+  p :
+    path-12-tri-join-rec-data
+      ( map-tri-join-rec-data f (twist-tri-join-rec-data d)) ＝
+    path-12-tri-join-rec-data
+      ( twist-tri-join-rec-data (map-tri-join-rec-data f d))
+  p =
+    eq-htpy
+      ( λ b →
+        eq-htpy (λ a → ap-inv f (path-12-tri-join-rec-data d a b)))
+
 coherence-twist-twist-tri-join-rec-data :
   {l1 l2 l3 l4 : Level}
   {A : UU l1} {B : UU l2} {C : UU l3} {X : UU l4}
@@ -940,6 +1125,40 @@ pointwise-coherence-twist-twist-tri-join-rec-data d =
       a b c) ＝
   coherence-triangle-tri-join-rec-data d a b c
 
+compute-pointwise-coherence-twist-twist-tri-join-rec-data :
+  {l1 l2 l3 l4 : Level}
+  {A : UU l1} {B : UU l2} {C : UU l3} {X : UU l4}
+  (d : tri-join-rec-data A B C X) →
+  pointwise-coherence-twist-twist-tri-join-rec-data d
+compute-pointwise-coherence-twist-twist-tri-join-rec-data d a b c =
+  compute-tr-eq-htpy-ev
+    ( λ a' H →
+      H b ∙ path-23-tri-join-rec-data d b c ＝
+      path-13-tri-join-rec-data d a' c)
+    ( λ a' →
+      eq-htpy
+        ( λ b' →
+          inv-inv (path-12-tri-join-rec-data d a' b')))
+    ( a)
+    ( coherence-triangle-tri-join-rec-data
+      ( twist-tri-join-rec-data (twist-tri-join-rec-data d))
+      a b c) ∙
+  compute-tr-eq-htpy-ev
+    ( λ b' h →
+      h ∙ path-23-tri-join-rec-data d b' c ＝
+      path-13-tri-join-rec-data d a c)
+    ( λ b' →
+      inv-inv (path-12-tri-join-rec-data d a b'))
+    ( b)
+    ( coherence-triangle-tri-join-rec-data
+      ( twist-tri-join-rec-data (twist-tri-join-rec-data d))
+      a b c) ∙
+  coherence-twist-twist-identification
+    ( path-12-tri-join-rec-data d a b)
+    ( path-23-tri-join-rec-data d b c)
+    ( path-13-tri-join-rec-data d a c)
+    ( coherence-triangle-tri-join-rec-data d a b c)
+
 coherence-twist-twist-tri-join-rec-data-pointwise :
   {l1 l2 l3 l4 : Level}
   {A : UU l1} {B : UU l2} {C : UU l3} {X : UU l4}
@@ -965,6 +1184,51 @@ eq-twist-twist-tri-join-rec-data :
 eq-twist-twist-tri-join-rec-data d =
   eq-tri-join-rec-data-path-12
     ( path-12-twist-twist-tri-join-rec-data d)
+
+compute-coherence-twist-twist-tri-join-rec-data :
+  {l1 l2 l3 l4 : Level}
+  {A : UU l1} {B : UU l2} {C : UU l3} {X : UU l4}
+  (d : tri-join-rec-data A B C X) →
+  coherence-twist-twist-tri-join-rec-data d
+compute-coherence-twist-twist-tri-join-rec-data d =
+  coherence-twist-twist-tri-join-rec-data-pointwise d
+    ( compute-pointwise-coherence-twist-twist-tri-join-rec-data d)
+
+is-retraction-twist-tri-join-rec-data :
+  {l1 l2 l3 l4 : Level}
+  {A : UU l1} {B : UU l2} {C : UU l3} {X : UU l4} →
+  (twist-tri-join-rec-data ∘ twist-tri-join-rec-data) ~
+  id {A = tri-join-rec-data A B C X}
+is-retraction-twist-tri-join-rec-data d =
+  eq-twist-twist-tri-join-rec-data d
+    ( compute-coherence-twist-twist-tri-join-rec-data d)
+
+is-section-twist-tri-join-rec-data :
+  {l1 l2 l3 l4 : Level}
+  {A : UU l1} {B : UU l2} {C : UU l3} {X : UU l4} →
+  (twist-tri-join-rec-data ∘ twist-tri-join-rec-data) ~
+  id {A = tri-join-rec-data B A C X}
+is-section-twist-tri-join-rec-data =
+  is-retraction-twist-tri-join-rec-data
+
+is-equiv-twist-tri-join-rec-data :
+  {l1 l2 l3 l4 : Level}
+  {A : UU l1} {B : UU l2} {C : UU l3} {X : UU l4} →
+  is-equiv
+    ( λ (d : tri-join-rec-data A B C X) →
+      twist-tri-join-rec-data d)
+is-equiv-twist-tri-join-rec-data =
+  is-equiv-is-invertible
+    ( twist-tri-join-rec-data)
+    ( is-section-twist-tri-join-rec-data)
+    ( is-retraction-twist-tri-join-rec-data)
+
+equiv-twist-tri-join-rec-data :
+  {l1 l2 l3 l4 : Level}
+  {A : UU l1} {B : UU l2} {C : UU l3} {X : UU l4} →
+  tri-join-rec-data A B C X ≃ tri-join-rec-data B A C X
+pr1 equiv-twist-tri-join-rec-data = twist-tri-join-rec-data
+pr2 equiv-twist-tri-join-rec-data = is-equiv-twist-tri-join-rec-data
 ```
 
 ### Associativity of joins
@@ -4535,6 +4799,27 @@ module _
     tri-join-rec-data-associative-cocone-data ∘
     associative-cocone-data-cocone-A-join-BC
 
+  abstract
+    compute-tri-join-rec-data-cocone-A-join-BC-normal-form-cocone-map :
+      {l4 l5 : Level} {X : UU l4} {Y : UU l5}
+      (d : cocone-A-join-BC X) (h : X → Y) →
+      tri-join-rec-data-cocone-A-join-BC-normal-form
+        ( cocone-map pr1 pr2 d h) ＝
+      map-tri-join-rec-data h
+        ( tri-join-rec-data-cocone-A-join-BC-normal-form d)
+    compute-tri-join-rec-data-cocone-A-join-BC-normal-form-cocone-map
+      d h =
+      eq-tri-join-rec-data-path-23-htpy
+        ( λ b c →
+          ap-comp
+            ( h)
+            ( vertical-map-cocone pr1 pr2 d)
+            ( glue-join (b , c)))
+        ( λ a b c →
+          tr-postcompose-naturality-constant-homotopy
+            ( h)
+            ( λ y → coherence-square-cocone pr1 pr2 d (a , y))
+            ( glue-join (b , c)))
   is-equiv-tri-join-rec-data-cocone-A-join-BC-normal-form :
     {l4 : Level} {X : UU l4} →
     is-equiv (tri-join-rec-data-cocone-A-join-BC-normal-form {X = X})
@@ -4561,6 +4846,22 @@ module _
     tri-join-rec-data-cocone-A-join-BC-normal-form ∘
     cocone-map pr1 pr2 (cocone-join {A = A} {B = B * C})
 
+  abstract
+    compute-map-tri-join-rec-data-tri-join-rec-data-map-A-join-BC :
+      {l4 l5 : Level} {X : UU l4} {Y : UU l5}
+      (h : X → Y) (f : A * (B * C) → X) →
+      tri-join-rec-data-map-A-join-BC (h ∘ f) ＝
+      map-tri-join-rec-data h (tri-join-rec-data-map-A-join-BC f)
+    compute-map-tri-join-rec-data-tri-join-rec-data-map-A-join-BC h f =
+      ap
+        ( tri-join-rec-data-cocone-A-join-BC-normal-form)
+        ( cocone-map-comp pr1 pr2
+          ( cocone-join {A = A} {B = B * C})
+          ( f)
+          ( h)) ∙
+      compute-tri-join-rec-data-cocone-A-join-BC-normal-form-cocone-map
+        ( cocone-map pr1 pr2 (cocone-join {A = A} {B = B * C}) f)
+        ( h)
   is-equiv-tri-join-rec-data-map-A-join-BC :
     {l4 : Level} {X : UU l4} →
     is-equiv (tri-join-rec-data-map-A-join-BC {X = X})
@@ -4596,52 +4897,6 @@ module _
     rec-tri-join ∘ tri-join-rec-data-map-A-join-BC {X = X} ~ id
   is-retraction-rec-tri-join =
     is-retraction-map-inv-equiv equiv-tri-join-rec-data-map-A-join-BC
-
-  naturality-glue-left-join-swapped :
-    (b : B) (a : A) (c : C) →
-    glue-join (b , inl-join a) ∙
-    ap inr-join (glue-join (a , c)) ＝
-    glue-join (b , inr-join c)
-  naturality-glue-left-join-swapped b a c =
-    inv
-      ( map-inv-compute-dependent-identification-eq-value-function
-        ( λ _ → inl-join {A = B} {B = A * C} b)
-        ( inr-join)
-        ( glue-join (a , c))
-        ( glue-join (b , inl-join a))
-        ( glue-join (b , inr-join c))
-        ( apd (λ y → glue-join (b , y)) (glue-join (a , c)))) ∙
-    ap
-      ( λ p → p ∙ glue-join (b , inr-join c))
-      ( ap-const
-        ( inl-join {A = B} {B = A * C} b)
-        ( glue-join (a , c)))
-
-  canonical-swapped-tri-join-rec-data :
-    tri-join-rec-data B A C (B * (A * C))
-  canonical-swapped-tri-join-rec-data =
-    make-tri-join-rec-data
-      ( inl-join)
-      ( inr-join ∘ inl-join)
-      ( inr-join ∘ inr-join)
-      ( λ b a → glue-join (b , inl-join a))
-      ( λ b c → glue-join (b , inr-join c))
-      ( λ a c → ap inr-join (glue-join (a , c)))
-      ( naturality-glue-left-join-swapped)
-
-  map-twist-tri-join :
-    A * (B * C) → B * (A * C)
-  map-twist-tri-join =
-    rec-tri-join
-      ( twist-tri-join-rec-data
-        ( canonical-swapped-tri-join-rec-data))
-
-  compute-tri-join-rec-data-map-twist-tri-join :
-    tri-join-rec-data-map-A-join-BC map-twist-tri-join ＝
-    twist-tri-join-rec-data canonical-swapped-tri-join-rec-data
-  compute-tri-join-rec-data-map-twist-tri-join =
-    is-section-rec-tri-join
-      ( twist-tri-join-rec-data canonical-swapped-tri-join-rec-data)
 
   triangle-cocone-AB-join-C-cocone-A-join-BC-associative-cocone-data :
     {l4 : Level} {X : UU l4} (d : cocone-A-join-BC X) →
@@ -6995,5 +7250,187 @@ module _
     map-associative-join
   pr2 (equiv-associative-join-coherence-squares H K) =
     is-equiv-map-associative-join-coherence-squares H K
+
+canonical-swapped-tri-join-rec-data :
+  {l1 l2 l3 : Level} {A : UU l1} {B : UU l2} {C : UU l3} →
+  tri-join-rec-data B A C (B * (A * C))
+canonical-swapped-tri-join-rec-data {A = A} {B = B} {C = C} =
+  tri-join-rec-data-map-A-join-BC
+    { A = B}
+    { B = A}
+    { C = C}
+    ( id)
+
+map-twist-tri-join :
+  {l1 l2 l3 : Level} {A : UU l1} {B : UU l2} {C : UU l3} →
+  A * (B * C) → B * (A * C)
+map-twist-tri-join {A = A} {B = B} {C = C} =
+  rec-tri-join
+    { A = A}
+    { B = B}
+    { C = C}
+    ( twist-tri-join-rec-data
+      ( canonical-swapped-tri-join-rec-data {A = A} {B = B} {C = C}))
+
+compute-tri-join-rec-data-map-twist-tri-join :
+  {l1 l2 l3 : Level} {A : UU l1} {B : UU l2} {C : UU l3} →
+  tri-join-rec-data-map-A-join-BC
+    { A = A}
+    { B = B}
+    { C = C}
+    ( map-twist-tri-join {A = A} {B = B} {C = C}) ＝
+  twist-tri-join-rec-data
+    ( canonical-swapped-tri-join-rec-data {A = A} {B = B} {C = C})
+compute-tri-join-rec-data-map-twist-tri-join {A = A} {B = B} {C = C} =
+  is-section-rec-tri-join
+    { A = A}
+    { B = B}
+    { C = C}
+    ( twist-tri-join-rec-data
+      ( canonical-swapped-tri-join-rec-data {A = A} {B = B} {C = C}))
+
+compute-precomp-map-twist-tri-join :
+  {l1 l2 l3 l4 : Level} {A : UU l1} {B : UU l2} {C : UU l3}
+  {X : UU l4} (h : B * (A * C) → X) →
+  tri-join-rec-data-map-A-join-BC
+    {A = A}
+    {B = B}
+    {C = C}
+    ( h ∘ map-twist-tri-join {A = A} {B = B} {C = C}) ＝
+  twist-tri-join-rec-data
+    ( tri-join-rec-data-map-A-join-BC
+      {A = B}
+      {B = A}
+      {C = C}
+      ( h))
+
+compute-precomp-map-twist-tri-join {A = A} {B = B} {C = C} h =
+  compute-map-tri-join-rec-data-tri-join-rec-data-map-A-join-BC
+    {A = A}
+    {B = B}
+    {C = C}
+    ( h)
+    ( map-twist-tri-join {A = A} {B = B} {C = C}) ∙
+  ap
+    ( map-tri-join-rec-data {A = A} {B = B} {C = C} h)
+    ( compute-tri-join-rec-data-map-twist-tri-join {A = A} {B = B} {C = C}) ∙
+  map-twist-tri-join-rec-data
+    { A = B}
+    { B = A}
+    { C = C}
+    ( h)
+    ( canonical-swapped-tri-join-rec-data {A = A} {B = B} {C = C}) ∙
+  ap
+    ( twist-tri-join-rec-data {A = B} {B = A} {C = C})
+    ( inv
+      ( compute-map-tri-join-rec-data-tri-join-rec-data-map-A-join-BC
+        { A = B}
+        { B = A}
+        { C = C}
+        ( h)
+        ( id)))
+
+map-precomp-map-twist-tri-join-normal-form :
+  {l1 l2 l3 l4 : Level} {A : UU l1} {B : UU l2} {C : UU l3}
+  {X : UU l4} →
+  (B * (A * C) → X) → (A * (B * C) → X)
+map-precomp-map-twist-tri-join-normal-form {A = A} {B = B} {C = C} =
+  rec-tri-join {A = A} {B = B} {C = C} ∘
+  twist-tri-join-rec-data {A = B} {B = A} {C = C} ∘
+  tri-join-rec-data-map-A-join-BC {A = B} {B = A} {C = C}
+
+htpy-precomp-map-twist-tri-join-normal-form :
+  {l1 l2 l3 l4 : Level} {A : UU l1} {B : UU l2} {C : UU l3}
+  {X : UU l4} →
+  (λ h → h ∘ map-twist-tri-join {A = A} {B = B} {C = C}) ~
+  map-precomp-map-twist-tri-join-normal-form
+    {A = A}
+    {B = B}
+    {C = C}
+    {X = X}
+htpy-precomp-map-twist-tri-join-normal-form {A = A} {B = B} {C = C} h =
+  inv
+    ( is-retraction-rec-tri-join
+      {A = A}
+      {B = B}
+      {C = C}
+      ( h ∘ map-twist-tri-join {A = A} {B = B} {C = C})) ∙
+  ap
+    ( rec-tri-join {A = A} {B = B} {C = C})
+    ( compute-precomp-map-twist-tri-join h)
+
+is-equiv-map-precomp-map-twist-tri-join-normal-form :
+  {l1 l2 l3 l4 : Level} {A : UU l1} {B : UU l2} {C : UU l3}
+  {X : UU l4} →
+  is-equiv
+    ( map-precomp-map-twist-tri-join-normal-form
+      {A = A}
+      {B = B}
+      {C = C}
+      {X = X})
+is-equiv-map-precomp-map-twist-tri-join-normal-form {A = A} {B = B} {C = C} =
+  is-equiv-comp
+    ( rec-tri-join {A = A} {B = B} {C = C})
+    ( twist-tri-join-rec-data {A = B} {B = A} {C = C} ∘
+      tri-join-rec-data-map-A-join-BC {A = B} {B = A} {C = C})
+    ( is-equiv-comp
+      ( twist-tri-join-rec-data {A = B} {B = A} {C = C})
+      ( tri-join-rec-data-map-A-join-BC {A = B} {B = A} {C = C})
+      ( is-equiv-tri-join-rec-data-map-A-join-BC
+        {A = B}
+        {B = A}
+        {C = C})
+      ( is-equiv-twist-tri-join-rec-data {A = B} {B = A} {C = C}))
+    ( is-equiv-map-inv-equiv
+      ( equiv-tri-join-rec-data-map-A-join-BC
+        {A = A}
+        {B = B}
+        {C = C}))
+
+is-equiv-precomp-map-twist-tri-join :
+  {l1 l2 l3 : Level} {A : UU l1} {B : UU l2} {C : UU l3}
+  {l4 : Level} (X : UU l4) →
+  is-equiv
+    ( λ (h : B * (A * C) → X) →
+      h ∘ map-twist-tri-join {A = A} {B = B} {C = C})
+is-equiv-precomp-map-twist-tri-join {A = A} {B = B} {C = C} X =
+  is-equiv-htpy
+    ( map-precomp-map-twist-tri-join-normal-form
+      {A = A}
+      {B = B}
+      {C = C})
+    ( htpy-precomp-map-twist-tri-join-normal-form
+      {A = A}
+      {B = B}
+      {C = C})
+    ( is-equiv-map-precomp-map-twist-tri-join-normal-form
+      {A = A}
+      {B = B}
+      {C = C}
+      {X = X})
+
+is-equiv-map-twist-tri-join :
+  {l1 l2 l3 : Level} {A : UU l1} {B : UU l2} {C : UU l3} →
+  is-equiv (map-twist-tri-join {A = A} {B = B} {C = C})
+is-equiv-map-twist-tri-join {A = A} {B = B} {C = C} =
+  is-equiv-is-equiv-precomp
+    ( map-twist-tri-join {A = A} {B = B} {C = C})
+    ( is-equiv-precomp-map-twist-tri-join {A = A} {B = B} {C = C})
+
+equiv-twist-tri-join :
+  {l1 l2 l3 : Level} {A : UU l1} {B : UU l2} {C : UU l3} →
+  A * (B * C) ≃ B * (A * C)
+pr1 equiv-twist-tri-join = map-twist-tri-join
+pr2 equiv-twist-tri-join = is-equiv-map-twist-tri-join
+
+equiv-associative-join-twist :
+  {l1 l2 l3 : Level} {A : UU l1} {B : UU l2} {C : UU l3} →
+  ((A * B) * C) ≃ (A * (B * C))
+equiv-associative-join-twist {A = A} {B = B} {C = C} =
+  equiv-join
+    ( id-equiv)
+    ( commutative-join {A = C} {B = B}) ∘e
+  equiv-twist-tri-join {A = C} {B = A} {C = B} ∘e
+  commutative-join {A = A * B} {B = C}
 
 ```

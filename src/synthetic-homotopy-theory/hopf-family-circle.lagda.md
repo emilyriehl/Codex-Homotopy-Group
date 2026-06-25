@@ -449,6 +449,20 @@ equiv-total-space-hopf-family-sphere-1-join-power-Fin-2 :
 equiv-total-space-hopf-family-sphere-1-join-power-Fin-2 =
   equiv-join-sphere-1-join-power-Fin-2 ∘e
   equiv-total-space-hopf-family-sphere-1-join-sphere-1
+
+equiv-total-space-hopf-family-sphere-1-sphere-3 :
+  total-space-hopf-family-sphere-1 ≃ sphere 3
+equiv-total-space-hopf-family-sphere-1-sphere-3 =
+  equiv-sphere-3-join-power-Fin-2 ∘e
+  equiv-join-power-two-two-Fin-2 ∘e
+  equiv-total-space-hopf-family-sphere-1-join-power-Fin-2
+
+equiv-total-space-hopf-construction-sphere-1-sphere-3 :
+  total-space-hopf-construction-sphere-1 ≃ sphere 3
+equiv-total-space-hopf-construction-sphere-1-sphere-3 =
+  equiv-total-space-hopf-family-sphere-1-sphere-3 ∘e
+  inv-equiv
+    ( equiv-total-space-hopf-family-sphere-1-total-space-hopf-construction-sphere-1)
 ```
 
 ### The projection from the total space of the Hopf family
