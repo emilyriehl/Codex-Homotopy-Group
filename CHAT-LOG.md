@@ -5016,3 +5016,50 @@ rewrite-rule dependency, or whitespace errors.
 Related commit:
 
 - This commit - Add BM span pushout reductions.
+
+### Start pointwise Blakers-Massey code-family route
+
+Request: Emily asked Codex to keep working on the real target after the
+span-pushout gap reductions were checked, with the generalized Blakers-Massey
+pointwise glue connectedness theorem as the active blocker.
+
+Model context:
+
+- Date: 2026-06-25.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible; `./check.sh` remained the final acceptance gate.
+
+Actions:
+
+- Began the Rocq/Coq-HoTT-style pointwise code-family proof inside
+  `blakers-massey-span-pushouts`.
+- Added the truncated right code for a glue map and proved that contractibility
+  of this code is equivalent to connectedness of the corresponding glue map.
+- Added the left code pieces `code-left-1-span-pushout` and
+  `code-left-2-span-pushout`.
+- Added the join-enhanced code `code-left-2-with-join-span-pushout` and proved
+  that its projection to `code-left-2-span-pushout` is connected under the
+  connected-join hypothesis.
+- Packaged the induced truncation equivalence
+  `type-trunc m code-left-2-with-join ≃ type-trunc m code-left-2`, formalizing
+  the modal insertion step from the Rocq proof.
+- Added the `codeleft2a`/`codeleft2b`/`codeleft2c` decomposition pushout, the
+  canonical map from this pushout into the join-enhanced code, the reverse map
+  by join recursion, and beta lemmas for both maps.
+- Updated `STATUS-REPORT.md` to identify the next real blocker as the
+  decomposition comparison equivalence, or a sufficient truncation equivalence,
+  replacing Rocq's `equiv_Ocodeleft2plus`.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/blakers-massey-span-pushouts.lagda.md
+```
+
+The Agda check passed.
+
+Related commit:
+
+- This commit - Start BM code family route.

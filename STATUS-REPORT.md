@@ -1978,3 +1978,39 @@ connectedness from the fibers of the original two maps. All three Agda checks
 passed. The touched-file scan and `git diff --check` found no holes, postulates,
 unsolved-meta pragmas, unsafe termination pragmas, rewrite-rule dependency, or
 whitespace errors.
+
+Later on 2026-06-25, the pointwise Blakers-Massey code-family route was started
+directly in `blakers-massey-span-pushouts`. The file now defines the truncated
+right code
+
+```text
+code-right-span-pushout m x y r = type-trunc m (fiber (glue-span-pushout Q x y) r)
+```
+
+and proves that contractibility of this code is exactly the connectedness of the
+corresponding glue map. It also defines the Coq-HoTT-style left codes
+`code-left-1-span-pushout` and `code-left-2-span-pushout`, the inserted
+join-enhanced code `code-left-2-with-join-span-pushout`, and proves that the
+projection from the inserted code back to `code-left-2-span-pushout` is
+`m`-connected under the connected-join hypothesis. Consequently, the induced map
+on `m`-truncations is now packaged as a checked equivalence:
+
+```text
+type-trunc m (code-left-2-with-join-span-pushout ...) ≃
+type-trunc m (code-left-2-span-pushout ...)
+```
+
+This is the modal insertion step used in the Rocq/Coq-HoTT proof.
+
+The same pass formalized the `codeleft2a`/`codeleft2b`/`codeleft2c`
+decomposition from the Rocq proof, the decomposition pushout, the canonical map
+from that pushout to `code-left-2-with-join-span-pushout`, the reverse map
+defined by join recursion, and the checked beta rules for both maps. The next
+real blocker is to prove this decomposition comparison is an equivalence, or at
+least a truncation equivalence strong enough to replace the Rocq theorem
+`equiv_Ocodeleft2plus` in the modal proof. The checked command for this pass
+was:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/blakers-massey-span-pushouts.lagda.md
+```
