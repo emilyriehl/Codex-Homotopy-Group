@@ -140,12 +140,15 @@ calculation:
   Applying this bridge twice turns the Freudenthal `S²` connected-map instance
   into the double-loop connectedness needed for the set-truncated stabilization
   map.
-- Two reusable connectivity prerequisites for the library-quality Freudenthal
+- Three reusable connectivity prerequisites for the library-quality Freudenthal
   route are now checked. The codiagonal of a `k`-connected map is proved
   `(k+1)`-connected using the fiberwise suspension identification, and the join
   of a `k`-connected type with an `n`-connected type is proved
   `(k+n+2)`-connected by the join pushout universal property and the
-  exponential characterization of connected types.
+  exponential characterization of connected types. The cogap of a
+  pushout-product square is also proved fiberwise equivalent to the join of the
+  two input fibers, and hence `(k+n+2)`-connected when the two input maps are
+  `k`- and `n`-connected.
 - Pointed-set exactness now has a derived mere-preimage/fiber interface. This
   keeps `is-exact-hom-Pointed-Set` as the source theorem while giving the
   group-level bridge a lower-level Coq-HoTT-style map-to-fiber form to consume.
@@ -252,6 +255,7 @@ instance to `π₂(S²) ≅ π₃(S³)`, the now-checked Hopf base computation
 | Connected maps and loop spaces | [`src/synthetic-homotopy-theory/connected-maps-loop-spaces.lagda.md`](src/synthetic-homotopy-theory/connected-maps-loop-spaces.lagda.md) | Proves the reusable loop-lowering theorem: a `(k+1)`-connected pointed map induces a `k`-connected map on loop spaces. The proof factors through the equivalence between the fiber of `ap f` and an identity type in the fiber of `f`. |
 | Connectivity of codiagonals of maps | [`src/synthetic-homotopy-theory/connectivity-codiagonals-of-maps.lagda.md`](src/synthetic-homotopy-theory/connectivity-codiagonals-of-maps.lagda.md) | Proves that the codiagonal of a `k`-connected map is `(k+1)`-connected, using the existing equivalence between codiagonal fibers and suspensions of the original fibers. |
 | Connectivity of joins of types | [`src/synthetic-homotopy-theory/connectivity-joins-of-types.lagda.md`](src/synthetic-homotopy-theory/connectivity-joins-of-types.lagda.md) | Proves that the join of a `k`-connected type and an `n`-connected type is `(k+n+2)`-connected. The proof works through cocones into a truncated type, identifies them with fiberwise constant maps, proves the constant cocone map is an equivalence, and transfers this across the join pushout universal property. |
+| Fibers of pushout-products | [`src/synthetic-homotopy-theory/fibers-pushout-products.lagda.md`](src/synthetic-homotopy-theory/fibers-pushout-products.lagda.md) | Proves that the fiber of the cogap of a pushout-product square over `(x , y)` is equivalent to `(fiber f x) * (fiber g y)`, by transporting the standard pushout-of-fibers theorem across explicit product-map fiber equivalences. It also proves the corresponding connected-map theorem: if `f` is `k`-connected and `g` is `n`-connected, then this cogap is `(k+n+2)`-connected. |
 | Computing identity types of subtypes | [`src/foundation/computing-identity-types-subtypes.lagda.md`](src/foundation/computing-identity-types-subtypes.lagda.md) | Proves the computation rule for the first component of subtype extensionality, used to control connected-component path calculations. |
 | Computing identity types of automorphism-infinity groups | [`src/higher-group-theory/computing-identity-types-automorphism-infinity-groups.lagda.md`](src/higher-group-theory/computing-identity-types-automorphism-infinity-groups.lagda.md) | Proves section, concatenation, inverse, and loop-transport computation rules for paths in automorphism-infinity classifying types. |
 | Computing binary functoriality of set truncation | [`src/foundation/computing-binary-functoriality-set-truncation.lagda.md`](src/foundation/computing-binary-functoriality-set-truncation.lagda.md) | Proves that `binary-map-trunc-Set` computes on two set-truncation units, and that the inverse of `equiv-unit-trunc-Set` for set types preserves any binary operation lifted by `binary-map-trunc-Set`. |
@@ -294,18 +298,18 @@ instance to `π₂(S²) ≅ π₃(S³)`, the now-checked Hopf base computation
 | Circle as an H-space | Done | The checked module [`src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md`](src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md) packages both `𝕊¹-H-Space` and the transported `sphere-1-H-Space`, and proves that circle and 1-sphere translations are equivalences. |
 | Hopf construction and Hopf fibration | Done | The generic Hopf map `A * A -> suspension A`, the `S¹ * S¹ ->* S²` specialization, the canonical Hopf-construction source fiber sequence, the Hopf family over `S²`, the Hopf-family projection fiber sequence with fiber `S¹`, the Hopf shear equivalence on `S¹ × S¹`, the actual-family flattening pushout, the explicit flattened-span pushout comparison with `S¹ * S¹`, the completed two-leg span comparison, the canonical equivalence `total-space-hopf-family-sphere-1 ≃ S¹ * S¹`, the comparison `Fin 2 * X ≃ suspension X`, join functoriality under equivalences, join commutativity, the Rocq-guided checked associator equivalence for joins, the bridge from `S¹ * S¹` to the join of two `join-power 2 (Fin 2)` models, the equivalence from that join to `join-power 4 (Fin 2)`, the `join-power 4 (Fin 2) ≃ S³` model, the pointed total-space comparison with `S³`, and the packaged Hopf fiber sequence `S¹ ->* S³ ->* S²` are checked. |
 | Hopf LES consequence `pi_3(S^3) = pi_3(S^2)` | Done | The exactness-to-isomorphism extraction, Hopf LES packaging, direct second shifted fibration-boundary exactness, and packaged Hopf fiber sequence input are all checked. The comparison has no local proof hole. |
-| Freudenthal suspension theorem | Interface and connectivity prerequisites checked, proof missing | The suspension-loop unit, connectivity range, and general theorem target are checked in `freudenthal-suspension-theorem`. The codiagonal-connectivity theorem and join-connectivity theorem are now checked as reusable prerequisites. The missing upstream-scale proof is the connected-map theorem itself, expected to use Blakers-Massey/meridian connectivity as in Coq-HoTT. |
+| Freudenthal suspension theorem | Interface and connectivity prerequisites checked, proof missing | The suspension-loop unit, connectivity range, and general theorem target are checked in `freudenthal-suspension-theorem`. The codiagonal-connectivity theorem, join-connectivity theorem, and pushout-product fiber/connectivity theorem are now checked as reusable prerequisites. The missing upstream-scale proof is the connected-map theorem itself, expected to identify the relevant Freudenthal/meridian map with this structural pushout-product layer as in Coq-HoTT. |
 | Stability of homotopy groups of spheres | Conditional bridge checked | The needed comparison `π₂(S²) ≅ π₃(S³)` is checked conditionally on the Freudenthal theorem instance `is-connected-map-Freudenthal-suspension 0 (sphere-Pointed-Type 2)`. The proof lowers connectivity through two loop-space applications, obtains the set-truncated double-loop equivalence, transfers it to an underlying homotopy-group map equivalence, and packages the result as a group isomorphism. |
 | Diagonal theorem `pi_n(S^n) = Z` | Reduced to lower stubs | The `n = 3` file now composes the stability scaffold, the checked `π₂(S²) ≅ π₁(S¹)` comparison, and the checked `π₁(S¹) ≅ ℤ` calculation. The general theorem remains unproved. |
 | Final theorem `pi_3(S^2) = Z` | Reduced to Freudenthal theorem instance | The target statement in [`src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md`](src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md) now checks as a formal composition from the single remaining hypothesis `is-connected-map-Freudenthal-suspension 0 (sphere-Pointed-Type 2)`. It has no local proof hole or weakening pragma. |
 
 ## Remaining tasks
 
-1. Use the checked codiagonal- and join-connectivity theorems to build the
-   next reusable pushout-product/Blakers-Massey connectivity layer needed for
-   Freudenthal.
+1. Relate the checked pushout-product fiber/connectivity theorem to the
+   Freudenthal suspension-loop unit, likely through the meridian/codiagonal
+   square used in the Coq-HoTT proof.
 2. Prove the general Freudenthal connected-map theorem for the suspension-loop
-   unit from that layer.
+   unit from that structural comparison.
 3. Promote the eventual general Freudenthal proof to the special instance
    `is-connected-map-Freudenthal-suspension 0 (sphere-Pointed-Type 2)`.
 4. Apply the checked conditional stability and Hopf/circle chain to obtain the
@@ -411,6 +415,20 @@ Both Agda checks passed. `git diff --check` passed. The touched-file scan
 found no holes, postulates, unsolved-meta pragmas, or unsafe termination
 pragmas. The checked theorems are the codiagonal connectivity shift and the
 join connectivity theorem.
+
+Later on 2026-06-25, the pushout-product fiber/connectivity layer was checked
+with:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/fibers-pushout-products.lagda.md
+./check.sh src/synthetic-homotopy-theory/connectivity-codiagonals-of-maps.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate|TERMINATING|NON_TERMINATING|rewriting" src/synthetic-homotopy-theory/fibers-pushout-products.lagda.md
+```
+
+Both Agda checks passed. `git diff --check` passed. The touched-file scan found
+no holes, postulates, unsolved-meta pragmas, unsafe termination pragmas, or
+rewrite-rule dependency in the new pushout-product fiber module.
 
 On 2026-06-25, the Rocq HoTT-guided join associativity route and the Hopf
 total-space comparison to `S³` were checked with:

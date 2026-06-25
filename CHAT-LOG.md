@@ -4813,3 +4813,50 @@ pragmas.
 Related commit:
 
 - This commit - Add Freudenthal connectivity prerequisites.
+
+### Add pushout-product fiber connectivity layer for Freudenthal
+
+Request: Emily asked Codex to continue working on the Freudenthal route after
+the first reusable connectivity prerequisites were committed.
+
+Model context:
+
+- Date: 2026-06-25.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible and used for interactive proof development;
+  `./check.sh` remained the final acceptance gate.
+
+Actions:
+
+- Added `fibers-pushout-products`, proving the fiberwise join theorem for the
+  cogap of a pushout-product square:
+  `fiber (cogap (id × g) (f × id)) (x , y) ≃ fiber f x * fiber g y`.
+- Proved the result structurally from the existing pushout-of-fibers theorem,
+  using explicit product-map fiber equivalences and a right-leg coherence proof
+  based on `compute-glue-cogap`, `tr-Id-left`, and the inverse/retraction laws
+  for the vertical fiber comparison.
+- Packaged the resulting map-level connectivity theorem: if `f` is
+  `k`-connected and `g` is `n`-connected, then the pushout-product cogap is
+  `(k+n+2)`-connected.
+- Updated `STATUS-REPORT.md` to record this as the checked
+  pushout-product/Blakers-Massey-style layer needed before the final
+  Freudenthal comparison.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/fibers-pushout-products.lagda.md
+./check.sh src/synthetic-homotopy-theory/connectivity-codiagonals-of-maps.lagda.md
+git diff --check
+rg -n "\{!!\}|allow-unsolved-metas|postulate|TERMINATING|NON_TERMINATING|rewriting" src/synthetic-homotopy-theory/fibers-pushout-products.lagda.md
+```
+
+Both Agda checks passed. `git diff --check` passed. The touched-file scan found
+no holes, postulates, unsolved-meta pragmas, unsafe termination pragmas, or
+rewrite-rule dependency in the new pushout-product fiber module.
+
+Related commit:
+
+- This commit - Add pushout-product fiber connectivity.
