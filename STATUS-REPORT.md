@@ -248,11 +248,13 @@ Freudenthal/stability comparison.
 | Hopf LES comparison for second homotopy groups | [`src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md) | Proves the right-hand boundary/fiber-inclusion exactness statement for the lower Hopf segment, the left fibration-boundary exactness statement by applying `is-exact-set-truncation-loop-fiber-sequence` to `fiber-sequence-boundary-fiber-sequence-direct-Pointed-Type` instantiated at the Hopf fiber sequence, and the algebraic extraction identifying `π₂(S²)` with `π₁(S¹)` from the two exactness statements and the checked trivial outer `S³` groups. |
 | Hopf LES comparison for third homotopy groups | [`src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md) | Builds the Hopf comparison isomorphism from the Hopf fibration homomorphism, the checked total-space exactness theorem, the new direct fibration-boundary exactness theorem for the second shifted segment, and the two trivial endpoint hypotheses. The exactness proof no longer uses triviality of `π₂(S¹)` as a shortcut. |
 | Hopf comparison for third homotopy groups | [`src/synthetic-homotopy-theory/hopf-fibration-third-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/hopf-fibration-third-homotopy-groups.lagda.md) | Delegates `π₃(S³) ≅ π₃(S²)` to the Hopf LES comparison scaffold and has no direct proof hole. |
-| Stability comparison for `π₃(S³)` | [`src/synthetic-homotopy-theory/stability-third-homotopy-group-sphere-3.lagda.md`](src/synthetic-homotopy-theory/stability-third-homotopy-group-sphere-3.lagda.md) | Records the unfinished stability comparison `π₂(S²) ≅ π₃(S³)`. |
+| Freudenthal suspension theorem interface | [`src/synthetic-homotopy-theory/freudenthal-suspension-theorem.lagda.md`](src/synthetic-homotopy-theory/freudenthal-suspension-theorem.lagda.md) | Packages the suspension-loop adjunction unit as `pointed-map-Freudenthal-suspension`, names the natural-number connectivity bounds for the theorem, and records the reusable general target statement `is-connected-map-Freudenthal-suspension`. This file is checked and has no holes; the proof of the theorem itself remains missing. |
+| Stabilization homomorphisms on homotopy groups | [`src/synthetic-homotopy-theory/stabilization-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/stabilization-homotopy-groups.lagda.md) | Defines the canonical concrete-group and abstract-group homomorphisms induced by the Freudenthal suspension map, `πₖ A -> πₖ ΩΣA`. This file is checked and has no holes. |
+| Stability comparison for `π₃(S³)` | [`src/synthetic-homotopy-theory/stability-third-homotopy-group-sphere-3.lagda.md`](src/synthetic-homotopy-theory/stability-third-homotopy-group-sphere-3.lagda.md) | Now specializes the Freudenthal target to `S²`, identifies the canonical stabilization homomorphism `π₂(S²) -> π₃(S³)`, and reduces the unfinished comparison to the proof that this named homomorphism is an isomorphism. |
 | Second homotopy group of `S²` | [`src/synthetic-homotopy-theory/second-homotopy-group-sphere-2.lagda.md`](src/synthetic-homotopy-theory/second-homotopy-group-sphere-2.lagda.md) | Proves the Hopf-derived comparison `π₂(S²) ≅ π₁(S¹)` by instantiating the lower Hopf exactness-to-isomorphism wrapper with the checked direct-connecting-fiber-sequence set-level exactness. It has no local `--allow-unsolved-metas`. |
 | Fundamental group of `S¹` | [`src/synthetic-homotopy-theory/fundamental-group-sphere-1.lagda.md`](src/synthetic-homotopy-theory/fundamental-group-sphere-1.lagda.md) | Proves the checked group isomorphism from the concrete fundamental group of `S¹` to `ℤ-Group`, with no unsolved metas or scaffold holes. |
 | Third homotopy group of the 3-sphere | [`src/synthetic-homotopy-theory/third-homotopy-group-sphere-3.lagda.md`](src/synthetic-homotopy-theory/third-homotopy-group-sphere-3.lagda.md) | Delegates `π₃(S³) ≅ ℤ` to the stability scaffold, the checked `π₂(S²) ≅ π₁(S¹)` comparison, and the checked `π₁(S¹) ≅ ℤ` calculation, and has no direct proof hole. |
-| Final theorem target | [`src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md`](src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md) | Records the pinned top-level statement `π₃(S²) ≅ ℤ` and proves it formally from the inverse Hopf-comparison stub and the `π₃(S³) ≅ ℤ` stub. The proof is therefore structurally assembled but depends on unfinished imported stubs. |
+| Final theorem target | [`src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md`](src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md) | Records the pinned top-level statement `π₃(S²) ≅ ℤ` and proves it formally from the checked Hopf comparison and the `π₃(S³) ≅ ℤ` file. The proof is structurally assembled, but the imported `π₃(S³) ≅ ℤ` route still depends on the unfinished Freudenthal stabilization isomorphism. |
 
 ## Status against the formalization plan
 
@@ -267,16 +269,20 @@ Freudenthal/stability comparison.
 | Circle as an H-space | Done | The checked module [`src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md`](src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md) packages both `𝕊¹-H-Space` and the transported `sphere-1-H-Space`, and proves that circle and 1-sphere translations are equivalences. |
 | Hopf construction and Hopf fibration | Done | The generic Hopf map `A * A -> suspension A`, the `S¹ * S¹ ->* S²` specialization, the canonical Hopf-construction source fiber sequence, the Hopf family over `S²`, the Hopf-family projection fiber sequence with fiber `S¹`, the Hopf shear equivalence on `S¹ × S¹`, the actual-family flattening pushout, the explicit flattened-span pushout comparison with `S¹ * S¹`, the completed two-leg span comparison, the canonical equivalence `total-space-hopf-family-sphere-1 ≃ S¹ * S¹`, the comparison `Fin 2 * X ≃ suspension X`, join functoriality under equivalences, join commutativity, the Rocq-guided checked associator equivalence for joins, the bridge from `S¹ * S¹` to the join of two `join-power 2 (Fin 2)` models, the equivalence from that join to `join-power 4 (Fin 2)`, the `join-power 4 (Fin 2) ≃ S³` model, the pointed total-space comparison with `S³`, and the packaged Hopf fiber sequence `S¹ ->* S³ ->* S²` are checked. |
 | Hopf LES consequence `pi_3(S^3) = pi_3(S^2)` | Done | The exactness-to-isomorphism extraction, Hopf LES packaging, direct second shifted fibration-boundary exactness, and packaged Hopf fiber sequence input are all checked. The comparison has no local proof hole. |
-| Freudenthal suspension theorem | Not started | Still a major missing theorem. |
-| Stability of homotopy groups of spheres | Instance stubbed | The needed comparison `π₂(S²) ≅ π₃(S³)` is recorded as an unfinished theorem depending on Freudenthal/stability. |
+| Freudenthal suspension theorem | Interface checked, proof missing | The suspension-loop unit, connectivity range, and general theorem target are checked in `freudenthal-suspension-theorem`. The missing upstream-scale proof is the connectedness theorem itself, expected to use Blakers-Massey/meridian connectivity as in Coq-HoTT. |
+| Stability of homotopy groups of spheres | Canonical instance narrowed | The needed comparison `π₂(S²) ≅ π₃(S³)` is now reduced to proving that the canonical Freudenthal stabilization homomorphism is an isomorphism. The remaining reusable bridge should turn a sufficiently connected pointed map into an isomorphism on the appropriate concrete homotopy group, then apply the checked `S²` Freudenthal special case. |
 | Diagonal theorem `pi_n(S^n) = Z` | Reduced to lower stubs | The `n = 3` file now composes the stability scaffold, the checked `π₂(S²) ≅ π₁(S¹)` comparison, and the checked `π₁(S¹) ≅ ℤ` calculation. The general theorem remains unproved. |
-| Final theorem `pi_3(S^2) = Z` | Reduced to Freudenthal/stability | The target statement in [`src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md`](src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md) now checks as a formal composition of the checked Hopf comparison and the `π₃(S³) ≅ ℤ` file. It has no direct proof hole but remains mathematically unfinished until the imported Freudenthal/stability scaffold is proved. |
+| Final theorem `pi_3(S^2) = Z` | Reduced to Freudenthal/stability | The target statement in [`src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md`](src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md) now checks as a formal composition of the checked Hopf comparison and the `π₃(S³) ≅ ℤ` file. It has no direct proof hole but remains mathematically unfinished until the Freudenthal stabilization isomorphism is proved. |
 
 ## Remaining tasks
 
-1. Prove the stability comparison `π₂(S²) ≅ π₃(S³)` from Freudenthal and sphere
-   stability.
-2. Recheck `π₃(S³) ≅ ℤ` and `π₃(S²) ≅ ℤ` after the imported
+1. Prove the general Freudenthal connected-map theorem for the suspension-loop
+   unit, likely via Blakers-Massey/meridian connectivity.
+2. Prove the reusable bridge from a sufficiently connected pointed map to an
+   isomorphism on concrete homotopy groups in range.
+3. Use the checked `S²` specialization and stabilization homomorphism to fill
+   `is-iso-hom-group-suspension-second-third-homotopy-group-sphere-2-sphere-3`.
+4. Recheck `π₃(S³) ≅ ℤ` and `π₃(S²) ≅ ℤ` after the imported
    Freudenthal/stability scaffold is proved; their proof bodies should remain
    short compositions.
 
@@ -302,8 +308,10 @@ stages; and `hopf-fiber-sequence` packages the transported fiber sequence
 The Hopf LES second- and third-homotopy comparison files also check against
 that packaged Hopf fiber sequence. Excluding Freudenthal, there is no remaining
 local Hopf scaffold in the current `π₃(S²)` route. The next upstream-shaped
-target for the overall theorem is now the Freudenthal/sphere-stability
-comparison in
+target for the overall theorem is now the Freudenthal connected-map theorem in
+`src/synthetic-homotopy-theory/freudenthal-suspension-theorem.lagda.md` and the
+range bridge needed to turn that connectivity into the named stabilization
+isomorphism in
 `src/synthetic-homotopy-theory/stability-third-homotopy-group-sphere-3.lagda.md`.
 
 Expected verification after the stability scaffold is replaced by a proof
@@ -328,17 +336,20 @@ third-homotopy LES consumers were checked with:
 ./check.sh src/synthetic-homotopy-theory/hopf-fibration-third-homotopy-groups.lagda.md
 ./check.sh src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md
 ./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
-./check.sh src/synthetic-homotopy-theory/second-homotopy-group-sphere-2.lagda.md
-git diff --check
-rg -n "\{!!\}|allow-unsolved-metas|postulate|lossy-unification" src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md src/synthetic-homotopy-theory/hopf-fibration-third-homotopy-groups.lagda.md src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md src/synthetic-homotopy-theory/second-homotopy-group-sphere-2.lagda.md
-rg -n "allow-unsolved-metas|\{!!\}" src/synthetic-homotopy-theory src/group-theory src/structured-types -g "*.lagda.md"
 ```
 
-All Agda checks passed. `git diff --check` passed. The targeted Hopf scan found
-no holes, postulates, unsolved-meta pragmas, or temporary lossy-unification
-pragmas. The broader scaffold scan now finds only the expected
-Freudenthal/stability stub in
-`src/synthetic-homotopy-theory/stability-third-homotopy-group-sphere-3.lagda.md`.
+Later on 2026-06-25, the Freudenthal/stabilization interface was checked with:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/freudenthal-suspension-theorem.lagda.md
+./check.sh src/synthetic-homotopy-theory/stabilization-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/stability-third-homotopy-group-sphere-3.lagda.md
+```
+
+The two new interface modules passed with no holes. The stability scaffold
+still checks under its existing `--allow-unsolved-metas` pragma, now with the
+remaining hole narrowed to the `is-iso-Group` proof for the canonical
+stabilization homomorphism.
 
 On 2026-06-25, the Rocq HoTT-guided join associativity route and the Hopf
 total-space comparison to `S³` were checked with:

@@ -4615,3 +4615,59 @@ Freudenthal/stability stub.
 Related commit:
 
 - This commit - Complete packaged Hopf fiber sequence.
+
+### Start Freudenthal/stabilization interface
+
+Request: Emily changed direction and asked for a plan aimed at a library-quality
+Freudenthal suspension theorem for general agda-unimath use, together with the
+special case needed for the Hopf calculation, then asked Codex to implement the
+plan.
+
+Model context:
+
+- Date: 2026-06-25.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible, but `./check.sh` remained the final acceptance
+  gate.
+
+Actions:
+
+- Added `src/synthetic-homotopy-theory/freudenthal-suspension-theorem.lagda.md`.
+  It packages the suspension-loop adjunction unit as
+  `pointed-map-Freudenthal-suspension`, names the natural-number connectivity
+  bounds, and records the reusable general target statement
+  `is-connected-map-Freudenthal-suspension`.
+- Added `src/synthetic-homotopy-theory/stabilization-homotopy-groups.lagda.md`.
+  It defines the canonical concrete-group and abstract-group stabilization
+  homomorphisms on homotopy groups induced by the Freudenthal suspension map.
+- Updated
+  `src/synthetic-homotopy-theory/stability-third-homotopy-group-sphere-3.lagda.md`
+  to specialize the Freudenthal target to `S²`, identify the canonical
+  stabilization homomorphism `π₂(S²) -> π₃(S³)`, and reduce the existing
+  stability comparison hole to the named `is-iso-Group` proof for that
+  homomorphism.
+- Updated `STATUS-REPORT.md` to record the checked interface and the narrowed
+  remaining blocker.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/freudenthal-suspension-theorem.lagda.md
+./check.sh src/synthetic-homotopy-theory/stabilization-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/stability-third-homotopy-group-sphere-3.lagda.md
+```
+
+The two new interface modules passed with no holes. The stability scaffold
+passes under its existing `--allow-unsolved-metas` pragma; its remaining hole is
+now precisely the `is-iso-Group` proof for the canonical Freudenthal
+stabilization homomorphism. The next proof-level blockers are the actual
+Freudenthal connected-map theorem, expected to use Blakers-Massey/meridian
+connectivity as in Coq-HoTT, and the reusable bridge from sufficient
+connectedness of a pointed map to an isomorphism on concrete homotopy groups in
+range.
+
+Related commit:
+
+- This commit - Start Freudenthal stabilization interface.
