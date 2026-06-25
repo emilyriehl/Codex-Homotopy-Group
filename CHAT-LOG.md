@@ -4964,3 +4964,55 @@ question-mark placeholders.
 Related commit:
 
 - This commit - Reduce pushout gaps to relation spans.
+
+### Add Blakers-Massey span-pushout reduction layer
+
+Request: Emily asked Codex to work hard on generalized Blakers-Massey
+connectedness after the ordinary pushout-gap reduction to relation spans had
+been checked.
+
+Model context:
+
+- Date: 2026-06-25.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible; `./check.sh` remained the final acceptance gate.
+
+Actions:
+
+- Extended `span-pushouts` with relation-indexed recursion and dependent
+  induction wrappers, including constructor and glue computation witnesses.
+- Identified the total-relation gap map as the iterated total map of the
+  pointwise glue maps `Q x y -> inl x = inr y`.
+- Proved connectedness transfers both ways between pointwise connectedness of
+  all span-pushout glue maps and connectedness of the total gap map.
+- Added `blakers-massey-span-pushouts`, which records the row and column total
+  spaces for a relation, proves the ABFJ/Coq-HoTT connected-join hypothesis
+  from row and column connectedness, and specializes the total-gap/glue transfer
+  to the `add+2-𝕋` Blakers-Massey range.
+- Proved that for the relation span associated to ordinary maps `f : S -> A`
+  and `g : S -> B`, row and column total spaces are equivalent to `fiber f a`
+  and `fiber g b`, so connected maps supply the ordinary-span connected-join
+  hypothesis.
+- Updated `STATUS-REPORT.md` to record that the remaining BM blocker is now the
+  pointwise Coq-HoTT-style code-family contraction proving connectedness of the
+  span-pushout glue maps.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/span-pushouts.lagda.md
+./check.sh src/synthetic-homotopy-theory/blakers-massey-span-pushouts.lagda.md
+./check.sh src/synthetic-homotopy-theory/freudenthal-suspension-theorem.lagda.md
+rg -n "\{!!\}|!\}|allow-unsolved-metas|postulate|TERMINATING|NON_TERMINATING|rewriting" src/synthetic-homotopy-theory/span-pushouts.lagda.md src/synthetic-homotopy-theory/blakers-massey-span-pushouts.lagda.md src/synthetic-homotopy-theory/freudenthal-suspension-theorem.lagda.md
+git diff --check
+```
+
+All three Agda checks passed. The touched-file scan and `git diff --check`
+found no holes, postulates, unsolved-meta pragmas, unsafe termination pragmas,
+rewrite-rule dependency, or whitespace errors.
+
+Related commit:
+
+- This commit - Add BM span pushout reductions.

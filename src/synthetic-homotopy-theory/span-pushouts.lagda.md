@@ -11,6 +11,7 @@ open import foundation.action-on-identifications-functions
 open import foundation.cartesian-product-types
 open import foundation.commuting-squares-of-maps
 open import foundation.connected-maps
+open import foundation.dependent-identifications
 open import foundation.dependent-pair-types
 open import foundation.equivalences
 open import foundation.function-types
@@ -22,6 +23,7 @@ open import foundation.truncation-levels
 open import foundation.universe-levels
 
 open import synthetic-homotopy-theory.cocones-under-spans
+open import synthetic-homotopy-theory.dependent-cocones-under-spans
 open import synthetic-homotopy-theory.gap-maps-pushouts
 open import synthetic-homotopy-theory.pushouts
 open import synthetic-homotopy-theory.universal-property-pushouts
@@ -87,6 +89,213 @@ module _
       ( cocone-pushout left-map-span-pushout right-map-span-pushout) ~
     gap-span-pushout
   triangle-gap-pushout-gap-span-pushout (x , y , q) = refl
+
+  cocone-span-pushout :
+    {l4 : Level} {Z : UU l4} →
+    (i : X → Z) (j : Y → Z) →
+    ((x : X) (y : Y) → Q x y → i x ＝ j y) →
+    cocone left-map-span-pushout right-map-span-pushout Z
+  pr1 (cocone-span-pushout i j H) = i
+  pr1 (pr2 (cocone-span-pushout i j H)) = j
+  pr2 (pr2 (cocone-span-pushout i j H)) (x , y , q) = H x y q
+
+  rec-span-pushout :
+    {l4 : Level} {Z : UU l4} →
+    (i : X → Z) (j : Y → Z) →
+    ((x : X) (y : Y) → Q x y → i x ＝ j y) →
+    span-pushout → Z
+  rec-span-pushout i j H =
+    cogap
+      ( left-map-span-pushout)
+      ( right-map-span-pushout)
+      ( cocone-span-pushout i j H)
+
+  compute-inl-rec-span-pushout :
+    {l4 : Level} {Z : UU l4} →
+    (i : X → Z) (j : Y → Z)
+    (H : (x : X) (y : Y) → Q x y → i x ＝ j y) →
+    (rec-span-pushout i j H ∘ inl-span-pushout) ~ i
+  compute-inl-rec-span-pushout i j H =
+    compute-inl-cogap
+      ( left-map-span-pushout)
+      ( right-map-span-pushout)
+      ( cocone-span-pushout i j H)
+
+  compute-inr-rec-span-pushout :
+    {l4 : Level} {Z : UU l4} →
+    (i : X → Z) (j : Y → Z)
+    (H : (x : X) (y : Y) → Q x y → i x ＝ j y) →
+    (rec-span-pushout i j H ∘ inr-span-pushout) ~ j
+  compute-inr-rec-span-pushout i j H =
+    compute-inr-cogap
+      ( left-map-span-pushout)
+      ( right-map-span-pushout)
+      ( cocone-span-pushout i j H)
+
+  compute-glue-rec-span-pushout :
+    {l4 : Level} {Z : UU l4} →
+    (i : X → Z) (j : Y → Z)
+    (H : (x : X) (y : Y) → Q x y → i x ＝ j y) →
+    statement-coherence-htpy-cocone
+      ( left-map-span-pushout)
+      ( right-map-span-pushout)
+      ( cocone-map
+        ( left-map-span-pushout)
+        ( right-map-span-pushout)
+        ( cocone-pushout left-map-span-pushout right-map-span-pushout)
+        ( rec-span-pushout i j H))
+      ( cocone-span-pushout i j H)
+      ( compute-inl-rec-span-pushout i j H)
+      ( compute-inr-rec-span-pushout i j H)
+  compute-glue-rec-span-pushout i j H =
+    compute-glue-cogap
+      ( left-map-span-pushout)
+      ( right-map-span-pushout)
+      ( cocone-span-pushout i j H)
+
+  dependent-cocone-span-pushout :
+    {l4 : Level} {P : span-pushout → UU l4} →
+    (i : (x : X) → P (inl-span-pushout x)) →
+    (j : (y : Y) → P (inr-span-pushout y)) →
+    ( (x : X) (y : Y) (q : Q x y) →
+      dependent-identification P (glue-span-pushout x y q) (i x) (j y)) →
+    dependent-cocone
+      ( left-map-span-pushout)
+      ( right-map-span-pushout)
+      ( cocone-pushout left-map-span-pushout right-map-span-pushout)
+      ( P)
+  pr1 (dependent-cocone-span-pushout i j H) = i
+  pr1 (pr2 (dependent-cocone-span-pushout i j H)) = j
+  pr2 (pr2 (dependent-cocone-span-pushout i j H)) (x , y , q) = H x y q
+
+  ind-span-pushout :
+    {l4 : Level} {P : span-pushout → UU l4} →
+    (i : (x : X) → P (inl-span-pushout x)) →
+    (j : (y : Y) → P (inr-span-pushout y)) →
+    ( (x : X) (y : Y) (q : Q x y) →
+      dependent-identification P (glue-span-pushout x y q) (i x) (j y)) →
+    (z : span-pushout) → P z
+  ind-span-pushout i j H =
+    dependent-cogap
+      ( left-map-span-pushout)
+      ( right-map-span-pushout)
+      ( dependent-cocone-span-pushout i j H)
+
+  compute-inl-ind-span-pushout :
+    {l4 : Level} {P : span-pushout → UU l4} →
+    (i : (x : X) → P (inl-span-pushout x)) →
+    (j : (y : Y) → P (inr-span-pushout y)) →
+    ( H : (x : X) (y : Y) (q : Q x y) →
+      dependent-identification P (glue-span-pushout x y q) (i x) (j y)) →
+    (ind-span-pushout i j H ∘ inl-span-pushout) ~ i
+  compute-inl-ind-span-pushout i j H =
+    compute-inl-dependent-cogap
+      ( left-map-span-pushout)
+      ( right-map-span-pushout)
+      ( dependent-cocone-span-pushout i j H)
+
+  compute-inr-ind-span-pushout :
+    {l4 : Level} {P : span-pushout → UU l4} →
+    (i : (x : X) → P (inl-span-pushout x)) →
+    (j : (y : Y) → P (inr-span-pushout y)) →
+    ( H : (x : X) (y : Y) (q : Q x y) →
+      dependent-identification P (glue-span-pushout x y q) (i x) (j y)) →
+    (ind-span-pushout i j H ∘ inr-span-pushout) ~ j
+  compute-inr-ind-span-pushout i j H =
+    compute-inr-dependent-cogap
+      ( left-map-span-pushout)
+      ( right-map-span-pushout)
+      ( dependent-cocone-span-pushout i j H)
+
+  compute-glue-ind-span-pushout :
+    {l4 : Level} {P : span-pushout → UU l4} →
+    (i : (x : X) → P (inl-span-pushout x)) →
+    (j : (y : Y) → P (inr-span-pushout y)) →
+    ( H : (x : X) (y : Y) (q : Q x y) →
+      dependent-identification P (glue-span-pushout x y q) (i x) (j y)) →
+    coherence-htpy-dependent-cocone
+      ( left-map-span-pushout)
+      ( right-map-span-pushout)
+      ( cocone-pushout left-map-span-pushout right-map-span-pushout)
+      ( P)
+      ( dependent-cocone-map
+        ( left-map-span-pushout)
+        ( right-map-span-pushout)
+        ( cocone-pushout left-map-span-pushout right-map-span-pushout)
+        ( P)
+        ( ind-span-pushout i j H))
+      ( dependent-cocone-span-pushout i j H)
+      ( compute-inl-ind-span-pushout i j H)
+      ( compute-inr-ind-span-pushout i j H)
+  compute-glue-ind-span-pushout i j H =
+    compute-glue-dependent-cogap
+      ( left-map-span-pushout)
+      ( right-map-span-pushout)
+      ( dependent-cocone-span-pushout i j H)
+
+  total-map-glue-span-pushout :
+    total-relation-span-pushout →
+    standard-pullback inl-span-pushout inr-span-pushout
+  total-map-glue-span-pushout =
+    tot (λ x → tot (glue-span-pushout x))
+
+  triangle-total-map-glue-span-pushout-gap-span-pushout :
+    total-map-glue-span-pushout ~ gap-span-pushout
+  triangle-total-map-glue-span-pushout-gap-span-pushout (x , y , q) = refl
+
+  is-connected-map-total-map-glue-span-pushout-is-connected-map-glue-span-pushout :
+    (k : 𝕋) →
+    ((x : X) (y : Y) → is-connected-map k (glue-span-pushout x y)) →
+    is-connected-map k total-map-glue-span-pushout
+  is-connected-map-total-map-glue-span-pushout-is-connected-map-glue-span-pushout
+    k H =
+    is-connected-map-tot-is-fiberwise-connected-map
+      ( k)
+      ( λ x → tot (glue-span-pushout x))
+      ( λ x →
+        is-connected-map-tot-is-fiberwise-connected-map
+          ( k)
+          ( glue-span-pushout x)
+          ( H x))
+
+  is-connected-map-gap-span-pushout-is-connected-map-glue-span-pushout :
+    (k : 𝕋) →
+    ((x : X) (y : Y) → is-connected-map k (glue-span-pushout x y)) →
+    is-connected-map k gap-span-pushout
+  is-connected-map-gap-span-pushout-is-connected-map-glue-span-pushout k H =
+    is-connected-map-htpy'
+      ( k)
+      ( triangle-total-map-glue-span-pushout-gap-span-pushout)
+      ( is-connected-map-total-map-glue-span-pushout-is-connected-map-glue-span-pushout
+        ( k)
+        ( H))
+
+  is-connected-map-glue-span-pushout-is-connected-map-total-map-glue-span-pushout :
+    (k : 𝕋) →
+    is-connected-map k total-map-glue-span-pushout →
+    (x : X) (y : Y) → is-connected-map k (glue-span-pushout x y)
+  is-connected-map-glue-span-pushout-is-connected-map-total-map-glue-span-pushout
+    k H x =
+    is-fiberwise-connected-map-is-connected-map-tot
+      ( k)
+      ( glue-span-pushout x)
+      ( is-fiberwise-connected-map-is-connected-map-tot
+        ( k)
+        ( λ z → tot (glue-span-pushout z))
+        ( H)
+        ( x))
+
+  is-connected-map-glue-span-pushout-is-connected-map-gap-span-pushout :
+    (k : 𝕋) →
+    is-connected-map k gap-span-pushout →
+    (x : X) (y : Y) → is-connected-map k (glue-span-pushout x y)
+  is-connected-map-glue-span-pushout-is-connected-map-gap-span-pushout k H =
+    is-connected-map-glue-span-pushout-is-connected-map-total-map-glue-span-pushout
+      ( k)
+      ( is-connected-map-htpy
+        ( k)
+        ( triangle-total-map-glue-span-pushout-gap-span-pushout)
+        ( H))
 ```
 
 ## Relation associated to two maps
