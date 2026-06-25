@@ -4764,3 +4764,52 @@ or local `--allow-unsolved-metas`.
 Related commit:
 
 - This commit - Bridge Freudenthal stability through loop connectivity.
+
+### Add reusable connectivity prerequisites for Freudenthal
+
+Request: Emily asked whether the final objective was now proved without holes,
+then asked Codex to follow the plan toward a library-quality Freudenthal route
+rather than treating the conditional theorem name as a proof.
+
+Model context:
+
+- Date: 2026-06-25.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible and used for interactive proof development;
+  `./check.sh` remained the final acceptance gate.
+
+Actions:
+
+- Added `connectivity-codiagonals-of-maps`, proving that the codiagonal of a
+  `k`-connected map is `(k+1)`-connected by combining the existing fiberwise
+  suspension equivalence for codiagonals with suspension connectivity.
+- Added `connectivity-joins-of-types`, proving that if `A` is `k`-connected
+  and `B` is `n`-connected, then `A * B` is `(k+n+2)`-connected.
+- The join proof follows the structural universal-property route: identify
+  cocones over the join span with fiberwise constant maps, use the exponential
+  characterization of connected types to prove the constant cocone map is an
+  equivalence, compare it with the diagonal map through the join pushout
+  universal property, and conclude connectedness by the diagonal-exponential
+  characterization.
+- Updated `STATUS-REPORT.md` to record these as reusable Freudenthal
+  prerequisites and to point the next handoff at the
+  pushout-product/Blakers-Massey connectivity layer.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/connectivity-joins-of-types.lagda.md
+./check.sh src/synthetic-homotopy-theory/connectivity-codiagonals-of-maps.lagda.md
+git diff --check
+rg -n "\{!!\}|postulate|allow-unsolved-metas|TERMINATING|NON_TERMINATING" src/synthetic-homotopy-theory/connectivity-codiagonals-of-maps.lagda.md src/synthetic-homotopy-theory/connectivity-joins-of-types.lagda.md
+```
+
+Both Agda checks passed. `git diff --check` passed. The touched-file scan
+found no holes, postulates, unsolved-meta pragmas, or unsafe termination
+pragmas.
+
+Related commit:
+
+- This commit - Add Freudenthal connectivity prerequisites.
