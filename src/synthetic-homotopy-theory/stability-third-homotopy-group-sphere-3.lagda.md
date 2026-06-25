@@ -231,3 +231,55 @@ iso-suspension-second-third-homotopy-group-sphere-2-sphere-3-is-connected-map-Fr
     ( is-equiv-map-set-trunc-loop-map-suspension-second-third-homotopy-group-sphere-2-sphere-3-is-connected-map-Freudenthal-suspension
       ( H))
 ```
+
+### The stable suspension comparison from Blakers-Massey
+
+```agda
+is-connected-map-Freudenthal-suspension-sphere-2-Blakers-Massey :
+  is-connected-map-Freudenthal-suspension 0 (sphere-Pointed-Type 2)
+is-connected-map-Freudenthal-suspension-sphere-2-Blakers-Massey =
+  is-connected-map-Freudenthal-suspension-Blakers-Massey
+    ( 0)
+    ( sphere-Pointed-Type 2)
+
+is-connected-map-map-Freudenthal-suspension-sphere-2-Blakers-Massey :
+  is-connected-map
+    ( truncation-level-ℕ 2)
+    ( map-Freudenthal-suspension (sphere-Pointed-Type 2))
+is-connected-map-map-Freudenthal-suspension-sphere-2-Blakers-Massey =
+  is-connected-map-Freudenthal-suspension-sphere-2
+    ( is-connected-map-Freudenthal-suspension-sphere-2-Blakers-Massey)
+
+is-connected-map-double-loop-Freudenthal-suspension-sphere-2-Blakers-Massey :
+  is-connected-map-double-loop-Freudenthal-suspension-sphere-2
+is-connected-map-double-loop-Freudenthal-suspension-sphere-2-Blakers-Massey =
+  is-connected-map-double-loop-Freudenthal-suspension-sphere-2-is-connected-map-Freudenthal-suspension
+    ( is-connected-map-Freudenthal-suspension-sphere-2-Blakers-Massey)
+
+is-equiv-map-set-trunc-loop-map-suspension-second-third-homotopy-group-sphere-2-sphere-3-Blakers-Massey :
+  is-equiv-map-set-trunc-loop-map-suspension-second-third-homotopy-group-sphere-2-sphere-3
+is-equiv-map-set-trunc-loop-map-suspension-second-third-homotopy-group-sphere-2-sphere-3-Blakers-Massey =
+  is-equiv-map-set-trunc-loop-map-suspension-second-third-homotopy-group-sphere-2-sphere-3-is-connected-map-Freudenthal-suspension
+    ( is-connected-map-Freudenthal-suspension-sphere-2-Blakers-Massey)
+
+is-iso-hom-group-suspension-second-third-homotopy-group-sphere-2-sphere-3-Blakers-Massey :
+  is-iso-Group
+    ( group-Concrete-Group
+      ( concrete-homotopy-group 1 (sphere-Pointed-Type 2)))
+    ( group-Concrete-Group
+      ( concrete-homotopy-group 2 (sphere-Pointed-Type 3)))
+    ( hom-group-suspension-second-third-homotopy-group-sphere-2-sphere-3)
+is-iso-hom-group-suspension-second-third-homotopy-group-sphere-2-sphere-3-Blakers-Massey =
+  is-iso-hom-group-suspension-second-third-homotopy-group-sphere-2-sphere-3-is-connected-map-Freudenthal-suspension
+    ( is-connected-map-Freudenthal-suspension-sphere-2-Blakers-Massey)
+
+iso-suspension-second-third-homotopy-group-sphere-2-sphere-3-Blakers-Massey :
+  iso-Group
+    ( group-Concrete-Group
+      ( concrete-homotopy-group 1 (sphere-Pointed-Type 2)))
+    ( group-Concrete-Group
+      ( concrete-homotopy-group 2 (sphere-Pointed-Type 3)))
+iso-suspension-second-third-homotopy-group-sphere-2-sphere-3-Blakers-Massey =
+  iso-suspension-second-third-homotopy-group-sphere-2-sphere-3-is-connected-map-Freudenthal-suspension
+    ( is-connected-map-Freudenthal-suspension-sphere-2-Blakers-Massey)
+```

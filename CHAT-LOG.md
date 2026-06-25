@@ -5110,3 +5110,37 @@ unsafe termination pragmas, or rewrite-rule dependency.
 Related commit:
 
 - This commit - Complete BM span pushout theorem.
+
+### Complete Freudenthal specialization and unconditional pi_3(S^2)
+
+Request: Emily asked Codex to implement the plan to complete the full unconditional proof calculating `π₃(S²)`, after another agent completed the generalized Blakers-Massey span-pushout theorem and the plan identified Freudenthal specialization as the remaining blocker.
+
+Model context:
+
+- Date: 2026-06-25.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible and used for intermediate typechecks; `./check.sh` remained the final acceptance gate.
+
+Actions:
+
+- Added the Freudenthal theorem proof in `freudenthal-suspension-theorem` by specializing the checked ordinary-span Blakers-Massey corollary to the suspension span `unit <- A -> unit`.
+- Used `is-connected-map-terminal-map-is-connected` to supply the two terminal-map connectedness hypotheses from the Freudenthal domain connectedness assumption.
+- Composed the resulting relation-span gap connectedness with the existing suspension gap bridge to export `is-connected-map-Freudenthal-suspension-Blakers-Massey`.
+- Added named Blakers-Massey consequences for the `S²` stabilization comparison.
+- Preserved the conditional `π₃(S³)` and `π₃(S²)` calculations under explicit Freudenthal-hypothesis names, and made the canonical final theorem names unconditional.
+- Updated `STATUS-REPORT.md` and `FORMALIZATION-PLAN.md` to record that the Freudenthal blocker and final theorem are complete locally.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/freudenthal-suspension-theorem.lagda.md
+./check.sh src/synthetic-homotopy-theory/stability-third-homotopy-group-sphere-3.lagda.md
+./check.sh src/synthetic-homotopy-theory/third-homotopy-group-sphere-3.lagda.md
+./check.sh src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md
+```
+
+All four Agda checks passed. MCP typechecks also reported no goals for the edited Agda files.
+
+Related commit:
+
+- This commit - Complete Freudenthal specialization and unconditional pi_3(S^2).

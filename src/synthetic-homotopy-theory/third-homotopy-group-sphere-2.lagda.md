@@ -43,24 +43,39 @@ the index `2` denotes the ordinary third homotopy group.
 ### The third homotopy group of the 2-sphere is the integers
 
 ```agda
-iso-third-homotopy-group-sphere-2-ℤ :
+iso-third-homotopy-group-sphere-2-ℤ-is-connected-map-Freudenthal-suspension :
   is-connected-map-Freudenthal-suspension 0 (sphere-Pointed-Type 2) →
   iso-Group
     ( group-Concrete-Group
       ( concrete-homotopy-group 2 (sphere-Pointed-Type 2)))
     ( ℤ-Group)
-iso-third-homotopy-group-sphere-2-ℤ H =
+iso-third-homotopy-group-sphere-2-ℤ-is-connected-map-Freudenthal-suspension H =
   comp-iso-Group
     ( group-Concrete-Group
       ( concrete-homotopy-group 2 (sphere-Pointed-Type 2)))
     ( group-Concrete-Group
       ( concrete-homotopy-group 2 (sphere-Pointed-Type 3)))
     ( ℤ-Group)
-    ( iso-third-homotopy-group-sphere-3-ℤ H)
+    ( iso-third-homotopy-group-sphere-3-ℤ-is-connected-map-Freudenthal-suspension H)
     ( inv-iso-Group
       ( group-Concrete-Group
         ( concrete-homotopy-group 2 (sphere-Pointed-Type 3)))
       ( group-Concrete-Group
         ( concrete-homotopy-group 2 (sphere-Pointed-Type 2)))
       ( iso-third-homotopy-group-sphere-3-sphere-2))
+```
+
+### The unconditional third homotopy group of the 2-sphere
+
+```agda
+iso-third-homotopy-group-sphere-2-ℤ :
+  iso-Group
+    ( group-Concrete-Group
+      ( concrete-homotopy-group 2 (sphere-Pointed-Type 2)))
+    ( ℤ-Group)
+iso-third-homotopy-group-sphere-2-ℤ =
+  iso-third-homotopy-group-sphere-2-ℤ-is-connected-map-Freudenthal-suspension
+    ( is-connected-map-Freudenthal-suspension-Blakers-Massey
+      ( 0)
+      ( sphere-Pointed-Type 2))
 ```

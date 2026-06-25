@@ -29,6 +29,8 @@ open import foundation.universe-levels
 open import structured-types.pointed-maps
 open import structured-types.pointed-types
 
+open import synthetic-homotopy-theory.blakers-massey-span-pushouts
+open import synthetic-homotopy-theory.connectivity-joins-of-types
 open import synthetic-homotopy-theory.loop-spaces
 open import synthetic-homotopy-theory.gap-maps-pushouts
 open import synthetic-homotopy-theory.span-pushouts
@@ -365,4 +367,47 @@ is-connected-map-Freudenthal-suspension-is-connected-map-gap-Freudenthal-suspens
 is-connected-map-Freudenthal-suspension-is-connected-map-gap-Freudenthal-suspension
   n A H c =
   is-connected-map-Freudenthal-suspension-is-connected-map-gap n A (H c)
+```
+
+### The Freudenthal suspension theorem from Blakers-Massey
+
+```agda
+is-connected-map-gap-span-pushout-suspension-Blakers-Massey :
+  {l : Level} (n : ℕ) (A : Pointed-Type l) →
+  is-connected
+    ( truncation-level-ℕ (freudenthal-domain-connectivity-level-ℕ n))
+    ( type-Pointed-Type A) →
+  is-connected-map
+    ( add+2-𝕋 (truncation-level-ℕ n) (truncation-level-ℕ n))
+    ( gap-span-pushout
+      ( relation-map-span-pushout
+        ( terminal-map (type-Pointed-Type A))
+        ( terminal-map (type-Pointed-Type A))))
+is-connected-map-gap-span-pushout-suspension-Blakers-Massey n A H =
+  is-connected-map-gap-relation-map-span-pushout-Blakers-Massey
+    ( terminal-map (type-Pointed-Type A))
+    ( terminal-map (type-Pointed-Type A))
+    ( truncation-level-ℕ n)
+    ( truncation-level-ℕ n)
+    ( is-connected-map-terminal-map-is-connected
+      ( succ-𝕋 (truncation-level-ℕ n))
+      ( tr
+        ( λ k → is-connected k (type-Pointed-Type A))
+        ( compute-freudenthal-domain-connectivity-level-𝕋 n)
+        ( H)))
+    ( is-connected-map-terminal-map-is-connected
+      ( succ-𝕋 (truncation-level-ℕ n))
+      ( tr
+        ( λ k → is-connected k (type-Pointed-Type A))
+        ( compute-freudenthal-domain-connectivity-level-𝕋 n)
+        ( H)))
+
+is-connected-map-Freudenthal-suspension-Blakers-Massey :
+  {l : Level} (n : ℕ) (A : Pointed-Type l) →
+  is-connected-map-Freudenthal-suspension n A
+is-connected-map-Freudenthal-suspension-Blakers-Massey n A H =
+  is-connected-map-Freudenthal-suspension-is-connected-map-gap-span-pushout-suspension-add+2
+    ( n)
+    ( A)
+    ( is-connected-map-gap-span-pushout-suspension-Blakers-Massey n A H)
 ```
