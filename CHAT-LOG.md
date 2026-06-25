@@ -5063,3 +5063,50 @@ The Agda check passed.
 Related commit:
 
 - This commit - Start BM code family route.
+
+### Complete generalized Blakers-Massey for span pushouts
+
+Request: Emily asked Codex to keep working hard and not stop until the
+Blakers-Massey theorem was proven.
+
+Model context:
+
+- Date: 2026-06-25.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible; `./check.sh` remained the final acceptance gate.
+
+Actions:
+
+- Completed the Coq-HoTT/Rocq-guided code-family proof in
+  `blakers-massey-span-pushouts`.
+- Proved the remaining center-over-glue computation for the right code by
+  formalizing the transport-singleton step, extracting the pointwise glue beta
+  rule through `compute-dependent-identification-function-type-fixed-codomain`,
+  cancelling the `compute-inl` branch comparison by the function-extensionality
+  section law, and composing with the checked code-left/code-right equivalence
+  computation.
+- Packaged contractibility of the right code under the connected-join
+  hypothesis as `is-contr-code-right-span-pushout-Blakers-Massey`.
+- Derived connectedness of all span-pushout glue maps and connectedness of the
+  total gap map under the generalized Blakers-Massey connected-join hypothesis.
+- Added the ordinary-span corollaries for maps `f : S -> A` and `g : S -> B`,
+  including `is-connected-map-gap-relation-map-span-pushout-Blakers-Massey`.
+- Updated `STATUS-REPORT.md` to record that the generalized Blakers-Massey
+  theorem is checked and that the remaining Freudenthal work is now the
+  specialization/assembly step.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/blakers-massey-span-pushouts.lagda.md
+rg -n "\{!!\}|\?\}|postulate|TERMINATING|REWRITE" src/synthetic-homotopy-theory/blakers-massey-span-pushouts.lagda.md
+```
+
+The Agda check passed. The touched-file scan found no holes, postulates,
+unsafe termination pragmas, or rewrite-rule dependency.
+
+Related commit:
+
+- This commit - Complete BM span pushout theorem.
