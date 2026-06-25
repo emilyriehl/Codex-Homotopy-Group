@@ -4860,3 +4860,58 @@ rewrite-rule dependency in the new pushout-product fiber module.
 Related commit:
 
 - This commit - Add pushout-product fiber connectivity.
+
+### Add dependent pushout-product and Freudenthal gap-route infrastructure
+
+Request: Emily asked Codex to continue working on the Freudenthal route after
+the pushout-product fiber/connectivity layer was added.
+
+Model context:
+
+- Date: 2026-06-25.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible; `./check.sh` was used as the final acceptance
+  gate.
+
+Actions:
+
+- Added `fibers-dependent-pushout-products`, the dependent analogue of the
+  pushout-product fiber theorem. It proves that the fiber of the dependent
+  pushout-product cogap over `(x , y)` is equivalent to
+  `fiber f x * fiber (g x) y`, and packages the corresponding connected-map
+  theorem.
+- Extended `freudenthal-suspension-theorem` with truncation-level arithmetic
+  for the Freudenthal range, the computation of the suspension-loop unit as
+  `meridian a ∙ inv (meridian base)`, and a structural comparison identifying
+  the Freudenthal map with the suspension pushout gap map followed by an
+  equivalence from the standard pullback to `ΩΣA`.
+- Added `gap-maps-pushouts`, packaging the canonical gap map of any pushout
+  cocone into the standard pullback of its two legs.
+- Added `span-pushouts`, the Agda counterpart of the Coq-HoTT span-pushout
+  setup: relation-indexed span pushouts, the total-relation gap map into the
+  pullback of the two inclusions, its definitional comparison with the ordinary
+  pushout gap map, and the double-fibration replacement equivalence for the
+  relation associated to two maps.
+- Updated `STATUS-REPORT.md` to record the checked infrastructure and narrow
+  the remaining Freudenthal blocker to generalized Blakers-Massey for
+  span-pushout gap maps plus the ordinary pushout-square reduction.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/fibers-dependent-pushout-products.lagda.md
+./check.sh src/synthetic-homotopy-theory/gap-maps-pushouts.lagda.md
+./check.sh src/synthetic-homotopy-theory/span-pushouts.lagda.md
+./check.sh src/synthetic-homotopy-theory/freudenthal-suspension-theorem.lagda.md
+rg -n "\{!!\}|!\}|\\?|allow-unsolved-metas|postulate|TERMINATING|NON_TERMINATING|rewriting" src/synthetic-homotopy-theory/fibers-dependent-pushout-products.lagda.md src/synthetic-homotopy-theory/gap-maps-pushouts.lagda.md src/synthetic-homotopy-theory/span-pushouts.lagda.md src/synthetic-homotopy-theory/freudenthal-suspension-theorem.lagda.md
+```
+
+All four Agda checks passed. The touched-file scan found no holes, postulates,
+unsolved-meta pragmas, unsafe termination pragmas, rewrite-rule dependency, or
+question-mark placeholders.
+
+Related commit:
+
+- This commit - Add Freudenthal gap route infrastructure.
