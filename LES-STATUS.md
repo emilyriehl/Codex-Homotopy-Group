@@ -140,6 +140,13 @@ most by the Hopf proof:
   `is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence-direct`
 - canonical all-index boundary/fiber-inclusion exactness, via
   `is-exact-set-truncation-canonical-iterated-loop-boundary-fiber-inclusion-fiber-sequence`
+- a checked set-truncated canonical LES package,
+  `Set-Truncated-Canonical-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence`,
+  whose object
+  `set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequence`
+  records the three repeating adjacent exactness positions while keeping the
+  two canonical boundary maps for the fibration-boundary and
+  boundary/fiber-inclusion positions as separate fields
 - the checked first-loop signed comparison
   `coherence-square-first-loop-canonical-iterated-boundary-fiber-sequence-signed`,
   which identifies the fresh canonical shifted boundary with the looped
@@ -225,12 +232,13 @@ is trivial.
 
 ## What Is Still Missing For Library-Quality LES Code
 
-### No Single Long Exact Sequence Package
+### No Single Group-Level Long Exact Sequence Package
 
-There is no theorem or record that packages the whole infinite LES as a single
-sequence of groups and homomorphisms with exactness at every adjacent term.
-Instead, the current state is a collection of adjacent exactness lemmas, some
-set-level and some group-level, spread across multiple files.
+There is now a checked set-truncated canonical LES package for the repeating
+adjacent pointed-set exactness positions. There is still no theorem or record
+that packages the whole infinite LES as a single sequence of groups and
+homomorphisms with exactness at every adjacent term. The group-level state is
+still a collection of adjacent exactness lemmas spread across multiple files.
 
 A library-quality result should probably provide a named object or theorem
 whose surface resembles the natural-language statement:
@@ -241,29 +249,36 @@ whose surface resembles the natural-language statement:
 
 with exactness projections for each middle term.
 
-### Boundary/Fiber-Inclusion Exactness Still Needs A Boundary Comparison
+### Boundary Conventions Still Need A Group-Level Public Story
 
 The total-space and fibration-boundary group exactness statements are available
 for all indices using the recursive/public boundary map. Boundary/fiber-
 inclusion exactness is now also available for all indices, but for the
 canonical boundary map of each iterated fiber sequence.
 
+The new set-truncated canonical package deliberately follows the Coq-HoTT
+`loops_les` style: each adjacent segment uses the fresh canonical connecting
+map supplied by the relevant iterated fiber sequence. In particular, it records
+two boundary fields with the same displayed source and target, one for
+fibration-boundary exactness and one for boundary/fiber-inclusion exactness,
+and does not assert that these are equal.
+
 This is meaningful structural progress, but it is not yet the final
-library-quality LES. A single package should use one boundary convention
-consistently in the adjacent triples
+library-quality group-level LES. A single group-level package should use one
+boundary convention consistently in the adjacent triples
 
 ```text
 pi(E) -> pi(B) -> pi(F)
 pi(B) -> pi(F) -> pi(E)
 ```
 
-The next real theorem must therefore incorporate the sign detected in the
-first-loop comparison. A direct unsigned comparison between `Ω` of the
-canonical boundary and the fresh canonical shifted boundary is not correct for
-the current definitions. The pure pointed-set target is now either an
-all-index signed comparison, with `ap inv` on the relevant loop input, or a
-refactored canonical-boundary package that avoids exposing the recursive
-boundary convention in this adjacent position.
+If the recursive boundary convention remains the public group-level map, the
+eventual adapter must incorporate the sign detected in the first-loop
+comparison. A direct unsigned comparison between `Ω` of the canonical boundary
+and the fresh canonical shifted boundary is not correct for the current
+definitions. The new canonical package avoids making that comparison part of
+the set-level public interface; the group-level public story still needs either
+a systematic signed adapter or a canonical-boundary homomorphism convention.
 
 ### The Proof Shape Is Still Too Transport-Heavy
 
@@ -343,19 +358,18 @@ construction rather than the route by which the blocker was cleared.
 
 ## Recommended Next Steps
 
-1. Generalize the checked signed first-loop comparison, or deliberately avoid
-   needing it in the public LES package. The concrete next proof target should
-   account for the `ap inv` sign discovered in
-   `coherence-square-first-loop-canonical-iterated-boundary-fiber-sequence-signed`.
-   If the recursive boundary convention is retained, prove the all-index
-   signed comparison and an exactness transport theorem across the double-loop
-   inversion automorphism before lifting the comparison to concrete
-   homotopy-group maps.
+1. Lift the checked set-truncated canonical package to a group-facing package
+   only after choosing the public boundary convention. The approach-2 route is
+   to prefer canonical fresh connecting maps in the public LES package and use
+   recursive/direct boundary maps as adapters or corollaries.
 
-2. Define a small LES indexing/package layer after the boundary comparison is
-   checked. It does not need to be elaborate
-   at first; even a record with three exactness projections for the repeating
-   adjacent positions would make the current result far easier to consume.
+2. If existing concrete homotopy-group homomorphisms continue to use recursive
+   boundaries, add a separate signed adapter layer. That adapter should account
+   for the `ap inv` sign discovered in
+   `coherence-square-first-loop-canonical-iterated-boundary-fiber-sequence-signed`
+   and transport exactness across the corresponding loop-inversion
+   automorphism. It should not be a prerequisite for the canonical set-level
+   package.
 
 3. Refactor the boundary map API. Choose a canonical public boundary, then make
    recursive/direct variants private or secondary corollaries with explicit
@@ -400,6 +414,20 @@ rg -n "\{!!\}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/long
 
 Both Agda checks passed, and the touched-file scan found no holes, unsolved
 meta pragmas, or postulates.
+
+Later on 2026-06-26, the approach-2 canonical set-truncated LES package was
+checked with:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+```
+
+All three checks passed. The package keeps the fibration-boundary and
+boundary/fiber-inclusion canonical boundary maps as separate fields, matching
+the fresh-connecting-map approach rather than forcing a recursive/canonical
+boundary equality.
 
 At the time this handoff was written, Agda MCP tools were visible to the agent,
 but `./check.sh <file>` remains the acceptance criterion. This file is a status

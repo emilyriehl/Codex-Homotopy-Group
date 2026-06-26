@@ -5479,3 +5479,48 @@ pragmas, or postulates.
 Related commit:
 
 - This commit - Add signed LES boundary coherence.
+
+### Package canonical set-truncated LES
+
+Request: Emily asked Codex to implement the plan to switch to the
+Coq-HoTT/Rocq-style canonical-boundary approach, without returning to the old
+recursive/canonical signed comparison route unless it was needed for that
+approach.
+
+Model context:
+
+- Date: 2026-06-26.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible, but this session used `./check.sh` as the proof
+  acceptance gate.
+
+Actions:
+
+- Added the record
+  `Set-Truncated-Canonical-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence`
+  to package the three repeating adjacent set-truncated exactness positions.
+- Added the checked canonical object
+  `set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequence`.
+- Kept the fibration-boundary and boundary/fiber-inclusion boundary maps as
+  separate fresh canonical fields, matching the Coq-HoTT `loops_les` style and
+  avoiding a public equality between the fresh shifted boundary and the looped
+  recursive boundary.
+- Updated `LES-STATUS.md` and `STATUS-REPORT.md` so the next handoff points at
+  the canonical package as the approach-2 progress and treats signed
+  recursive/direct comparisons as secondary adapters.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+```
+
+All three Agda checks passed.
+
+Related commit:
+
+- This commit - Package canonical set-truncated LES.

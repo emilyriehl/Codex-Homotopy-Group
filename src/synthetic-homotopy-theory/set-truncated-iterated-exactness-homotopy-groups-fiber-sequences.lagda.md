@@ -366,6 +366,144 @@ module _
           ( boundary-pointed-map-fiber-sequence S)))
 ```
 
+The canonical long exact sequence package records the two adjacent uses of the
+boundary map separately. The fibration-boundary segment uses the fresh
+boundary map of the shifted iterated loop fiber sequence, while the
+boundary-fiber-inclusion segment uses the loop-boundary map of the current
+iterated loop fiber sequence. These have the same displayed source and target,
+but this package does not assert that they are equal.
+
+```agda
+
+  record Set-Truncated-Canonical-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence :
+    UU (l1 ⊔ l2 ⊔ l3)
+    where
+    constructor
+      make-Set-Truncated-Canonical-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence
+    field
+      hom-fiber-inclusion-set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequence :
+        (n : ℕ) →
+        hom-Pointed-Set
+          ( trunc-Pointed-Set
+            ( Ω
+              ( iterated-loop-space
+                ( n)
+                ( fiber-fiber-sequence-Pointed-Type S))))
+          ( trunc-Pointed-Set
+            ( Ω
+              ( iterated-loop-space
+                ( n)
+                ( total-space-fiber-sequence-Pointed-Type S))))
+      hom-fibration-set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequence :
+        (n : ℕ) →
+        hom-Pointed-Set
+          ( trunc-Pointed-Set
+            ( Ω
+              ( iterated-loop-space
+                ( n)
+                ( total-space-fiber-sequence-Pointed-Type S))))
+          ( trunc-Pointed-Set
+            ( Ω
+              ( iterated-loop-space
+                ( n)
+                ( base-fiber-sequence-Pointed-Type S))))
+      hom-fibration-boundary-set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequence :
+        (n : ℕ) →
+        hom-Pointed-Set
+          ( trunc-Pointed-Set
+            ( Ω
+              ( iterated-loop-space
+                ( succ-ℕ n)
+                ( base-fiber-sequence-Pointed-Type S))))
+          ( trunc-Pointed-Set
+            ( Ω
+              ( iterated-loop-space
+                ( n)
+                ( fiber-fiber-sequence-Pointed-Type S))))
+      hom-boundary-fiber-inclusion-set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequence :
+        (n : ℕ) →
+        hom-Pointed-Set
+          ( trunc-Pointed-Set
+            ( Ω
+              ( iterated-loop-space
+                ( succ-ℕ n)
+                ( base-fiber-sequence-Pointed-Type S))))
+          ( trunc-Pointed-Set
+            ( Ω
+              ( iterated-loop-space
+                ( n)
+                ( fiber-fiber-sequence-Pointed-Type S))))
+      is-exact-fiber-inclusion-fibration-set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequence :
+        (n : ℕ) →
+        is-exact-hom-Pointed-Set
+          ( trunc-Pointed-Set
+            ( Ω
+              ( iterated-loop-space
+                ( n)
+                ( fiber-fiber-sequence-Pointed-Type S))))
+          ( trunc-Pointed-Set
+            ( Ω
+              ( iterated-loop-space
+                ( n)
+                ( total-space-fiber-sequence-Pointed-Type S))))
+          ( trunc-Pointed-Set
+            ( Ω
+              ( iterated-loop-space
+                ( n)
+                ( base-fiber-sequence-Pointed-Type S))))
+          ( hom-fiber-inclusion-set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequence
+            ( n))
+          ( hom-fibration-set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequence
+            ( n))
+      is-exact-fibration-boundary-set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequence :
+        (n : ℕ) →
+        is-exact-hom-Pointed-Set
+          ( trunc-Pointed-Set
+            ( Ω
+              ( iterated-loop-space
+                ( succ-ℕ n)
+                ( total-space-fiber-sequence-Pointed-Type S))))
+          ( trunc-Pointed-Set
+            ( Ω
+              ( iterated-loop-space
+                ( succ-ℕ n)
+                ( base-fiber-sequence-Pointed-Type S))))
+          ( trunc-Pointed-Set
+            ( Ω
+              ( iterated-loop-space
+                ( n)
+                ( fiber-fiber-sequence-Pointed-Type S))))
+          ( hom-fibration-set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequence
+            ( succ-ℕ n))
+          ( hom-fibration-boundary-set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequence
+            ( n))
+      is-exact-boundary-fiber-inclusion-set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequence :
+        (n : ℕ) →
+        is-exact-hom-Pointed-Set
+          ( trunc-Pointed-Set
+            ( Ω
+              ( iterated-loop-space
+                ( succ-ℕ n)
+                ( base-fiber-sequence-Pointed-Type S))))
+          ( trunc-Pointed-Set
+            ( Ω
+              ( iterated-loop-space
+                ( n)
+                ( fiber-fiber-sequence-Pointed-Type S))))
+          ( trunc-Pointed-Set
+            ( Ω
+              ( iterated-loop-space
+                ( n)
+                ( total-space-fiber-sequence-Pointed-Type S))))
+          ( hom-boundary-fiber-inclusion-set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequence
+            ( n))
+          ( hom-fiber-inclusion-set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequence
+            ( n))
+
+  open Set-Truncated-Canonical-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence
+    public
+```
+
 ## Theorems
 
 ```agda
@@ -462,6 +600,18 @@ module _
   is-exact-set-truncation-canonical-iterated-loop-fibration-boundary-fiber-sequence n =
     is-exact-set-truncation-loop-boundary-fiber-sequence
       ( iterated-loop-fiber-sequence S (succ-ℕ n))
+
+  set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequence :
+    Set-Truncated-Canonical-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence
+  set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequence =
+    make-Set-Truncated-Canonical-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence
+      ( hom-trunc-iterated-loop-fiber-inclusion-fiber-sequence)
+      ( hom-trunc-iterated-loop-fibration-fiber-sequence)
+      ( hom-trunc-canonical-iterated-loop-boundary-fiber-sequence)
+      ( hom-trunc-canonical-iterated-loop-boundary-fiber-inclusion-fiber-sequence)
+      ( is-exact-set-truncation-iterated-loop-fiber-sequence)
+      ( is-exact-set-truncation-canonical-iterated-loop-fibration-boundary-fiber-sequence)
+      ( is-exact-set-truncation-canonical-iterated-loop-boundary-fiber-inclusion-fiber-sequence)
 
   is-exact-set-truncation-direct-iterated-loop-fibration-boundary-fiber-sequence :
     (n : ℕ) →
