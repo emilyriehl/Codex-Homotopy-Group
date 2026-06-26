@@ -367,6 +367,74 @@ module _
         ( n)
         ( fibration-fiber-sequence-Pointed-Type S))
 
+  is-exact-hom-Group-is-exact-set-truncation-canonical-iterated-loop-boundary-fiber-inclusion-fiber-sequence :
+    (n : ℕ) →
+    is-exact-hom-Pointed-Set
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( succ-ℕ n)
+            ( base-fiber-sequence-Pointed-Type S))))
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( n)
+            ( fiber-fiber-sequence-Pointed-Type S))))
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( n)
+            ( total-space-fiber-sequence-Pointed-Type S))))
+      ( hom-trunc-canonical-iterated-loop-boundary-fiber-inclusion-fiber-sequence
+        ( S)
+        ( n))
+      ( hom-trunc-iterated-loop-fiber-inclusion-fiber-sequence S n) →
+    is-exact-hom-Group
+      ( group-Concrete-Group
+        ( concrete-homotopy-group
+          ( succ-ℕ n)
+          ( base-fiber-sequence-Pointed-Type S)))
+      ( group-Concrete-Group
+        ( concrete-homotopy-group
+          ( n)
+          ( fiber-fiber-sequence-Pointed-Type S)))
+      ( group-Concrete-Group
+        ( concrete-homotopy-group
+          ( n)
+          ( total-space-fiber-sequence-Pointed-Type S)))
+      ( hom-group-hom-Concrete-Group
+        ( concrete-homotopy-group
+          ( succ-ℕ n)
+          ( base-fiber-sequence-Pointed-Type S))
+        ( concrete-homotopy-group
+          ( n)
+          ( fiber-fiber-sequence-Pointed-Type S))
+        ( canonical-boundary-hom-concrete-homotopy-group-fiber-sequence S n))
+      ( hom-group-hom-Concrete-Group
+        ( concrete-homotopy-group
+          ( n)
+          ( fiber-fiber-sequence-Pointed-Type S))
+        ( concrete-homotopy-group
+          ( n)
+          ( total-space-fiber-sequence-Pointed-Type S))
+        ( hom-fiber-inclusion-concrete-homotopy-group-fiber-sequence S n))
+  is-exact-hom-Group-is-exact-set-truncation-canonical-iterated-loop-boundary-fiber-inclusion-fiber-sequence
+    n =
+    is-exact-hom-Group-is-exact-loop-truncation-hom-Pointed-Type
+      ( iterated-loop-space
+        ( succ-ℕ n)
+        ( base-fiber-sequence-Pointed-Type S))
+      ( iterated-loop-space
+        ( n)
+        ( fiber-fiber-sequence-Pointed-Type S))
+      ( iterated-loop-space
+        ( n)
+        ( total-space-fiber-sequence-Pointed-Type S))
+      ( canonical-pointed-map-iterated-boundary-fiber-sequence S n)
+      ( pointed-map-iterated-loop-space
+        ( n)
+        ( fiber-inclusion-fiber-sequence-Pointed-Type S))
+
   is-exact-hom-Group-is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence :
     (n : ℕ) →
     is-exact-hom-Pointed-Set

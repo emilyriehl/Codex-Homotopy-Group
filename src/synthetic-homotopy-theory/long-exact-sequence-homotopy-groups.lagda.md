@@ -1620,6 +1620,19 @@ module _
   boundary-hom-concrete-homotopy-group-fiber-sequence n =
     hom-concrete-group-Pointed-Type
       ( pointed-map-iterated-boundary-fiber-sequence n)
+
+  canonical-boundary-hom-concrete-homotopy-group-fiber-sequence :
+    (n : ℕ) →
+    hom-Concrete-Group
+      ( concrete-homotopy-group
+        ( succ-ℕ n)
+        ( base-fiber-sequence-Pointed-Type S))
+      ( concrete-homotopy-group
+        ( n)
+        ( fiber-fiber-sequence-Pointed-Type S))
+  canonical-boundary-hom-concrete-homotopy-group-fiber-sequence n =
+    hom-concrete-group-Pointed-Type
+      ( canonical-pointed-map-iterated-boundary-fiber-sequence n)
 ```
 
 ### The canonical boundary homomorphism of a pointed map

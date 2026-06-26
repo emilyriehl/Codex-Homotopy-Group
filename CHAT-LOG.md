@@ -5337,3 +5337,51 @@ pragmas, or rewrite-rule dependency in the reviewed LES-related modules.
 Related commit:
 
 - This commit - Review LES status handoff.
+
+### Add canonical all-index boundary/fiber exactness
+
+Request: Emily asked Codex to implement the LES status plan with the goal of
+library-quality code.
+
+Model context:
+
+- Date: 2026-06-26.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible. The MCP auto tool was tried on a temporary
+  coherence hole and produced an invalid insertion, which was immediately
+  reverted; all accepted Agda validation used `./check.sh`.
+
+Actions:
+
+- Added a reusable `pointed-htpy-iterated-loop-space` lemma for iterating
+  pointed homotopies.
+- Added the canonical boundary homomorphism
+  `canonical-boundary-hom-concrete-homotopy-group-fiber-sequence`.
+- Added checked all-index canonical boundary/fiber-inclusion exactness at the
+  set-truncated level and lifted it to ordinary group exactness via the
+  existing concrete homotopy-group bridge.
+- Exposed the public group-level theorem
+  `is-exact-hom-canonical-boundary-fiber-inclusion-concrete-homotopy-group-fiber-sequence`.
+- Updated `LES-STATUS.md` to distinguish this checked canonical result from
+  the remaining recursive/canonical boundary comparison needed for a single
+  library-quality LES package.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/functoriality-iterated-loop-spaces.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+```
+
+The real remaining blocker is to compare the recursive/public boundary map
+with the canonical iterated boundary map, or to refactor the fibration-boundary
+theorem to use the canonical convention uniformly.
+
+Related commit:
+
+- This commit - Add canonical LES boundary exactness.

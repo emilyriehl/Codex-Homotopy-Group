@@ -212,6 +212,50 @@ module _
     is-exact-set-truncation-loop-fiber-sequence
       ( iterated-loop-fiber-sequence S (succ-ℕ n))
 
+  hom-trunc-canonical-iterated-loop-boundary-fiber-inclusion-fiber-sequence :
+    (n : ℕ) →
+    hom-Pointed-Set
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( succ-ℕ n)
+            ( base-fiber-sequence-Pointed-Type S))))
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( n)
+            ( fiber-fiber-sequence-Pointed-Type S))))
+  hom-trunc-canonical-iterated-loop-boundary-fiber-inclusion-fiber-sequence
+    n =
+    hom-trunc-loop-boundary-fiber-sequence-Pointed-Type
+      ( iterated-loop-fiber-sequence S n)
+
+  is-exact-set-truncation-canonical-iterated-loop-boundary-fiber-inclusion-fiber-sequence :
+    (n : ℕ) →
+    is-exact-hom-Pointed-Set
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( succ-ℕ n)
+            ( base-fiber-sequence-Pointed-Type S))))
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( n)
+            ( fiber-fiber-sequence-Pointed-Type S))))
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( n)
+            ( total-space-fiber-sequence-Pointed-Type S))))
+      ( hom-trunc-canonical-iterated-loop-boundary-fiber-inclusion-fiber-sequence
+        n)
+      ( hom-trunc-iterated-loop-fiber-inclusion-fiber-sequence n)
+  is-exact-set-truncation-canonical-iterated-loop-boundary-fiber-inclusion-fiber-sequence
+    n =
+    is-exact-set-truncation-loop-boundary-fiber-inclusion-fiber-sequence
+      ( iterated-loop-fiber-sequence S n)
+
   is-exact-set-truncation-canonical-iterated-loop-fibration-boundary-fiber-sequence :
     (n : ℕ) →
     is-exact-hom-Pointed-Set

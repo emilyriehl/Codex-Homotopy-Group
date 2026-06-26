@@ -106,7 +106,9 @@ contains the main structural and low-level LES work. It formalizes:
   `hom-fiber-inclusion-concrete-homotopy-group-fiber-sequence`,
   `hom-fibration-concrete-homotopy-group-fiber-sequence`, and
   `boundary-hom-concrete-homotopy-group-fiber-sequence`
-- canonical boundary homomorphisms for pointed maps
+- canonical boundary homomorphisms for pointed maps and for iterated packaged
+  fiber sequences, including
+  `canonical-boundary-hom-concrete-homotopy-group-fiber-sequence`
 - `iterated-loop-fiber-sequence`
 - set-truncated exactness for the initial adjacent triples
   `F -> E -> B`, `Omega B -> F -> E`, `Omega E -> Omega B -> F`,
@@ -136,6 +138,8 @@ most by the Hopf proof:
 - public all-index fibration-boundary exactness in the repository's iterated
   loop indexing, via
   `is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence-direct`
+- canonical all-index boundary/fiber-inclusion exactness, via
+  `is-exact-set-truncation-canonical-iterated-loop-boundary-fiber-inclusion-fiber-sequence`
 - transport wrappers for recursive boundary maps and pointed homotopies
 
 The earlier induced-map reassociation blocker has been resolved in
@@ -154,6 +158,8 @@ group exactness. The key exports include:
 - the trivial-codomain variant
   `is-exact-hom-Group-is-exact-loop-truncation-hom-Pointed-Type-is-trivial-codomain`
 - LES-specific wrappers for total-space and fibration-boundary exactness
+- a canonical boundary/fiber-inclusion wrapper,
+  `is-exact-hom-Group-is-exact-set-truncation-canonical-iterated-loop-boundary-fiber-inclusion-fiber-sequence`
 
 This is a useful and checked bridge, but it is adapter-heavy. It requires
 explicit comparison maps, unit compatibility, injectivity data, and coherence
@@ -181,10 +187,15 @@ calculation:
 - `is-exact-hom-boundary-fiber-inclusion-concrete-homotopy-group-fiber-sequence`
   gives a boundary/fiber-inclusion exactness statement, but only in the
   currently needed low-dimensional form.
+- `is-exact-hom-canonical-boundary-fiber-inclusion-concrete-homotopy-group-fiber-sequence`
+  gives all-index boundary/fiber-inclusion exactness for the canonical
+  boundary map of the corresponding iterated fiber sequence.
 
-The last point is the most concrete mathematical gap in the current group LES
-API: boundary/fiber-inclusion exactness has not yet been exported uniformly for
-all indices in the same polished way as the other two adjacent positions.
+The remaining gap is now more precise: boundary/fiber-inclusion exactness is
+available uniformly for canonical iterated boundary maps, while the existing
+recursive boundary homomorphism used by the fibration-boundary direct theorem
+has not yet been identified with those canonical boundaries in the fully
+iterated form needed for a single polished LES package.
 
 ### Hopf Consumers
 
@@ -217,22 +228,26 @@ whose surface resembles the natural-language statement:
 
 with exactness projections for each middle term.
 
-### Boundary/Fiber-Inclusion Exactness Is Uneven
+### Boundary/Fiber-Inclusion Exactness Still Needs A Boundary Comparison
 
-The total-space and fibration-boundary group exactness statements are now
-available for all indices. The boundary/fiber-inclusion group exactness export
-is still only the low-dimensional case needed by the Hopf proof.
+The total-space and fibration-boundary group exactness statements are available
+for all indices using the recursive/public boundary map. Boundary/fiber-
+inclusion exactness is now also available for all indices, but for the
+canonical boundary map of each iterated fiber sequence.
 
-The set-level code contains a checked looped boundary/fiber-inclusion segment
-and the structural ingredients for shifted boundary fiber sequences, but it
-does not yet expose the all-index boundary/fiber-inclusion theorem in the same
-way the total-space and fibration-boundary positions are exposed. Thus this is
-not merely a public group-level wrapper problem: the next agent should first
-make the set-level all-index statement explicit, preferably by deriving it from
-the shifted boundary fiber sequence rather than by extending the local
-transport chain directly. It should still be treated as a real gap: a reader
-expecting the full LES will not find a uniform theorem for all three repeating
-adjacent positions.
+This is meaningful structural progress, but it is not yet the final
+library-quality LES. A single package should use one boundary convention
+consistently in the adjacent triples
+
+```text
+pi(E) -> pi(B) -> pi(F)
+pi(B) -> pi(F) -> pi(E)
+```
+
+The next real theorem is therefore the comparison between the recursive
+boundary map and the canonical boundary map after iterated looping, or a
+redesign of the public boundary API so the canonical map is used consistently
+in both adjacent positions.
 
 ### The Proof Shape Is Still Too Transport-Heavy
 
@@ -312,14 +327,15 @@ construction rather than the route by which the blocker was cleared.
 
 ## Recommended Next Steps
 
-1. Add the missing all-index boundary/fiber-inclusion theorem. First expose a
-   set-level all-index statement, preferably by applying the already checked
-   total-space exactness theorem to the shifted boundary fiber sequence and
-   its iterates. Then reuse the group exactness bridge to export the
-   corresponding ordinary group exactness theorem, rather than proving a new
-   algebraic theorem.
+1. Prove the boundary-map comparison needed to make the all-index theorem use
+   the same boundary convention everywhere. The checked canonical theorem now
+   covers `pi(B) -> pi(F) -> pi(E)` for all indices; what remains is to compare
+   it with the recursive boundary map used by the existing fibration-boundary
+   direct theorem, or to refactor the fibration-boundary theorem to use the
+   canonical boundary uniformly.
 
-2. Define a small LES indexing/package layer. It does not need to be elaborate
+2. Define a small LES indexing/package layer after the boundary comparison is
+   checked. It does not need to be elaborate
    at first; even a record with three exactness projections for the repeating
    adjacent positions would make the current result far easier to consume.
 
@@ -328,8 +344,8 @@ construction rather than the route by which the blocker was cleared.
    comparison names.
 
 4. Split `long-exact-sequence-homotopy-groups.lagda.md` into one-concept
-   modules once the all-index boundary/fiber-inclusion theorem is checked.
-   Splitting before that may make the remaining transport work harder.
+   modules once the boundary comparison and package layer are checked. Splitting
+   before that may make the remaining transport work harder.
 
 5. Write short literate prose above the final structural theorems explaining
    the relationship with the HoTT Book LES proof and the Coq-HoTT
@@ -347,11 +363,15 @@ The relevant Agda modules have been checked in recent sessions with
 `./check.sh`, including:
 
 ```sh
+./check.sh src/synthetic-homotopy-theory/functoriality-iterated-loop-spaces.lagda.md
 ./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
 ./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md
 ./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
 ```
+
+On 2026-06-26, the canonical boundary/fiber-inclusion additions were checked
+with the same five commands above.
 
 At the time this handoff was written, Agda MCP tools were visible to the agent,
 but `./check.sh <file>` remains the acceptance criterion. This file is a status

@@ -11,6 +11,7 @@ open import elementary-number-theory.natural-numbers
 
 open import foundation.universe-levels
 
+open import structured-types.pointed-homotopies
 open import structured-types.pointed-maps
 open import structured-types.pointed-types
 
@@ -41,4 +42,16 @@ module _
   pointed-map-iterated-loop-space zero-ℕ f = f
   pointed-map-iterated-loop-space (succ-ℕ n) f =
     pointed-map-Ω (pointed-map-iterated-loop-space n f)
+
+  pointed-htpy-iterated-loop-space :
+    (n : ℕ) {f g : A →∗ B} →
+    f ~∗ g →
+    pointed-map-iterated-loop-space n f ~∗
+    pointed-map-iterated-loop-space n g
+  pointed-htpy-iterated-loop-space zero-ℕ H = H
+  pointed-htpy-iterated-loop-space (succ-ℕ n) {f} {g} H =
+    pointed-htpy-Ω
+      ( pointed-map-iterated-loop-space n f)
+      ( pointed-map-iterated-loop-space n g)
+      ( pointed-htpy-iterated-loop-space n H)
 ```
