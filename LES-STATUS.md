@@ -353,9 +353,8 @@ package:
 - `src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md`
   now imports this canonical theorem provider directly.
 
-`src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md`
-re-exports the canonical exactness module and retains the ordinary group
-compatibility statements consumed by the Hopf calculation:
+`src/synthetic-homotopy-theory/direct-exactness-homotopy-groups-fiber-sequences.lagda.md`
+owns the direct shifted connecting-map group-level exactness statements:
 
 - `is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-direct`
   gives all-index exactness at the base term
@@ -363,6 +362,14 @@ compatibility statements consumed by the Hopf calculation:
 - `is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-second-direct`
   is the low-dimensional convenience instance used around the lower Hopf
   segment.
+- `is-exact-hom-fibration-connecting-map-concrete-homotopy-group-fiber-sequence`
+  exposes the direct connecting-map theorem before the historical boundary
+  alias.
+
+`src/synthetic-homotopy-theory/recursive-exactness-homotopy-groups-fiber-sequences.lagda.md`
+owns the recursive and transport compatibility statements consumed by the Hopf
+calculation:
+
 - `is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-pointed-htpy`
   transports fibration-boundary exactness across a pointed homotopy of boundary
   maps.
@@ -371,6 +378,11 @@ compatibility statements consumed by the Hopf calculation:
   currently needed low-dimensional form.
 - `is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-is-trivial-codomain`
   is the older trivial-target fallback retained for downstream compatibility.
+
+`src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md`
+is now only the compatibility facade re-exporting the canonical, direct, and
+recursive theorem-provider modules. This preserves older downstream imports
+while making each proof route explicit.
 
 The group-level LES package defines
 `Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence` and instantiates it as
@@ -886,6 +898,30 @@ The checked commands were:
 ```
 
 All six checks passed.
+
+Later on 2026-06-26, the remaining group-level compatibility wrappers were
+split by route. The new module
+`direct-exactness-homotopy-groups-fiber-sequences` owns the direct
+connecting-map and historical direct-boundary aliases. The new module
+`recursive-exactness-homotopy-groups-fiber-sequences` owns the recursive
+set-level-to-group wrapper, pointed-homotopy transport, the low-dimensional
+boundary/fiber-inclusion statement, and the trivial-codomain fallback. The
+older `exactness-homotopy-groups-fiber-sequences` module is now a thin public
+facade re-exporting the canonical, direct, and recursive providers.
+
+The checked commands were:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/recursive-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/direct-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+All seven checks passed.
 
 At the time this handoff was written, Agda MCP tools were visible to the agent,
 but `./check.sh <file>` remains the acceptance criterion. This file is a status

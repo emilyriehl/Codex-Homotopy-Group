@@ -6242,3 +6242,50 @@ and `git diff --check` passed.
 Related commit:
 
 - This commit - Split canonical group exactness theorem provider.
+
+### Split remaining group exactness compatibility routes
+
+Request: Emily asked Codex to keep working on the library-quality LES cleanup,
+focused on the main route rather than side objectives.
+
+Model context:
+
+- Date: 2026-06-26.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible; this session used `./check.sh` as the proof
+  acceptance gate.
+
+Actions:
+
+- Added `recursive-exactness-homotopy-groups-fiber-sequences`, extracting the
+  recursive set-truncated-to-group exactness wrapper, pointed-homotopy
+  transport, low-dimensional boundary/fiber-inclusion theorem, and
+  trivial-codomain fallback.
+- Added `direct-exactness-homotopy-groups-fiber-sequences`, extracting the
+  direct shifted connecting-map theorem and historical direct-boundary aliases.
+- Reduced `exactness-homotopy-groups-fiber-sequences` to a public facade
+  re-exporting the canonical, direct, and recursive exactness providers.
+- Updated `LES-STATUS.md` and `STATUS-REPORT.md` to record the new ownership
+  split and the checked import surface.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/recursive-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/direct-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+All seven Agda checks passed. A touched-file scan found no holes, postulates,
+unsafe termination pragmas, rewrite-rule dependency, or unsolved-meta options,
+and `git diff --check` passed.
+
+Related commit:
+
+- This commit - Split remaining group exactness compatibility routes.
