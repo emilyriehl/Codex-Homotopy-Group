@@ -5926,3 +5926,59 @@ All six Agda checks passed.
 Related commit:
 
 - This commit - Extract loop-space pointed equivalence algebra.
+
+### Extract boundary adapters and set-truncated LES exactness
+
+Request: Emily asked Codex to continue work on the next LES cleanup target and
+not stop until it was completed.
+
+Model context:
+
+- Date: 2026-06-26.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible; this session used `./check.sh` as the proof
+  acceptance gate.
+
+Actions:
+
+- Added `fibers-boundary-maps-pointed-maps`, extracting the LES-facing
+  boundary-map terminology, direct fiber-of-boundary comparison, comparison
+  with the fiber inclusion of the fiber inclusion, and looped-boundary
+  adapters from the large LES file.
+- Added `set-truncated-exactness-homotopy-groups-fiber-sequences`, extracting
+  the base set-truncated exactness layer for canonical, packaged, boundary,
+  shifted connecting, looped packaged, and looped boundary/fiber-inclusion
+  segments.
+- Reduced `long-exact-sequence-homotopy-groups` to definition-level
+  homotopy-group maps, recursive boundary maps, boundary homomorphisms, and
+  compatibility prose for the extracted modules.
+- Rewired the iterated set-truncated exactness, group exactness, and Hopf
+  second-homotopy consumers to import the new exactness and boundary modules
+  directly.
+- Updated `LES-STATUS.md` and `STATUS-REPORT.md` to record the completed split
+  and the new next cleanup target.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/fibers-boundary-maps-pointed-maps.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+rg -n "\{!!\}|allow-unsolved-metas|postulate|TERMINATING|REWRITE" src/synthetic-homotopy-theory/fibers-boundary-maps-pointed-maps.lagda.md src/synthetic-homotopy-theory/set-truncated-exactness-homotopy-groups-fiber-sequences.lagda.md src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+git diff --check
+```
+
+All eight Agda checks passed. The touched-file scan found no holes,
+postulates, unsafe termination pragmas, rewrite-rule dependency, or
+unsolved-meta options, and `git diff --check` passed.
+
+Related commit:
+
+- This commit - Extract LES boundary and exactness modules.

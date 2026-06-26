@@ -93,15 +93,12 @@ source of truth instead.
 ### Boundary Maps And Initial LES Segments
 
 `src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md`
-contains the remaining structural and low-level LES work. It now imports the
-standalone structural modules for the loop-fiber equivalence, the first
-fiber-inclusion fiber sequence, and the connecting fiber sequence. It
-formalizes:
+now contains the definition-level LES maps and homomorphisms. It imports the
+standalone structural modules for the connecting fiber sequence, loop-fiber
+equivalence, first fiber-inclusion fiber sequence, boundary-map adapters, and
+set-truncated exactness packages. It formalizes:
 
-- `boundary-fiber-Pointed-Type : Omega B ->* fiber g`
-  as a compatibility name for `connecting-map-Pointed-Type`
-- the direct shifted sequence
-  `fiber-sequence-boundary-map-Ω-direct-Pointed-Type`
+- compatibility prose pointing to the standalone boundary-map terminology
 - induced homomorphisms for a packaged fiber sequence:
   `hom-fiber-inclusion-concrete-homotopy-group-fiber-sequence`,
   `hom-fibration-concrete-homotopy-group-fiber-sequence`, and
@@ -115,19 +112,11 @@ formalizes:
   `loop-canonical-pointed-map-iterated-boundary-fiber-sequence` for the loop of
   the canonical iterated boundary
 - `iterated-loop-fiber-sequence`
-- set-truncated exactness for the initial adjacent triples
-  `F -> E -> B`, `Omega B -> F -> E`, `Omega E -> Omega B -> F`,
-  and `Omega F -> Omega E -> Omega B`
-- a checked looped boundary/fiber-inclusion segment, including
-  `is-exact-set-truncation-loop-boundary-fiber-inclusion-fiber-sequence`
 
-This module is still the heart of the current LES formalization, but it is not
-yet library-quality organization. It remains very large and mixes boundary
-compatibility names, path algebra, exactness proofs, induced homomorphisms, and
-comparison lemmas. The recent split has removed the first structural
-fiber-identification blocks from this file; the remaining upstream cleanup
-should continue moving boundary-comparison adapters and exactness packages into
-one-concept modules.
+This module is still a large LES definition scaffold, but it no longer owns the
+boundary-comparison adapters or the base set-truncated exactness proofs. The
+remaining upstream cleanup should focus on splitting the iterated boundary
+maps and homomorphism packages into smaller final-surface modules.
 
 ### Connecting Fiber Sequences
 
@@ -186,11 +175,43 @@ as `fiber-sequence-boundary-fiber-Pointed-Type`. The construction uses the
 standalone `connecting-map-Pointed-Type`, so it is aligned with the
 `connect_fiberseq` route rather than the old local boundary-map block.
 
+### Fibers Of Boundary Maps
+
+`src/synthetic-homotopy-theory/fibers-boundary-maps-pointed-maps.lagda.md`
+is the extracted boundary-adapter module. It gives LES-facing terminology for
+the connecting map of a pointed map,
+
+```text
+Omega B ->* fiber g,
+```
+
+and contains the direct comparison between `Omega E` and the fiber of this
+boundary map. It also records the compatibility between this direct
+fiber-of-boundary comparison and the fiber-inclusion-of-the-fiber-inclusion
+sequence, plus the looped-boundary first-projection/path adapters used by the
+iterated exactness layer.
+
+### Base Set-Truncated Exactness
+
+`src/synthetic-homotopy-theory/set-truncated-exactness-homotopy-groups-fiber-sequences.lagda.md`
+is the extracted base exactness module. It proves set-truncated exactness for:
+
+- canonical and packaged `F ->* E ->* B` fiber-sequence triples;
+- the boundary segment `Omega B ->* F ->* E`;
+- the shifted connecting segment `Omega E ->* Omega B ->* F`;
+- the looped packaged segment `Omega F ->* Omega E ->* Omega B`;
+- the looped boundary/fiber-inclusion segment
+  `Omega^2 B ->* Omega F ->* Omega E`;
+- the initial four-triple set-truncated LES segment package.
+
+This file is still proof-heavy, but it now separates the set-level exactness
+layer from the definition-level homotopy-group maps in the main LES file.
+
 ### Iterated Set-Truncated Exactness
 
 `src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md`
-extends the LES exactness to arbitrary iterates for the two positions needed
-most by the Hopf proof:
+imports the base set-truncated exactness module and extends the LES exactness
+to arbitrary iterates for the positions needed most by the Hopf proof:
 
 - all-index exactness at the total-space term, via
   `is-exact-set-truncation-iterated-loop-fiber-sequence`
@@ -381,13 +402,18 @@ clear theorem names explaining:
 
 ### The Main LES Module Needs To Be Split
 
-`long-exact-sequence-homotopy-groups.lagda.md` is doing too much. A plausible
-upstream split would be:
+`long-exact-sequence-homotopy-groups.lagda.md` is smaller than before, but it
+is still doing too much. Completed splits now include:
 
-- boundary maps of pointed maps;
 - loop spaces of fibers and fibers of fiber inclusions;
 - shifted connecting fiber sequences;
+- boundary maps of pointed maps and their fiber comparisons;
 - exactness of set truncations of fiber sequences;
+
+A plausible remaining upstream split would be:
+
+- iterated loop fiber sequences and recursive boundary pointed maps;
+- concrete homotopy-group homomorphisms induced by fiber sequences;
 - iterated exactness of the homotopy LES;
 - group-level exactness of homotopy groups;
 - a final package exposing the long exact sequence.
@@ -427,9 +453,11 @@ construction rather than the route by which the blocker was cleared.
 1. Continue splitting `long-exact-sequence-homotopy-groups.lagda.md` into
    one-concept modules. The connecting fiber sequence has been extracted as a
    checked structural module, and the loop-fiber and first fiber-inclusion
-   fiber-sequence equivalences have now been extracted. The next candidates are
-   the remaining boundary-comparison adapters and the exactness packages that
-   still live in the main LES file.
+   fiber-sequence equivalences, boundary-comparison adapters, and base
+   set-truncated exactness package have now been extracted. The next
+   candidates are the iterated-loop fiber-sequence definitions, recursive
+   boundary pointed maps, and concrete homotopy-group homomorphism wrappers
+   that still live in the main LES file.
 
 2. Write short literate prose above the final structural theorems explaining
    the relationship with the HoTT Book LES proof and the Coq-HoTT
@@ -631,6 +659,34 @@ The checked commands were:
 ```
 
 All six checks passed.
+
+Later on 2026-06-26, the boundary-map adapters and the base
+set-truncated exactness package were split out of
+`long-exact-sequence-homotopy-groups`. The new module
+`fibers-boundary-maps-pointed-maps` owns the LES-facing boundary terminology,
+the direct fiber-of-boundary comparison, the comparison with the
+fiber-inclusion-of-the-fiber-inclusion sequence, and the looped-boundary
+adapters. The new module
+`set-truncated-exactness-homotopy-groups-fiber-sequences` owns the base
+set-truncated exactness proofs for canonical, packaged, boundary, shifted
+connecting, looped packaged, and looped boundary/fiber-inclusion segments. The
+main LES module now imports those modules and keeps only definition-level
+homotopy-group maps, recursive boundary maps, and compatibility prose.
+
+The checked commands were:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/fibers-boundary-maps-pointed-maps.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+```
+
+All eight checks passed.
 
 At the time this handoff was written, Agda MCP tools were visible to the agent,
 but `./check.sh <file>` remains the acceptance criterion. This file is a status

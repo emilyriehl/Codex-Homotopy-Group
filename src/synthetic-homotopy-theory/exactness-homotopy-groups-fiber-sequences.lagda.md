@@ -29,6 +29,7 @@ open import synthetic-homotopy-theory.functoriality-loop-spaces
 open import synthetic-homotopy-theory.iterated-loop-spaces
 open import synthetic-homotopy-theory.long-exact-sequence-homotopy-groups
 open import synthetic-homotopy-theory.loop-spaces
+open import synthetic-homotopy-theory.set-truncated-exactness-homotopy-groups-fiber-sequences
 open import synthetic-homotopy-theory.set-truncated-iterated-exactness-homotopy-groups-fiber-sequences
 ```
 

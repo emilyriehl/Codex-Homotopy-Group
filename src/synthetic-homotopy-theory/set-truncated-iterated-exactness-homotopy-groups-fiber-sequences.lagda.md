@@ -32,6 +32,7 @@ open import structured-types.pointed-types
 
 open import synthetic-homotopy-theory.cavallos-trick
 open import synthetic-homotopy-theory.connecting-fiber-sequences
+open import synthetic-homotopy-theory.fibers-boundary-maps-pointed-maps
 open import synthetic-homotopy-theory.functoriality-iterated-loop-spaces
 open import synthetic-homotopy-theory.functoriality-loop-spaces
 open import synthetic-homotopy-theory.iterated-loop-spaces
@@ -39,6 +40,7 @@ open import synthetic-homotopy-theory.long-exact-sequence-homotopy-groups
 open import synthetic-homotopy-theory.loop-spaces-fibers-of-pointed-maps
 open import synthetic-homotopy-theory.loop-spaces
 open import synthetic-homotopy-theory.reassociation-iterated-loop-spaces
+open import synthetic-homotopy-theory.set-truncated-exactness-homotopy-groups-fiber-sequences
 ```
 
 </details>
