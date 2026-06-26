@@ -10,6 +10,8 @@ module synthetic-homotopy-theory.long-exact-sequence-homotopy-groups where
 open import synthetic-homotopy-theory.homomorphisms-homotopy-groups-fiber-sequences
 open import synthetic-homotopy-theory.iterated-boundary-maps-fiber-sequences
 open import synthetic-homotopy-theory.iterated-loop-fiber-sequences
+open import synthetic-homotopy-theory.long-exact-sequence-homotopy-groups-fiber-sequences
+open import synthetic-homotopy-theory.set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequences
 ```
 
 </details>
@@ -57,6 +59,16 @@ shifted boundary fiber sequence, are defined in
 The homomorphisms on concrete homotopy groups induced by the fiber inclusion,
 fibration, and boundary maps of a fiber sequence are defined in
 [`homomorphisms-homotopy-groups-fiber-sequences`](synthetic-homotopy-theory.homomorphisms-homotopy-groups-fiber-sequences.md).
+
+### Set-truncated canonical long exact sequence
+
+The set-truncated canonical long exact sequence package is defined in
+[`set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequences`](synthetic-homotopy-theory.set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequences.md).
+
+### Group-level long exact sequence
+
+The group-level long exact sequence package is defined in
+[`long-exact-sequence-homotopy-groups-fiber-sequences`](synthetic-homotopy-theory.long-exact-sequence-homotopy-groups-fiber-sequences.md).
 
 ## Properties
 

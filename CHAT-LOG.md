@@ -6039,3 +6039,56 @@ unsolved-meta options, and `git diff --check` passed.
 Related commit:
 
 - This commit - Extract iterated LES definitions and homomorphisms.
+
+### Extract public LES package modules
+
+Request: Emily asked Codex to complete the next task after the iterated LES
+definition/homomorphism split, continuing the library-quality LES cleanup.
+
+Model context:
+
+- Date: 2026-06-26.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible; this session used `./check.sh` as the proof
+  acceptance gate.
+
+Actions:
+
+- Added
+  `set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequences`,
+  extracting the checked set-truncated canonical LES record and object from
+  the transport-heavy iterated exactness file.
+- Added `long-exact-sequence-homotopy-groups-fiber-sequences`, extracting the
+  checked group-level LES record and object from the group exactness theorem
+  file.
+- Updated `long-exact-sequence-homotopy-groups` to import the two package
+  modules as public-facing LES entry points.
+- Left the existing proof-heavy files as theorem providers: the iterated
+  set-truncated exactness file owns the all-index set-level exactness and
+  signed comparison results, while the group exactness file owns the ordinary
+  group exactness wrappers.
+- Updated `LES-STATUS.md` and `STATUS-REPORT.md` so the current next target is
+  the remaining exactness support layer rather than the already-thin main LES
+  coordination module.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+rg -n "\{!!\}|allow-unsolved-metas|postulate|TERMINATING|REWRITE" src/synthetic-homotopy-theory/set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+git diff --check
+```
+
+All five Agda checks passed. The touched-file scan found no holes,
+postulates, unsafe termination pragmas, rewrite-rule dependency, or
+unsolved-meta options, and `git diff --check` passed.
+
+Related commit:
+
+- This commit - Extract public LES package modules.
