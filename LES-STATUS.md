@@ -223,11 +223,16 @@ The total-space and fibration-boundary group exactness statements are now
 available for all indices. The boundary/fiber-inclusion group exactness export
 is still only the low-dimensional case needed by the Hopf proof.
 
-The set-level code contains more looped boundary/fiber-inclusion work than the
-public group-level API exposes, so this is likely a packaging and transport
-problem rather than a missing mathematical idea. It should still be treated as
-a real gap: a reader expecting the full LES will not find a uniform theorem for
-all three repeating adjacent positions.
+The set-level code contains a checked looped boundary/fiber-inclusion segment
+and the structural ingredients for shifted boundary fiber sequences, but it
+does not yet expose the all-index boundary/fiber-inclusion theorem in the same
+way the total-space and fibration-boundary positions are exposed. Thus this is
+not merely a public group-level wrapper problem: the next agent should first
+make the set-level all-index statement explicit, preferably by deriving it from
+the shifted boundary fiber sequence rather than by extending the local
+transport chain directly. It should still be treated as a real gap: a reader
+expecting the full LES will not find a uniform theorem for all three repeating
+adjacent positions.
 
 ### The Proof Shape Is Still Too Transport-Heavy
 
@@ -307,10 +312,12 @@ construction rather than the route by which the blocker was cleared.
 
 ## Recommended Next Steps
 
-1. Add the missing all-index group-level boundary/fiber-inclusion theorem.
-   Start from the existing set-level looped boundary/fiber-inclusion exactness
-   and reuse the group exactness bridge rather than proving a new algebraic
-   theorem.
+1. Add the missing all-index boundary/fiber-inclusion theorem. First expose a
+   set-level all-index statement, preferably by applying the already checked
+   total-space exactness theorem to the shifted boundary fiber sequence and
+   its iterates. Then reuse the group exactness bridge to export the
+   corresponding ordinary group exactness theorem, rather than proving a new
+   algebraic theorem.
 
 2. Define a small LES indexing/package layer. It does not need to be elaborate
    at first; even a record with three exactness projections for the repeating
