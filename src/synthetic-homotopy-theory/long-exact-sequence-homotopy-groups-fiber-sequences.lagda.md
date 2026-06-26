@@ -18,7 +18,7 @@ open import group-theory.homomorphisms-concrete-groups
 
 open import structured-types.fiber-sequences
 
-open import synthetic-homotopy-theory.exactness-homotopy-groups-fiber-sequences
+open import synthetic-homotopy-theory.canonical-exactness-homotopy-groups-fiber-sequences
 open import synthetic-homotopy-theory.homomorphisms-homotopy-groups-fiber-sequences
 open import synthetic-homotopy-theory.homotopy-groups
 ```

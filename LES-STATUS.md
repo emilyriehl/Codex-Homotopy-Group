@@ -337,19 +337,29 @@ the generic pointed-set-to-group transport theorem.
 
 ### Current Group-Level Exactness Statements
 
-`src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md`
-exports the ordinary group exactness statements consumed by the Hopf
-calculation:
+`src/synthetic-homotopy-theory/canonical-exactness-homotopy-groups-fiber-sequences.lagda.md`
+owns the canonical group-level exactness statements used by the public LES
+package:
 
 - `is-exact-hom-fiber-inclusion-fibration-concrete-homotopy-group-fiber-sequence`
   gives all-index exactness at the total-space term
   `pi(F) -> pi(E) -> pi(B)`.
-- `is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-direct`
-  gives all-index exactness at the base term
-  `pi(E) -> pi(B) -> pi(F)` using the direct shifted exactness route.
 - `is-exact-hom-canonical-fibration-boundary-concrete-homotopy-group-fiber-sequence`
   gives all-index exactness at the base term using the canonical iterated
   boundary homomorphism.
+- `is-exact-hom-canonical-boundary-fiber-inclusion-concrete-homotopy-group-fiber-sequence`
+  gives all-index boundary/fiber-inclusion exactness for the canonical
+  boundary map of the corresponding iterated fiber sequence.
+- `src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md`
+  now imports this canonical theorem provider directly.
+
+`src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md`
+re-exports the canonical exactness module and retains the ordinary group
+compatibility statements consumed by the Hopf calculation:
+
+- `is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-direct`
+  gives all-index exactness at the base term
+  `pi(E) -> pi(B) -> pi(F)` using the direct shifted exactness route.
 - `is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-second-direct`
   is the low-dimensional convenience instance used around the lower Hopf
   segment.
@@ -359,16 +369,16 @@ calculation:
 - `is-exact-hom-boundary-fiber-inclusion-concrete-homotopy-group-fiber-sequence`
   gives a boundary/fiber-inclusion exactness statement, but only in the
   currently needed low-dimensional form.
-- `is-exact-hom-canonical-boundary-fiber-inclusion-concrete-homotopy-group-fiber-sequence`
-  gives all-index boundary/fiber-inclusion exactness for the canonical
-  boundary map of the corresponding iterated fiber sequence.
-- `src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md`
-  defines `Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence` and
-  instantiates it as `long-exact-sequence-homotopy-groups-fiber-sequence` for
-  any packaged fiber sequence. The package uses the canonical iterated boundary
-  homomorphism in both boundary slots. The signed inversion adapter needed to
-  compare the looped canonical boundary with the fresh shifted boundary is
-  confined to the imported proof of the fibration-boundary exactness theorem.
+- `is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-is-trivial-codomain`
+  is the older trivial-target fallback retained for downstream compatibility.
+
+The group-level LES package defines
+`Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence` and instantiates it as
+`long-exact-sequence-homotopy-groups-fiber-sequence` for any packaged fiber
+sequence. The package uses the canonical iterated boundary homomorphism in
+both boundary slots. The signed inversion adapter needed to compare the looped
+canonical boundary with the fresh shifted boundary is confined to the imported
+proof of the canonical fibration-boundary exactness theorem.
 
 ### Hopf Consumers
 
@@ -510,12 +520,14 @@ construction rather than the route by which the blocker was cleared.
 
 ## Recommended Next Steps
 
-1. Continue cleaning the public group-level exactness statement layer into
-   reviewer-facing modules. The main LES file, final package modules, iterated
-   set-truncated map layer, canonical set-truncated exactness layer, signed
-   boundary comparison layer, generic group bridge, and fiber-sequence-specific
-   group bridge are now split; the next candidate is the theorem statement
-   layer in `exactness-homotopy-groups-fiber-sequences`.
+1. Continue cleaning the remaining group-level compatibility statement layer
+   into reviewer-facing modules. The main LES file, final package modules,
+   iterated set-truncated map layer, canonical set-truncated exactness layer,
+   signed boundary comparison layer, generic group bridge,
+   fiber-sequence-specific group bridge, and canonical group exactness layer
+   are now split. The next candidate is the direct/recursive/trivial
+   compatibility theorem layer still in
+   `exactness-homotopy-groups-fiber-sequences`.
 
 2. Write short literate prose above the final structural theorems explaining
    the relationship with the HoTT Book LES proof and the Coq-HoTT
@@ -846,6 +858,31 @@ The checked commands were:
 ./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
 ./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+```
+
+All six checks passed. A touched-file scan found no holes, postulates, unsafe
+termination pragmas, rewrite-rule dependency, or unsolved-meta options, and
+`git diff --check` passed.
+
+Later on 2026-06-26, the canonical group-level exactness statements were split
+out of the compatibility exactness module. The new module
+`canonical-exactness-homotopy-groups-fiber-sequences` owns the all-index
+total-space, canonical fibration-boundary, and canonical
+boundary/fiber-inclusion exactness theorems. The public group-level LES
+package now imports this canonical theorem provider directly. The older
+`exactness-homotopy-groups-fiber-sequences` module re-exports the canonical
+module and retains only the direct, recursive, low-dimensional, and
+trivial-codomain compatibility wrappers.
+
+The checked commands were:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/canonical-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
 ```
 
 All six checks passed.

@@ -6195,3 +6195,50 @@ and `git diff --check` passed.
 Related commit:
 
 - This commit - Split group exactness transport for fiber sequences.
+
+### Split canonical group exactness theorem provider
+
+Request: Emily asked Codex to keep working after the group exactness transport
+split, continuing the library-quality LES cleanup.
+
+Model context:
+
+- Date: 2026-06-26.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible; this session used `./check.sh` as the proof
+  acceptance gate.
+
+Actions:
+
+- Added `canonical-exactness-homotopy-groups-fiber-sequences`, extracting the
+  all-index canonical group-level exactness statements used by the public
+  group-level LES package.
+- Updated `exactness-homotopy-groups-fiber-sequences` to re-export the
+  canonical module and retain only direct, recursive, low-dimensional, and
+  trivial-codomain compatibility wrappers.
+- Updated
+  `long-exact-sequence-homotopy-groups-fiber-sequences` to import the
+  canonical theorem provider directly rather than the compatibility module.
+- Updated `LES-STATUS.md` and `STATUS-REPORT.md` so the next target is
+  splitting the remaining compatibility wrappers by route.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/canonical-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+All six Agda checks passed. A touched-file scan found no holes, postulates,
+unsafe termination pragmas, rewrite-rule dependency, or unsolved-meta options,
+and `git diff --check` passed.
+
+Related commit:
+
+- This commit - Split canonical group exactness theorem provider.

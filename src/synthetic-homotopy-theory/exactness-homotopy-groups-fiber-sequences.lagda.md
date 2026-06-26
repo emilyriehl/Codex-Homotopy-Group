@@ -2,6 +2,8 @@
 
 ```agda
 module synthetic-homotopy-theory.exactness-homotopy-groups-fiber-sequences where
+
+open import synthetic-homotopy-theory.canonical-exactness-homotopy-groups-fiber-sequences public
 ```
 
 <details><summary>Imports</summary>
@@ -64,47 +66,12 @@ module _
   where
 ```
 
-### Exactness at the total-space homotopy group
+### Canonical group-level exactness
 
-```agda
-
-  is-exact-hom-fiber-inclusion-fibration-concrete-homotopy-group-fiber-sequence :
-    (n : ℕ) →
-    is-exact-hom-Group
-      ( group-Concrete-Group
-        ( concrete-homotopy-group
-          ( n)
-          ( fiber-fiber-sequence-Pointed-Type S)))
-      ( group-Concrete-Group
-        ( concrete-homotopy-group
-          ( n)
-          ( total-space-fiber-sequence-Pointed-Type S)))
-      ( group-Concrete-Group
-        ( concrete-homotopy-group
-          ( n)
-          ( base-fiber-sequence-Pointed-Type S)))
-      ( hom-group-hom-Concrete-Group
-        ( concrete-homotopy-group
-          ( n)
-          ( fiber-fiber-sequence-Pointed-Type S))
-        ( concrete-homotopy-group
-          ( n)
-          ( total-space-fiber-sequence-Pointed-Type S))
-        ( hom-fiber-inclusion-concrete-homotopy-group-fiber-sequence S n))
-      ( hom-group-hom-Concrete-Group
-        ( concrete-homotopy-group
-          ( n)
-          ( total-space-fiber-sequence-Pointed-Type S))
-        ( concrete-homotopy-group
-          ( n)
-          ( base-fiber-sequence-Pointed-Type S))
-        ( hom-fibration-concrete-homotopy-group-fiber-sequence S n))
-  is-exact-hom-fiber-inclusion-fibration-concrete-homotopy-group-fiber-sequence n =
-    is-exact-hom-Group-is-exact-set-truncation-iterated-loop-fiber-sequence
-      ( S)
-      ( n)
-      ( is-exact-set-truncation-iterated-loop-fiber-sequence S n)
-```
+The all-index canonical group-level exactness statements are defined in
+[`canonical-exactness-homotopy-groups-fiber-sequences`](synthetic-homotopy-theory.canonical-exactness-homotopy-groups-fiber-sequences.md)
+and re-exported here. The remaining theorems in this file are compatibility
+wrappers for recursive, direct, low-dimensional, or trivial-codomain routes.
 
 ### Exactness at the fiber homotopy group after the boundary
 
@@ -147,46 +114,6 @@ module _
       ( boundary-pointed-map-fiber-sequence S)
       ( fiber-inclusion-fiber-sequence-Pointed-Type S)
       ( is-exact-set-truncation-loop-boundary-fiber-inclusion-fiber-sequence S)
-
-  is-exact-hom-canonical-boundary-fiber-inclusion-concrete-homotopy-group-fiber-sequence :
-    (n : ℕ) →
-    is-exact-hom-Group
-      ( group-Concrete-Group
-        ( concrete-homotopy-group
-          ( succ-ℕ n)
-          ( base-fiber-sequence-Pointed-Type S)))
-      ( group-Concrete-Group
-        ( concrete-homotopy-group
-          ( n)
-          ( fiber-fiber-sequence-Pointed-Type S)))
-      ( group-Concrete-Group
-        ( concrete-homotopy-group
-          ( n)
-          ( total-space-fiber-sequence-Pointed-Type S)))
-      ( hom-group-hom-Concrete-Group
-        ( concrete-homotopy-group
-          ( succ-ℕ n)
-          ( base-fiber-sequence-Pointed-Type S))
-        ( concrete-homotopy-group
-          ( n)
-          ( fiber-fiber-sequence-Pointed-Type S))
-        ( canonical-boundary-hom-concrete-homotopy-group-fiber-sequence S n))
-      ( hom-group-hom-Concrete-Group
-        ( concrete-homotopy-group
-          ( n)
-          ( fiber-fiber-sequence-Pointed-Type S))
-        ( concrete-homotopy-group
-          ( n)
-          ( total-space-fiber-sequence-Pointed-Type S))
-        ( hom-fiber-inclusion-concrete-homotopy-group-fiber-sequence S n))
-  is-exact-hom-canonical-boundary-fiber-inclusion-concrete-homotopy-group-fiber-sequence
-    n =
-    is-exact-hom-Group-is-exact-set-truncation-canonical-iterated-loop-boundary-fiber-inclusion-fiber-sequence
-      ( S)
-      ( n)
-      ( is-exact-set-truncation-canonical-iterated-loop-boundary-fiber-inclusion-fiber-sequence
-        ( S)
-        ( n))
 ```
 
 ### Exactness at the base homotopy group from recursive set-level exactness
@@ -357,47 +284,6 @@ module _
   is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-second-direct =
     is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-direct
       ( 1)
-
-  is-exact-hom-canonical-fibration-boundary-concrete-homotopy-group-fiber-sequence :
-    (n : ℕ) →
-    is-exact-hom-Group
-      ( group-Concrete-Group
-        ( concrete-homotopy-group
-          ( succ-ℕ n)
-          ( total-space-fiber-sequence-Pointed-Type S)))
-      ( group-Concrete-Group
-        ( concrete-homotopy-group
-          ( succ-ℕ n)
-          ( base-fiber-sequence-Pointed-Type S)))
-      ( group-Concrete-Group
-        ( concrete-homotopy-group
-          ( n)
-          ( fiber-fiber-sequence-Pointed-Type S)))
-      ( hom-group-hom-Concrete-Group
-        ( concrete-homotopy-group
-          ( succ-ℕ n)
-          ( total-space-fiber-sequence-Pointed-Type S))
-        ( concrete-homotopy-group
-          ( succ-ℕ n)
-          ( base-fiber-sequence-Pointed-Type S))
-        ( hom-fibration-concrete-homotopy-group-fiber-sequence S (succ-ℕ n)))
-      ( hom-group-hom-Concrete-Group
-        ( concrete-homotopy-group
-          ( succ-ℕ n)
-          ( base-fiber-sequence-Pointed-Type S))
-        ( concrete-homotopy-group
-          ( n)
-          ( fiber-fiber-sequence-Pointed-Type S))
-        ( canonical-boundary-hom-concrete-homotopy-group-fiber-sequence S n))
-  is-exact-hom-canonical-fibration-boundary-concrete-homotopy-group-fiber-sequence
-    n =
-    is-exact-hom-Group-is-exact-set-truncation-loop-canonical-iterated-boundary-fiber-sequence
-      ( S)
-      ( n)
-      ( is-exact-set-truncation-loop-canonical-iterated-boundary-fiber-sequence-signed
-        ( S)
-        ( n))
-
   is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-pointed-htpy :
     (n : ℕ) →
     ( pointed-map-Ω (pointed-map-iterated-boundary-fiber-sequence S n)) ~∗
