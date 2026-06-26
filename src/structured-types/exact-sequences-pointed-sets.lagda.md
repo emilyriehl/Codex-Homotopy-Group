@@ -288,6 +288,43 @@ module _
         ( ( inv (H x)) ∙ K))
 ```
 
+### Exactness is invariant under compatible inverse middle shifts
+
+```agda
+module _
+  {l1 l2 l3 : Level}
+  (A : Pointed-Set l1) (B : Pointed-Set l2) (C : Pointed-Set l3)
+  (f : hom-Pointed-Set A B) (g h : hom-Pointed-Set B C)
+  (e d : hom-Pointed-Set B B)
+  where
+
+  is-exact-hom-Pointed-Set-image-kernel-shift-right-inverse :
+    ((x : type-Pointed-Set B) →
+      is-in-image-hom-Pointed-Set {A = A} {B = B} f
+        ( map-pointed-map d x) ↔
+      is-in-image-hom-Pointed-Set {A = A} {B = B} f x) →
+    ((x : type-Pointed-Set B) →
+      map-pointed-map h (map-pointed-map e x) ＝
+      map-pointed-map g x) →
+    ((x : type-Pointed-Set B) →
+      map-pointed-map e (map-pointed-map d x) ＝ x) →
+    is-exact-hom-Pointed-Set A B C f g →
+    is-exact-hom-Pointed-Set A B C f h
+  is-exact-hom-Pointed-Set-image-kernel-shift-right-inverse I H R =
+    is-exact-hom-Pointed-Set-image-kernel-shift-right
+      ( A)
+      ( B)
+      ( C)
+      ( f)
+      ( g)
+      ( h)
+      ( d)
+      ( I)
+      ( λ x →
+        ( ap (map-pointed-map h) (inv (R x))) ∙
+        ( H (map-pointed-map d x)))
+```
+
 ### Exactness is invariant under injective comparison of the middle pointed set
 
 ```agda

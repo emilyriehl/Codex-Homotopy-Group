@@ -2062,3 +2062,47 @@ rg -n "\{!!\}|\?\}|postulate|TERMINATING|REWRITE" src/synthetic-homotopy-theory/
 
 The Agda check passed. The touched-file scan found no holes, postulates,
 unsafe termination pragmas, or rewrite-rule dependency.
+
+Later on 2026-06-26, the LES signed-boundary adapter advanced from a checked
+first-loop comparison square to checked exactness transport. The reusable
+pointed-set exactness layer now includes
+
+```text
+is-exact-hom-Pointed-Set-image-kernel-shift-right-inverse
+```
+
+which transports exactness across a compatible inverse middle self-map. The
+set-truncated iterated exactness file now packages loop inversion as a pointed
+equivalence, uses its formal inverse to avoid `--without-K` path induction on
+based 2-loops, proves image invariance of the fibration image under this
+inverse sign map, and derives
+
+```text
+is-exact-set-truncation-loop-canonical-iterated-boundary-fiber-sequence-first-loop-signed
+```
+
+This theorem turns the existing signed first-loop comparison between the fresh
+canonical shifted boundary and the looped canonical boundary into actual
+set-truncated exactness for the looped canonical boundary. The group-level
+exactness file then lifts this to
+
+```text
+is-exact-hom-canonical-fibration-boundary-concrete-homotopy-group-fiber-sequence-first-loop-signed
+```
+
+so the canonical fibration-boundary exactness segment is now available at
+ordinary group level for the first-loop case. This does not yet finish the
+library-quality all-index canonical LES package: the signed adapter still needs
+to be generalized across iterates or hidden behind a single canonical public
+boundary convention.
+
+Verification:
+
+```sh
+./check.sh src/structured-types/exact-sequences-pointed-sets.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+```
+
+All four Agda checks passed.

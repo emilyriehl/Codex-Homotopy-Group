@@ -5571,3 +5571,51 @@ Both Agda checks passed after the optional slow hook was removed.
 Related commit:
 
 - This commit - Package group-level LES exactness.
+
+### Transport first-loop signed LES exactness
+
+Request: Emily asked Codex to implement the LES plan and continue making
+significant progress on the main library-quality LES objective, without
+downgrading to easier side objectives.
+
+Model context:
+
+- Date: 2026-06-26.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible, but this session used `./check.sh` as the proof
+  acceptance gate.
+
+Actions:
+
+- Added
+  `is-exact-hom-Pointed-Set-image-kernel-shift-right-inverse` to the
+  pointed-set exactness transport layer.
+- Reworked the first-loop signed adapter to use the pointed equivalence induced
+  by loop inversion and its formal inverse, avoiding forbidden `--without-K`
+  pattern matching on based double loops.
+- Proved
+  `is-exact-set-truncation-loop-canonical-iterated-boundary-fiber-sequence-first-loop-signed`,
+  upgrading the previous signed comparison square into actual set-truncated
+  exactness for the looped canonical boundary.
+- Added the group-level consequence
+  `is-exact-hom-canonical-fibration-boundary-concrete-homotopy-group-fiber-sequence-first-loop-signed`.
+- Updated `LES-STATUS.md` and `STATUS-REPORT.md` to mark the first-loop signed
+  adapter as checked and to keep the all-index signed/canonical package as the
+  remaining main target.
+
+Verification:
+
+```sh
+./check.sh src/structured-types/exact-sequences-pointed-sets.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+```
+
+All four Agda checks passed.
+
+Related commit:
+
+- This commit - Transport signed LES exactness.

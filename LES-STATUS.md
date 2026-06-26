@@ -152,6 +152,11 @@ most by the Hopf proof:
   which identifies the fresh canonical shifted boundary with the looped
   recursive boundary only after precomposing the recursive side by the
   double-loop inversion map induced by `ap inv`
+- the checked first-loop signed exactness transport
+  `is-exact-set-truncation-loop-canonical-iterated-boundary-fiber-sequence-first-loop-signed`,
+  which turns that signed comparison into exactness for the looped canonical
+  boundary by using the loop-inversion pointed equivalence and its formal
+  inverse
 - transport wrappers for recursive boundary maps and pointed homotopies
 
 The earlier induced-map reassociation blocker has been resolved in
@@ -203,6 +208,9 @@ calculation:
 - `is-exact-hom-canonical-boundary-fiber-inclusion-concrete-homotopy-group-fiber-sequence`
   gives all-index boundary/fiber-inclusion exactness for the canonical
   boundary map of the corresponding iterated fiber sequence.
+- `is-exact-hom-canonical-fibration-boundary-concrete-homotopy-group-fiber-sequence-first-loop-signed`
+  gives the first-loop fibration-boundary exactness statement for the canonical
+  boundary homomorphism, obtained from the checked signed set-level transport.
 - `Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence` packages the three
   repeating group-level exactness positions into a single checked record, and
   `long-exact-sequence-homotopy-groups-fiber-sequence` instantiates it for any
@@ -216,13 +224,15 @@ checked raw computation
 `eq-map-loop-fiber-map-Ω-boundary-fiber-Pointed-Type` and its set-truncated
 first-loop consequence show that `ap inv` appears on double loops. Thus the
 old unsigned coherence square is not the correct next theorem under the
-current definitions. The new group-level package is therefore a checked
+current definitions. The first-loop signed adapter is now checked at both
+set-truncated and group-exactness levels, but it is not yet systematic for all
+iterates. The new group-level package is therefore still a checked
 mixed-boundary package: the fibration-boundary position uses the recursive
-direct boundary homomorphism, and the boundary/fiber-inclusion position uses
-the canonical iterated boundary homomorphism. A polished LES package should
-either make the signed comparison systematic and transport exactness across the
-inversion automorphism, or choose a canonical boundary convention that hides
-this sign from the public API.
+direct boundary homomorphism, and the boundary/fiber-inclusion position uses the
+canonical iterated boundary homomorphism. A polished LES package should either
+generalize the signed comparison and exactness transport across the inversion
+automorphism, or choose a canonical boundary convention that hides this sign
+from the public API.
 
 ### Hopf Consumers
 
@@ -372,12 +382,9 @@ construction rather than the route by which the blocker was cleared.
    recursive/direct boundary maps as adapters or corollaries.
 
 2. If existing concrete homotopy-group homomorphisms continue to use recursive
-   boundaries, add a separate signed adapter layer. That adapter should account
-   for the `ap inv` sign discovered in
-   `coherence-square-first-loop-canonical-iterated-boundary-fiber-sequence-signed`
-   and transport exactness across the corresponding loop-inversion
-   automorphism. It should not be a prerequisite for the canonical set-level
-   package.
+   boundaries, continue the separate signed adapter layer. The first-loop case
+   now transports exactness across the loop-inversion automorphism; the next
+   target is the all-iterate generalization and a clean public wrapper.
 
 3. Refactor the boundary map API. Choose a canonical public boundary, then make
    recursive/direct variants private or secondary corollaries with explicit
@@ -437,6 +444,28 @@ boundary/fiber-inclusion canonical boundary maps as separate fields, matching
 the fresh-connecting-map approach rather than forcing a recursive/canonical
 boundary equality. The group-level package records the currently checked
 mixed-boundary exactness data in a single reusable object.
+
+Later on 2026-06-26, the first-loop signed adapter was upgraded from a
+comparison square to checked exactness transport. The structured pointed-set
+exactness file now includes
+`is-exact-hom-Pointed-Set-image-kernel-shift-right-inverse`; the set-truncated
+iterated exactness file uses the pointed equivalence induced by loop inversion
+to prove
+`is-exact-set-truncation-loop-canonical-iterated-boundary-fiber-sequence-first-loop-signed`;
+and the group-level exactness file exposes
+`is-exact-hom-canonical-fibration-boundary-concrete-homotopy-group-fiber-sequence-first-loop-signed`.
+The checked commands were:
+
+```sh
+./check.sh src/structured-types/exact-sequences-pointed-sets.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+```
+
+All four checks passed. This is real progress on the signed adapter layer, but
+it is still the first-loop case rather than the final all-index canonical
+group-level LES package.
 
 At the time this handoff was written, Agda MCP tools were visible to the agent,
 but `./check.sh <file>` remains the acceptance criterion. This file is a status
