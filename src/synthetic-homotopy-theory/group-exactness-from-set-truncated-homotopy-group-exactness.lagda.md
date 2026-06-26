@@ -7,8 +7,6 @@ module synthetic-homotopy-theory.group-exactness-from-set-truncated-homotopy-gro
 <details><summary>Imports</summary>
 
 ```agda
-open import elementary-number-theory.natural-numbers
-
 open import foundation.action-on-identifications-functions
 open import foundation.contractible-types
 open import foundation.dependent-pair-types
@@ -30,19 +28,13 @@ open import group-theory.images-of-group-homomorphisms
 open import group-theory.kernels-homomorphisms-groups
 
 open import structured-types.exact-sequences-pointed-sets
-open import structured-types.fiber-sequences
 open import structured-types.pointed-maps
 open import structured-types.pointed-sets
 open import structured-types.pointed-types
 
-open import synthetic-homotopy-theory.functoriality-iterated-loop-spaces
 open import synthetic-homotopy-theory.functoriality-loop-spaces
-open import synthetic-homotopy-theory.homomorphisms-homotopy-groups-fiber-sequences
 open import synthetic-homotopy-theory.homotopy-groups
-open import synthetic-homotopy-theory.iterated-boundary-maps-fiber-sequences
-open import synthetic-homotopy-theory.iterated-loop-spaces
 open import synthetic-homotopy-theory.loop-spaces
-open import synthetic-homotopy-theory.set-truncated-iterated-exactness-homotopy-groups-fiber-sequences
 open import synthetic-homotopy-theory.underlying-groups-concrete-homotopy-groups
 open import synthetic-homotopy-theory.underlying-maps-concrete-homotopy-groups
 ```
@@ -51,15 +43,14 @@ open import synthetic-homotopy-theory.underlying-maps-concrete-homotopy-groups
 
 ## Idea
 
-The set-truncated long exact sequence gives exactness for pointed sets built
-from loop spaces. The final Hopf comparison needs exactness for the ordinary
-groups underlying concrete homotopy groups. This file isolates that transport
-step, keeping it separate from the construction of the set-level exactness
-statements.
+Set-truncated exactness gives exactness for pointed sets built from loop
+spaces. Applications to concrete homotopy groups need exactness for the
+ordinary groups underlying those concrete groups. This file isolates the
+generic transport step from pointed-set exactness to ordinary group exactness.
 
-The missing proof will use the underlying-type equivalences for concrete
-homotopy groups and the naturality squares for the induced maps to transport
-image and kernel membership between the two exactness formulations.
+The fiber-sequence-specific specializations are kept in
+[`group-exactness-from-set-truncated-exactness-fiber-sequences`](synthetic-homotopy-theory.group-exactness-from-set-truncated-exactness-fiber-sequences.md),
+so this module remains a reusable bridge for any pointed-type loop truncation.
 
 ## Theorems
 
@@ -295,316 +286,4 @@ module _
         ( equiv-underlying-type-concrete-group-Pointed-Type C)
         ( is-contr-target))
       ( naturality-map-underlying-type-concrete-group-Pointed-Type f)
-
-module _
-  {l1 l2 l3 : Level}
-  (S : fiber-sequence-Pointed-Type l1 l2 l3)
-  where
-
-  is-exact-hom-Group-is-exact-set-truncation-iterated-loop-fiber-sequence :
-    (n : ℕ) →
-    is-exact-hom-Pointed-Set
-      ( trunc-Pointed-Set
-        ( Ω
-          ( iterated-loop-space
-            ( n)
-            ( fiber-fiber-sequence-Pointed-Type S))))
-      ( trunc-Pointed-Set
-        ( Ω
-          ( iterated-loop-space
-            ( n)
-            ( total-space-fiber-sequence-Pointed-Type S))))
-      ( trunc-Pointed-Set
-        ( Ω
-          ( iterated-loop-space
-            ( n)
-            ( base-fiber-sequence-Pointed-Type S))))
-      ( hom-trunc-iterated-loop-fiber-inclusion-fiber-sequence S n)
-      ( hom-trunc-iterated-loop-fibration-fiber-sequence S n) →
-    is-exact-hom-Group
-      ( group-Concrete-Group
-        ( concrete-homotopy-group
-          ( n)
-          ( fiber-fiber-sequence-Pointed-Type S)))
-      ( group-Concrete-Group
-        ( concrete-homotopy-group
-          ( n)
-          ( total-space-fiber-sequence-Pointed-Type S)))
-      ( group-Concrete-Group
-        ( concrete-homotopy-group
-          ( n)
-          ( base-fiber-sequence-Pointed-Type S)))
-      ( hom-group-hom-Concrete-Group
-        ( concrete-homotopy-group
-          ( n)
-          ( fiber-fiber-sequence-Pointed-Type S))
-        ( concrete-homotopy-group
-          ( n)
-          ( total-space-fiber-sequence-Pointed-Type S))
-        ( hom-fiber-inclusion-concrete-homotopy-group-fiber-sequence S n))
-      ( hom-group-hom-Concrete-Group
-        ( concrete-homotopy-group
-          ( n)
-          ( total-space-fiber-sequence-Pointed-Type S))
-        ( concrete-homotopy-group
-          ( n)
-          ( base-fiber-sequence-Pointed-Type S))
-        ( hom-fibration-concrete-homotopy-group-fiber-sequence S n))
-  is-exact-hom-Group-is-exact-set-truncation-iterated-loop-fiber-sequence n =
-    is-exact-hom-Group-is-exact-loop-truncation-hom-Pointed-Type
-      ( iterated-loop-space
-        ( n)
-        ( fiber-fiber-sequence-Pointed-Type S))
-      ( iterated-loop-space
-        ( n)
-        ( total-space-fiber-sequence-Pointed-Type S))
-      ( iterated-loop-space
-        ( n)
-        ( base-fiber-sequence-Pointed-Type S))
-      ( pointed-map-iterated-loop-space
-        ( n)
-        ( fiber-inclusion-fiber-sequence-Pointed-Type S))
-      ( pointed-map-iterated-loop-space
-        ( n)
-        ( fibration-fiber-sequence-Pointed-Type S))
-
-  is-exact-hom-Group-is-exact-set-truncation-canonical-iterated-loop-boundary-fiber-inclusion-fiber-sequence :
-    (n : ℕ) →
-    is-exact-hom-Pointed-Set
-      ( trunc-Pointed-Set
-        ( Ω
-          ( iterated-loop-space
-            ( succ-ℕ n)
-            ( base-fiber-sequence-Pointed-Type S))))
-      ( trunc-Pointed-Set
-        ( Ω
-          ( iterated-loop-space
-            ( n)
-            ( fiber-fiber-sequence-Pointed-Type S))))
-      ( trunc-Pointed-Set
-        ( Ω
-          ( iterated-loop-space
-            ( n)
-            ( total-space-fiber-sequence-Pointed-Type S))))
-      ( hom-trunc-canonical-iterated-loop-boundary-fiber-inclusion-fiber-sequence
-        ( S)
-        ( n))
-      ( hom-trunc-iterated-loop-fiber-inclusion-fiber-sequence S n) →
-    is-exact-hom-Group
-      ( group-Concrete-Group
-        ( concrete-homotopy-group
-          ( succ-ℕ n)
-          ( base-fiber-sequence-Pointed-Type S)))
-      ( group-Concrete-Group
-        ( concrete-homotopy-group
-          ( n)
-          ( fiber-fiber-sequence-Pointed-Type S)))
-      ( group-Concrete-Group
-        ( concrete-homotopy-group
-          ( n)
-          ( total-space-fiber-sequence-Pointed-Type S)))
-      ( hom-group-hom-Concrete-Group
-        ( concrete-homotopy-group
-          ( succ-ℕ n)
-          ( base-fiber-sequence-Pointed-Type S))
-        ( concrete-homotopy-group
-          ( n)
-          ( fiber-fiber-sequence-Pointed-Type S))
-        ( canonical-boundary-hom-concrete-homotopy-group-fiber-sequence S n))
-      ( hom-group-hom-Concrete-Group
-        ( concrete-homotopy-group
-          ( n)
-          ( fiber-fiber-sequence-Pointed-Type S))
-        ( concrete-homotopy-group
-          ( n)
-          ( total-space-fiber-sequence-Pointed-Type S))
-        ( hom-fiber-inclusion-concrete-homotopy-group-fiber-sequence S n))
-  is-exact-hom-Group-is-exact-set-truncation-canonical-iterated-loop-boundary-fiber-inclusion-fiber-sequence
-    n =
-    is-exact-hom-Group-is-exact-loop-truncation-hom-Pointed-Type
-      ( iterated-loop-space
-        ( succ-ℕ n)
-        ( base-fiber-sequence-Pointed-Type S))
-      ( iterated-loop-space
-        ( n)
-        ( fiber-fiber-sequence-Pointed-Type S))
-      ( iterated-loop-space
-        ( n)
-        ( total-space-fiber-sequence-Pointed-Type S))
-      ( canonical-pointed-map-iterated-boundary-fiber-sequence S n)
-      ( pointed-map-iterated-loop-space
-        ( n)
-        ( fiber-inclusion-fiber-sequence-Pointed-Type S))
-
-  coherence-square-canonical-boundary-concrete-homotopy-group-fiber-sequence :
-    (n : ℕ) → UU (l1 ⊔ l3)
-  coherence-square-canonical-boundary-concrete-homotopy-group-fiber-sequence n =
-    (x :
-      type-Group
-        ( group-Concrete-Group
-          ( concrete-homotopy-group
-            ( succ-ℕ n)
-            ( base-fiber-sequence-Pointed-Type S)))) →
-    map-underlying-type-concrete-group-Pointed-Type
-      ( iterated-loop-space
-        ( n)
-        ( fiber-fiber-sequence-Pointed-Type S))
-      ( map-hom-Group
-        ( group-Concrete-Group
-          ( concrete-homotopy-group
-            ( succ-ℕ n)
-            ( base-fiber-sequence-Pointed-Type S)))
-        ( group-Concrete-Group
-          ( concrete-homotopy-group
-            ( n)
-            ( fiber-fiber-sequence-Pointed-Type S)))
-        ( hom-group-hom-Concrete-Group
-          ( concrete-homotopy-group
-            ( succ-ℕ n)
-            ( base-fiber-sequence-Pointed-Type S))
-          ( concrete-homotopy-group
-            ( n)
-            ( fiber-fiber-sequence-Pointed-Type S))
-          ( canonical-boundary-hom-concrete-homotopy-group-fiber-sequence
-            S
-            n))
-        ( x)) ＝
-    map-pointed-map
-      ( hom-trunc-canonical-iterated-loop-boundary-fiber-sequence S n)
-      ( map-underlying-type-concrete-group-Pointed-Type
-        ( iterated-loop-space
-          ( succ-ℕ n)
-          ( base-fiber-sequence-Pointed-Type S))
-        ( x))
-
-  is-exact-hom-Group-is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence :
-    (n : ℕ) →
-    is-exact-hom-Pointed-Set
-      ( trunc-Pointed-Set
-        ( Ω
-          ( iterated-loop-space
-            ( succ-ℕ n)
-            ( total-space-fiber-sequence-Pointed-Type S))))
-      ( trunc-Pointed-Set
-        ( Ω
-          ( iterated-loop-space
-            ( succ-ℕ n)
-            ( base-fiber-sequence-Pointed-Type S))))
-      ( trunc-Pointed-Set
-        ( Ω
-          ( iterated-loop-space
-            ( n)
-            ( fiber-fiber-sequence-Pointed-Type S))))
-      ( hom-trunc-iterated-loop-fibration-fiber-sequence S (succ-ℕ n))
-      ( hom-trunc-iterated-loop-boundary-fiber-sequence S n) →
-    is-exact-hom-Group
-      ( group-Concrete-Group
-        ( concrete-homotopy-group
-          ( succ-ℕ n)
-          ( total-space-fiber-sequence-Pointed-Type S)))
-      ( group-Concrete-Group
-        ( concrete-homotopy-group
-          ( succ-ℕ n)
-          ( base-fiber-sequence-Pointed-Type S)))
-      ( group-Concrete-Group
-        ( concrete-homotopy-group
-          ( n)
-          ( fiber-fiber-sequence-Pointed-Type S)))
-      ( hom-group-hom-Concrete-Group
-        ( concrete-homotopy-group
-          ( succ-ℕ n)
-          ( total-space-fiber-sequence-Pointed-Type S))
-        ( concrete-homotopy-group
-          ( succ-ℕ n)
-          ( base-fiber-sequence-Pointed-Type S))
-        ( hom-fibration-concrete-homotopy-group-fiber-sequence S (succ-ℕ n)))
-      ( hom-group-hom-Concrete-Group
-        ( concrete-homotopy-group
-          ( succ-ℕ n)
-          ( base-fiber-sequence-Pointed-Type S))
-        ( concrete-homotopy-group
-          ( n)
-          ( fiber-fiber-sequence-Pointed-Type S))
-        ( boundary-hom-concrete-homotopy-group-fiber-sequence S n))
-  is-exact-hom-Group-is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence n =
-    is-exact-hom-Group-is-exact-loop-truncation-hom-Pointed-Type
-      ( iterated-loop-space
-        ( succ-ℕ n)
-        ( total-space-fiber-sequence-Pointed-Type S))
-      ( iterated-loop-space
-        ( succ-ℕ n)
-        ( base-fiber-sequence-Pointed-Type S))
-      ( iterated-loop-space
-        ( n)
-        ( fiber-fiber-sequence-Pointed-Type S))
-      ( pointed-map-iterated-loop-space
-        ( succ-ℕ n)
-        ( fibration-fiber-sequence-Pointed-Type S))
-      ( pointed-map-iterated-boundary-fiber-sequence S n)
-
-  is-exact-hom-Group-is-exact-set-truncation-loop-canonical-iterated-boundary-fiber-sequence :
-    (n : ℕ) →
-    is-exact-hom-Pointed-Set
-      ( trunc-Pointed-Set
-        ( Ω
-          ( iterated-loop-space
-            ( succ-ℕ n)
-            ( total-space-fiber-sequence-Pointed-Type S))))
-      ( trunc-Pointed-Set
-        ( Ω
-          ( iterated-loop-space
-            ( succ-ℕ n)
-            ( base-fiber-sequence-Pointed-Type S))))
-      ( trunc-Pointed-Set
-        ( Ω
-          ( iterated-loop-space
-            ( n)
-            ( fiber-fiber-sequence-Pointed-Type S))))
-      ( hom-trunc-iterated-loop-fibration-fiber-sequence S (succ-ℕ n))
-      ( hom-trunc-loop-canonical-iterated-boundary-fiber-sequence S n) →
-    is-exact-hom-Group
-      ( group-Concrete-Group
-        ( concrete-homotopy-group
-          ( succ-ℕ n)
-          ( total-space-fiber-sequence-Pointed-Type S)))
-      ( group-Concrete-Group
-        ( concrete-homotopy-group
-          ( succ-ℕ n)
-          ( base-fiber-sequence-Pointed-Type S)))
-      ( group-Concrete-Group
-        ( concrete-homotopy-group
-          ( n)
-          ( fiber-fiber-sequence-Pointed-Type S)))
-      ( hom-group-hom-Concrete-Group
-        ( concrete-homotopy-group
-          ( succ-ℕ n)
-          ( total-space-fiber-sequence-Pointed-Type S))
-        ( concrete-homotopy-group
-          ( succ-ℕ n)
-          ( base-fiber-sequence-Pointed-Type S))
-        ( hom-fibration-concrete-homotopy-group-fiber-sequence S (succ-ℕ n)))
-      ( hom-group-hom-Concrete-Group
-        ( concrete-homotopy-group
-          ( succ-ℕ n)
-          ( base-fiber-sequence-Pointed-Type S))
-        ( concrete-homotopy-group
-          ( n)
-          ( fiber-fiber-sequence-Pointed-Type S))
-        ( canonical-boundary-hom-concrete-homotopy-group-fiber-sequence S n))
-  is-exact-hom-Group-is-exact-set-truncation-loop-canonical-iterated-boundary-fiber-sequence n =
-    is-exact-hom-Group-is-exact-loop-truncation-hom-Pointed-Type
-      ( iterated-loop-space
-        ( succ-ℕ n)
-        ( total-space-fiber-sequence-Pointed-Type S))
-      ( iterated-loop-space
-        ( succ-ℕ n)
-        ( base-fiber-sequence-Pointed-Type S))
-      ( iterated-loop-space
-        ( n)
-        ( fiber-fiber-sequence-Pointed-Type S))
-      ( pointed-map-iterated-loop-space
-        ( succ-ℕ n)
-        ( fibration-fiber-sequence-Pointed-Type S))
-      ( canonical-pointed-map-iterated-boundary-fiber-sequence S n)
-
 ```

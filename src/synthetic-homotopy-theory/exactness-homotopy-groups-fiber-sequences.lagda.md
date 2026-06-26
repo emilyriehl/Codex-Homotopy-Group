@@ -22,6 +22,7 @@ open import structured-types.fiber-sequences
 open import structured-types.pointed-homotopies
 open import structured-types.pointed-sets
 
+open import synthetic-homotopy-theory.group-exactness-from-set-truncated-exactness-fiber-sequences
 open import synthetic-homotopy-theory.group-exactness-from-set-truncated-homotopy-group-exactness
 open import synthetic-homotopy-theory.homotopy-groups
 open import synthetic-homotopy-theory.homomorphisms-homotopy-groups-fiber-sequences

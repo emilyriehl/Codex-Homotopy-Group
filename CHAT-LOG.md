@@ -6147,3 +6147,51 @@ and `git diff --check` passed.
 Related commit:
 
 - This commit - Split iterated set-truncated exactness support.
+
+### Split group exactness transport for fiber sequences
+
+Request: Emily asked Codex to keep working after the iterated set-truncated
+exactness support split, staying focused on the library-quality LES cleanup.
+
+Model context:
+
+- Date: 2026-06-26.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible; this session used `./check.sh` as the proof
+  acceptance gate.
+
+Actions:
+
+- Added
+  `group-exactness-from-set-truncated-exactness-fiber-sequences`, extracting
+  the LES-specific group-level converters from set-truncated fiber-sequence
+  exactness to ordinary group exactness.
+- Reduced
+  `group-exactness-from-set-truncated-homotopy-group-exactness` to the generic
+  pointed-set-to-group and loop-truncation transport theorems, and pruned the
+  now-unneeded fiber-sequence imports.
+- Updated `exactness-homotopy-groups-fiber-sequences` to import the new
+  fiber-sequence bridge while still using the generic trivial-codomain bridge.
+- Updated `LES-STATUS.md` and `STATUS-REPORT.md` so the next target is the
+  statement layer in `exactness-homotopy-groups-fiber-sequences`.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-exactness-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+```
+
+All six Agda checks passed. A touched-file scan found no holes, postulates,
+unsafe termination pragmas, rewrite-rule dependency, or unsolved-meta options,
+and `git diff --check` passed.
+
+Related commit:
+
+- This commit - Split group exactness transport for fiber sequences.

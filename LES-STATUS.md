@@ -305,26 +305,35 @@ The first-loop sign calculation is also important negative information: the
 naive unsigned recursive/canonical square is not the right target for the
 current boundary definitions.
 
-### Group-Level LES Bridge
+### Generic Group-Level Exactness Bridge
 
 `src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md`
-transfers pointed-set exactness of set-truncated iterated loop maps to ordinary
-group exactness. The key exports include:
+transfers pointed-set exactness to ordinary group exactness. The key exports
+include:
 
 - `is-exact-hom-Group-is-exact-hom-Pointed-Set`
 - `is-exact-hom-Group-is-exact-loop-truncation-hom-Pointed-Type`
 - the trivial-codomain variant
   `is-exact-hom-Group-is-exact-loop-truncation-hom-Pointed-Type-is-trivial-codomain`
-- LES-specific wrappers for total-space and fibration-boundary exactness
-- a looped-canonical fibration-boundary wrapper,
-  `is-exact-hom-Group-is-exact-set-truncation-loop-canonical-iterated-boundary-fiber-sequence`
-- a canonical boundary/fiber-inclusion wrapper,
-  `is-exact-hom-Group-is-exact-set-truncation-canonical-iterated-loop-boundary-fiber-inclusion-fiber-sequence`
 
-This is a useful and checked bridge, but it is adapter-heavy. It requires
-explicit comparison maps, unit compatibility, injectivity data, and coherence
-squares. For library-quality code, the public API should expose simple
-homotopy-group exactness theorems and keep these comparison arguments internal.
+This is still an adapter, since it requires explicit comparison maps, unit
+compatibility, injectivity data, and coherence squares. It is now independent
+of fiber sequences and set-truncated LES modules, which makes it a reusable
+ordinary-group transport theorem.
+
+### Fiber-Sequence Group-Level Exactness Bridge
+
+`src/synthetic-homotopy-theory/group-exactness-from-set-truncated-exactness-fiber-sequences.lagda.md`
+specializes the generic bridge to the set-truncated adjacent triples in a
+fiber sequence. It owns the group-level converters for:
+
+- all-index total-space exactness;
+- canonical boundary/fiber-inclusion exactness;
+- recursive fibration-boundary exactness;
+- looped-canonical fibration-boundary exactness.
+
+This module is still proof- and adapter-heavy, but it is no longer mixed into
+the generic pointed-set-to-group transport theorem.
 
 ### Current Group-Level Exactness Statements
 
@@ -501,13 +510,12 @@ construction rather than the route by which the blocker was cleared.
 
 ## Recommended Next Steps
 
-1. Continue cleaning the group-level exactness support layer into
+1. Continue cleaning the public group-level exactness statement layer into
    reviewer-facing modules. The main LES file, final package modules, iterated
-   set-truncated map layer, canonical set-truncated exactness layer, and signed
-   boundary comparison layer are now split; the next candidate is the
-   adapter-heavy group-level wrapper code in
-   `group-exactness-from-set-truncated-homotopy-group-exactness` and
-   `exactness-homotopy-groups-fiber-sequences`.
+   set-truncated map layer, canonical set-truncated exactness layer, signed
+   boundary comparison layer, generic group bridge, and fiber-sequence-specific
+   group bridge are now split; the next candidate is the theorem statement
+   layer in `exactness-homotopy-groups-fiber-sequences`.
 
 2. Write short literate prose above the final structural theorems explaining
    the relationship with the HoTT Book LES proof and the Coq-HoTT
@@ -708,7 +716,9 @@ The checked commands were:
 ./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
 ```
 
-All six checks passed.
+All six checks passed. A touched-file scan found no holes, postulates, unsafe
+termination pragmas, rewrite-rule dependency, or unsolved-meta options, and
+`git diff --check` passed.
 
 Later on 2026-06-26, the boundary-map adapters and the base
 set-truncated exactness package were split out of
@@ -817,6 +827,28 @@ The checked commands were:
 All ten checks passed. A touched-file scan found no holes, postulates, unsafe
 termination pragmas, rewrite-rule dependency, or unsolved-meta options, and
 `git diff --check` passed.
+
+Later on 2026-06-26, the group-level exactness bridge was split into a generic
+transport theorem module and a fiber-sequence-specific specialization module.
+The existing module
+`group-exactness-from-set-truncated-homotopy-group-exactness` now owns only the
+generic pointed-set-to-group and loop-truncation transport theorems. The new
+module `group-exactness-from-set-truncated-exactness-fiber-sequences` owns the
+LES-specific converters from set-truncated fiber-sequence exactness to ordinary
+group exactness. The public exactness module imports both.
+
+The checked commands were:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-exactness-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+```
+
+All six checks passed.
 
 At the time this handoff was written, Agda MCP tools were visible to the agent,
 but `./check.sh <file>` remains the acceptance criterion. This file is a status
