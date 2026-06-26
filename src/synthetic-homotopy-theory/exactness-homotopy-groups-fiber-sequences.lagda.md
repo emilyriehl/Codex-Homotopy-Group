@@ -46,18 +46,176 @@ is too strong in general: such a fiber sequence would impose short-exact-style
 conditions, while the homotopy long exact sequence only gives adjacent
 exactness, with the next boundary map measuring the cokernel.
 
-This file records the group-level exactness statements for the two adjacent
-triples needed by the Hopf comparison.
+This file records the group-level exactness statements for the adjacent triples
+needed by the Hopf comparison, and packages the checked repeating group-level
+long exact sequence data for a fiber sequence.
 
-## Theorems
+## Definitions
 
-### Exactness at the total-space homotopy group
+### The group-level long exact sequence package
+
+The group-level package records two boundary homomorphisms. The
+fibration-boundary position uses the recursive/direct boundary homomorphism,
+while the boundary-fiber-inclusion position uses the canonical iterated
+boundary homomorphism. This mirrors the currently checked group-level
+theorems; the set-truncated canonical package records the fresh canonical
+boundary maps separately.
 
 ```agda
 module _
   {l1 l2 l3 : Level}
   (S : fiber-sequence-Pointed-Type l1 l2 l3)
   where
+
+  record Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence :
+    UU (l1 ⊔ l2 ⊔ l3)
+    where
+    constructor make-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence
+    field
+      hom-fiber-inclusion-long-exact-sequence-homotopy-groups-fiber-sequence :
+        (n : ℕ) →
+        hom-Concrete-Group
+          ( concrete-homotopy-group
+            ( n)
+            ( fiber-fiber-sequence-Pointed-Type S))
+          ( concrete-homotopy-group
+            ( n)
+            ( total-space-fiber-sequence-Pointed-Type S))
+      hom-fibration-long-exact-sequence-homotopy-groups-fiber-sequence :
+        (n : ℕ) →
+        hom-Concrete-Group
+          ( concrete-homotopy-group
+            ( n)
+            ( total-space-fiber-sequence-Pointed-Type S))
+          ( concrete-homotopy-group
+            ( n)
+            ( base-fiber-sequence-Pointed-Type S))
+      hom-fibration-boundary-long-exact-sequence-homotopy-groups-fiber-sequence :
+        (n : ℕ) →
+        hom-Concrete-Group
+          ( concrete-homotopy-group
+            ( succ-ℕ n)
+            ( base-fiber-sequence-Pointed-Type S))
+          ( concrete-homotopy-group
+            ( n)
+            ( fiber-fiber-sequence-Pointed-Type S))
+      hom-boundary-fiber-inclusion-long-exact-sequence-homotopy-groups-fiber-sequence :
+        (n : ℕ) →
+        hom-Concrete-Group
+          ( concrete-homotopy-group
+            ( succ-ℕ n)
+            ( base-fiber-sequence-Pointed-Type S))
+          ( concrete-homotopy-group
+            ( n)
+            ( fiber-fiber-sequence-Pointed-Type S))
+      is-exact-fiber-inclusion-fibration-long-exact-sequence-homotopy-groups-fiber-sequence :
+        (n : ℕ) →
+        is-exact-hom-Group
+          ( group-Concrete-Group
+            ( concrete-homotopy-group
+              ( n)
+              ( fiber-fiber-sequence-Pointed-Type S)))
+          ( group-Concrete-Group
+            ( concrete-homotopy-group
+              ( n)
+              ( total-space-fiber-sequence-Pointed-Type S)))
+          ( group-Concrete-Group
+            ( concrete-homotopy-group
+              ( n)
+              ( base-fiber-sequence-Pointed-Type S)))
+          ( hom-group-hom-Concrete-Group
+            ( concrete-homotopy-group
+              ( n)
+              ( fiber-fiber-sequence-Pointed-Type S))
+            ( concrete-homotopy-group
+              ( n)
+              ( total-space-fiber-sequence-Pointed-Type S))
+            ( hom-fiber-inclusion-long-exact-sequence-homotopy-groups-fiber-sequence
+              ( n)))
+          ( hom-group-hom-Concrete-Group
+            ( concrete-homotopy-group
+              ( n)
+              ( total-space-fiber-sequence-Pointed-Type S))
+            ( concrete-homotopy-group
+              ( n)
+              ( base-fiber-sequence-Pointed-Type S))
+            ( hom-fibration-long-exact-sequence-homotopy-groups-fiber-sequence
+              ( n)))
+      is-exact-fibration-boundary-long-exact-sequence-homotopy-groups-fiber-sequence :
+        (n : ℕ) →
+        is-exact-hom-Group
+          ( group-Concrete-Group
+            ( concrete-homotopy-group
+              ( succ-ℕ n)
+              ( total-space-fiber-sequence-Pointed-Type S)))
+          ( group-Concrete-Group
+            ( concrete-homotopy-group
+              ( succ-ℕ n)
+              ( base-fiber-sequence-Pointed-Type S)))
+          ( group-Concrete-Group
+            ( concrete-homotopy-group
+              ( n)
+              ( fiber-fiber-sequence-Pointed-Type S)))
+          ( hom-group-hom-Concrete-Group
+            ( concrete-homotopy-group
+              ( succ-ℕ n)
+              ( total-space-fiber-sequence-Pointed-Type S))
+            ( concrete-homotopy-group
+              ( succ-ℕ n)
+              ( base-fiber-sequence-Pointed-Type S))
+            ( hom-fibration-long-exact-sequence-homotopy-groups-fiber-sequence
+              ( succ-ℕ n)))
+          ( hom-group-hom-Concrete-Group
+            ( concrete-homotopy-group
+              ( succ-ℕ n)
+              ( base-fiber-sequence-Pointed-Type S))
+            ( concrete-homotopy-group
+              ( n)
+              ( fiber-fiber-sequence-Pointed-Type S))
+            ( hom-fibration-boundary-long-exact-sequence-homotopy-groups-fiber-sequence
+              ( n)))
+      is-exact-boundary-fiber-inclusion-long-exact-sequence-homotopy-groups-fiber-sequence :
+        (n : ℕ) →
+        is-exact-hom-Group
+          ( group-Concrete-Group
+            ( concrete-homotopy-group
+              ( succ-ℕ n)
+              ( base-fiber-sequence-Pointed-Type S)))
+          ( group-Concrete-Group
+            ( concrete-homotopy-group
+              ( n)
+              ( fiber-fiber-sequence-Pointed-Type S)))
+          ( group-Concrete-Group
+            ( concrete-homotopy-group
+              ( n)
+              ( total-space-fiber-sequence-Pointed-Type S)))
+          ( hom-group-hom-Concrete-Group
+            ( concrete-homotopy-group
+              ( succ-ℕ n)
+              ( base-fiber-sequence-Pointed-Type S))
+            ( concrete-homotopy-group
+              ( n)
+              ( fiber-fiber-sequence-Pointed-Type S))
+            ( hom-boundary-fiber-inclusion-long-exact-sequence-homotopy-groups-fiber-sequence
+              ( n)))
+          ( hom-group-hom-Concrete-Group
+            ( concrete-homotopy-group
+              ( n)
+              ( fiber-fiber-sequence-Pointed-Type S))
+            ( concrete-homotopy-group
+              ( n)
+              ( total-space-fiber-sequence-Pointed-Type S))
+            ( hom-fiber-inclusion-long-exact-sequence-homotopy-groups-fiber-sequence
+              ( n)))
+
+  open Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence public
+```
+
+## Theorems
+
+### Exactness at the total-space homotopy group
+
+```agda
 
   is-exact-hom-fiber-inclusion-fibration-concrete-homotopy-group-fiber-sequence :
     (n : ℕ) →
@@ -312,6 +470,18 @@ module _
   is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-second-direct =
     is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-direct
       ( 1)
+
+  long-exact-sequence-homotopy-groups-fiber-sequence :
+    Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence
+  long-exact-sequence-homotopy-groups-fiber-sequence =
+    make-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence
+      ( hom-fiber-inclusion-concrete-homotopy-group-fiber-sequence S)
+      ( hom-fibration-concrete-homotopy-group-fiber-sequence S)
+      ( boundary-hom-concrete-homotopy-group-fiber-sequence S)
+      ( canonical-boundary-hom-concrete-homotopy-group-fiber-sequence S)
+      ( is-exact-hom-fiber-inclusion-fibration-concrete-homotopy-group-fiber-sequence)
+      ( is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-direct)
+      ( is-exact-hom-canonical-boundary-fiber-inclusion-concrete-homotopy-group-fiber-sequence)
 
   is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-pointed-htpy :
     (n : ℕ) →

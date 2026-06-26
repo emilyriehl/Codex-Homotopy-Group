@@ -5524,3 +5524,50 @@ All three Agda checks passed.
 Related commit:
 
 - This commit - Package canonical set-truncated LES.
+
+### Package group-level LES exactness
+
+Request: Emily asked Codex to keep working and only stop after significant
+progress toward the library-quality LES objective.
+
+Model context:
+
+- Date: 2026-06-26.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible, but this session used `./check.sh` as the proof
+  acceptance gate.
+
+Actions:
+
+- Added the group-level record
+  `Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence` to
+  `exactness-homotopy-groups-fiber-sequences`.
+- Added the checked object
+  `long-exact-sequence-homotopy-groups-fiber-sequence`, packaging the three
+  repeating group-level exactness positions for any packaged fiber sequence.
+- Recorded the current boundary convention honestly: the fibration-boundary
+  field uses the recursive/direct boundary homomorphism, while the
+  boundary/fiber-inclusion field uses the canonical iterated boundary
+  homomorphism.
+- Briefly tried to add a generic canonical fibration-boundary group-transfer
+  hook in the transport module, but its check entered the known slow
+  transport-normalization path. The optional hook was removed, leaving the
+  checked package as the committed progress.
+- Updated `LES-STATUS.md` and `STATUS-REPORT.md` to distinguish the checked
+  mixed-boundary group package from the still-future fully canonical public
+  boundary convention.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md
+```
+
+Both Agda checks passed after the optional slow hook was removed.
+
+Related commit:
+
+- This commit - Package group-level LES exactness.

@@ -203,6 +203,10 @@ calculation:
 - `is-exact-hom-canonical-boundary-fiber-inclusion-concrete-homotopy-group-fiber-sequence`
   gives all-index boundary/fiber-inclusion exactness for the canonical
   boundary map of the corresponding iterated fiber sequence.
+- `Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence` packages the three
+  repeating group-level exactness positions into a single checked record, and
+  `long-exact-sequence-homotopy-groups-fiber-sequence` instantiates it for any
+  packaged fiber sequence.
 
 The remaining gap is now more precise: boundary/fiber-inclusion exactness is
 available uniformly for canonical iterated boundary maps, while the existing
@@ -212,10 +216,13 @@ checked raw computation
 `eq-map-loop-fiber-map-Ω-boundary-fiber-Pointed-Type` and its set-truncated
 first-loop consequence show that `ap inv` appears on double loops. Thus the
 old unsigned coherence square is not the correct next theorem under the
-current definitions. A polished LES package should either make the signed
-comparison systematic and transport exactness across the inversion
-automorphism, or choose a canonical boundary convention that hides this sign
-from the public API.
+current definitions. The new group-level package is therefore a checked
+mixed-boundary package: the fibration-boundary position uses the recursive
+direct boundary homomorphism, and the boundary/fiber-inclusion position uses
+the canonical iterated boundary homomorphism. A polished LES package should
+either make the signed comparison systematic and transport exactness across the
+inversion automorphism, or choose a canonical boundary convention that hides
+this sign from the public API.
 
 ### Hopf Consumers
 
@@ -235,10 +242,11 @@ is trivial.
 ### No Single Group-Level Long Exact Sequence Package
 
 There is now a checked set-truncated canonical LES package for the repeating
-adjacent pointed-set exactness positions. There is still no theorem or record
-that packages the whole infinite LES as a single sequence of groups and
-homomorphisms with exactness at every adjacent term. The group-level state is
-still a collection of adjacent exactness lemmas spread across multiple files.
+adjacent pointed-set exactness positions, and a checked group-level record
+packaging the three repeating ordinary group exactness positions for a fiber
+sequence. The group-level package is still not the final library-quality public
+LES, because it records the currently checked mixed boundary convention rather
+than one fully canonical boundary convention.
 
 A library-quality result should probably provide a named object or theorem
 whose surface resembles the natural-language statement:
@@ -415,8 +423,8 @@ rg -n "\{!!\}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/long
 Both Agda checks passed, and the touched-file scan found no holes, unsolved
 meta pragmas, or postulates.
 
-Later on 2026-06-26, the approach-2 canonical set-truncated LES package was
-checked with:
+Later on 2026-06-26, the approach-2 canonical set-truncated LES package and
+the group-level LES package were checked with:
 
 ```sh
 ./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
@@ -424,10 +432,11 @@ checked with:
 ./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
 ```
 
-All three checks passed. The package keeps the fibration-boundary and
+All three checks passed. The set-level package keeps the fibration-boundary and
 boundary/fiber-inclusion canonical boundary maps as separate fields, matching
 the fresh-connecting-map approach rather than forcing a recursive/canonical
-boundary equality.
+boundary equality. The group-level package records the currently checked
+mixed-boundary exactness data in a single reusable object.
 
 At the time this handoff was written, Agda MCP tools were visible to the agent,
 but `./check.sh <file>` remains the acceptance criterion. This file is a status
