@@ -43,11 +43,13 @@ open import structured-types.pointed-types
 open import structured-types.whiskering-pointed-homotopies-composition
 
 open import synthetic-homotopy-theory.connecting-fiber-sequences
+open import synthetic-homotopy-theory.fiber-sequences-fiber-inclusions
 open import synthetic-homotopy-theory.functoriality-homotopy-groups
 open import synthetic-homotopy-theory.functoriality-iterated-loop-spaces
 open import synthetic-homotopy-theory.functoriality-loop-spaces
 open import synthetic-homotopy-theory.homotopy-groups
 open import synthetic-homotopy-theory.iterated-loop-spaces
+open import synthetic-homotopy-theory.loop-spaces-fibers-of-pointed-maps
 open import synthetic-homotopy-theory.loop-spaces
 open import synthetic-homotopy-theory.reassociation-iterated-loop-spaces
 ```
@@ -164,101 +166,9 @@ module _
 
 ### The loop space of the fiber of a pointed map
 
-```agda
-module _
-  {l1 l2 : Level} {E : Pointed-Type l1} {B : Pointed-Type l2}
-  where
-
-  map-loop-fiber-Pointed-Type :
-    (g : E →∗ B) →
-    type-Ω (fiber-Pointed-Type g) →
-    type-Pointed-Type (fiber-Pointed-Type (pointed-map-Ω g))
-  map-loop-fiber-Pointed-Type (g , refl) x =
-    fiber-ap-eq-fiber
-      ( g)
-      ( point-Pointed-Type (fiber-Pointed-Type (g , refl)))
-      ( point-Pointed-Type (fiber-Pointed-Type (g , refl)))
-      ( x)
-
-  map-inv-loop-fiber-Pointed-Type :
-    (g : E →∗ B) →
-    type-Pointed-Type (fiber-Pointed-Type (pointed-map-Ω g)) →
-    type-Ω (fiber-Pointed-Type g)
-  map-inv-loop-fiber-Pointed-Type (g , refl) =
-    map-inv-equiv
-      ( equiv-fiber-ap-eq-fiber
-        ( g)
-        ( point-Pointed-Type (fiber-Pointed-Type (g , refl)))
-        ( point-Pointed-Type (fiber-Pointed-Type (g , refl))))
-
-  is-section-map-inv-loop-fiber-Pointed-Type :
-    (g : E →∗ B) →
-    (x : type-Pointed-Type (fiber-Pointed-Type (pointed-map-Ω g))) →
-    map-loop-fiber-Pointed-Type g (map-inv-loop-fiber-Pointed-Type g x) ＝ x
-  is-section-map-inv-loop-fiber-Pointed-Type (g , refl) =
-    is-section-map-inv-equiv
-      ( equiv-fiber-ap-eq-fiber
-        ( g)
-        ( point-Pointed-Type (fiber-Pointed-Type (g , refl)))
-        ( point-Pointed-Type (fiber-Pointed-Type (g , refl))))
-
-  is-retraction-map-inv-loop-fiber-Pointed-Type :
-    (g : E →∗ B) →
-    (x : type-Ω (fiber-Pointed-Type g)) →
-    map-inv-loop-fiber-Pointed-Type g (map-loop-fiber-Pointed-Type g x) ＝ x
-  is-retraction-map-inv-loop-fiber-Pointed-Type (g , refl) =
-    is-retraction-map-inv-equiv
-      ( equiv-fiber-ap-eq-fiber
-        ( g)
-        ( point-Pointed-Type (fiber-Pointed-Type (g , refl)))
-        ( point-Pointed-Type (fiber-Pointed-Type (g , refl))))
-
-  is-equiv-map-loop-fiber-Pointed-Type :
-    (g : E →∗ B) → is-equiv (map-loop-fiber-Pointed-Type g)
-  is-equiv-map-loop-fiber-Pointed-Type g =
-    is-equiv-is-invertible
-      ( map-inv-loop-fiber-Pointed-Type g)
-      ( is-section-map-inv-loop-fiber-Pointed-Type g)
-      ( is-retraction-map-inv-loop-fiber-Pointed-Type g)
-
-  equiv-loop-fiber-Pointed-Type :
-    (g : E →∗ B) →
-    type-Ω (fiber-Pointed-Type g) ≃
-    type-Pointed-Type (fiber-Pointed-Type (pointed-map-Ω g))
-  pr1 (equiv-loop-fiber-Pointed-Type g) = map-loop-fiber-Pointed-Type g
-  pr2 (equiv-loop-fiber-Pointed-Type g) = is-equiv-map-loop-fiber-Pointed-Type g
-
-  preserves-point-map-loop-fiber-Pointed-Type :
-    (g : E →∗ B) →
-    map-equiv (equiv-loop-fiber-Pointed-Type g) refl ＝
-    point-Pointed-Type (fiber-Pointed-Type (pointed-map-Ω g))
-  preserves-point-map-loop-fiber-Pointed-Type (g , refl) =
-    refl
-
-  pointed-equiv-loop-fiber-Pointed-Type :
-    (g : E →∗ B) →
-    Ω (fiber-Pointed-Type g) ≃∗ fiber-Pointed-Type (pointed-map-Ω g)
-  pr1 (pointed-equiv-loop-fiber-Pointed-Type g) = equiv-loop-fiber-Pointed-Type g
-  pr2 (pointed-equiv-loop-fiber-Pointed-Type g) =
-    preserves-point-map-loop-fiber-Pointed-Type g
-
-  pointed-htpy-loop-fiber-inclusion-Pointed-Type :
-    (g : E →∗ B) →
-    pointed-map-Ω (inclusion-fiber-Pointed-Type g) ~∗
-    ( inclusion-fiber-Pointed-Type (pointed-map-Ω g) ∘∗
-      pointed-map-pointed-equiv (pointed-equiv-loop-fiber-Pointed-Type g))
-  pr1 (pointed-htpy-loop-fiber-inclusion-Pointed-Type (g , refl)) x =
-    inv
-      ( ap pr1
-        ( triangle-fiber-ap-eq-fiber
-          ( g)
-          ( point-Pointed-Type (fiber-Pointed-Type (g , refl)))
-          ( point-Pointed-Type (fiber-Pointed-Type (g , refl)))
-          ( x)))
-  pr2 (pointed-htpy-loop-fiber-inclusion-Pointed-Type (g , refl)) =
-    refl
-
-```
+The loop-fiber equivalence and its compatibility with fiber inclusions are
+defined in
+[`loop-spaces-fibers-of-pointed-maps`](synthetic-homotopy-theory.loop-spaces-fibers-of-pointed-maps.md).
 
 ### Compatibility name for the connecting map of a pointed map
 
@@ -663,155 +573,9 @@ module _
 
 ### The fiber sequence after taking the fiber of a pointed map
 
-The first nontrivial step in the iterated fiber sequence construction is the
-identification of the fiber of the fiber inclusion with the loop space of the
-base. This is the first instance of HoTT Book Lemma 8.4.4.
-
-```agda
-  map-fiber-inclusion-path-Pointed-Type :
-    map-pointed-map g (point-Pointed-Type E) ＝ point-Pointed-Type B →
-    type-Pointed-Type
-      ( fiber-Pointed-Type (inclusion-fiber-Pointed-Type g))
-  map-fiber-inclusion-path-Pointed-Type p =
-    ( ( point-Pointed-Type E , p) , refl)
-
-  map-inv-fiber-inclusion-path-Pointed-Type :
-    type-Pointed-Type
-      ( fiber-Pointed-Type (inclusion-fiber-Pointed-Type g)) →
-    map-pointed-map g (point-Pointed-Type E) ＝ point-Pointed-Type B
-  map-inv-fiber-inclusion-path-Pointed-Type ((x , p) , q) =
-    inv (ap (map-pointed-map g) q) ∙ p
-
-  is-section-map-inv-fiber-inclusion-path-Pointed-Type :
-    (x :
-      type-Pointed-Type
-        ( fiber-Pointed-Type (inclusion-fiber-Pointed-Type g))) →
-    map-fiber-inclusion-path-Pointed-Type
-      ( map-inv-fiber-inclusion-path-Pointed-Type x) ＝ x
-  is-section-map-inv-fiber-inclusion-path-Pointed-Type
-    ((.(point-Pointed-Type E) , p) , refl) =
-    refl
-
-  is-retraction-map-inv-fiber-inclusion-path-Pointed-Type :
-    (p : map-pointed-map g (point-Pointed-Type E) ＝ point-Pointed-Type B) →
-    map-inv-fiber-inclusion-path-Pointed-Type
-      ( map-fiber-inclusion-path-Pointed-Type p) ＝ p
-  is-retraction-map-inv-fiber-inclusion-path-Pointed-Type p = refl
-
-  is-equiv-map-fiber-inclusion-path-Pointed-Type :
-    is-equiv map-fiber-inclusion-path-Pointed-Type
-  is-equiv-map-fiber-inclusion-path-Pointed-Type =
-    is-equiv-is-invertible
-      ( map-inv-fiber-inclusion-path-Pointed-Type)
-      ( is-section-map-inv-fiber-inclusion-path-Pointed-Type)
-      ( is-retraction-map-inv-fiber-inclusion-path-Pointed-Type)
-
-  equiv-fiber-inclusion-path-Pointed-Type :
-    ( map-pointed-map g (point-Pointed-Type E) ＝ point-Pointed-Type B) ≃
-    type-Pointed-Type
-      ( fiber-Pointed-Type (inclusion-fiber-Pointed-Type g))
-  pr1 equiv-fiber-inclusion-path-Pointed-Type =
-    map-fiber-inclusion-path-Pointed-Type
-  pr2 equiv-fiber-inclusion-path-Pointed-Type =
-    is-equiv-map-fiber-inclusion-path-Pointed-Type
-
-  equiv-fiber-inclusion-boundary-fiber-Pointed-Type :
-    type-Ω B ≃
-    type-Pointed-Type
-      ( fiber-Pointed-Type (inclusion-fiber-Pointed-Type g))
-  equiv-fiber-inclusion-boundary-fiber-Pointed-Type =
-    equiv-fiber-inclusion-path-Pointed-Type ∘e
-    equiv-concat (preserves-point-pointed-map g) (point-Pointed-Type B)
-
-  dependent-identification-eq-pair-fiber-inclusion-Pointed-Type :
-    {p q : map-pointed-map g (point-Pointed-Type E) ＝ point-Pointed-Type B}
-    (α : p ＝ q) →
-    dependent-identification
-      ( λ x → pr1 x ＝ point-Pointed-Type E)
-      ( eq-pair-Σ
-        { A = type-Pointed-Type E}
-        { B = λ x → map-pointed-map g x ＝ point-Pointed-Type B}
-        { s = point-Pointed-Type E , p}
-        { t = point-Pointed-Type E , q}
-        ( refl)
-        ( α))
-      ( refl)
-      ( refl)
-  dependent-identification-eq-pair-fiber-inclusion-Pointed-Type refl =
-    refl
-
-  preserves-point-equiv-fiber-inclusion-boundary-fiber-Pointed-Type :
-    map-equiv equiv-fiber-inclusion-boundary-fiber-Pointed-Type refl ＝
-    point-Pointed-Type
-      ( fiber-Pointed-Type (inclusion-fiber-Pointed-Type g))
-  preserves-point-equiv-fiber-inclusion-boundary-fiber-Pointed-Type =
-    eq-pair-Σ
-      ( eq-pair-Σ
-        { A = type-Pointed-Type E}
-        { B = λ x → map-pointed-map g x ＝ point-Pointed-Type B}
-        { s =
-          point-Pointed-Type E ,
-          preserves-point-pointed-map g ∙ refl}
-        { t = point-Pointed-Type E , preserves-point-pointed-map g}
-        ( refl)
-        ( right-unit))
-      ( dependent-identification-eq-pair-fiber-inclusion-Pointed-Type
-        ( right-unit))
-
-  pointed-equiv-fiber-inclusion-boundary-fiber-Pointed-Type :
-    Ω B ≃∗ fiber-Pointed-Type (inclusion-fiber-Pointed-Type g)
-  pr1 pointed-equiv-fiber-inclusion-boundary-fiber-Pointed-Type =
-    equiv-fiber-inclusion-boundary-fiber-Pointed-Type
-  pr2 pointed-equiv-fiber-inclusion-boundary-fiber-Pointed-Type =
-    preserves-point-equiv-fiber-inclusion-boundary-fiber-Pointed-Type
-
-  pointed-htpy-boundary-fiber-inclusion-boundary-fiber-Pointed-Type :
-    boundary-fiber-Pointed-Type ~∗
-    ( inclusion-fiber-Pointed-Type (inclusion-fiber-Pointed-Type g) ∘∗
-      pointed-map-pointed-equiv
-        pointed-equiv-fiber-inclusion-boundary-fiber-Pointed-Type)
-  pr1 pointed-htpy-boundary-fiber-inclusion-boundary-fiber-Pointed-Type p =
-    refl
-  pr2 pointed-htpy-boundary-fiber-inclusion-boundary-fiber-Pointed-Type =
-    ( inv
-      ( ap-pr1-eq-pair-Σ
-        ( eq-pair-Σ
-          { A = type-Pointed-Type E}
-          { B = λ x → map-pointed-map g x ＝ point-Pointed-Type B}
-          { s =
-            point-Pointed-Type E ,
-            preserves-point-pointed-map g ∙ refl}
-          { t = point-Pointed-Type E , preserves-point-pointed-map g}
-          ( refl)
-          ( right-unit))
-        ( dependent-identification-eq-pair-fiber-inclusion-Pointed-Type
-          ( right-unit)))) ∙
-    ( inv right-unit)
-
-  is-fiber-sequence-boundary-fiber-Pointed-Type :
-    is-fiber-sequence-Pointed-Type
-      ( boundary-fiber-Pointed-Type)
-      ( inclusion-fiber-Pointed-Type g)
-  pr1 is-fiber-sequence-boundary-fiber-Pointed-Type =
-    pointed-equiv-fiber-inclusion-boundary-fiber-Pointed-Type
-  pr2 is-fiber-sequence-boundary-fiber-Pointed-Type =
-    pointed-htpy-boundary-fiber-inclusion-boundary-fiber-Pointed-Type
-
-  fiber-sequence-boundary-fiber-Pointed-Type :
-    fiber-sequence-Pointed-Type l2 (l1 ⊔ l2) l1
-  pr1 fiber-sequence-boundary-fiber-Pointed-Type =
-    Ω B
-  pr1 (pr2 fiber-sequence-boundary-fiber-Pointed-Type) =
-    fiber-Pointed-Type g
-  pr1 (pr2 (pr2 fiber-sequence-boundary-fiber-Pointed-Type)) =
-    E
-  pr1 (pr2 (pr2 (pr2 fiber-sequence-boundary-fiber-Pointed-Type))) =
-    boundary-fiber-Pointed-Type
-  pr1 (pr2 (pr2 (pr2 (pr2 fiber-sequence-boundary-fiber-Pointed-Type)))) =
-    inclusion-fiber-Pointed-Type g
-  pr2 (pr2 (pr2 (pr2 (pr2 fiber-sequence-boundary-fiber-Pointed-Type)))) =
-    is-fiber-sequence-boundary-fiber-Pointed-Type
-```
+The first fiber-of-the-fiber identification and the pointed fiber sequence
+`Ω B ->* fiber g ->* E` are defined in
+[`fiber-sequences-fiber-inclusions`](synthetic-homotopy-theory.fiber-sequences-fiber-inclusions.md).
 
 ### The fiber of the boundary map
 

@@ -5827,3 +5827,56 @@ unsolved-meta options, and `git diff --check` passed.
 Related commit:
 
 - This commit - Complete LES connecting API cleanup.
+
+### Extract loop-fiber and fiber-inclusion LES modules
+
+Request: Emily asked Codex to implement the next steps toward the full
+library-quality LES plan, continuing the split of the large long exact
+sequence module into one-concept modules.
+
+Model context:
+
+- Date: 2026-06-26.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible; this session used `./check.sh` as the proof
+  acceptance gate.
+
+Actions:
+
+- Added `loop-spaces-fibers-of-pointed-maps`, extracting the pointed
+  equivalence `Omega (fiber g) ~=* fiber (Omega g)` and its compatibility with
+  the looped fiber inclusion.
+- Added `fiber-sequences-fiber-inclusions`, extracting the first
+  fiber-of-the-fiber package `Omega B ->* fiber g ->* E` and phrasing it
+  through the standalone connecting map.
+- Rewired `long-exact-sequence-homotopy-groups` to import those structural
+  modules instead of defining the blocks inline.
+- Rewired the set-truncated iterated exactness module to import the loop-fiber
+  module directly where it uses the extracted equivalence.
+- Updated `LES-STATUS.md` and `STATUS-REPORT.md` to record the new module
+  boundaries and the next remaining split target.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/loop-spaces-fibers-of-pointed-maps.lagda.md
+./check.sh src/synthetic-homotopy-theory/fiber-sequences-fiber-inclusions.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+rg -n "\{!!\}|allow-unsolved-metas|postulate|TERMINATING|REWRITE" src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md src/synthetic-homotopy-theory/loop-spaces-fibers-of-pointed-maps.lagda.md src/synthetic-homotopy-theory/fiber-sequences-fiber-inclusions.lagda.md
+git diff --check
+```
+
+All eight Agda checks passed. The touched-file scan found no holes,
+postulates, unsafe termination pragmas, rewrite-rule dependency, or
+unsolved-meta options, and `git diff --check` passed.
+
+Related commit:
+
+- This commit - Extract loop-fiber LES modules.
