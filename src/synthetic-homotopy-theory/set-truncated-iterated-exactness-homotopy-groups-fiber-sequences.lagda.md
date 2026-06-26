@@ -142,6 +142,41 @@ module _
     hom-trunc-boundary-fiber-sequence-Pointed-Type
       ( iterated-loop-fiber-sequence S (succ-ℕ n))
 
+  hom-trunc-loop-canonical-iterated-boundary-fiber-sequence :
+    (n : ℕ) →
+    hom-Pointed-Set
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( succ-ℕ n)
+            ( base-fiber-sequence-Pointed-Type S))))
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( n)
+            ( fiber-fiber-sequence-Pointed-Type S))))
+  hom-trunc-loop-canonical-iterated-boundary-fiber-sequence n =
+    hom-trunc-Pointed-Set
+      ( pointed-map-Ω
+        ( canonical-pointed-map-iterated-boundary-fiber-sequence S n))
+
+  coherence-square-loop-canonical-iterated-boundary-fiber-sequence :
+    (n : ℕ) → UU (l1 ⊔ l3)
+  coherence-square-loop-canonical-iterated-boundary-fiber-sequence n =
+    (x :
+      type-Pointed-Set
+        ( trunc-Pointed-Set
+          ( Ω
+            ( iterated-loop-space
+              ( succ-ℕ n)
+              ( base-fiber-sequence-Pointed-Type S))))) →
+    map-pointed-map
+      ( hom-trunc-loop-canonical-iterated-boundary-fiber-sequence n)
+      ( x) ＝
+    map-pointed-map
+      ( hom-trunc-canonical-iterated-loop-boundary-fiber-sequence n)
+      ( x)
+
   hom-trunc-direct-iterated-loop-fibration-fiber-sequence :
     (n : ℕ) →
     hom-Pointed-Set

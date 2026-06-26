@@ -140,6 +140,10 @@ most by the Hopf proof:
   `is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence-direct`
 - canonical all-index boundary/fiber-inclusion exactness, via
   `is-exact-set-truncation-canonical-iterated-loop-boundary-fiber-inclusion-fiber-sequence`
+- the checked set-level comparison target
+  `coherence-square-loop-canonical-iterated-boundary-fiber-sequence`, which
+  isolates the exact map comparison between `Ω` of the canonical boundary at
+  index `n` and the fresh canonical boundary at index `succ n`
 - transport wrappers for recursive boundary maps and pointed homotopies
 
 The earlier induced-map reassociation blocker has been resolved in
@@ -195,7 +199,11 @@ The remaining gap is now more precise: boundary/fiber-inclusion exactness is
 available uniformly for canonical iterated boundary maps, while the existing
 recursive boundary homomorphism used by the fibration-boundary direct theorem
 has not yet been identified with those canonical boundaries in the fully
-iterated form needed for a single polished LES package.
+iterated form needed for a single polished LES package. The current checked
+target for this identification is the set-truncated coherence square
+`coherence-square-loop-canonical-iterated-boundary-fiber-sequence`; at the
+concrete-group level the corresponding target is
+`coherence-square-canonical-boundary-concrete-homotopy-group-fiber-sequence`.
 
 ### Hopf Consumers
 
@@ -244,10 +252,12 @@ pi(E) -> pi(B) -> pi(F)
 pi(B) -> pi(F) -> pi(E)
 ```
 
-The next real theorem is therefore the comparison between the recursive
-boundary map and the canonical boundary map after iterated looping, or a
-redesign of the public boundary API so the canonical map is used consistently
-in both adjacent positions.
+The next real theorem is therefore the set-truncated comparison
+`coherence-square-loop-canonical-iterated-boundary-fiber-sequence`. Proving it
+would compare `Ω` of the canonical boundary at index `n` with the fresh
+canonical shifted boundary at index `succ n`; this is the pure pointed-set
+part of making the canonical boundary convention usable consistently in both
+adjacent positions.
 
 ### The Proof Shape Is Still Too Transport-Heavy
 
@@ -327,12 +337,14 @@ construction rather than the route by which the blocker was cleared.
 
 ## Recommended Next Steps
 
-1. Prove the boundary-map comparison needed to make the all-index theorem use
-   the same boundary convention everywhere. The checked canonical theorem now
-   covers `pi(B) -> pi(F) -> pi(E)` for all indices; what remains is to compare
-   it with the recursive boundary map used by the existing fibration-boundary
-   direct theorem, or to refactor the fibration-boundary theorem to use the
-   canonical boundary uniformly.
+1. Prove `coherence-square-loop-canonical-iterated-boundary-fiber-sequence`.
+   This is now the most precise checked target for the boundary convention
+   problem: it compares the set-truncated map induced by looping
+   `canonical-pointed-map-iterated-boundary-fiber-sequence S n` with the fresh
+   canonical boundary map of `iterated-loop-fiber-sequence S (succ-ℕ n)`.
+   After this is proved, use naturality of the concrete homotopy-group
+   underlying-type equivalence to establish
+   `coherence-square-canonical-boundary-concrete-homotopy-group-fiber-sequence`.
 
 2. Define a small LES indexing/package layer after the boundary comparison is
    checked. It does not need to be elaborate

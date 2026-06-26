@@ -5385,3 +5385,51 @@ theorem to use the canonical convention uniformly.
 Related commit:
 
 - This commit - Add canonical LES boundary exactness.
+
+### Isolate the canonical boundary coherence target
+
+Request: Emily asked Codex to keep working while staying focused on the big
+picture LES objective.
+
+Model context:
+
+- Date: 2026-06-26.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible and were used to inspect the known
+  boundary-of-boundary pointed-coherence goal. Final acceptance remained
+  `./check.sh`.
+
+Actions:
+
+- Added the set-truncated map
+  `hom-trunc-loop-canonical-iterated-boundary-fiber-sequence`.
+- Added the checked set-level blocker type
+  `coherence-square-loop-canonical-iterated-boundary-fiber-sequence`, comparing
+  `Ω` of the canonical boundary at index `n` with the fresh canonical shifted
+  boundary at index `succ n`.
+- Added the concrete-group coherence target
+  `coherence-square-canonical-boundary-concrete-homotopy-group-fiber-sequence`.
+- Tried to promote the canonical shifted fibration-boundary exactness directly
+  through the concrete-group transport bridge. Agda exposed that the needed
+  map coherence is not definitional, and the fully expanded conditional bridge
+  was too slow to keep in this hot module.
+- Temporarily inspected the pointed homotopy comparing the boundary of the
+  shifted boundary fiber sequence with the looped fiber inclusion. The
+  basepoint coherence goal normalized to a very large transport expression;
+  the temporary hole was removed.
+- Updated `LES-STATUS.md` so the next real target is the pure set-level
+  coherence square rather than a vague recursive/canonical boundary
+  comparison.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md
+```
+
+Related commit:
+
+- This commit - Isolate canonical LES boundary coherence.
