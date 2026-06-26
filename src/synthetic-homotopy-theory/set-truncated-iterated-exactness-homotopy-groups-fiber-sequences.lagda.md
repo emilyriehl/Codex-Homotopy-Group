@@ -31,6 +31,7 @@ open import structured-types.pointed-maps
 open import structured-types.pointed-types
 
 open import synthetic-homotopy-theory.cavallos-trick
+open import synthetic-homotopy-theory.connecting-fiber-sequences
 open import synthetic-homotopy-theory.functoriality-iterated-loop-spaces
 open import synthetic-homotopy-theory.functoriality-loop-spaces
 open import synthetic-homotopy-theory.iterated-loop-spaces
@@ -1159,6 +1160,38 @@ module _
         ( pointed-map-iterated-loop-space
           ( n)
           ( boundary-pointed-map-fiber-sequence S)))
+
+  hom-trunc-iterated-loop-connecting-fibration-fiber-sequence :
+    (n : ℕ) →
+    hom-Pointed-Set
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( n)
+            ( Ω (total-space-fiber-sequence-Pointed-Type S)))))
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( n)
+            ( Ω (base-fiber-sequence-Pointed-Type S)))))
+  hom-trunc-iterated-loop-connecting-fibration-fiber-sequence =
+    hom-trunc-direct-iterated-loop-fibration-fiber-sequence
+
+  hom-trunc-iterated-loop-connecting-map-fiber-sequence :
+    (n : ℕ) →
+    hom-Pointed-Set
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( n)
+            ( Ω (base-fiber-sequence-Pointed-Type S)))))
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( n)
+            ( fiber-fiber-sequence-Pointed-Type S))))
+  hom-trunc-iterated-loop-connecting-map-fiber-sequence =
+    hom-trunc-direct-iterated-loop-boundary-fiber-sequence
 ```
 
 The canonical long exact sequence package records the two adjacent uses of the
@@ -1437,6 +1470,37 @@ but this package does not assert that they are equal.
       ( is-exact-set-truncation-canonical-iterated-loop-fibration-boundary-fiber-sequence)
       ( is-exact-set-truncation-canonical-iterated-loop-boundary-fiber-inclusion-fiber-sequence)
 
+  is-exact-set-truncation-iterated-loop-connecting-fiber-sequence :
+    (n : ℕ) →
+    is-exact-hom-Pointed-Set
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( n)
+            ( Ω (total-space-fiber-sequence-Pointed-Type S)))))
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( n)
+            ( Ω (base-fiber-sequence-Pointed-Type S)))))
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( n)
+            ( fiber-fiber-sequence-Pointed-Type S))))
+      ( hom-trunc-iterated-loop-connecting-fibration-fiber-sequence n)
+      ( hom-trunc-iterated-loop-connecting-map-fiber-sequence n)
+  is-exact-set-truncation-iterated-loop-connecting-fiber-sequence
+    zero-ℕ =
+    is-exact-set-truncation-loop-fiber-sequence
+      ( fiber-sequence-connecting-map-fiber-sequence-Pointed-Type S)
+  is-exact-set-truncation-iterated-loop-connecting-fiber-sequence
+    ( succ-ℕ n) =
+    is-exact-set-truncation-loop-fiber-sequence
+      ( iterated-loop-fiber-sequence
+        ( fiber-sequence-connecting-map-fiber-sequence-Pointed-Type S)
+        ( succ-ℕ n))
+
   is-exact-set-truncation-direct-iterated-loop-fibration-boundary-fiber-sequence :
     (n : ℕ) →
     is-exact-hom-Pointed-Set
@@ -1457,16 +1521,8 @@ but this package does not assert that they are equal.
             ( fiber-fiber-sequence-Pointed-Type S))))
       ( hom-trunc-direct-iterated-loop-fibration-fiber-sequence n)
       ( hom-trunc-direct-iterated-loop-boundary-fiber-sequence n)
-  is-exact-set-truncation-direct-iterated-loop-fibration-boundary-fiber-sequence
-    zero-ℕ =
-    is-exact-set-truncation-loop-fiber-sequence
-      ( fiber-sequence-boundary-fiber-sequence-direct-Pointed-Type S)
-  is-exact-set-truncation-direct-iterated-loop-fibration-boundary-fiber-sequence
-    ( succ-ℕ n) =
-    is-exact-set-truncation-loop-fiber-sequence
-      ( iterated-loop-fiber-sequence
-        ( fiber-sequence-boundary-fiber-sequence-direct-Pointed-Type S)
-        ( succ-ℕ n))
+  is-exact-set-truncation-direct-iterated-loop-fibration-boundary-fiber-sequence =
+    is-exact-set-truncation-iterated-loop-connecting-fiber-sequence
 
   eq-tr-hom-trunc-reassociate-iterated-loop-fibration-fiber-sequence :
     (n : ℕ) →
@@ -1566,7 +1622,7 @@ but this package does not assert that they are equal.
       ( hom-trunc-Pointed-Set)
       ( reassociate-Ω-pointed-map-iterated-boundary-fiber-sequence S n)
 
-  is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence-direct :
+  is-exact-set-truncation-iterated-loop-fibration-connecting-map-fiber-sequence :
     (n : ℕ) →
     is-exact-hom-Pointed-Set
       ( trunc-Pointed-Set
@@ -1583,10 +1639,10 @@ but this package does not assert that they are equal.
         ( Ω
           ( iterated-loop-space
             ( n)
-            ( fiber-fiber-sequence-Pointed-Type S))))
+          ( fiber-fiber-sequence-Pointed-Type S))))
       ( hom-trunc-iterated-loop-fibration-fiber-sequence (succ-ℕ n))
       ( hom-trunc-iterated-loop-boundary-fiber-sequence n)
-  is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence-direct n =
+  is-exact-set-truncation-iterated-loop-fibration-connecting-map-fiber-sequence n =
     is-exact-hom-Pointed-Set-tr
       ( ap
         ( trunc-Pointed-Set)
@@ -1612,6 +1668,29 @@ but this package does not assert that they are equal.
       ( eq-tr-hom-trunc-reassociate-iterated-loop-fibration-fiber-sequence n)
       ( eq-tr-hom-trunc-reassociate-iterated-loop-boundary-fiber-sequence n)
       ( is-exact-set-truncation-direct-iterated-loop-fibration-boundary-fiber-sequence n)
+
+  is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence-direct :
+    (n : ℕ) →
+    is-exact-hom-Pointed-Set
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( succ-ℕ n)
+            ( total-space-fiber-sequence-Pointed-Type S))))
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( succ-ℕ n)
+            ( base-fiber-sequence-Pointed-Type S))))
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( n)
+            ( fiber-fiber-sequence-Pointed-Type S))))
+      ( hom-trunc-iterated-loop-fibration-fiber-sequence (succ-ℕ n))
+      ( hom-trunc-iterated-loop-boundary-fiber-sequence n)
+  is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence-direct =
+    is-exact-set-truncation-iterated-loop-fibration-connecting-map-fiber-sequence
 
   is-exact-set-truncation-first-iterated-loop-fibration-boundary-fiber-sequence-direct :
     is-exact-hom-Pointed-Set

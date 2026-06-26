@@ -127,6 +127,26 @@ fiber identifications, path algebra, exactness proofs, induced homomorphisms,
 and comparison lemmas. A future upstream version should split this into
 one-concept modules.
 
+### Connecting Fiber Sequences
+
+`src/synthetic-homotopy-theory/connecting-fiber-sequences.lagda.md` is the
+first extraction from the large LES module toward one-concept organization. It
+gives library-facing names to the checked `connect_fiberseq`-style structures:
+
+- `connecting-map-Pointed-Type : Omega B ->* fiber g`
+- `fiber-sequence-connecting-map-Pointed-Type`, packaging
+  `Omega E ->* Omega B ->* fiber g`
+- `connecting-map-fiber-sequence-Pointed-Type` for a packaged fiber sequence
+  `F ->* E ->* B`
+- `fiber-sequence-connecting-map-fiber-sequence-Pointed-Type`, packaging
+  `Omega E ->* Omega B ->* F`
+
+The module currently reuses the checked low-level proofs from
+`long-exact-sequence-homotopy-groups`; it does not duplicate the path algebra.
+This is intentional. It creates the structural API that later splits and
+upstream cleanup can target, while preserving existing route-specific names as
+compatibility aliases.
+
 ### Iterated Set-Truncated Exactness
 
 `src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md`
@@ -137,12 +157,14 @@ most by the Hopf proof:
   `is-exact-set-truncation-iterated-loop-fiber-sequence`
 - canonical shifted fibration-boundary exactness, via
   `is-exact-set-truncation-canonical-iterated-loop-fibration-boundary-fiber-sequence`
-- direct shifted fibration-boundary exactness in the natural `Omega^n(Omega X)`
-  indexing, via
-  `is-exact-set-truncation-direct-iterated-loop-fibration-boundary-fiber-sequence`
+- connecting-sequence fibration-boundary exactness in the natural
+  `Omega^n(Omega X)` indexing, via
+  `is-exact-set-truncation-iterated-loop-connecting-fiber-sequence`, with the
+  older direct name retained as a compatibility alias
 - public all-index fibration-boundary exactness in the repository's iterated
   loop indexing, via
-  `is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence-direct`
+  `is-exact-set-truncation-iterated-loop-fibration-connecting-map-fiber-sequence`,
+  with the older direct name retained as a compatibility alias
 - canonical all-index boundary/fiber-inclusion exactness, via
   `is-exact-set-truncation-canonical-iterated-loop-boundary-fiber-inclusion-fiber-sequence`
 - a checked set-truncated canonical LES package,
@@ -368,8 +390,10 @@ construction rather than the route by which the blocker was cleared.
    recursive/direct variants private or secondary corollaries with explicit
    comparison names.
 
-2. Split `long-exact-sequence-homotopy-groups.lagda.md` into one-concept
-   modules now that the boundary comparison and package layer are checked.
+2. Continue splitting `long-exact-sequence-homotopy-groups.lagda.md` into
+   one-concept modules. `connecting-fiber-sequences` is the first extracted
+   structural facade; the next candidates are boundary maps of pointed maps and
+   loop-fiber/fiber-of-fiber equivalences.
 
 3. Write short literate prose above the final structural theorems explaining
    the relationship with the HoTT Book LES proof and the Coq-HoTT

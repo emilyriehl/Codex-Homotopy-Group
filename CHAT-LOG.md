@@ -5721,3 +5721,53 @@ All five Agda checks passed.
 Related commit:
 
 - This commit - Complete canonical LES boundary exactness.
+
+### Extract connecting fiber sequence API
+
+Request: Emily asked Codex to start work toward a full library-quality LES and
+to make real structural progress rather than superficial status updates.
+
+Model context:
+
+- Date: 2026-06-26.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible; this session used `./check.sh` as the proof
+  acceptance gate.
+
+Actions:
+
+- Added `synthetic-homotopy-theory.connecting-fiber-sequences`, the first
+  one-concept extraction from the large LES module. It gives public
+  `connect_fiberseq`-style names to the shifted connecting fiber sequence
+  `Ω E ->* Ω B ->* fiber g` and to the packaged-fiber-sequence form
+  `Ω E ->* Ω B ->* F`.
+- Rewired the iterated set-truncated direct exactness proof to use
+  `fiber-sequence-connecting-map-fiber-sequence-Pointed-Type`.
+- Added connecting-sequence theorem names
+  `is-exact-set-truncation-iterated-loop-connecting-fiber-sequence` and
+  `is-exact-set-truncation-iterated-loop-fibration-connecting-map-fiber-sequence`,
+  retaining the older direct-boundary names as compatibility aliases.
+- Added the group-level theorem
+  `is-exact-hom-fibration-connecting-map-concrete-homotopy-group-fiber-sequence`,
+  retaining the older direct theorem as an alias.
+- Updated `LES-STATUS.md` and `STATUS-REPORT.md` to record the structural
+  extraction and the revised remaining cleanup targets.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/connecting-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+```
+
+All six Agda checks passed.
+
+Related commit:
+
+- This commit - Extract connecting fiber sequence API.
