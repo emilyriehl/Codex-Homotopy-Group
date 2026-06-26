@@ -1790,7 +1790,9 @@ Request: Emily asked Codex to consult the formalization plan and status report, 
 Model context:
 
 - Date: 2026-06-16.
-- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
 
 Actions:
 
@@ -5191,3 +5193,57 @@ unsolved metas, unsafe termination pragmas, or rewrite-rule dependency.
 Related commit:
 
 - This commit - Direct final homotopy group isomorphisms.
+
+### General positive diagonal homotopy groups of spheres
+
+Request: Emily asked Codex to bring back and implement the stored plan for the
+diagonal calculation `πₙ(Sⁿ) ≅ ℤ`, prioritizing the harder upstream-quality
+route through structural Freudenthal stability and reusable constructions.
+
+Model context:
+
+- Date: 2026-06-25.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible; `./check.sh` remained the final acceptance gate.
+
+Actions:
+
+- Added group-level triviality wrappers for the positive concrete homotopy
+  groups of the circle and 1-sphere.
+- Added general sphere connectedness: inhabited types are `(-1)`-connected
+  and `Sⁿ` is `(n-1)`-connected, with successor-specialized forms for
+  Freudenthal.
+- Added a reusable connected-map homotopy-group module: iterated loop
+  connectivity lowers through arbitrary many loopings, and a sufficiently
+  connected pointed map induces an isomorphism on concrete homotopy groups.
+- Added general diagonal Freudenthal stability for spheres, including the
+  truncation-level arithmetic comparing Freudenthal's range with the diagonal
+  range and the loop-shift group equality comparing `π_k(Ω A)` with
+  `π_{k+1}(A)`.
+- Added the recursive positive diagonal theorem in
+  `diagonal-homotopy-groups-spheres`, proving `πₙ₊₁(Sⁿ⁺¹) ≅ ℤ` from
+  `π₁(S¹) ≅ ℤ`, the Hopf-derived `π₂(S²) ≅ π₁(S¹)`, and diagonal
+  stability.
+- Updated `STATUS-REPORT.md` and `FORMALIZATION-PLAN.md` to record that the
+  higher `S¹` vanishing, diagonal stability, and positive diagonal theorem are
+  done locally.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md
+./check.sh src/synthetic-homotopy-theory/connectedness-spheres.lagda.md
+./check.sh src/synthetic-homotopy-theory/connected-maps-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/stability-diagonal-homotopy-groups-spheres.lagda.md
+./check.sh src/synthetic-homotopy-theory/diagonal-homotopy-groups-spheres.lagda.md
+rg -n "\{!!\}|\?\}|allow-unsolved-metas|postulate|TERMINATING|NON_TERMINATING|REWRITE|rewriting" src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md src/synthetic-homotopy-theory/connectedness-spheres.lagda.md src/synthetic-homotopy-theory/connected-maps-homotopy-groups.lagda.md src/synthetic-homotopy-theory/stability-diagonal-homotopy-groups-spheres.lagda.md src/synthetic-homotopy-theory/diagonal-homotopy-groups-spheres.lagda.md
+git diff --check
+```
+
+All five Agda checks passed. The touched-file scan found no holes, postulates,
+unsolved metas, unsafe termination pragmas, or rewrite-rule dependency.
+`git diff --check` passed.
+
+Related commit:
+
+- This commit - Formalize positive diagonal sphere homotopy groups.

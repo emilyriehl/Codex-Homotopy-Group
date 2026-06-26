@@ -22,7 +22,10 @@ open import foundation.sets
 open import foundation.truncated-types
 open import foundation-core.truncation-levels
 
+open import group-theory.concrete-groups
 open import group-theory.trivial-concrete-groups
+open import group-theory.trivial-groups
+open import group-theory.trivial-underlying-groups-concrete-groups
 
 open import structured-types.pointed-equivalences
 
@@ -147,4 +150,24 @@ is-trivial-positive-concrete-homotopy-group-sphere-1 n =
     n
     ( sphere-Pointed-Type 1)
     is-1-type-sphere-1
+
+is-trivial-group-positive-concrete-homotopy-group-𝕊¹ :
+  (n : ℕ) →
+  is-trivial-Group
+    ( group-Concrete-Group
+      ( concrete-homotopy-group (succ-ℕ n) 𝕊¹-Pointed-Type))
+is-trivial-group-positive-concrete-homotopy-group-𝕊¹ n =
+  is-trivial-group-is-trivial-Concrete-Group
+    ( concrete-homotopy-group (succ-ℕ n) 𝕊¹-Pointed-Type)
+    ( is-trivial-positive-concrete-homotopy-group-𝕊¹ n)
+
+is-trivial-group-positive-concrete-homotopy-group-sphere-1 :
+  (n : ℕ) →
+  is-trivial-Group
+    ( group-Concrete-Group
+      ( concrete-homotopy-group (succ-ℕ n) (sphere-Pointed-Type 1)))
+is-trivial-group-positive-concrete-homotopy-group-sphere-1 n =
+  is-trivial-group-is-trivial-Concrete-Group
+    ( concrete-homotopy-group (succ-ℕ n) (sphere-Pointed-Type 1))
+    ( is-trivial-positive-concrete-homotopy-group-sphere-1 n)
 ```

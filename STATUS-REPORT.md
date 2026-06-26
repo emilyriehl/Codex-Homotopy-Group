@@ -48,6 +48,10 @@ calculation:
   formalized: the loop space of the circle and the 1-sphere is equivalent to
   the integers, the circle and 1-sphere are 1-types, and positive concrete
   homotopy groups of 1-types are trivial.
+- The circle vanishing result now also has group-level wrappers for the positive
+  concrete homotopy groups of both the circle and the 1-sphere. These wrappers
+  package the existing concrete-group triviality facts as ordinary triviality
+  of the underlying groups.
 - The circle H-space prerequisite for the Hopf construction is now checked.
   The module `h-space-structure-circle` packages the standard multiplication
   on `𝕊¹` as `𝕊¹-H-Space` and transports it to the 1-sphere as
@@ -140,6 +144,20 @@ calculation:
   Applying this bridge twice turns the Freudenthal `S²` connected-map instance
   into the double-loop connectedness needed for the set-truncated stabilization
   map.
+- Connected pointed maps now also have a checked homotopy-group isomorphism
+  criterion: iterated loop-space connectivity lowers through arbitrary many
+  loopings, and a sufficiently connected pointed map induces an isomorphism on
+  concrete homotopy groups.
+- General connectedness of spheres is checked: `Sⁿ` is `(n-1)`-connected,
+  with successor forms usable by Freudenthal.
+- General diagonal stability for spheres is checked. Freudenthal/Blakers-Massey
+  gives the diagonal stabilization isomorphisms
+  `πₙ₊₂(Sⁿ⁺²) ≅ πₙ₊₃(Sⁿ⁺³)`, with an explicit loop-shift bridge for
+  `π_k(Ω A) ≅ π_{k+1}(A)`.
+- The positive diagonal theorem is checked locally: the module
+  `diagonal-homotopy-groups-spheres` proves `πₙ₊₁(Sⁿ⁺¹) ≅ ℤ` by composing
+  the base `π₁(S¹) ≅ ℤ`, the Hopf-derived `π₂(S²) ≅ π₁(S¹)`, and recursive
+  diagonal stability.
 - Three reusable connectivity prerequisites for the library-quality Freudenthal
   route are now checked. The codiagonal of a `k`-connected map is proved
   `(k+1)`-connected using the fiberwise suspension identification, and the join
@@ -216,23 +234,15 @@ calculation:
   `π₃(S³) ≅ π₃(S²)` comparison and the lower `π₂(S²) ≅ π₁(S¹)` comparison
   have no local holes, postulates, or weakening pragmas.
 
-The final theorem `pi_3(S^2) = Z` is not yet proved. The top-level Agda file
-now assembles the final isomorphism through two next-level files that themselves
-compose one level further down. The Hopf comparison `π₃(S³) ≅ π₃(S²)` now has
-its algebraic exactness-to-isomorphism step, trivial concrete-to-group bridge,
-and Hopf LES packaging proved. The attempted route through fiber sequences of
-concrete homotopy-group classifying maps has been rejected as too strong in
-general. The current group-level LES bridge is therefore explicitly reduced to
-comparing set-truncated adjacent exactness with ordinary group exactness of
-concrete homotopy groups. The total-space set-truncated iterated exactness
-case, the canonical shifted boundary case, the unrestricted direct
-fibration-boundary set-level case, and the unrestricted direct
-fibration-boundary group exactness case now check. The `π₃(S³) ≅ ℤ` calculation is now unconditional: the checked
-Blakers-Massey span-pushout theorem specializes to the suspension span
-`unit <- A -> unit`, the Freudenthal gap bridge turns that into
-`is-connected-map-Freudenthal-suspension n A`, and the `S²` instance feeds
-the checked stability, Hopf, and circle comparisons. The final
-`π₃(S²) ≅ ℤ` theorem is now exported without a Freudenthal hypothesis.
+The full current route to `π₃(S²) ≅ ℤ` is checked and unconditional. The
+top-level Agda files assemble the final isomorphism as direct composites through
+the Hopf comparisons, the circle calculation, and Freudenthal/Blakers-Massey
+stability. This run additionally formalizes the positive diagonal theorem
+`πₙ(Sⁿ) ≅ ℤ` locally: general sphere connectedness, connected-map
+homotopy-group isomorphism criteria, diagonal Freudenthal stability, and the
+recursive diagonal theorem are now checked. The specialized `π₃(S³) ≅ ℤ` file
+remains as a direct low-dimensional composite, while the new general theorem is
+available in `diagonal-homotopy-groups-spheres`.
 
 ## Implemented Agda code
 
@@ -249,7 +259,7 @@ the checked stability, Hopf, and circle comparisons. The final
 | Exactness of pointed sets | [`src/structured-types/exact-sequences-pointed-sets.lagda.md`](src/structured-types/exact-sequences-pointed-sets.lagda.md) | Defines images, kernels, exactness of pointed-set maps, derives the mere-preimage/fiber form of image membership and exactness, proves transport across identified pointed-set triples and maps, pointwise replacement of the second map, image-equivalent replacement of the first map, compatible middle self-map shifts of the second map, and injective comparison of the middle pointed set, and proves that the set truncation of the canonical fiber sequence `fiber g -> E -> B` is exact. |
 | Boundary maps and LES exactness steps | [`src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md) | Defines the boundary pointed map, induced maps on homotopy groups of a fiber sequence, recursive boundary pointed maps, and boundary homomorphisms. It proves the first fiber-of-the-fiber identification, packages `Ω B ->* fiber g ->* E` as a pointed fiber sequence, proves pointed-set exactness for canonical and packaged `F ->* E ->* B` fiber sequences, proves pointed-set exactness for the packaged boundary segment `Ω B ->* F ->* E`, proves pointed-set exactness for the packaged loop-boundary segment `Ω E ->* Ω B ->* F`, proves pointed-set exactness for the looped packaged segment `Ω F ->* Ω E ->* Ω B`, proves pointed-set exactness for the canonical adjacent triples `Ω B ->* fiber g ->* E`, `Ω E ->* Ω B ->* fiber g`, and `Ω² B ->* Ω (fiber g) ->* Ω E`, transports the last canonical theorem to the packaged looped boundary/fiber-inclusion segment `Ω² B ->* Ω F ->* Ω E`, and bundles the first four packaged exactness proofs as an initial set-truncated LES segment. These are steps toward, not yet the full proof of, Theorem 8.4.6 of the HoTT book. |
 | Higher homotopy groups of 1-types | [`src/synthetic-homotopy-theory/higher-homotopy-groups-truncated-types.lagda.md`](src/synthetic-homotopy-theory/higher-homotopy-groups-truncated-types.lagda.md) | Proves that positive concrete homotopy groups of pointed 1-types are trivial. |
-| Circle and 1-sphere homotopy facts | [`src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md`](src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md) | Proves the loop-space equivalences for the circle and 1-sphere, the 1-type facts, and triviality of their positive concrete homotopy groups. |
+| Circle and 1-sphere homotopy facts | [`src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md`](src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md) | Proves the loop-space equivalences for the circle and 1-sphere, the 1-type facts, triviality of their positive concrete homotopy groups, and ordinary group-level triviality wrappers for those positive concrete homotopy groups. |
 | Circle and 1-sphere H-space structures | [`src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md`](src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md) | Packages the existing circle multiplication as a coherent `𝕊¹-H-Space`, transports it across the circle--1-sphere equivalence, packages the transported multiplication as `sphere-1-H-Space`, proves that left and right translations on both the circle and 1-sphere are equivalences, and proves the Hopf shear equivalence on `S¹ × S¹`. |
 | Low homotopy groups of `S³` | [`src/synthetic-homotopy-theory/homotopy-groups-sphere-3.lagda.md`](src/synthetic-homotopy-theory/homotopy-groups-sphere-3.lagda.md) | Proves that inhabited types are `(-1)`-connected, that `1`-connected pointed types have trivial concrete group, that `S³` is 2-connected by iterated suspension connectivity, and that `concrete-homotopy-group 0 (S³)` and `concrete-homotopy-group 1 (S³)` are trivial. |
 | Integer powers of loops | [`src/synthetic-homotopy-theory/computing-integer-powers-of-loops.lagda.md`](src/synthetic-homotopy-theory/computing-integer-powers-of-loops.lagda.md) | Proves successor, predecessor, and automorphism-iteration addition computations for integer powers of loops. |
@@ -261,6 +271,8 @@ the checked stability, Hopf, and circle comparisons. The final
 | Underlying maps of concrete homotopy groups | [`src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/underlying-maps-concrete-homotopy-groups.lagda.md) | Defines the ordinary underlying map of a concrete homotopy-group homomorphism and its set-truncated loop comparison squares. The forward and inverse coherence squares are proved for concrete groups coming from pointed types, as are the unit comparison lemmas needed by group exactness transport and the forward multiplication-preservation theorem for the underlying-type comparison. It now also proves the reusable pointed-type bridge: an equivalence on the set-truncated loop map induces an equivalence on the ordinary underlying map of the concrete-group homomorphism. |
 | Isomorphism bridge for homotopy groups | [`src/synthetic-homotopy-theory/isomorphisms-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/isomorphisms-homotopy-groups.lagda.md) | Specializes the pointed-type bridge to concrete homotopy groups: if `map-set-trunc-loop-map-concrete-homotopy-group n f` is an equivalence, then `map-underlying-hom-concrete-homotopy-group n f` is an equivalence. This is the checked underlying-map step needed before packaging Freudenthal range results as group isomorphisms. |
 | Connected maps and loop spaces | [`src/synthetic-homotopy-theory/connected-maps-loop-spaces.lagda.md`](src/synthetic-homotopy-theory/connected-maps-loop-spaces.lagda.md) | Proves the reusable loop-lowering theorem: a `(k+1)`-connected pointed map induces a `k`-connected map on loop spaces. The proof factors through the equivalence between the fiber of `ap f` and an identity type in the fiber of `f`. |
+| Connected maps and homotopy groups | [`src/synthetic-homotopy-theory/connected-maps-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/connected-maps-homotopy-groups.lagda.md) | Proves that iterated loop-space connectivity lowers through arbitrary many loopings and packages the criterion that a sufficiently connected pointed map induces an isomorphism on concrete homotopy groups. |
+| Connectedness of spheres | [`src/synthetic-homotopy-theory/connectedness-spheres.lagda.md`](src/synthetic-homotopy-theory/connectedness-spheres.lagda.md) | Proves that inhabited types are `(-1)`-connected and that `Sⁿ` is `(n-1)`-connected, with successor-specialized forms for Freudenthal inputs. |
 | Connectivity of codiagonals of maps | [`src/synthetic-homotopy-theory/connectivity-codiagonals-of-maps.lagda.md`](src/synthetic-homotopy-theory/connectivity-codiagonals-of-maps.lagda.md) | Proves that the codiagonal of a `k`-connected map is `(k+1)`-connected, using the existing equivalence between codiagonal fibers and suspensions of the original fibers. |
 | Connectivity of joins of types | [`src/synthetic-homotopy-theory/connectivity-joins-of-types.lagda.md`](src/synthetic-homotopy-theory/connectivity-joins-of-types.lagda.md) | Proves that the join of a `k`-connected type and an `n`-connected type is `(k+n+2)`-connected. The proof works through cocones into a truncated type, identifies them with fiberwise constant maps, proves the constant cocone map is an equivalence, and transfers this across the join pushout universal property. |
 | Fibers of pushout-products | [`src/synthetic-homotopy-theory/fibers-pushout-products.lagda.md`](src/synthetic-homotopy-theory/fibers-pushout-products.lagda.md) | Proves that the fiber of the cogap of a pushout-product square over `(x , y)` is equivalent to `(fiber f x) * (fiber g y)`, by transporting the standard pushout-of-fibers theorem across explicit product-map fiber equivalences. It also proves the corresponding connected-map theorem: if `f` is `k`-connected and `g` is `n`-connected, then this cogap is `(k+n+2)`-connected. |
@@ -292,8 +304,10 @@ the checked stability, Hopf, and circle comparisons. The final
 | Freudenthal suspension theorem interface | [`src/synthetic-homotopy-theory/freudenthal-suspension-theorem.lagda.md`](src/synthetic-homotopy-theory/freudenthal-suspension-theorem.lagda.md) | Proves the reusable Freudenthal suspension theorem from the checked Blakers-Massey span-pushout theorem: the suspension-loop unit is identified with the suspension pushout gap map followed by an equivalence, the ordinary-span Blakers-Massey corollary is specialized to `unit <- A -> unit`, terminal-map connectedness supplies the hypotheses, and the result exports `is-connected-map-Freudenthal-suspension-Blakers-Massey`. |
 | Stabilization homomorphisms on homotopy groups | [`src/synthetic-homotopy-theory/stabilization-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/stabilization-homotopy-groups.lagda.md) | Defines the canonical concrete-group and abstract-group homomorphisms induced by the Freudenthal suspension map, `πₖ A -> πₖ ΩΣA`. This file is checked and has no holes. |
 | Stability comparison for `π₃(S³)` | [`src/synthetic-homotopy-theory/stability-third-homotopy-group-sphere-3.lagda.md`](src/synthetic-homotopy-theory/stability-third-homotopy-group-sphere-3.lagda.md) | Specializes the checked Freudenthal theorem to `S²`, identifies the canonical stabilization homomorphism `π₂(S²) -> π₃(S³)`, proves the needed set-truncated double-loop equivalence, and packages the resulting group isomorphism. Conditional bridge lemmas remain available with explicit hypothesis names, while the Blakers-Massey instance supplies the unconditional comparison. |
+| Diagonal stability for spheres | [`src/synthetic-homotopy-theory/stability-diagonal-homotopy-groups-spheres.lagda.md`](src/synthetic-homotopy-theory/stability-diagonal-homotopy-groups-spheres.lagda.md) | Proves the Freudenthal/Blakers-Massey diagonal stabilization isomorphisms `πₙ₊₂(Sⁿ⁺²) ≅ πₙ₊₃(Sⁿ⁺³)`, including the truncation-level arithmetic and loop-shift group equality needed to compare `π_k(Ω A)` with `π_{k+1}(A)`. |
 | Second homotopy group of `S²` | [`src/synthetic-homotopy-theory/second-homotopy-group-sphere-2.lagda.md`](src/synthetic-homotopy-theory/second-homotopy-group-sphere-2.lagda.md) | Proves the Hopf-derived comparison `π₂(S²) ≅ π₁(S¹)` by instantiating the lower Hopf exactness-to-isomorphism wrapper with the checked direct-connecting-fiber-sequence set-level exactness. It has no local `--allow-unsolved-metas`. |
 | Fundamental group of `S¹` | [`src/synthetic-homotopy-theory/fundamental-group-sphere-1.lagda.md`](src/synthetic-homotopy-theory/fundamental-group-sphere-1.lagda.md) | Proves the checked group isomorphism from the concrete fundamental group of `S¹` to `ℤ-Group`, with no unsolved metas or scaffold holes. |
+| Diagonal homotopy groups of spheres | [`src/synthetic-homotopy-theory/diagonal-homotopy-groups-spheres.lagda.md`](src/synthetic-homotopy-theory/diagonal-homotopy-groups-spheres.lagda.md) | Proves the positive diagonal theorem `πₙ₊₁(Sⁿ⁺¹) ≅ ℤ` by composing `π₁(S¹) ≅ ℤ`, the Hopf-derived `π₂(S²) ≅ π₁(S¹)`, and recursive diagonal stability. |
 | Third homotopy group of the 3-sphere | [`src/synthetic-homotopy-theory/third-homotopy-group-sphere-3.lagda.md`](src/synthetic-homotopy-theory/third-homotopy-group-sphere-3.lagda.md) | Proves `π₃(S³) ≅ ℤ` unconditionally by applying the checked Freudenthal/Blakers-Massey theorem to the preserved conditional stability-Hopf-circle composition. |
 | Final theorem target | [`src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md`](src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md) | Proves `π₃(S²) ≅ ℤ` unconditionally by composing the checked Hopf comparison with the unconditional `π₃(S³) ≅ ℤ` calculation. |
 
@@ -305,19 +319,19 @@ the checked stability, Hopf, and circle comparisons. The final
 | Induced maps on homotopy groups | Done | Implemented via iterated loop functoriality and concrete homotopy group functoriality. |
 | Long exact sequence of homotopy groups | Partial | Boundary maps, induced homomorphisms, pointed-set exactness, exactness of the set truncation of canonical and packaged `F ->* E ->* B` triples, exactness of the packaged boundary triple `Ω B ->* F ->* E`, exactness of the packaged loop-boundary triple `Ω E ->* Ω B ->* F`, exactness of the looped packaged triple `Ω F ->* Ω E ->* Ω B`, the first fiber-of-the-fiber identification `Ω B ≃* fiber (fiber g -> E)`, pointed-set exactness of the canonical triples `Ω B ->* fiber g ->* E`, `Ω E ->* Ω B ->* fiber g`, and `Ω² B ->* Ω (fiber g) ->* Ω E`, transported exactness of the packaged looped boundary/fiber-inclusion triple `Ω² B ->* Ω F ->* Ω E`, and a bundled initial four-triple set-truncated LES segment are formalized. The group-exactness transport layer is checked for the total-space case, for the boundary/fiber-inclusion case at `π₁(F)`, for fibration-boundary targets whose codomain group is contractible, and for unrestricted direct fibration-boundary segments in all indices. The set-truncated iterated total-space theorem, the canonical shifted boundary theorem, the direct-indexed shifted-boundary exactness theorem, the reassociated public shifted-boundary exactness theorem for all indices, the type-level and induced-map reassociation equalities, and the packaged shifted-boundary pointwise comparison are checked. The classifying-map fiber-sequence route is recorded as too strong in general. |
 | Exactness-to-isomorphism with zero endpoints | Done | Proved in [`src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md`](src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md). |
-| Higher homotopy groups of the circle vanish | Mostly done | Positive concrete homotopy groups of the circle and 1-sphere are trivial. Further packaging may be needed for the exact Hopf LES endpoints. |
+| Higher homotopy groups of the circle vanish | Done locally | Positive concrete homotopy groups of the circle and 1-sphere are trivial, and this is now also packaged as ordinary group-level triviality of the underlying groups. |
 | Loop space of the circle is the integers | Done | The loop-space equivalence is formalized, the universal-cover encoder is proved additive on loop concatenation, the result is transferred to the 1-sphere, and the concrete group isomorphism `π₁(S¹) ≅ ℤ` is checked. |
 | Circle as an H-space | Done | The checked module [`src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md`](src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md) packages both `𝕊¹-H-Space` and the transported `sphere-1-H-Space`, and proves that circle and 1-sphere translations are equivalences. |
 | Hopf construction and Hopf fibration | Done | The generic Hopf map `A * A -> suspension A`, the `S¹ * S¹ ->* S²` specialization, the canonical Hopf-construction source fiber sequence, the Hopf family over `S²`, the Hopf-family projection fiber sequence with fiber `S¹`, the Hopf shear equivalence on `S¹ × S¹`, the actual-family flattening pushout, the explicit flattened-span pushout comparison with `S¹ * S¹`, the completed two-leg span comparison, the canonical equivalence `total-space-hopf-family-sphere-1 ≃ S¹ * S¹`, the comparison `Fin 2 * X ≃ suspension X`, join functoriality under equivalences, join commutativity, the Rocq-guided checked associator equivalence for joins, the bridge from `S¹ * S¹` to the join of two `join-power 2 (Fin 2)` models, the equivalence from that join to `join-power 4 (Fin 2)`, the `join-power 4 (Fin 2) ≃ S³` model, the pointed total-space comparison with `S³`, and the packaged Hopf fiber sequence `S¹ ->* S³ ->* S²` are checked. |
 | Hopf LES consequence `pi_3(S^3) = pi_3(S^2)` | Done | The exactness-to-isomorphism extraction, Hopf LES packaging, direct second shifted fibration-boundary exactness, and packaged Hopf fiber sequence input are all checked. The comparison has no local proof hole. |
 | Freudenthal suspension theorem | Done locally | The suspension-loop unit, Freudenthal range arithmetic, gap-map comparison, gap-to-Freudenthal transfer, generalized Blakers-Massey span-pushout theorem, ordinary-span corollary, and suspension-span specialization are checked. The file exports `is-connected-map-Freudenthal-suspension-Blakers-Massey`. |
-| Stability of homotopy groups of spheres | Done locally for the needed case | The comparison `π₂(S²) ≅ π₃(S³)` is checked from the Freudenthal/Blakers-Massey `S²` instance. Conditional bridge lemmas remain available, but the Hopf-facing comparison is now unconditional. |
-| Diagonal theorem `pi_n(S^n) = Z` | `n = 3` done locally through stability/Hopf | The general diagonal theorem remains outside the completed route, but the project now proves the needed `π₃(S³) ≅ ℤ` theorem unconditionally via stability, the Hopf-derived `π₂(S²) ≅ π₁(S¹)` comparison, and `π₁(S¹) ≅ ℤ`. |
+| Stability of homotopy groups of spheres | Done locally | The special comparison `π₂(S²) ≅ π₃(S³)` remains checked, and the general diagonal stabilization comparisons `πₙ₊₂(Sⁿ⁺²) ≅ πₙ₊₃(Sⁿ⁺³)` are now checked from Freudenthal/Blakers-Massey plus sphere connectedness. |
+| Diagonal theorem `pi_n(S^n) = Z` | Done locally for positive spheres | The checked module `diagonal-homotopy-groups-spheres` proves `πₙ₊₁(Sⁿ⁺¹) ≅ ℤ` by recursion from `π₁(S¹) ≅ ℤ`, the Hopf-derived `π₂(S²) ≅ π₁(S¹)`, and general diagonal stability. |
 | Final theorem `pi_3(S^2) = Z` | Done locally | The target statement in [`src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md`](src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md) now checks as an unconditional formal composition. It has no local proof hole or weakening pragma. |
 
 ## Remaining tasks
 
-No proof obligations remain for the current route to `π₃(S²) ≅ ℤ`. Future upstream-facing work should polish module boundaries, naming, and exposition for the Blakers-Massey and Freudenthal developments, and decide which general results should be proposed to agda-unimath proper.
+No proof obligations remain for the current route to `π₃(S²) ≅ ℤ`, and the positive diagonal theorem `πₙ(Sⁿ) ≅ ℤ` is now also checked locally in the repository indexing. Future upstream-facing work should polish module boundaries, naming, and exposition for the Blakers-Massey, Freudenthal, diagonal stability, and diagonal theorem developments, and decide which general results should be proposed to agda-unimath proper.
 
 ## Next agent handoff
 
@@ -328,6 +342,7 @@ The full current route to `π₃(S²) ≅ ℤ` is checked and unconditional. The
 - the `S²` Freudenthal instance and stable comparison `π₂(S²) ≅ π₃(S³)` in `stability-third-homotopy-group-sphere-3`;
 - the Hopf comparison `π₃(S³) ≅ π₃(S²)`, the lower Hopf comparison `π₂(S²) ≅ π₁(S¹)`, and the circle calculation `π₁(S¹) ≅ ℤ`;
 - final unconditional exports `iso-third-homotopy-group-sphere-3-ℤ` and `iso-third-homotopy-group-sphere-2-ℤ`.
+- new general diagonal exports in `diagonal-homotopy-groups-spheres`, especially `iso-diagonal-homotopy-group-sphere-succ-ℤ`, proving `πₙ₊₁(Sⁿ⁺¹) ≅ ℤ` from the base cases and recursive Freudenthal diagonal stability.
 
 The next useful work is not another blocker-clearing proof, but upstream-quality cleanup: review names and file boundaries, improve prose around the Blakers-Massey and Freudenthal bridge, and decide how much of the local development should be split into general agda-unimath-ready modules.
 
