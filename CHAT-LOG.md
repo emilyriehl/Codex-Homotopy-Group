@@ -5247,3 +5247,52 @@ unsolved metas, unsafe termination pragmas, or rewrite-rule dependency.
 Related commit:
 
 - This commit - Formalize positive diagonal sphere homotopy groups.
+
+
+### Long exact sequence status handoff
+
+Request: Emily asked Codex for a final status-report-style summary of the work
+around the long exact sequence of a fibration, comparing the checked local
+formalization with the natural-language LES proof and critically identifying
+what still remains before the code is library-quality.
+
+Model context:
+
+- Date: 2026-06-26.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible; `./check.sh` remains the final acceptance gate
+  for Agda proof files.
+
+Actions:
+
+- Added `LES-STATUS.md` as a standalone handoff document for another agent.
+- Recorded the natural-language target LES for a fiber sequence
+  `F -> E -> B`, including the repository concrete-homotopy-group indexing
+  convention.
+- Summarized the checked local formalization across the fiber-sequence,
+  pointed-set exactness, ordinary group exactness, boundary-map, iterated
+  set-truncated exactness, group-level bridge, and Hopf consumer modules.
+- Identified the main remaining gaps for upstream-quality code: no single
+  packaged infinite LES object, uneven all-index coverage for the
+  boundary/fiber-inclusion group exactness position, a still transport-heavy
+  proof surface, unclear public boundary-map conventions, an oversized core LES
+  module, no packaged `pi_0` tail, no abelian-group refinement, and project-
+  historical naming.
+- Recommended next steps, led by adding the all-index group-level
+  boundary/fiber-inclusion theorem and then packaging the repeating LES
+  exactness projections behind a cleaner public API.
+
+Verification:
+
+```sh
+git diff --check
+```
+
+The documentation hygiene check passed. No Agda proof files were changed in
+this session.
+
+Related commit:
+
+- This commit - Add LES status handoff.
