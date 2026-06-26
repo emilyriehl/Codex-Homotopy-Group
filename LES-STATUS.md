@@ -385,23 +385,18 @@ construction rather than the route by which the blocker was cleared.
 
 ## Recommended Next Steps
 
-1. Refactor the boundary map API. The group-level package now chooses the
-   canonical boundary homomorphism as public; make
-   recursive/direct variants private or secondary corollaries with explicit
-   comparison names.
+1. Continue splitting `long-exact-sequence-homotopy-groups.lagda.md` into
+   one-concept modules. The connecting fiber sequence has been extracted as a
+   checked structural module; the next candidates are loop-fiber/fiber-of-fiber
+   equivalences and the remaining boundary-comparison adapters.
 
-2. Continue splitting `long-exact-sequence-homotopy-groups.lagda.md` into
-   one-concept modules. `connecting-fiber-sequences` is the first extracted
-   structural facade; the next candidates are boundary maps of pointed maps and
-   loop-fiber/fiber-of-fiber equivalences.
-
-3. Write short literate prose above the final structural theorems explaining
+2. Write short literate prose above the final structural theorems explaining
    the relationship with the HoTT Book LES proof and the Coq-HoTT
    `connect_fiberseq` decomposition. The code already contains the pieces, but
    a reviewer should not have to infer the proof architecture from transport
    lemmas.
 
-4. Only after the group-level LES package is clean, consider adding the `pi_0`
+3. Only after the group-level LES package is clean, consider adding the `pi_0`
    tail and abelian refinements. These are important for completeness but not
    the next blocker for the current local theorem stack.
 
@@ -508,6 +503,47 @@ homomorphism in both boundary slots. The checked commands were:
 All five checks passed. The signed transport is now hidden inside the
 canonical fibration-boundary exactness proof rather than exposed as public LES
 data.
+
+Later on 2026-06-26, the first two API-cleanup tasks were completed as checked
+code. The module
+`synthetic-homotopy-theory.connecting-fiber-sequences` is no longer a facade
+over `long-exact-sequence-homotopy-groups`: it defines the connecting map of a
+pointed map, proves the pointed fiber sequence
+
+```text
+Omega E ->* Omega B ->* fiber g
+```
+
+and transports it across a packaged fiber sequence to prove
+
+```text
+Omega E ->* Omega B ->* F.
+```
+
+The long exact sequence module now imports this structural module. Its
+`boundary-fiber-Pointed-Type` and `boundary-pointed-map-fiber-sequence` names
+are compatibility names for the connecting maps, and the generic
+`fiber-sequence-boundary-map-Ω-direct-Pointed-Type` package is an alias of the
+structural connecting fiber sequence. The older packaged direct proof package
+remains in the LES file because later comparison lemmas use its exact proof
+components; it is now documented as compatibility infrastructure rather than
+the reviewer-facing construction.
+
+The checked commands were:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/connecting-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+```
+
+All seven checks passed. The touched-file scan found no holes, postulates,
+unsafe termination pragmas, rewrite-rule dependency, or unsolved-meta options,
+and `git diff --check` passed.
 
 At the time this handoff was written, Agda MCP tools were visible to the agent,
 but `./check.sh <file>` remains the acceptance criterion. This file is a status

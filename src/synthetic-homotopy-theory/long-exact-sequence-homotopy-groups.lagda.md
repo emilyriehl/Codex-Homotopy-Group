@@ -42,6 +42,7 @@ open import structured-types.pointed-maps
 open import structured-types.pointed-types
 open import structured-types.whiskering-pointed-homotopies-composition
 
+open import synthetic-homotopy-theory.connecting-fiber-sequences
 open import synthetic-homotopy-theory.functoriality-homotopy-groups
 open import synthetic-homotopy-theory.functoriality-iterated-loop-spaces
 open import synthetic-homotopy-theory.functoriality-loop-spaces
@@ -71,6 +72,12 @@ to state the long exact sequence is the family of boundary homomorphisms
 In the indexing convention of
 [homotopy groups](synthetic-homotopy-theory.homotopy-groups.md),
 `concrete-homotopy-group n` denotes `π(n+1)`.
+
+The public group-level boundary convention is the canonical iterated boundary
+homomorphism. The shifted sequence `Ω E →∗ Ω B →∗ F` is provided structurally by
+the connecting fiber sequence module; names in this file containing `direct` or
+the older boundary-map terminology are compatibility adapters used by the LES
+proof.
 
 ## Definitions
 
@@ -253,7 +260,12 @@ module _
 
 ```
 
-### The boundary pointed map of a pointed map
+### Compatibility name for the connecting map of a pointed map
+
+The structural construction lives in
+[`connecting-fiber-sequences`](synthetic-homotopy-theory.connecting-fiber-sequences.md).
+The following name is retained as boundary-map terminology for the long exact
+sequence.
 
 ```agda
 module _
@@ -262,10 +274,8 @@ module _
   where
 
   boundary-fiber-Pointed-Type : Ω B →∗ fiber-Pointed-Type g
-  pr1 boundary-fiber-Pointed-Type p =
-    ( point-Pointed-Type E , preserves-point-pointed-map g ∙ p)
-  pr2 boundary-fiber-Pointed-Type =
-    eq-pair-Σ refl right-unit
+  boundary-fiber-Pointed-Type =
+    connecting-map-Pointed-Type g
 
   eq-ap-map-Ω-Pointed-Type :
     (p : type-Ω E) →
@@ -1052,25 +1062,13 @@ module _
     is-fiber-sequence-Pointed-Type
       ( pointed-map-Ω g)
       ( boundary-fiber-Pointed-Type g)
-  pr1 (is-fiber-sequence-boundary-map-Ω-direct-Pointed-Type g) =
-    pointed-equiv-fiber-boundary-map-Ω-direct-Pointed-Type g
-  pr2 (is-fiber-sequence-boundary-map-Ω-direct-Pointed-Type g) =
-    pointed-htpy-inclusion-fiber-boundary-map-Ω-direct-Pointed-Type g
+  is-fiber-sequence-boundary-map-Ω-direct-Pointed-Type =
+    is-fiber-sequence-connecting-map-Pointed-Type
 
   fiber-sequence-boundary-map-Ω-direct-Pointed-Type :
     (g : E →∗ B) → fiber-sequence-Pointed-Type l1 l2 (l1 ⊔ l2)
-  pr1 (fiber-sequence-boundary-map-Ω-direct-Pointed-Type g) =
-    Ω E
-  pr1 (pr2 (fiber-sequence-boundary-map-Ω-direct-Pointed-Type g)) =
-    Ω B
-  pr1 (pr2 (pr2 (fiber-sequence-boundary-map-Ω-direct-Pointed-Type g))) =
-    fiber-Pointed-Type g
-  pr1 (pr2 (pr2 (pr2 (fiber-sequence-boundary-map-Ω-direct-Pointed-Type g)))) =
-    pointed-map-Ω g
-  pr1 (pr2 (pr2 (pr2 (pr2 (fiber-sequence-boundary-map-Ω-direct-Pointed-Type g))))) =
-    boundary-fiber-Pointed-Type g
-  pr2 (pr2 (pr2 (pr2 (pr2 (fiber-sequence-boundary-map-Ω-direct-Pointed-Type g))))) =
-    is-fiber-sequence-boundary-map-Ω-direct-Pointed-Type g
+  fiber-sequence-boundary-map-Ω-direct-Pointed-Type =
+    fiber-sequence-connecting-map-Pointed-Type
 
 ```
 
@@ -1446,16 +1444,16 @@ module _
     pointed-htpy-iterated-loop-fiber-inclusion-fiber-sequence n
 ```
 
-### The boundary map of a fiber sequence
+### Compatibility name for the connecting map of a fiber sequence
+
+The packaged boundary map is the connecting map of the packaged fiber sequence.
+The `boundary` name is retained for the homotopy-group LES API.
 
 ```agda
   boundary-pointed-map-fiber-sequence : Ω (base-fiber-sequence-Pointed-Type S) →∗
     fiber-fiber-sequence-Pointed-Type S
   boundary-pointed-map-fiber-sequence =
-    pointed-map-inv-pointed-equiv
-      ( pointed-equiv-fiber-fiber-sequence-Pointed-Type S) ∘∗
-    boundary-fiber-Pointed-Type
-      ( fibration-fiber-sequence-Pointed-Type S)
+    connecting-map-fiber-sequence-Pointed-Type S
 
   pointed-map-iterated-boundary-fiber-sequence :
     (n : ℕ) →

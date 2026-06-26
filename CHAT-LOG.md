@@ -5771,3 +5771,59 @@ All six Agda checks passed.
 Related commit:
 
 - This commit - Extract connecting fiber sequence API.
+
+### Complete boundary and connecting-sequence API cleanup
+
+Request: Emily asked Codex to focus on fully completing tasks 1 and 2: make the
+boundary API reviewer-friendly and extract the structural `connect_fiberseq`
+analogue as library-quality code.
+
+Model context:
+
+- Date: 2026-06-26.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible; this session used `./check.sh` as the proof
+  acceptance gate.
+
+Actions:
+
+- Replaced the `connecting-fiber-sequences` facade with a standalone structural
+  module. It now defines the connecting map of a pointed map, proves the
+  pointed fiber sequence `Omega E ->* Omega B ->* fiber g`, compares the fiber
+  of the raw connecting map with the fiber of the packaged connecting map, and
+  packages `Omega E ->* Omega B ->* F`.
+- Updated `long-exact-sequence-homotopy-groups` so
+  `boundary-fiber-Pointed-Type` and `boundary-pointed-map-fiber-sequence` are
+  compatibility names for the structural connecting maps. The generic
+  `fiber-sequence-boundary-map-Ω-direct-Pointed-Type` package is now an alias
+  of `fiber-sequence-connecting-map-Pointed-Type`.
+- Left the older packaged direct proof package in place where downstream
+  comparison lemmas depend on its proof components, documenting it as
+  compatibility infrastructure rather than the public construction.
+- Updated the set-truncated exactness prose, `LES-STATUS.md`, and
+  `STATUS-REPORT.md` to record that the first two cleanup tasks are checked and
+  to clarify the remaining legacy adapter boundary.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/connecting-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+rg -n "\{!!\}|\?\}|postulate|TERMINATING|REWRITE|--allow-unsolved-metas" src/synthetic-homotopy-theory/connecting-fiber-sequences.lagda.md src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+git diff --check
+```
+
+All seven Agda checks passed. The touched-file scan found no holes,
+postulates, unsafe termination pragmas, rewrite-rule dependency, or
+unsolved-meta options, and `git diff --check` passed.
+
+Related commit:
+
+- This commit - Complete LES connecting API cleanup.

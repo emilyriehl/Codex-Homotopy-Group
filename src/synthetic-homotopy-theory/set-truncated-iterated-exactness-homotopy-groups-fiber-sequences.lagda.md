@@ -87,12 +87,12 @@ are exact after set truncation. The second checked target says that the maps
 are exact after set truncation when the final map is the canonical shifted
 boundary map of the iterated loop fiber sequence. The recursive looped
 boundary map is retained separately because it is the map classifying the
-concrete homotopy-group homomorphism. The direct shifted connecting fiber
-sequence gives checked recursive exactness for all iterates in its natural
-`Ω^n(Ω X)` indexing; its first two instances reduce definitionally to the
-public shifted indexing needed for the Hopf `π₃(S²)` computation. The fully
-arbitrary-index public theorem still needs a functorial reassociation comparison
-between `Ω^n(Ω X)` and `Ω^(n+1) X`, including the induced maps.
+concrete homotopy-group homomorphism. The shifted connecting fiber sequence is
+provided structurally by
+[`connecting-fiber-sequences`](synthetic-homotopy-theory.connecting-fiber-sequences.md);
+the older `direct` names below are compatibility aliases for that structural
+route. Reassociation identifies the natural `Ω^n(Ω X)` indexing with the public
+shifted `Ω^(n+1) X` indexing.
 
 ## Definitions
 

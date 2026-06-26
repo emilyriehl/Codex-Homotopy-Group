@@ -288,8 +288,8 @@ available in `diagonal-homotopy-groups-spheres`.
 | Exactness of group homomorphisms | [`src/group-theory/exact-sequences-groups.lagda.md`](src/group-theory/exact-sequences-groups.lagda.md) | Defines `is-exact-hom-Group` and proves `is-exact-is-fiber-sequence-hom-Concrete-Group`, the forward implication from a fiber sequence of concrete-group classifying maps to exactness of the induced ordinary group homomorphisms. |
 | Pointed sets | [`src/structured-types/pointed-sets.lagda.md`](src/structured-types/pointed-sets.lagda.md) | Defines pointed sets, pointed maps of pointed sets, set truncation as a pointed set and as a pointed map, and transport of `hom-trunc-Pointed-Set` along identified source and target pointed types. |
 | Exactness of pointed sets | [`src/structured-types/exact-sequences-pointed-sets.lagda.md`](src/structured-types/exact-sequences-pointed-sets.lagda.md) | Defines images, kernels, exactness of pointed-set maps, derives the mere-preimage/fiber form of image membership and exactness, proves transport across identified pointed-set triples and maps, pointwise replacement of the second map, image-equivalent replacement of the first map, compatible middle self-map shifts of the second map, and injective comparison of the middle pointed set, and proves that the set truncation of the canonical fiber sequence `fiber g -> E -> B` is exact. |
-| Boundary maps and LES exactness steps | [`src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md) | Defines the boundary pointed map, induced maps on homotopy groups of a fiber sequence, recursive boundary pointed maps, and boundary homomorphisms. It proves the first fiber-of-the-fiber identification, packages `Ω B ->* fiber g ->* E` as a pointed fiber sequence, proves pointed-set exactness for canonical and packaged `F ->* E ->* B` fiber sequences, proves pointed-set exactness for the packaged boundary segment `Ω B ->* F ->* E`, proves pointed-set exactness for the packaged loop-boundary segment `Ω E ->* Ω B ->* F`, proves pointed-set exactness for the looped packaged segment `Ω F ->* Ω E ->* Ω B`, proves pointed-set exactness for the canonical adjacent triples `Ω B ->* fiber g ->* E`, `Ω E ->* Ω B ->* fiber g`, and `Ω² B ->* Ω (fiber g) ->* Ω E`, transports the last canonical theorem to the packaged looped boundary/fiber-inclusion segment `Ω² B ->* Ω F ->* Ω E`, and bundles the first four packaged exactness proofs as an initial set-truncated LES segment. These are steps toward, not yet the full proof of, Theorem 8.4.6 of the HoTT book. |
-| Connecting fiber sequences | [`src/synthetic-homotopy-theory/connecting-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/connecting-fiber-sequences.lagda.md) | Provides library-facing names for the checked `connect_fiberseq`-style shifted fiber sequences. For a pointed map `g : E ->* B`, it exposes `connecting-map-Pointed-Type` and `fiber-sequence-connecting-map-Pointed-Type`, packaging `Ω E ->* Ω B ->* fiber g`. For a packaged fiber sequence `F ->* E ->* B`, it exposes `connecting-map-fiber-sequence-Pointed-Type` and `fiber-sequence-connecting-map-fiber-sequence-Pointed-Type`, packaging `Ω E ->* Ω B ->* F`. |
+| Boundary maps and LES exactness steps | [`src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md) | Defines the LES boundary compatibility names, induced maps on homotopy groups of a fiber sequence, recursive boundary pointed maps, and boundary homomorphisms. It proves the first fiber-of-the-fiber identification, packages `Ω B ->* fiber g ->* E` as a pointed fiber sequence, proves pointed-set exactness for canonical and packaged `F ->* E ->* B` fiber sequences, proves pointed-set exactness for the packaged boundary segment `Ω B ->* F ->* E`, proves pointed-set exactness for the packaged loop-boundary segment `Ω E ->* Ω B ->* F`, proves pointed-set exactness for the looped packaged segment `Ω F ->* Ω E ->* Ω B`, proves pointed-set exactness for the canonical adjacent triples `Ω B ->* fiber g ->* E`, `Ω E ->* Ω B ->* fiber g`, and `Ω² B ->* Ω (fiber g) ->* Ω E`, transports the last canonical theorem to the packaged looped boundary/fiber-inclusion segment `Ω² B ->* Ω F ->* Ω E`, and bundles the first four packaged exactness proofs as an initial set-truncated LES segment. These are steps toward, not yet the full proof of, Theorem 8.4.6 of the HoTT book. |
+| Connecting fiber sequences | [`src/synthetic-homotopy-theory/connecting-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/connecting-fiber-sequences.lagda.md) | Standalone structural `connect_fiberseq` module. For a pointed map `g : E ->* B`, it defines `connecting-map-Pointed-Type` and proves `fiber-sequence-connecting-map-Pointed-Type`, packaging `Ω E ->* Ω B ->* fiber g`. For a packaged fiber sequence `F ->* E ->* B`, it compares the canonical fiber with the chosen fiber and proves `fiber-sequence-connecting-map-fiber-sequence-Pointed-Type`, packaging `Ω E ->* Ω B ->* F`. |
 | Higher homotopy groups of 1-types | [`src/synthetic-homotopy-theory/higher-homotopy-groups-truncated-types.lagda.md`](src/synthetic-homotopy-theory/higher-homotopy-groups-truncated-types.lagda.md) | Proves that positive concrete homotopy groups of pointed 1-types are trivial. |
 | Circle and 1-sphere homotopy facts | [`src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md`](src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md) | Proves the loop-space equivalences for the circle and 1-sphere, the 1-type facts, triviality of their positive concrete homotopy groups, and ordinary group-level triviality wrappers for those positive concrete homotopy groups. |
 | Circle and 1-sphere H-space structures | [`src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md`](src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md) | Packages the existing circle multiplication as a coherent `𝕊¹-H-Space`, transports it across the circle--1-sphere equivalence, packages the transported multiplication as `sphere-1-H-Space`, proves that left and right translations on both the circle and 1-sphere are equivalences, and proves the Hopf shear equivalence on `S¹ × S¹`. |
@@ -2150,3 +2150,40 @@ Verification:
 ```
 
 All four Agda checks passed.
+
+Later on 2026-06-26, the LES boundary and connecting-sequence API cleanup was
+completed for the first two recommended tasks. The extracted module
+
+```text
+src/synthetic-homotopy-theory/connecting-fiber-sequences.lagda.md
+```
+
+now contains the actual `connect_fiberseq`-style proof rather than aliases back
+to the long exact sequence file. It defines the connecting map of a pointed map,
+proves `Omega E ->* Omega B ->* fiber g` as a pointed fiber sequence, compares
+the canonical fiber with the chosen fiber of a packaged fiber sequence, and
+packages `Omega E ->* Omega B ->* F`.
+
+The long exact sequence file now imports that structural module. Its boundary
+map names are compatibility names for the structural connecting maps, and the
+generic direct shifted fiber-sequence package is an alias of the connecting
+fiber sequence. The packaged legacy direct proof package is intentionally still
+present because later comparison lemmas depend on its proof components; it is
+no longer the public construction used by the set-truncated or group-level LES
+route.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/connecting-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+```
+
+All seven Agda checks passed. A touched-file scan found no holes, postulates,
+unsafe termination pragmas, rewrite-rule dependency, or unsolved-meta options,
+and `git diff --check` passed.
