@@ -109,6 +109,11 @@ contains the main structural and low-level LES work. It formalizes:
 - canonical boundary homomorphisms for pointed maps and for iterated packaged
   fiber sequences, including
   `canonical-boundary-hom-concrete-homotopy-group-fiber-sequence`
+- separate pointed-map names for the two canonical boundary roles:
+  `canonical-pointed-map-iterated-loop-boundary-fiber-sequence` for the fresh
+  shifted fibration-boundary map and
+  `loop-canonical-pointed-map-iterated-boundary-fiber-sequence` for the loop of
+  the canonical iterated boundary
 - `iterated-loop-fiber-sequence`
 - set-truncated exactness for the initial adjacent triples
   `F -> E -> B`, `Omega B -> F -> E`, `Omega E -> Omega B -> F`,
@@ -208,9 +213,6 @@ calculation:
 - `is-exact-hom-canonical-boundary-fiber-inclusion-concrete-homotopy-group-fiber-sequence`
   gives all-index boundary/fiber-inclusion exactness for the canonical
   boundary map of the corresponding iterated fiber sequence.
-- `is-exact-hom-canonical-fibration-boundary-concrete-homotopy-group-fiber-sequence-first-loop-signed`
-  gives the first-loop fibration-boundary exactness statement for the canonical
-  boundary homomorphism, obtained from the checked signed set-level transport.
 - `Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence` packages the three
   repeating group-level exactness positions into a single checked record, and
   `long-exact-sequence-homotopy-groups-fiber-sequence` instantiates it for any
@@ -224,9 +226,10 @@ checked raw computation
 `eq-map-loop-fiber-map-Ω-boundary-fiber-Pointed-Type` and its set-truncated
 first-loop consequence show that `ap inv` appears on double loops. Thus the
 old unsigned coherence square is not the correct next theorem under the
-current definitions. The first-loop signed adapter is now checked at both
-set-truncated and group-exactness levels, but it is not yet systematic for all
-iterates. The new group-level package is therefore still a checked
+current definitions. The first-loop signed adapter is now checked as an
+internal compatibility calculation, but it is not part of the public package
+shape and is not yet systematic for all iterates. The new group-level package
+is therefore still a checked
 mixed-boundary package: the fibration-boundary position uses the recursive
 direct boundary homomorphism, and the boundary/fiber-inclusion position uses the
 canonical iterated boundary homomorphism. A polished LES package should either
@@ -452,7 +455,7 @@ exactness file now includes
 iterated exactness file uses the pointed equivalence induced by loop inversion
 to prove
 `is-exact-set-truncation-loop-canonical-iterated-boundary-fiber-sequence-first-loop-signed`;
-and the group-level exactness file exposes
+and the group-level exactness file internally checks
 `is-exact-hom-canonical-fibration-boundary-concrete-homotopy-group-fiber-sequence-first-loop-signed`.
 The checked commands were:
 
@@ -466,6 +469,34 @@ The checked commands were:
 All four checks passed. This is real progress on the signed adapter layer, but
 it is still the first-loop case rather than the final all-index canonical
 group-level LES package.
+
+Later on 2026-06-26, the boundary API was refactored toward the canonical
+public route. `long-exact-sequence-homotopy-groups` now names the fresh shifted
+canonical boundary map and the loop of the canonical iterated boundary map as
+separate pointed maps:
+
+```text
+canonical-pointed-map-iterated-loop-boundary-fiber-sequence
+loop-canonical-pointed-map-iterated-boundary-fiber-sequence
+```
+
+The set-truncated canonical LES package now defines its two boundary fields
+through these names, making the fresh-connecting-map convention explicit. The
+first-loop signed group-level consequence was moved into a private block so it
+remains a checked compatibility calculation rather than a public LES theorem.
+The checked commands were:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+```
+
+All three checks passed. The next library-quality target is not another
+first-loop signed corollary; it is a group-facing treatment of the fresh
+canonical shifted boundary, either by proving that the corresponding
+set-truncated boundary maps preserve homotopy-group multiplication or by
+introducing the right delooped public boundary convention.
 
 At the time this handoff was written, Agda MCP tools were visible to the agent,
 but `./check.sh <file>` remains the acceptance criterion. This file is a status

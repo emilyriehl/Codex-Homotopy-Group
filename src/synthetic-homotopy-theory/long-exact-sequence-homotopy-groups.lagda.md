@@ -1518,6 +1518,38 @@ module _
         ( n)
         ( fibration-fiber-sequence-Pointed-Type S))
 
+  canonical-pointed-map-iterated-loop-boundary-fiber-sequence :
+    (n : ℕ) →
+    Ω
+      ( iterated-loop-space
+        ( succ-ℕ n)
+        ( base-fiber-sequence-Pointed-Type S)) →∗
+    Ω
+      ( iterated-loop-space
+        ( n)
+        ( fiber-fiber-sequence-Pointed-Type S))
+  canonical-pointed-map-iterated-loop-boundary-fiber-sequence n =
+    pointed-map-inv-pointed-equiv
+      ( pointed-equiv-fiber-fiber-sequence-Pointed-Type
+        ( iterated-loop-fiber-sequence (succ-ℕ n))) ∘∗
+    boundary-fiber-Pointed-Type
+      ( fibration-fiber-sequence-Pointed-Type
+        ( iterated-loop-fiber-sequence (succ-ℕ n)))
+
+  loop-canonical-pointed-map-iterated-boundary-fiber-sequence :
+    (n : ℕ) →
+    Ω
+      ( iterated-loop-space
+        ( succ-ℕ n)
+        ( base-fiber-sequence-Pointed-Type S)) →∗
+    Ω
+      ( iterated-loop-space
+        ( n)
+        ( fiber-fiber-sequence-Pointed-Type S))
+  loop-canonical-pointed-map-iterated-boundary-fiber-sequence n =
+    pointed-map-Ω
+      ( canonical-pointed-map-iterated-boundary-fiber-sequence n)
+
   equiv-fiber-canonical-boundary-boundary-fiber-sequence-Pointed-Type :
     type-Pointed-Type
       ( fiber-Pointed-Type

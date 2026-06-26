@@ -172,8 +172,8 @@ module _
             ( n)
             ( fiber-fiber-sequence-Pointed-Type S))))
   hom-trunc-canonical-iterated-loop-boundary-fiber-sequence n =
-    hom-trunc-boundary-fiber-sequence-Pointed-Type
-      ( iterated-loop-fiber-sequence S (succ-ℕ n))
+    hom-trunc-Pointed-Set
+      ( canonical-pointed-map-iterated-loop-boundary-fiber-sequence S n)
 
   hom-trunc-loop-canonical-iterated-boundary-fiber-sequence :
     (n : ℕ) →
@@ -190,8 +190,7 @@ module _
             ( fiber-fiber-sequence-Pointed-Type S))))
   hom-trunc-loop-canonical-iterated-boundary-fiber-sequence n =
     hom-trunc-Pointed-Set
-      ( pointed-map-Ω
-        ( canonical-pointed-map-iterated-boundary-fiber-sequence S n))
+      ( loop-canonical-pointed-map-iterated-boundary-fiber-sequence S n)
 
   pointed-equiv-ap-inv-Ω-base-fiber-sequence :
     Ω (Ω (base-fiber-sequence-Pointed-Type S)) ≃∗

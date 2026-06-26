@@ -471,47 +471,49 @@ module _
     is-exact-hom-fibration-boundary-concrete-homotopy-group-fiber-sequence-direct
       ( 1)
 
-  is-exact-hom-canonical-fibration-boundary-concrete-homotopy-group-fiber-sequence-first-loop-signed :
-    is-exact-hom-Group
-      ( group-Concrete-Group
-        ( concrete-homotopy-group
+  private
+
+    is-exact-hom-canonical-fibration-boundary-concrete-homotopy-group-fiber-sequence-first-loop-signed :
+      is-exact-hom-Group
+        ( group-Concrete-Group
+          ( concrete-homotopy-group
+            ( 1)
+            ( total-space-fiber-sequence-Pointed-Type S)))
+        ( group-Concrete-Group
+          ( concrete-homotopy-group
+            ( 1)
+            ( base-fiber-sequence-Pointed-Type S)))
+        ( group-Concrete-Group
+          ( concrete-homotopy-group
+            ( 0)
+            ( fiber-fiber-sequence-Pointed-Type S)))
+        ( hom-group-hom-Concrete-Group
+          ( concrete-homotopy-group
+            ( 1)
+            ( total-space-fiber-sequence-Pointed-Type S))
+          ( concrete-homotopy-group
+            ( 1)
+            ( base-fiber-sequence-Pointed-Type S))
+          ( hom-fibration-concrete-homotopy-group-fiber-sequence S 1))
+        ( hom-group-hom-Concrete-Group
+          ( concrete-homotopy-group
+            ( 1)
+            ( base-fiber-sequence-Pointed-Type S))
+          ( concrete-homotopy-group
+            ( 0)
+            ( fiber-fiber-sequence-Pointed-Type S))
+          ( canonical-boundary-hom-concrete-homotopy-group-fiber-sequence S 0))
+    is-exact-hom-canonical-fibration-boundary-concrete-homotopy-group-fiber-sequence-first-loop-signed =
+      is-exact-hom-Group-is-exact-loop-truncation-hom-Pointed-Type
+        ( Ω (total-space-fiber-sequence-Pointed-Type S))
+        ( Ω (base-fiber-sequence-Pointed-Type S))
+        ( fiber-fiber-sequence-Pointed-Type S)
+        ( pointed-map-iterated-loop-space
           ( 1)
-          ( total-space-fiber-sequence-Pointed-Type S)))
-      ( group-Concrete-Group
-        ( concrete-homotopy-group
-          ( 1)
-          ( base-fiber-sequence-Pointed-Type S)))
-      ( group-Concrete-Group
-        ( concrete-homotopy-group
-          ( 0)
-          ( fiber-fiber-sequence-Pointed-Type S)))
-      ( hom-group-hom-Concrete-Group
-        ( concrete-homotopy-group
-          ( 1)
-          ( total-space-fiber-sequence-Pointed-Type S))
-        ( concrete-homotopy-group
-          ( 1)
-          ( base-fiber-sequence-Pointed-Type S))
-        ( hom-fibration-concrete-homotopy-group-fiber-sequence S 1))
-      ( hom-group-hom-Concrete-Group
-        ( concrete-homotopy-group
-          ( 1)
-          ( base-fiber-sequence-Pointed-Type S))
-        ( concrete-homotopy-group
-          ( 0)
-          ( fiber-fiber-sequence-Pointed-Type S))
-        ( canonical-boundary-hom-concrete-homotopy-group-fiber-sequence S 0))
-  is-exact-hom-canonical-fibration-boundary-concrete-homotopy-group-fiber-sequence-first-loop-signed =
-    is-exact-hom-Group-is-exact-loop-truncation-hom-Pointed-Type
-      ( Ω (total-space-fiber-sequence-Pointed-Type S))
-      ( Ω (base-fiber-sequence-Pointed-Type S))
-      ( fiber-fiber-sequence-Pointed-Type S)
-      ( pointed-map-iterated-loop-space
-        ( 1)
-        ( fibration-fiber-sequence-Pointed-Type S))
-      ( canonical-pointed-map-iterated-boundary-fiber-sequence S 0)
-      ( is-exact-set-truncation-loop-canonical-iterated-boundary-fiber-sequence-first-loop-signed
-        ( S))
+          ( fibration-fiber-sequence-Pointed-Type S))
+        ( canonical-pointed-map-iterated-boundary-fiber-sequence S 0)
+        ( is-exact-set-truncation-loop-canonical-iterated-boundary-fiber-sequence-first-loop-signed
+          ( S))
 
   long-exact-sequence-homotopy-groups-fiber-sequence :
     Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence

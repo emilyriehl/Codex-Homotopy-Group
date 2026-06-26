@@ -5619,3 +5619,52 @@ All four Agda checks passed.
 Related commit:
 
 - This commit - Transport signed LES exactness.
+
+### Refactor canonical LES boundary API
+
+Request: Emily asked Codex to continue toward the final library-quality LES
+route, keeping signed transports hidden and avoiding narrow progress that does
+not serve the canonical public theorem.
+
+Model context:
+
+- Date: 2026-06-26.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible, but this session used `./check.sh` as the proof
+  acceptance gate.
+
+Actions:
+
+- Added the pointed-map names
+  `canonical-pointed-map-iterated-loop-boundary-fiber-sequence` and
+  `loop-canonical-pointed-map-iterated-boundary-fiber-sequence` to
+  `long-exact-sequence-homotopy-groups`.
+- Rewired
+  `hom-trunc-canonical-iterated-loop-boundary-fiber-sequence` and
+  `hom-trunc-loop-canonical-iterated-boundary-fiber-sequence` to use these
+  named pointed maps, making the canonical set-truncated package expose the
+  fresh shifted boundary convention explicitly.
+- Moved the first-loop signed group-level consequence into a private block in
+  `exactness-homotopy-groups-fiber-sequences`, so it remains checked
+  compatibility code but no longer appears as part of the public LES API.
+- Updated `LES-STATUS.md` and `STATUS-REPORT.md` to identify the next
+  library-quality blocker: a group-facing treatment of the fresh canonical
+  shifted boundary, either by proving multiplication preservation for the
+  set-truncated boundary maps or by introducing the right delooped public
+  boundary convention.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+```
+
+All three Agda checks passed.
+
+Related commit:
+
+- This commit - Refactor canonical LES boundary API.
