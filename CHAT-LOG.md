@@ -6344,3 +6344,41 @@ and `git diff --check` passed.
 Related commit:
 
 - This commit - Split set-truncated iterated exactness compatibility routes.
+
+### Update forward-looking LES handoff steps
+
+Request: Emily asked Codex to update the recommended next steps in
+`LES-STATUS.md` so they reflect the current checked split architecture and are
+clear for handoff to another agent pursuing library-quality LES code.
+
+Model context:
+
+- Date: 2026-06-26.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible; this session changed documentation only and did
+  not need an Agda proof check.
+
+Actions:
+
+- Updated `LES-STATUS.md` to stop listing completed exactness-provider splits
+  as future work.
+- Reframed the remaining work around the library-quality public LES surface:
+  natural LES projections, boundary convention documentation, structural
+  `connect_fiberseq` proof narrative, upstream naming/prose, then `pi_0` tail
+  and abelian refinements.
+- Added an explicit handoff note telling the next agent not to re-split
+  exactness providers unless a concrete API issue requires it.
+
+Verification:
+
+```sh
+git diff --check
+```
+
+The documentation diff check passed.
+
+Related commit:
+
+- This commit - Update LES handoff next steps.

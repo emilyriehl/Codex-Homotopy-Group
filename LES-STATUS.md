@@ -496,7 +496,7 @@ clear theorem names explaining:
 - how looping/reindexing changes the displayed boundary map;
 - whether the comparison is definitional, by pointed homotopy, or by transport.
 
-### The Remaining Exactness Packages Need To Be Split
+### The Proof Modules Are Split, But Need A Public API Pass
 
 `long-exact-sequence-homotopy-groups.lagda.md` is now only a thin coordination
 module. Completed splits include:
@@ -508,19 +508,18 @@ module. Completed splits include:
 - iterated loop fiber sequences;
 - recursive and canonical iterated boundary maps;
 - homomorphisms induced on concrete homotopy groups by fiber sequences;
+- iterated set-truncated maps, canonical exactness, direct exactness,
+  recursive exactness, and signed boundary comparisons;
+- generic and fiber-sequence-specific pointed-set-to-group exactness bridges;
+- canonical, direct, and recursive group-level exactness theorem providers;
 - the set-truncated canonical LES package;
 - the group-level LES package.
 
-A plausible remaining upstream split would be:
-
-- the transport-heavy support lemmas inside iterated exactness of the homotopy
-  LES;
-- the signed boundary comparison support layer;
-- the group-level exactness support wrappers below the final package.
-
-This split matters for maintainability, discoverability, and review. The
-current exactness files still contain many adapters and transport theorems
-beside the public exactness statements.
+The main remaining issue is no longer file size or ownership of the old
+compatibility layers. The issue is the reviewer-facing API. The exactness
+providers are organized enough to build on, but the public package should expose
+a natural LES surface, hide transport and sign adapters, and explain which
+boundary convention it has chosen.
 
 ### The `pi_0` Tail Is Not Packaged
 
@@ -550,24 +549,74 @@ construction rather than the route by which the blocker was cleared.
 
 ## Recommended Next Steps
 
-1. Continue cleaning the remaining group-level compatibility statement layer
-   into reviewer-facing modules. The main LES file, final package modules,
-   iterated set-truncated map layer, canonical set-truncated exactness layer,
-   signed boundary comparison layer, generic group bridge,
-   fiber-sequence-specific group bridge, and canonical group exactness layer
-   are now split. The next candidate is the direct/recursive/trivial
-   compatibility theorem layer still in
-   `exactness-homotopy-groups-fiber-sequences`.
+1. Build the reviewer-facing natural LES surface.
 
-2. Write short literate prose above the final structural theorems explaining
-   the relationship with the HoTT Book LES proof and the Coq-HoTT
-   `connect_fiberseq` decomposition. The code already contains the pieces, but
-   a reviewer should not have to infer the proof architecture from transport
-   lemmas.
+   Start in
+   `src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md`
+   and
+   `src/synthetic-homotopy-theory/set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md`.
+   Add names and projections that read like the standard statement
 
-3. Only after the group-level LES package is clean, consider adding the `pi_0`
-   tail and abelian refinements. These are important for completeness but not
-   the next blocker for the current local theorem stack.
+   ```text
+   ... -> pi_(n+1)(B) -> pi_n(F) -> pi_n(E) -> pi_n(B) -> pi_(n-1)(F) -> ...
+   ```
+
+   The existing records already package the repeating exactness data; the task
+   is to expose that data in a form a library user can recognize without
+   reading the proof modules.
+
+2. Write the boundary-convention story into the public package prose.
+
+   The public group-level package currently uses the delooped canonical
+   boundary homomorphism and keeps the signed comparison inside the imported
+   exactness proof. Document this as the chosen convention. The prose should
+   also state how the fresh canonical shifted boundary, recursive boundary, and
+   direct connecting-map boundary relate, pointing to the provider modules:
+
+   - `set-truncated-canonical-iterated-exactness-homotopy-groups-fiber-sequences`;
+   - `set-truncated-direct-iterated-exactness-homotopy-groups-fiber-sequences`;
+   - `set-truncated-recursive-iterated-exactness-homotopy-groups-fiber-sequences`;
+   - `signed-boundary-comparisons-fiber-sequences`;
+   - `canonical-exactness-homotopy-groups-fiber-sequences`;
+   - `direct-exactness-homotopy-groups-fiber-sequences`;
+   - `recursive-exactness-homotopy-groups-fiber-sequences`.
+
+   Do not expose the signed transport as the main public theorem.
+
+3. Recast the proof narrative around structural connecting fiber sequences.
+
+   The code has the Coq-HoTT-style `connect_fiberseq` ingredient in
+   `connecting-fiber-sequences` and the direct set-truncated exactness provider.
+   The next library-quality pass should make the public explanation say:
+
+   - first build the shifted connecting fiber sequence
+     `Omega E -> Omega B -> F`;
+   - iterate it;
+   - derive set-truncated exactness;
+   - then transport to concrete homotopy-group exactness.
+
+   Image/kernel and signed transport lemmas should be documented as internal
+   adapters needed to compare boundary conventions, not as the headline proof.
+
+4. Do an upstream-readiness naming and prose pass.
+
+   Remove or de-emphasize names whose main purpose was local Hopf progress,
+   such as low-dimensional convenience aliases, from the public narrative.
+   Keep compatibility names available if downstream files use them, but make
+   the stable names describe the mathematical construction. Add short
+   `## Idea` prose and cross-links in the public package files so a reviewer
+   can navigate the modules without reconstructing the development history.
+
+5. After the public group-level LES API is stable, extend completeness.
+
+   Add the low-dimensional pointed-set `pi_0` tail and then consider the
+   abelian-group refinement for higher homotopy groups. These are real gaps for
+   a complete library-quality LES theorem, but they should come after the
+   current group-level LES surface and boundary convention are settled.
+
+For handoff: the next agent should not spend time re-splitting the exactness
+providers unless a concrete API problem requires it. The main target is now the
+public LES theorem/package interface and its explanatory prose.
 
 ## Verification State
 
