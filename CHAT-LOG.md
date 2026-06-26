@@ -5668,3 +5668,56 @@ All three Agda checks passed.
 Related commit:
 
 - This commit - Refactor canonical LES boundary API.
+
+### Complete canonical group-level LES boundary exactness
+
+Request: Emily asked Codex to continue work toward the final library-quality
+LES route, keeping signed transports hidden and avoiding narrow progress that
+does not serve the canonical public theorem.
+
+Model context:
+
+- Date: 2026-06-26.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible; this session used both an MCP type query and
+  `./check.sh` as the final proof acceptance gate.
+
+Actions:
+
+- Generalized the loop-inversion/sign adapter from the first-loop case to all
+  iterated loop levels on the fibration side.
+- Proved the all-index signed comparison
+  `coherence-square-canonical-iterated-boundary-fiber-sequence-signed` by
+  applying the checked first-loop comparison to
+  `iterated-loop-fiber-sequence S n`.
+- Proved
+  `is-exact-set-truncation-loop-canonical-iterated-boundary-fiber-sequence-signed`,
+  giving all-index set-truncated exactness for the looped canonical boundary
+  while keeping the signed inversion transport internal.
+- Added the group-level bridge
+  `is-exact-hom-Group-is-exact-set-truncation-loop-canonical-iterated-boundary-fiber-sequence`.
+- Switched `long-exact-sequence-homotopy-groups-fiber-sequence` to use
+  `canonical-boundary-hom-concrete-homotopy-group-fiber-sequence` in both
+  boundary slots, with fibration-boundary exactness supplied by the new
+  all-index canonical theorem.
+- Updated `LES-STATUS.md` and `STATUS-REPORT.md` to mark the canonical
+  group-level LES boundary objective as checked and to move remaining work to
+  upstream-quality API cleanup.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+```
+
+All five Agda checks passed.
+
+Related commit:
+
+- This commit - Complete canonical LES boundary exactness.
