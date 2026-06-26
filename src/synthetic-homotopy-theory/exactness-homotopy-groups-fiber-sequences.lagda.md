@@ -24,10 +24,12 @@ open import structured-types.pointed-sets
 
 open import synthetic-homotopy-theory.group-exactness-from-set-truncated-homotopy-group-exactness
 open import synthetic-homotopy-theory.homotopy-groups
+open import synthetic-homotopy-theory.homomorphisms-homotopy-groups-fiber-sequences
 open import synthetic-homotopy-theory.functoriality-iterated-loop-spaces
 open import synthetic-homotopy-theory.functoriality-loop-spaces
+open import synthetic-homotopy-theory.iterated-boundary-maps-fiber-sequences
+open import synthetic-homotopy-theory.iterated-loop-fiber-sequences
 open import synthetic-homotopy-theory.iterated-loop-spaces
-open import synthetic-homotopy-theory.long-exact-sequence-homotopy-groups
 open import synthetic-homotopy-theory.loop-spaces
 open import synthetic-homotopy-theory.set-truncated-exactness-homotopy-groups-fiber-sequences
 open import synthetic-homotopy-theory.set-truncated-iterated-exactness-homotopy-groups-fiber-sequences

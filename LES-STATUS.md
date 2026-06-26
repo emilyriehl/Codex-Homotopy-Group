@@ -90,33 +90,20 @@ be reformulated as a short fiber sequence of concrete-group classifying maps.
 The later group-level bridge correctly uses set-truncated exactness as the
 source of truth instead.
 
-### Boundary Maps And Initial LES Segments
+### Long Exact Sequence Coordination Module
 
 `src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md`
-now contains the definition-level LES maps and homomorphisms. It imports the
-standalone structural modules for the connecting fiber sequence, loop-fiber
-equivalence, first fiber-inclusion fiber sequence, boundary-map adapters, and
-set-truncated exactness packages. It formalizes:
+is now a thin coordination/documentation module. The definition-level LES maps,
+boundary maps, and homomorphisms have been split into standalone modules, and
+this file points readers to them:
 
-- compatibility prose pointing to the standalone boundary-map terminology
-- induced homomorphisms for a packaged fiber sequence:
-  `hom-fiber-inclusion-concrete-homotopy-group-fiber-sequence`,
-  `hom-fibration-concrete-homotopy-group-fiber-sequence`, and
-  `boundary-hom-concrete-homotopy-group-fiber-sequence`
-- canonical boundary homomorphisms for pointed maps and for iterated packaged
-  fiber sequences, including
-  `canonical-boundary-hom-concrete-homotopy-group-fiber-sequence`
-- separate pointed-map names for the two canonical boundary roles:
-  `canonical-pointed-map-iterated-loop-boundary-fiber-sequence` for the fresh
-  shifted fibration-boundary map and
-  `loop-canonical-pointed-map-iterated-boundary-fiber-sequence` for the loop of
-  the canonical iterated boundary
-- `iterated-loop-fiber-sequence`
+- `iterated-loop-fiber-sequences`
+- `iterated-boundary-maps-fiber-sequences`
+- `homomorphisms-homotopy-groups-fiber-sequences`
 
-This module is still a large LES definition scaffold, but it no longer owns the
-boundary-comparison adapters or the base set-truncated exactness proofs. The
-remaining upstream cleanup should focus on splitting the iterated boundary
-maps and homomorphism packages into smaller final-surface modules.
+The old large main-file organization has therefore been cleared as a blocker.
+Remaining library-quality cleanup should focus on the larger exactness
+packages and the final public long-exact-sequence surface.
 
 ### Connecting Fiber Sequences
 
@@ -133,8 +120,9 @@ gives library-facing names to the checked `connect_fiberseq`-style structures:
   `Omega E ->* Omega B ->* F`
 
 This module is now standalone structural code rather than a facade over
-`long-exact-sequence-homotopy-groups`. The long exact sequence file imports it
-and keeps older boundary-map terminology as compatibility aliases.
+`long-exact-sequence-homotopy-groups`. Later boundary-map terminology is now
+kept in dedicated boundary modules rather than in the long exact sequence
+coordination file.
 
 ### Loop Spaces Of Fibers
 
@@ -206,6 +194,53 @@ is the extracted base exactness module. It proves set-truncated exactness for:
 
 This file is still proof-heavy, but it now separates the set-level exactness
 layer from the definition-level homotopy-group maps in the main LES file.
+
+### Iterated Loop Fiber Sequences
+
+`src/synthetic-homotopy-theory/iterated-loop-fiber-sequences.lagda.md`
+contains the checked iteration of a packaged fiber sequence. For a fiber
+sequence `F ->* E ->* B`, it defines:
+
+- `pointed-equiv-iterated-loop-fiber-fiber-sequence`, identifying `Omega^n F`
+  with the fiber of `Omega^n E ->* Omega^n B`;
+- `pointed-htpy-iterated-loop-fiber-inclusion-fiber-sequence`, comparing the
+  iterated fiber inclusion with the canonical inclusion of that fiber;
+- `iterated-loop-fiber-sequence`, packaging
+  `Omega^n F ->* Omega^n E ->* Omega^n B`.
+
+### Iterated Boundary Maps Of Fiber Sequences
+
+`src/synthetic-homotopy-theory/iterated-boundary-maps-fiber-sequences.lagda.md`
+contains the recursive and canonical boundary maps of a packaged fiber
+sequence. It owns:
+
+- `boundary-pointed-map-fiber-sequence`;
+- `pointed-map-iterated-boundary-fiber-sequence`;
+- reassociation lemmas for recursive iterated boundaries;
+- `canonical-pointed-map-iterated-boundary-fiber-sequence`;
+- `canonical-pointed-map-iterated-loop-boundary-fiber-sequence`;
+- `loop-canonical-pointed-map-iterated-boundary-fiber-sequence`;
+- the direct shifted boundary fiber sequence
+  `fiber-sequence-boundary-fiber-sequence-direct-Pointed-Type`.
+
+This keeps the Coq-HoTT/Rocq-style distinction between fresh canonical
+connecting maps and recursive looped boundary maps visible at the pointed-map
+level.
+
+### Homomorphisms Induced By Fiber Sequences
+
+`src/synthetic-homotopy-theory/homomorphisms-homotopy-groups-fiber-sequences.lagda.md`
+contains the concrete homotopy-group homomorphisms induced by a packaged fiber
+sequence:
+
+- `hom-fiber-inclusion-concrete-homotopy-group-fiber-sequence`;
+- `hom-fibration-concrete-homotopy-group-fiber-sequence`;
+- `boundary-hom-concrete-homotopy-group-fiber-sequence`;
+- `canonical-boundary-hom-concrete-homotopy-group-fiber-sequence`;
+- `canonical-boundary-hom-concrete-homotopy-group-Pointed-Type`.
+
+The group-level exactness files now import these homomorphisms directly
+instead of obtaining them through the main LES module.
 
 ### Iterated Set-Truncated Exactness
 
@@ -400,27 +435,28 @@ clear theorem names explaining:
 - how looping/reindexing changes the displayed boundary map;
 - whether the comparison is definitional, by pointed homotopy, or by transport.
 
-### The Main LES Module Needs To Be Split
+### The Remaining Exactness Packages Need To Be Split
 
-`long-exact-sequence-homotopy-groups.lagda.md` is smaller than before, but it
-is still doing too much. Completed splits now include:
+`long-exact-sequence-homotopy-groups.lagda.md` is now only a thin coordination
+module. Completed splits include:
 
 - loop spaces of fibers and fibers of fiber inclusions;
 - shifted connecting fiber sequences;
 - boundary maps of pointed maps and their fiber comparisons;
 - exactness of set truncations of fiber sequences;
+- iterated loop fiber sequences;
+- recursive and canonical iterated boundary maps;
+- homomorphisms induced on concrete homotopy groups by fiber sequences.
 
 A plausible remaining upstream split would be:
 
-- iterated loop fiber sequences and recursive boundary pointed maps;
-- concrete homotopy-group homomorphisms induced by fiber sequences;
 - iterated exactness of the homotopy LES;
 - group-level exactness of homotopy groups;
 - a final package exposing the long exact sequence.
 
 This split matters for maintainability, discoverability, and review. The
-current single-file organization makes it hard to tell which lemmas are core
-definitions and which are proof-local adapters.
+current exactness files still contain many adapters and transport theorems
+beside the public exactness statements.
 
 ### The `pi_0` Tail Is Not Packaged
 
@@ -450,14 +486,11 @@ construction rather than the route by which the blocker was cleared.
 
 ## Recommended Next Steps
 
-1. Continue splitting `long-exact-sequence-homotopy-groups.lagda.md` into
-   one-concept modules. The connecting fiber sequence has been extracted as a
-   checked structural module, and the loop-fiber and first fiber-inclusion
-   fiber-sequence equivalences, boundary-comparison adapters, and base
-   set-truncated exactness package have now been extracted. The next
-   candidates are the iterated-loop fiber-sequence definitions, recursive
-   boundary pointed maps, and concrete homotopy-group homomorphism wrappers
-   that still live in the main LES file.
+1. Continue splitting the exactness layer into reviewer-facing modules. The
+   main LES file is now thin; the next candidates are the transport-heavy
+   all-index results in
+   `set-truncated-iterated-exactness-homotopy-groups-fiber-sequences` and the
+   group-level wrappers in `exactness-homotopy-groups-fiber-sequences`.
 
 2. Write short literate prose above the final structural theorems explaining
    the relationship with the HoTT Book LES proof and the Coq-HoTT
@@ -687,6 +720,31 @@ The checked commands were:
 ```
 
 All eight checks passed.
+
+Later on 2026-06-26, the remaining definition-level contents of
+`long-exact-sequence-homotopy-groups` were split into three checked modules:
+`iterated-loop-fiber-sequences`, `iterated-boundary-maps-fiber-sequences`, and
+`homomorphisms-homotopy-groups-fiber-sequences`. Downstream set-level,
+group-level, and Hopf consumers now import these modules directly. The old
+long exact sequence file is now a thin coordination module.
+
+The checked commands were:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/iterated-loop-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/iterated-boundary-maps-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/homomorphisms-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/classifying-fiber-sequences-homotopy-groups.lagda.md
+```
+
+All eleven checks passed.
 
 At the time this handoff was written, Agda MCP tools were visible to the agent,
 but `./check.sh <file>` remains the acceptance criterion. This file is a status

@@ -5982,3 +5982,60 @@ unsolved-meta options, and `git diff --check` passed.
 Related commit:
 
 - This commit - Extract LES boundary and exactness modules.
+
+### Extract iterated LES definitions and homomorphisms
+
+Request: Emily asked Codex to keep working on the next targets after the
+boundary-adapter and base exactness split.
+
+Model context:
+
+- Date: 2026-06-26.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible; this session used `./check.sh` as the proof
+  acceptance gate.
+
+Actions:
+
+- Added `iterated-loop-fiber-sequences`, extracting the iterated loop fiber
+  sequence package and its compatibility with iterated fiber inclusions.
+- Added `iterated-boundary-maps-fiber-sequences`, extracting the recursive
+  boundary maps, reassociation lemmas, canonical boundary maps, looped
+  canonical boundary maps, and direct shifted boundary fiber sequence.
+- Added `homomorphisms-homotopy-groups-fiber-sequences`, extracting the
+  concrete homotopy-group homomorphisms induced by a fiber sequence and by the
+  canonical boundary map of a pointed map.
+- Reduced `long-exact-sequence-homotopy-groups` to a thin coordination module
+  pointing to the extracted APIs.
+- Rewired set-level, group-level, and Hopf consumers to import the extracted
+  modules directly instead of relying on the old long-exact module.
+- Updated `LES-STATUS.md` and `STATUS-REPORT.md` to mark the main-file split
+  complete and shift the next target to exactness-package/API cleanup.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/iterated-loop-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/iterated-boundary-maps-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/homomorphisms-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/classifying-fiber-sequences-homotopy-groups.lagda.md
+rg -n "\{!!\}|allow-unsolved-metas|postulate|TERMINATING|REWRITE" src/synthetic-homotopy-theory/iterated-loop-fiber-sequences.lagda.md src/synthetic-homotopy-theory/iterated-boundary-maps-fiber-sequences.lagda.md src/synthetic-homotopy-theory/homomorphisms-homotopy-groups-fiber-sequences.lagda.md src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md src/synthetic-homotopy-theory/set-truncated-exactness-homotopy-groups-fiber-sequences.lagda.md src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+git diff --check
+```
+
+All eleven Agda checks passed. The touched-file scan found no holes,
+postulates, unsafe termination pragmas, rewrite-rule dependency, or
+unsolved-meta options, and `git diff --check` passed.
+
+Related commit:
+
+- This commit - Extract iterated LES definitions and homomorphisms.

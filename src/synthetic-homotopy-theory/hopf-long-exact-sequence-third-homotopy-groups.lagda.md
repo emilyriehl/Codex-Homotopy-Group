@@ -23,7 +23,7 @@ open import synthetic-homotopy-theory.exactness-homotopy-groups-fiber-sequences
 open import synthetic-homotopy-theory.homotopy-groups
 open import synthetic-homotopy-theory.homotopy-groups-circle
 open import synthetic-homotopy-theory.hopf-fiber-sequence
-open import synthetic-homotopy-theory.long-exact-sequence-homotopy-groups
+open import synthetic-homotopy-theory.homomorphisms-homotopy-groups-fiber-sequences
 open import synthetic-homotopy-theory.spheres
 ```
 
