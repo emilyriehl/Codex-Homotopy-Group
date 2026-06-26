@@ -7,7 +7,7 @@ Update this file whenever significant progress is made, for example when a
 new theorem is proved, an important definition is formalized, a planned module
 is added, or a major blocked item is resolved or re-scoped.
 
-Last updated: 2026-06-25.
+Last updated: 2026-06-26.
 
 ## Current summary
 
@@ -215,6 +215,12 @@ calculation:
   direct shifted boundary map pointwise with the recursive looped fiber
   inclusion, and lifts that comparison to set-truncated homomorphisms. The arbitrary-index
   fibration-boundary bridge is now checked at the set-truncated level and lifted to group exactness.
+  The later recursive/canonical boundary comparison exposed a real sign: the
+  loop of the boundary agrees with the fresh shifted boundary after
+  precomposition by the double-loop inversion map induced by `ap inv`. The
+  checked first-loop theorem is now the signed comparison
+  `coherence-square-first-loop-canonical-iterated-boundary-fiber-sequence-signed`,
+  not the older unsigned square.
 - The algebraic extraction for the lower Hopf segment
   `π₂(S³) → π₂(S²) → π₁(S¹) → π₁(S³)` is now checked. The left
   fibration-boundary exactness input is supplied by looping the packaged direct
@@ -286,7 +292,7 @@ available in `diagonal-homotopy-groups-spheres`.
 | Loop-space classifying-map computations | [`src/group-theory/computing-loop-space-functoriality-homotopy-automorphism-groups.lagda.md`](src/group-theory/computing-loop-space-functoriality-homotopy-automorphism-groups.lagda.md) | Computes `map-Ω` on the classifying pointed map of connected components after automorphism-infinity extensionality. |
 | Loop-space naturality of effectiveness | [`src/synthetic-homotopy-theory/naturality-effectiveness-loop-spaces.lagda.md`](src/synthetic-homotopy-theory/naturality-effectiveness-loop-spaces.lagda.md) | Transports naturality of effectiveness of truncation into the based-loop form required by the inverse underlying-map square. |
 | Naturality of effectiveness of truncation | [`src/foundation/naturality-effectiveness-truncation.lagda.md`](src/foundation/naturality-effectiveness-truncation.lagda.md) | Proves that effectiveness on a unit-truncated path computes to `ap unit-trunc`, that it preserves concatenation on truncation-unit loop representatives, and that effectiveness of truncation is natural in maps, up to the naturality paths of the truncation unit. These are reusable foundation lemmas needed by the underlying-map and multiplication comparisons for concrete homotopy groups. |
-| Set-truncated iterated LES exactness | [`src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md) | Defines the set-truncated maps on `Ω Ω^n F`, `Ω Ω^n E`, and `Ω Ω^n B`, plus both the recursive boundary map used by the concrete-group homomorphism and the canonical shifted boundary map suggested by Coq-HoTT. It checks without `--allow-unsolved-metas`, proving the total-space iterated case for all `n`, exactness for the canonical shifted fibration-boundary case, transport theorems that turn either a kernel equivalence or a pointwise canonical-vs-recursive boundary comparison into recursive boundary exactness, and direct recursive fibration-boundary exactness for all iterates in the public shifted indexing by reassociation transport; the finite Hopf-facing instances reduce to the all-index theorem. |
+| Set-truncated iterated LES exactness | [`src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md) | Defines the set-truncated maps on `Ω Ω^n F`, `Ω Ω^n E`, and `Ω Ω^n B`, plus both the recursive boundary map used by the concrete-group homomorphism and the canonical shifted boundary map suggested by Coq-HoTT. It checks without `--allow-unsolved-metas`, proving the total-space iterated case for all `n`, exactness for the canonical shifted fibration-boundary case, transport theorems that turn either a kernel equivalence or a pointwise canonical-vs-recursive boundary comparison into recursive boundary exactness, direct recursive fibration-boundary exactness for all iterates in the public shifted indexing by reassociation transport, and the first-loop signed recursive/canonical comparison with the required double-loop inversion; the finite Hopf-facing instances reduce to the all-index theorem. |
 | Group exactness transport for homotopy groups | [`src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md`](src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md) | Proves a generic transfer theorem from pointed-set exactness to ordinary group exactness using explicit comparison maps, injectivity, unit compatibility, and coherence squares; proves a pointed-type wrapper; proves a trivial-codomain pointed-type wrapper that avoids comparing the second maps; and proves the total-space LES-specific transport target from set-truncated iterated exactness to ordinary group exactness of concrete homotopy groups. This file no longer uses `--allow-unsolved-metas`. |
 | Group exactness of homotopy groups | [`src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md) | Records the adjacent group-level exactness statements needed by the Hopf comparison. The total-space statement composes through the checked transport layer. The boundary/fiber-inclusion statement `π₂(B) -> π₁(F) -> π₁(E)` is checked from the packaged looped boundary exactness theorem. The fibration-boundary statement is still available under a trivial-codomain hypothesis, and the unrestricted nontrivial-target fibration-boundary statement now has a direct checked group exactness theorem for every index, obtained from the reassociated public set-level direct theorem. The Hopf `π₃(S³) -> π₃(S²) -> π₂(S¹)` segment is the second shifted instance of this all-index theorem. |
 | Hopf construction | [`src/synthetic-homotopy-theory/hopf-construction.lagda.md`](src/synthetic-homotopy-theory/hopf-construction.lagda.md) | Defines the generic Hopf total space `A * A`, base `suspension A`, cocone, map, pointed total space, pointed base, and pointed Hopf map for any H-space. |
@@ -347,6 +353,18 @@ The full current route to `π₃(S²) ≅ ℤ` is checked and unconditional. The
 The next useful work is not another blocker-clearing proof, but upstream-quality cleanup: review names and file boundaries, improve prose around the Blakers-Massey and Freudenthal bridge, and decide how much of the local development should be split into general agda-unimath-ready modules.
 
 ## Current verification
+
+On 2026-06-26, the signed loop-boundary comparison and first-loop
+recursive/canonical set-truncated coherence were checked with:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+rg -n "\{!!\}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+```
+
+Both Agda checks passed. The touched-file scan found no holes, unsolved-meta
+pragmas, or postulates.
 
 On 2026-06-25, the Freudenthal specialization and final unconditional theorem files were checked with:
 

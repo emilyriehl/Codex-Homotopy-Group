@@ -1102,6 +1102,63 @@ eq-pr1-map-loop-fiber-map-Ω-boundary-fiber-Pointed-Type (h , refl) q =
       ( q))) ∙
   ( eq-map-Ω-constant-pointed-map-Pointed-Type q)
 
+eq-map-inv-loop-fiber-boundary-Ω-Pointed-Type :
+  {l1 l2 : Level} {E : Pointed-Type l1} {B : Pointed-Type l2}
+  (g : E →∗ B) (q : type-Ω (Ω B)) →
+  map-inv-loop-fiber-Pointed-Type g
+    ( map-pointed-map
+      ( boundary-fiber-Pointed-Type (pointed-map-Ω g))
+      ( q)) ＝
+  map-Ω (boundary-fiber-Pointed-Type g) (ap inv q)
+eq-map-inv-loop-fiber-boundary-Ω-Pointed-Type {E = E} {B = B} (h , refl) q =
+  ( inv
+    ( htpy-map-inv-fiber-ap-eq-fiber-map-inv-equiv
+      ( h)
+      ( point-Pointed-Type (fiber-Pointed-Type (h , refl)))
+      ( point-Pointed-Type (fiber-Pointed-Type (h , refl)))
+      ( map-pointed-map
+        ( boundary-fiber-Pointed-Type (pointed-map-Ω (h , refl)))
+        ( q)))) ∙
+  ( ap
+    ( eq-pair-eq-fiber
+      { A = type-Pointed-Type E}
+      { B = λ x → h x ＝ point-Pointed-Type B}
+      { x = point-Pointed-Type E})
+    ( ( ap concat-ap-inv-q eq-inv-inv-point) ∙
+      right-unit))
+  where
+    eq-inv-inv-point :
+      inv-inv
+        ( pr2 (point-Pointed-Type (fiber-Pointed-Type (h , refl)))) ＝
+      refl
+    eq-inv-inv-point = refl
+
+    concat-ap-inv-q :
+      ( inv
+        ( inv (pr2 (point-Pointed-Type (fiber-Pointed-Type (h , refl))))) ＝
+        pr2 (point-Pointed-Type (fiber-Pointed-Type (h , refl)))) →
+      inv (ap h refl) ＝
+      pr2 (point-Pointed-Type (fiber-Pointed-Type (h , refl)))
+    concat-ap-inv-q u = ap inv q ∙ u
+
+eq-map-loop-fiber-map-Ω-boundary-fiber-Pointed-Type :
+  {l1 l2 : Level} {E : Pointed-Type l1} {B : Pointed-Type l2}
+  (g : E →∗ B) (q : type-Ω (Ω B)) →
+  map-loop-fiber-Pointed-Type g
+    ( map-Ω (boundary-fiber-Pointed-Type g) (ap inv q)) ＝
+  map-pointed-map
+    ( boundary-fiber-Pointed-Type (pointed-map-Ω g))
+    ( q)
+eq-map-loop-fiber-map-Ω-boundary-fiber-Pointed-Type g q =
+  ( inv
+    ( ap
+      ( map-loop-fiber-Pointed-Type g)
+      ( eq-map-inv-loop-fiber-boundary-Ω-Pointed-Type g q))) ∙
+  ( is-section-map-inv-loop-fiber-Pointed-Type g
+    ( map-pointed-map
+      ( boundary-fiber-Pointed-Type (pointed-map-Ω g))
+      ( q)))
+
 ```
 
 ### Pointed equivalence algebra

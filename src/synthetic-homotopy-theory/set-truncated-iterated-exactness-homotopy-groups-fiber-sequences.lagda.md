@@ -10,13 +10,22 @@ module synthetic-homotopy-theory.set-truncated-iterated-exactness-homotopy-group
 open import elementary-number-theory.natural-numbers
 
 open import foundation.action-on-identifications-functions
+open import foundation.dependent-pair-types
+open import foundation.equivalences
+open import foundation.functoriality-set-truncation
 open import foundation.identity-types
+open import foundation.injective-maps
 open import foundation.logical-equivalences
+open import foundation.propositions
+open import foundation.set-truncations
+open import foundation.sets
 open import foundation.transport-along-identifications
 open import foundation.universe-levels
 
 open import structured-types.exact-sequences-pointed-sets
 open import structured-types.fiber-sequences
+open import structured-types.fibers-of-pointed-maps
+open import structured-types.pointed-equivalences
 open import structured-types.pointed-homotopies
 open import structured-types.pointed-maps
 open import structured-types.pointed-types
@@ -160,22 +169,161 @@ module _
       ( pointed-map-Ω
         ( canonical-pointed-map-iterated-boundary-fiber-sequence S n))
 
-  coherence-square-loop-canonical-iterated-boundary-fiber-sequence :
-    (n : ℕ) → UU (l1 ⊔ l3)
-  coherence-square-loop-canonical-iterated-boundary-fiber-sequence n =
+  pointed-map-ap-inv-Ω-base-fiber-sequence :
+    Ω (Ω (base-fiber-sequence-Pointed-Type S)) →∗
+    Ω (Ω (base-fiber-sequence-Pointed-Type S))
+  pointed-map-ap-inv-Ω-base-fiber-sequence = (ap inv , refl)
+
+  hom-trunc-ap-inv-Ω-base-fiber-sequence :
+    hom-Pointed-Set
+      ( trunc-Pointed-Set
+        ( Ω (Ω (base-fiber-sequence-Pointed-Type S))))
+      ( trunc-Pointed-Set
+        ( Ω (Ω (base-fiber-sequence-Pointed-Type S))))
+  hom-trunc-ap-inv-Ω-base-fiber-sequence =
+    hom-trunc-Pointed-Set pointed-map-ap-inv-Ω-base-fiber-sequence
+
+  eq-map-Ω-pointed-map-fiber-fiber-canonical-first-loop-boundary-fiber-sequence :
+    (q : type-Ω (Ω (base-fiber-sequence-Pointed-Type S))) →
+    map-Ω (pointed-map-fiber-fiber-sequence-Pointed-Type S)
+      ( map-pointed-map
+        ( boundary-pointed-map-fiber-sequence
+          ( iterated-loop-fiber-sequence S 1))
+        ( q)) ＝
+    map-Ω
+      ( boundary-fiber-Pointed-Type
+        ( fibration-fiber-sequence-Pointed-Type S))
+      ( map-pointed-map pointed-map-ap-inv-Ω-base-fiber-sequence q)
+  eq-map-Ω-pointed-map-fiber-fiber-canonical-first-loop-boundary-fiber-sequence q =
+    ( is-injective-equiv
+      ( equiv-pointed-equiv
+        ( pointed-equiv-loop-fiber-Pointed-Type
+          ( fibration-fiber-sequence-Pointed-Type S)))
+      ( ( is-section-map-inv-pointed-equiv
+          ( pointed-equiv-iterated-loop-fiber-fiber-sequence S 1)
+          ( map-pointed-map
+            ( boundary-fiber-Pointed-Type
+              ( pointed-map-Ω (fibration-fiber-sequence-Pointed-Type S)))
+            ( q))) ∙
+        ( inv
+          ( is-section-map-inv-pointed-equiv
+            ( pointed-equiv-loop-fiber-Pointed-Type
+              ( fibration-fiber-sequence-Pointed-Type S))
+            ( map-pointed-map
+              ( boundary-fiber-Pointed-Type
+                ( pointed-map-Ω (fibration-fiber-sequence-Pointed-Type S)))
+              ( q)))))) ∙
+    ( is-injective-equiv
+      ( equiv-pointed-equiv
+        ( pointed-equiv-loop-fiber-Pointed-Type
+          ( fibration-fiber-sequence-Pointed-Type S)))
+      ( ( is-section-map-inv-pointed-equiv
+          ( pointed-equiv-loop-fiber-Pointed-Type
+            ( fibration-fiber-sequence-Pointed-Type S))
+          ( map-pointed-map
+            ( boundary-fiber-Pointed-Type
+              ( pointed-map-Ω (fibration-fiber-sequence-Pointed-Type S)))
+            ( q))) ∙
+        ( inv
+          ( eq-map-loop-fiber-map-Ω-boundary-fiber-Pointed-Type
+            ( fibration-fiber-sequence-Pointed-Type S)
+            ( q)))))
+
+  eq-map-hom-trunc-loop-pointed-map-fiber-fiber-canonical-first-loop-boundary-fiber-sequence :
     (x :
       type-Pointed-Set
         ( trunc-Pointed-Set
-          ( Ω
-            ( iterated-loop-space
-              ( succ-ℕ n)
-              ( base-fiber-sequence-Pointed-Type S))))) →
+          ( Ω (Ω (base-fiber-sequence-Pointed-Type S))))) →
     map-pointed-map
-      ( hom-trunc-loop-canonical-iterated-boundary-fiber-sequence n)
-      ( x) ＝
+      ( hom-trunc-loop-pointed-map-fiber-fiber-sequence-Pointed-Type S)
+      ( map-pointed-map
+        ( hom-trunc-canonical-iterated-loop-boundary-fiber-sequence zero-ℕ)
+        ( x)) ＝
     map-pointed-map
-      ( hom-trunc-canonical-iterated-loop-boundary-fiber-sequence n)
+      ( hom-trunc-loop-boundary-boundary-fiber-Pointed-Type
+        ( fibration-fiber-sequence-Pointed-Type S))
+      ( map-pointed-map hom-trunc-ap-inv-Ω-base-fiber-sequence x)
+  eq-map-hom-trunc-loop-pointed-map-fiber-fiber-canonical-first-loop-boundary-fiber-sequence =
+    apply-dependent-universal-property-trunc-Set'
+      ( λ x →
+        set-Prop
+          ( Id-Prop
+            ( set-Pointed-Set
+              ( trunc-Pointed-Set
+                ( Ω
+                  ( fiber-Pointed-Type
+                    ( fibration-fiber-sequence-Pointed-Type S)))))
+            ( map-pointed-map
+              ( hom-trunc-loop-pointed-map-fiber-fiber-sequence-Pointed-Type S)
+              ( map-pointed-map
+                ( hom-trunc-canonical-iterated-loop-boundary-fiber-sequence
+                  zero-ℕ)
+                ( x)))
+            ( map-pointed-map
+              ( hom-trunc-loop-boundary-boundary-fiber-Pointed-Type
+                ( fibration-fiber-sequence-Pointed-Type S))
+              ( map-pointed-map hom-trunc-ap-inv-Ω-base-fiber-sequence x))))
+      ( λ q →
+        ( ap
+          ( map-pointed-map
+            ( hom-trunc-loop-pointed-map-fiber-fiber-sequence-Pointed-Type S))
+          ( naturality-unit-trunc-Set
+            ( map-pointed-map
+              ( boundary-pointed-map-fiber-sequence
+                ( iterated-loop-fiber-sequence S 1)))
+            ( q))) ∙
+        ( naturality-unit-trunc-Set
+          ( map-pointed-map
+            ( pointed-map-Ω
+              ( pointed-map-fiber-fiber-sequence-Pointed-Type S)))
+          ( map-pointed-map
+            ( boundary-pointed-map-fiber-sequence
+              ( iterated-loop-fiber-sequence S 1))
+            ( q))) ∙
+        ( ap
+          ( unit-trunc-Set)
+          ( eq-map-Ω-pointed-map-fiber-fiber-canonical-first-loop-boundary-fiber-sequence
+            ( q))) ∙
+        ( inv
+          ( naturality-unit-trunc-Set
+            ( map-pointed-map
+              ( pointed-map-Ω
+                ( boundary-fiber-Pointed-Type
+                  ( fibration-fiber-sequence-Pointed-Type S))))
+            ( map-pointed-map
+              pointed-map-ap-inv-Ω-base-fiber-sequence
+              q))) ∙
+        ( ap
+          ( map-pointed-map
+            ( hom-trunc-loop-boundary-boundary-fiber-Pointed-Type
+              ( fibration-fiber-sequence-Pointed-Type S)))
+          ( inv
+            ( naturality-unit-trunc-Set
+              ( map-pointed-map pointed-map-ap-inv-Ω-base-fiber-sequence)
+              ( q)))))
+
+  coherence-square-first-loop-canonical-iterated-boundary-fiber-sequence-signed :
+    (x :
+      type-Pointed-Set
+        ( trunc-Pointed-Set
+          ( Ω (Ω (base-fiber-sequence-Pointed-Type S))))) →
+    map-pointed-map
+      ( hom-trunc-loop-canonical-iterated-boundary-fiber-sequence zero-ℕ)
+      ( map-pointed-map hom-trunc-ap-inv-Ω-base-fiber-sequence x) ＝
+    map-pointed-map
+      ( hom-trunc-canonical-iterated-loop-boundary-fiber-sequence zero-ℕ)
       ( x)
+  coherence-square-first-loop-canonical-iterated-boundary-fiber-sequence-signed x =
+    is-injective-map-trunc-Set
+      ( map-Ω (pointed-map-fiber-fiber-sequence-Pointed-Type S))
+      ( is-injective-equiv
+        ( equiv-Ω-pointed-equiv
+          ( pointed-equiv-fiber-fiber-sequence-Pointed-Type S)))
+      ( ( eq-map-hom-trunc-loop-boundary-fiber-sequence-Pointed-Type S
+          ( map-pointed-map hom-trunc-ap-inv-Ω-base-fiber-sequence x)) ∙
+        ( inv
+          ( eq-map-hom-trunc-loop-pointed-map-fiber-fiber-canonical-first-loop-boundary-fiber-sequence
+            ( x))))
 
   hom-trunc-direct-iterated-loop-fibration-fiber-sequence :
     (n : ℕ) →

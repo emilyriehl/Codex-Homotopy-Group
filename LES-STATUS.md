@@ -140,16 +140,18 @@ most by the Hopf proof:
   `is-exact-set-truncation-iterated-loop-fibration-boundary-fiber-sequence-direct`
 - canonical all-index boundary/fiber-inclusion exactness, via
   `is-exact-set-truncation-canonical-iterated-loop-boundary-fiber-inclusion-fiber-sequence`
-- the checked set-level comparison target
-  `coherence-square-loop-canonical-iterated-boundary-fiber-sequence`, which
-  isolates the exact map comparison between `Ω` of the canonical boundary at
-  index `n` and the fresh canonical boundary at index `succ n`
+- the checked first-loop signed comparison
+  `coherence-square-first-loop-canonical-iterated-boundary-fiber-sequence-signed`,
+  which identifies the fresh canonical shifted boundary with the looped
+  recursive boundary only after precomposing the recursive side by the
+  double-loop inversion map induced by `ap inv`
 - transport wrappers for recursive boundary maps and pointed homotopies
 
 The earlier induced-map reassociation blocker has been resolved in
 `src/synthetic-homotopy-theory/reassociation-iterated-loop-spaces.lagda.md`.
-This is substantial progress: the fibration-boundary part is no longer only a
-low-dimensional Hopf shortcut.
+The first-loop sign calculation is also important negative information: the
+naive unsigned recursive/canonical square is not the right target for the
+current boundary definitions.
 
 ### Group-Level LES Bridge
 
@@ -198,12 +200,15 @@ calculation:
 The remaining gap is now more precise: boundary/fiber-inclusion exactness is
 available uniformly for canonical iterated boundary maps, while the existing
 recursive boundary homomorphism used by the fibration-boundary direct theorem
-has not yet been identified with those canonical boundaries in the fully
-iterated form needed for a single polished LES package. The current checked
-target for this identification is the set-truncated coherence square
-`coherence-square-loop-canonical-iterated-boundary-fiber-sequence`; at the
-concrete-group level the corresponding target is
-`coherence-square-canonical-boundary-concrete-homotopy-group-fiber-sequence`.
+does not agree with the fresh canonical shifted boundary without a sign. The
+checked raw computation
+`eq-map-loop-fiber-map-Ω-boundary-fiber-Pointed-Type` and its set-truncated
+first-loop consequence show that `ap inv` appears on double loops. Thus the
+old unsigned coherence square is not the correct next theorem under the
+current definitions. A polished LES package should either make the signed
+comparison systematic and transport exactness across the inversion
+automorphism, or choose a canonical boundary convention that hides this sign
+from the public API.
 
 ### Hopf Consumers
 
@@ -252,12 +257,13 @@ pi(E) -> pi(B) -> pi(F)
 pi(B) -> pi(F) -> pi(E)
 ```
 
-The next real theorem is therefore the set-truncated comparison
-`coherence-square-loop-canonical-iterated-boundary-fiber-sequence`. Proving it
-would compare `Ω` of the canonical boundary at index `n` with the fresh
-canonical shifted boundary at index `succ n`; this is the pure pointed-set
-part of making the canonical boundary convention usable consistently in both
-adjacent positions.
+The next real theorem must therefore incorporate the sign detected in the
+first-loop comparison. A direct unsigned comparison between `Ω` of the
+canonical boundary and the fresh canonical shifted boundary is not correct for
+the current definitions. The pure pointed-set target is now either an
+all-index signed comparison, with `ap inv` on the relevant loop input, or a
+refactored canonical-boundary package that avoids exposing the recursive
+boundary convention in this adjacent position.
 
 ### The Proof Shape Is Still Too Transport-Heavy
 
@@ -337,14 +343,14 @@ construction rather than the route by which the blocker was cleared.
 
 ## Recommended Next Steps
 
-1. Prove `coherence-square-loop-canonical-iterated-boundary-fiber-sequence`.
-   This is now the most precise checked target for the boundary convention
-   problem: it compares the set-truncated map induced by looping
-   `canonical-pointed-map-iterated-boundary-fiber-sequence S n` with the fresh
-   canonical boundary map of `iterated-loop-fiber-sequence S (succ-ℕ n)`.
-   After this is proved, use naturality of the concrete homotopy-group
-   underlying-type equivalence to establish
-   `coherence-square-canonical-boundary-concrete-homotopy-group-fiber-sequence`.
+1. Generalize the checked signed first-loop comparison, or deliberately avoid
+   needing it in the public LES package. The concrete next proof target should
+   account for the `ap inv` sign discovered in
+   `coherence-square-first-loop-canonical-iterated-boundary-fiber-sequence-signed`.
+   If the recursive boundary convention is retained, prove the all-index
+   signed comparison and an exactness transport theorem across the double-loop
+   inversion automorphism before lifting the comparison to concrete
+   homotopy-group maps.
 
 2. Define a small LES indexing/package layer after the boundary comparison is
    checked. It does not need to be elaborate
@@ -383,7 +389,17 @@ The relevant Agda modules have been checked in recent sessions with
 ```
 
 On 2026-06-26, the canonical boundary/fiber-inclusion additions were checked
-with the same five commands above.
+with the same five commands above. Later on 2026-06-26, the signed loop-boundary
+comparison and set-truncated first-loop signed coherence were checked with:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+rg -n "\{!!\}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+```
+
+Both Agda checks passed, and the touched-file scan found no holes, unsolved
+meta pragmas, or postulates.
 
 At the time this handoff was written, Agda MCP tools were visible to the agent,
 but `./check.sh <file>` remains the acceptance criterion. This file is a status

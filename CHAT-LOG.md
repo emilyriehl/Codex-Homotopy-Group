@@ -5433,3 +5433,49 @@ Verification:
 Related commit:
 
 - This commit - Isolate canonical LES boundary coherence.
+
+### Add signed first-loop boundary coherence
+
+Request: Emily asked Codex to keep working hard on the LES formalization, with
+the previous focus on the real recursive/canonical boundary blocker.
+
+Model context:
+
+- Date: 2026-06-26.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible, but this session used `./check.sh` as the proof
+  acceptance gate.
+
+Actions:
+
+- Proved the signed raw loop-boundary comparison
+  `eq-map-loop-fiber-map-Ω-boundary-fiber-Pointed-Type`: the fresh boundary of
+  `Ω g` agrees with the loop of the boundary of `g` after the double-loop input
+  is sent through `ap inv`.
+- Updated the set-truncated iterated LES file by adding the pointed self-map
+  induced by `ap inv`, proving the signed pointwise comparison against the
+  chosen fiber equivalence, and replacing the false unsigned first-loop
+  coherence with
+  `coherence-square-first-loop-canonical-iterated-boundary-fiber-sequence-signed`.
+- Updated `LES-STATUS.md` and `STATUS-REPORT.md` to record that the old
+  unsigned square is not the correct next target under the current boundary
+  definitions. The next library-quality target is an all-index signed
+  comparison with exactness transport across inversion, or a canonical-boundary
+  package that hides this sign.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+rg -n "\{!!\}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+```
+
+Both Agda checks passed. The touched-file scan found no holes, unsolved-meta
+pragmas, or postulates.
+
+Related commit:
+
+- This commit - Add signed LES boundary coherence.
