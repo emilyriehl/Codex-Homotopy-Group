@@ -6289,3 +6289,58 @@ and `git diff --check` passed.
 Related commit:
 
 - This commit - Split remaining group exactness compatibility routes.
+
+### Split set-truncated iterated exactness compatibility routes
+
+Request: Emily asked Codex to keep working on the library-quality LES cleanup,
+continuing from the group-level route split.
+
+Model context:
+
+- Date: 2026-06-26.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible; this session used `./check.sh` as the proof
+  acceptance gate.
+
+Actions:
+
+- Added
+  `set-truncated-direct-iterated-exactness-homotopy-groups-fiber-sequences`,
+  extracting the connecting-map route, direct aliases, and reassociation
+  transports for set-truncated iterated exactness.
+- Added
+  `set-truncated-recursive-iterated-exactness-homotopy-groups-fiber-sequences`,
+  extracting kernel, pointwise-homotopy, and pointed-homotopy transports from
+  canonical shifted boundary exactness to recursive boundary exactness.
+- Reduced
+  `set-truncated-iterated-exactness-homotopy-groups-fiber-sequences` to a
+  public facade re-exporting maps, canonical exactness, signed comparison,
+  direct exactness, and recursive exactness providers.
+- Updated `LES-STATUS.md` and `STATUS-REPORT.md` to record the new
+  set-truncated module ownership.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/set-truncated-direct-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-recursive-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-exactness-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/canonical-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/direct-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/recursive-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+All eleven Agda checks passed. A touched-file scan found no holes, postulates,
+unsafe termination pragmas, rewrite-rule dependency, or unsolved-meta options,
+and `git diff --check` passed.
+
+Related commit:
+
+- This commit - Split set-truncated iterated exactness compatibility routes.

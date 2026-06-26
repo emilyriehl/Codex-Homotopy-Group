@@ -272,13 +272,10 @@ fresh shifted canonical boundaries. The all-index signed comparison and the
 corresponding exactness transport now live here, keeping the systematic
 double-loop inversion machinery out of the public LES packages.
 
-### Iterated Set-Truncated Exactness Wrapper
+### Direct Iterated Set-Truncated Exactness
 
-`src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md`
-now imports the extracted map, canonical exactness, and signed comparison
-modules as public theorem providers. It retains the remaining compatibility
-wrappers and transport lemmas that connect the structural route to older local
-names:
+`src/synthetic-homotopy-theory/set-truncated-direct-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md`
+owns the direct connecting-map route and reassociation transports:
 
 - connecting-sequence fibration-boundary exactness in the natural
   `Omega^n(Omega X)` indexing, via
@@ -288,16 +285,37 @@ names:
   loop indexing, via
   `is-exact-set-truncation-iterated-loop-fibration-connecting-map-fiber-sequence`,
   with the older direct name retained as a compatibility alias
+
+### Recursive Iterated Set-Truncated Exactness
+
+`src/synthetic-homotopy-theory/set-truncated-recursive-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md`
+owns the recursive-boundary compatibility transports:
+
+- kernel-comparison transport from canonical shifted boundary exactness;
+- pointwise homotopy transport from canonical shifted boundary exactness;
+- pointed-homotopy transport from the recursive looped boundary map to the
+  fresh boundary map of the iterated loop fiber sequence.
+
+### Iterated Set-Truncated Exactness Wrapper
+
+`src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md`
+is now only the compatibility facade re-exporting the extracted maps,
+canonical exactness, signed comparison, direct exactness, and recursive
+exactness modules. This preserves older downstream imports while making each
+proof route explicit.
+
+The checked set-truncated canonical LES package remains in
+`src/synthetic-homotopy-theory/set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md`:
+
 - theorem inputs for the checked set-truncated canonical LES package in
-  `src/synthetic-homotopy-theory/set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md`,
-  whose record
+  this file are imported through the facade;
+- its record
   `Set-Truncated-Canonical-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence`
   and object
   `set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequence`
   expose the three repeating adjacent exactness positions while keeping the
   two canonical boundary maps for the fibration-boundary and
-  boundary/fiber-inclusion positions as separate fields
-- transport wrappers for recursive boundary maps and pointed homotopies
+  boundary/fiber-inclusion positions as separate fields.
 
 The earlier induced-map reassociation blocker has been resolved in
 `src/synthetic-homotopy-theory/reassociation-iterated-loop-spaces.lagda.md`.
@@ -922,6 +940,36 @@ The checked commands were:
 ```
 
 All seven checks passed.
+
+Later on 2026-06-26, the set-truncated iterated exactness compatibility layer
+was split by route. The new module
+`set-truncated-direct-iterated-exactness-homotopy-groups-fiber-sequences` owns
+the connecting-map route, direct aliases, and reassociation transports from
+`Omega^n(Omega X)` to the public shifted indexing. The new module
+`set-truncated-recursive-iterated-exactness-homotopy-groups-fiber-sequences`
+owns kernel, pointwise-homotopy, and pointed-homotopy transport from canonical
+shifted boundary exactness to recursive boundary exactness. The older
+`set-truncated-iterated-exactness-homotopy-groups-fiber-sequences` module is
+now a thin public facade re-exporting maps, canonical exactness, signed
+comparison, direct exactness, and recursive exactness providers.
+
+The checked commands were:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/set-truncated-direct-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-recursive-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-exactness-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/canonical-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/direct-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/recursive-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+All eleven checks passed.
 
 At the time this handoff was written, Agda MCP tools were visible to the agent,
 but `./check.sh <file>` remains the acceptance criterion. This file is a status
