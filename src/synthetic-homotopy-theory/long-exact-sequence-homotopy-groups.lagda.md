@@ -50,6 +50,7 @@ open import synthetic-homotopy-theory.functoriality-loop-spaces
 open import synthetic-homotopy-theory.homotopy-groups
 open import synthetic-homotopy-theory.iterated-loop-spaces
 open import synthetic-homotopy-theory.loop-spaces-fibers-of-pointed-maps
+open import synthetic-homotopy-theory.loop-spaces-pointed-equivalences
 open import synthetic-homotopy-theory.loop-spaces
 open import synthetic-homotopy-theory.reassociation-iterated-loop-spaces
 ```
@@ -925,150 +926,8 @@ eq-map-loop-fiber-map-Ω-boundary-fiber-Pointed-Type g q =
 
 ### Pointed equivalence algebra
 
-```agda
-pointed-htpy-Ω-inv-pointed-equiv :
-  {l1 l2 : Level} {A : Pointed-Type l1} {B : Pointed-Type l2}
-  (e : A ≃∗ B) →
-  pointed-map-Ω (pointed-map-inv-pointed-equiv e) ~∗
-  pointed-map-inv-pointed-equiv (pointed-equiv-Ω-pointed-equiv e)
-pointed-htpy-Ω-inv-pointed-equiv e =
-  concat-pointed-htpy
-    ( inv-left-unit-law-comp-pointed-map
-      ( pointed-map-Ω (pointed-map-inv-pointed-equiv e)))
-    ( concat-pointed-htpy
-      ( right-whisker-comp-pointed-htpy
-        ( id-pointed-map)
-        ( pointed-map-inv-pointed-equiv (pointed-equiv-Ω-pointed-equiv e) ∘∗
-          pointed-map-pointed-equiv (pointed-equiv-Ω-pointed-equiv e))
-        ( inv-pointed-htpy
-          ( is-pointed-retraction-pointed-map-inv-pointed-equiv
-            ( pointed-equiv-Ω-pointed-equiv e)))
-        ( pointed-map-Ω (pointed-map-inv-pointed-equiv e)))
-      ( concat-pointed-htpy
-        ( associative-comp-pointed-map
-          ( pointed-map-inv-pointed-equiv (pointed-equiv-Ω-pointed-equiv e))
-          ( pointed-map-pointed-equiv (pointed-equiv-Ω-pointed-equiv e))
-          ( pointed-map-Ω (pointed-map-inv-pointed-equiv e)))
-        ( concat-pointed-htpy
-          ( left-whisker-comp-pointed-htpy
-            ( pointed-map-inv-pointed-equiv (pointed-equiv-Ω-pointed-equiv e))
-            ( pointed-map-pointed-equiv (pointed-equiv-Ω-pointed-equiv e) ∘∗
-              pointed-map-Ω (pointed-map-inv-pointed-equiv e))
-            ( id-pointed-map)
-            ( concat-pointed-htpy
-              ( inv-pointed-htpy
-                ( preserves-comp-pointed-map-Ω
-                  ( pointed-map-pointed-equiv e)
-                  ( pointed-map-inv-pointed-equiv e)))
-              ( concat-pointed-htpy
-                ( pointed-htpy-Ω
-                  ( pointed-map-pointed-equiv e ∘∗
-                    pointed-map-inv-pointed-equiv e)
-                  ( id-pointed-map)
-                  ( is-pointed-section-pointed-map-inv-pointed-equiv e))
-                ( preserves-id-pointed-map-Ω))))
-          ( right-unit-law-comp-pointed-map
-            ( pointed-map-inv-pointed-equiv
-              ( pointed-equiv-Ω-pointed-equiv e))))))
-
-is-retraction-map-Ω-pointed-map-inv-pointed-equiv :
-  {l1 l2 : Level} {A : Pointed-Type l1} {B : Pointed-Type l2}
-  (e : A ≃∗ B) (q : type-Ω A) →
-  map-Ω (pointed-map-inv-pointed-equiv e)
-    ( map-Ω (pointed-map-pointed-equiv e) q) ＝
-  q
-is-retraction-map-Ω-pointed-map-inv-pointed-equiv e q =
-  ( pr1 (pointed-htpy-Ω-inv-pointed-equiv e)
-    ( map-Ω (pointed-map-pointed-equiv e) q)) ∙
-  ( is-retraction-map-inv-equiv (equiv-Ω-pointed-equiv e) q)
-
-pointed-htpy-section-explicit-inv-comp-pointed-equiv :
-  {l1 l2 l3 : Level}
-  {A : Pointed-Type l1} {B : Pointed-Type l2} {C : Pointed-Type l3}
-  (e : A ≃∗ B) (f : B ≃∗ C) →
-  ( pointed-map-pointed-equiv (comp-pointed-equiv f e) ∘∗
-    ( pointed-map-inv-pointed-equiv e ∘∗
-      pointed-map-inv-pointed-equiv f)) ~∗
-  id-pointed-map
-pointed-htpy-section-explicit-inv-comp-pointed-equiv e f =
-  concat-pointed-htpy
-    ( associative-comp-pointed-map
-      ( pointed-map-pointed-equiv f)
-      ( pointed-map-pointed-equiv e)
-      ( pointed-map-inv-pointed-equiv e ∘∗
-        pointed-map-inv-pointed-equiv f))
-    ( concat-pointed-htpy
-      ( left-whisker-comp-pointed-htpy
-        ( pointed-map-pointed-equiv f)
-        ( pointed-map-pointed-equiv e ∘∗
-          ( pointed-map-inv-pointed-equiv e ∘∗
-            pointed-map-inv-pointed-equiv f))
-        ( ( pointed-map-pointed-equiv e ∘∗
-            pointed-map-inv-pointed-equiv e) ∘∗
-          pointed-map-inv-pointed-equiv f)
-        ( inv-associative-comp-pointed-map
-          ( pointed-map-pointed-equiv e)
-          ( pointed-map-inv-pointed-equiv e)
-          ( pointed-map-inv-pointed-equiv f)))
-      ( concat-pointed-htpy
-        ( left-whisker-comp-pointed-htpy
-          ( pointed-map-pointed-equiv f)
-          ( ( pointed-map-pointed-equiv e ∘∗
-              pointed-map-inv-pointed-equiv e) ∘∗
-            pointed-map-inv-pointed-equiv f)
-          ( pointed-map-inv-pointed-equiv f)
-          ( concat-pointed-htpy
-            ( right-whisker-comp-pointed-htpy
-              ( pointed-map-pointed-equiv e ∘∗
-                pointed-map-inv-pointed-equiv e)
-              ( id-pointed-map)
-              ( is-pointed-section-pointed-map-inv-pointed-equiv e)
-              ( pointed-map-inv-pointed-equiv f))
-            ( left-unit-law-comp-pointed-map
-              ( pointed-map-inv-pointed-equiv f))))
-        ( is-pointed-section-pointed-map-inv-pointed-equiv f)))
-
-pointed-htpy-inv-comp-pointed-equiv :
-  {l1 l2 l3 : Level}
-  {A : Pointed-Type l1} {B : Pointed-Type l2} {C : Pointed-Type l3}
-  (e : A ≃∗ B) (f : B ≃∗ C) →
-  ( pointed-map-inv-pointed-equiv e ∘∗
-    pointed-map-inv-pointed-equiv f) ~∗
-  pointed-map-inv-pointed-equiv (comp-pointed-equiv f e)
-pointed-htpy-inv-comp-pointed-equiv e f =
-  concat-pointed-htpy
-    ( inv-left-unit-law-comp-pointed-map
-      ( pointed-map-inv-pointed-equiv e ∘∗
-        pointed-map-inv-pointed-equiv f))
-    ( concat-pointed-htpy
-      ( right-whisker-comp-pointed-htpy
-        ( id-pointed-map)
-        ( pointed-map-inv-pointed-equiv (comp-pointed-equiv f e) ∘∗
-          pointed-map-pointed-equiv (comp-pointed-equiv f e))
-        ( inv-pointed-htpy
-          ( is-pointed-retraction-pointed-map-inv-pointed-equiv
-            ( comp-pointed-equiv f e)))
-        ( pointed-map-inv-pointed-equiv e ∘∗
-          pointed-map-inv-pointed-equiv f))
-      ( concat-pointed-htpy
-        ( associative-comp-pointed-map
-          ( pointed-map-inv-pointed-equiv (comp-pointed-equiv f e))
-          ( pointed-map-pointed-equiv (comp-pointed-equiv f e))
-          ( pointed-map-inv-pointed-equiv e ∘∗
-            pointed-map-inv-pointed-equiv f))
-        ( concat-pointed-htpy
-          ( left-whisker-comp-pointed-htpy
-            ( pointed-map-inv-pointed-equiv (comp-pointed-equiv f e))
-            ( pointed-map-pointed-equiv (comp-pointed-equiv f e) ∘∗
-              ( pointed-map-inv-pointed-equiv e ∘∗
-                pointed-map-inv-pointed-equiv f))
-            ( id-pointed-map)
-            ( pointed-htpy-section-explicit-inv-comp-pointed-equiv e f))
-          ( right-unit-law-comp-pointed-map
-            ( pointed-map-inv-pointed-equiv
-              ( comp-pointed-equiv f e))))))
-
-```
+The generic loop-space algebra for pointed equivalences is defined in
+[`loop-spaces-pointed-equivalences`](synthetic-homotopy-theory.loop-spaces-pointed-equivalences.md).
 
 ### Induced maps on the homotopy groups of a fiber sequence
 

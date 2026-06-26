@@ -291,6 +291,7 @@ available in `diagonal-homotopy-groups-spheres`.
 | Boundary maps and LES exactness steps | [`src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md) | Defines the LES boundary compatibility names, induced maps on homotopy groups of a fiber sequence, recursive boundary pointed maps, and boundary homomorphisms. It now imports the standalone loop-fiber, fiber-inclusion, and connecting-sequence modules for the structural fiber-sequence ingredients. It proves pointed-set exactness for canonical and packaged `F ->* E ->* B` fiber sequences, proves pointed-set exactness for the packaged boundary segment `Ω B ->* F ->* E`, proves pointed-set exactness for the packaged loop-boundary segment `Ω E ->* Ω B ->* F`, proves pointed-set exactness for the looped packaged segment `Ω F ->* Ω E ->* Ω B`, proves pointed-set exactness for the canonical adjacent triples `Ω B ->* fiber g ->* E`, `Ω E ->* Ω B ->* fiber g`, and `Ω² B ->* Ω (fiber g) ->* Ω E`, transports the last canonical theorem to the packaged looped boundary/fiber-inclusion segment `Ω² B ->* Ω F ->* Ω E`, and bundles the first four packaged exactness proofs as an initial set-truncated LES segment. These are steps toward, not yet the full proof of, Theorem 8.4.6 of the HoTT book. |
 | Connecting fiber sequences | [`src/synthetic-homotopy-theory/connecting-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/connecting-fiber-sequences.lagda.md) | Standalone structural `connect_fiberseq` module. For a pointed map `g : E ->* B`, it defines `connecting-map-Pointed-Type` and proves `fiber-sequence-connecting-map-Pointed-Type`, packaging `Ω E ->* Ω B ->* fiber g`. For a packaged fiber sequence `F ->* E ->* B`, it compares the canonical fiber with the chosen fiber and proves `fiber-sequence-connecting-map-fiber-sequence-Pointed-Type`, packaging `Ω E ->* Ω B ->* F`. |
 | Loop spaces of fibers | [`src/synthetic-homotopy-theory/loop-spaces-fibers-of-pointed-maps.lagda.md`](src/synthetic-homotopy-theory/loop-spaces-fibers-of-pointed-maps.lagda.md) | Proves the pointed equivalence `Ω (fiber g) ≃* fiber (Ω g)` for a pointed map `g`, together with the pointed homotopy comparing the loop of the fiber inclusion with the canonical inclusion of the loop-map fiber. |
+| Loop spaces of pointed equivalences | [`src/synthetic-homotopy-theory/loop-spaces-pointed-equivalences.lagda.md`](src/synthetic-homotopy-theory/loop-spaces-pointed-equivalences.lagda.md) | Proves reusable pointed homotopies showing that the loop-space functor preserves inverses and composition of pointed equivalences, including the retraction calculation used by the remaining loop-boundary comparison code. |
 | Fiber sequences of fiber inclusions | [`src/synthetic-homotopy-theory/fiber-sequences-fiber-inclusions.lagda.md`](src/synthetic-homotopy-theory/fiber-sequences-fiber-inclusions.lagda.md) | Identifies the fiber of the canonical fiber inclusion with the loop space of the base and packages `Ω B ->* fiber g ->* E` as `fiber-sequence-boundary-fiber-Pointed-Type`, using the standalone connecting map rather than local LES boundary code. |
 | Higher homotopy groups of 1-types | [`src/synthetic-homotopy-theory/higher-homotopy-groups-truncated-types.lagda.md`](src/synthetic-homotopy-theory/higher-homotopy-groups-truncated-types.lagda.md) | Proves that positive concrete homotopy groups of pointed 1-types are trivial. |
 | Circle and 1-sphere homotopy facts | [`src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md`](src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md) | Proves the loop-space equivalences for the circle and 1-sphere, the 1-type facts, triviality of their positive concrete homotopy groups, and ordinary group-level triviality wrappers for those positive concrete homotopy groups. |
@@ -2230,4 +2231,33 @@ All eight Agda checks passed. A touched-file scan found no holes, postulates,
 unsafe termination pragmas, rewrite-rule dependency, or unsolved-meta options,
 and `git diff --check` passed. The next library-quality split target is the
 remaining boundary-comparison and exactness code still embedded in
+`long-exact-sequence-homotopy-groups`.
+
+Later on 2026-06-26, the generic pointed-equivalence algebra used by the LES
+comparison code was extracted to
+
+```text
+src/synthetic-homotopy-theory/loop-spaces-pointed-equivalences.lagda.md
+```
+
+This module proves the pointed homotopy comparing the loop of the inverse of a
+pointed equivalence with the inverse of the looped pointed equivalence, the
+corresponding retraction calculation on loop maps, and the pointed homotopies
+relating inverse-of-composite maps to composites of inverses. The long exact
+sequence file now imports this module rather than keeping those generic
+pointed-map algebra proofs inline.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/loop-spaces-pointed-equivalences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+```
+
+All six Agda checks passed. The next major split target remains the
+boundary-comparison and exactness code still embedded in
 `long-exact-sequence-homotopy-groups`.

@@ -160,6 +160,17 @@ is the extracted loop-fiber equivalence module. It proves:
 This is the structural ingredient used when iterating the LES and should be a
 reasonable upstream candidate independent of the concrete LES exactness code.
 
+### Loop Spaces Of Pointed Equivalences
+
+`src/synthetic-homotopy-theory/loop-spaces-pointed-equivalences.lagda.md`
+is a generic support module extracted from the LES comparison code. It records
+explicit pointed homotopies showing that the loop-space functor preserves
+inverses and composition of pointed equivalences, including the retraction
+calculation used by the remaining loop-boundary comparison.
+
+This is not LES-specific mathematics; it is reusable pointed-equivalence
+algebra that should not live inside the main long exact sequence file.
+
 ### Fiber Sequences Of Fiber Inclusions
 
 `src/synthetic-homotopy-theory/fiber-sequences-fiber-inclusions.lagda.md`
@@ -601,6 +612,25 @@ The checked commands were:
 All eight checks passed. A touched-file scan found no holes, postulates,
 unsafe termination pragmas, rewrite-rule dependency, or unsolved-meta options,
 and `git diff --check` passed.
+
+Later on 2026-06-26, the generic pointed-equivalence algebra used by the LES
+comparison code was also extracted to
+`loop-spaces-pointed-equivalences`. The main LES file now imports this module
+instead of carrying the loop-of-inverse and inverse-of-composite pointed
+homotopies inline.
+
+The checked commands were:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/loop-spaces-pointed-equivalences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+```
+
+All six checks passed.
 
 At the time this handoff was written, Agda MCP tools were visible to the agent,
 but `./check.sh <file>` remains the acceptance criterion. This file is a status

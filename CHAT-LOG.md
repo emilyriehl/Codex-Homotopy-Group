@@ -5880,3 +5880,49 @@ unsolved-meta options, and `git diff --check` passed.
 Related commit:
 
 - This commit - Extract loop-fiber LES modules.
+
+### Extract loop-space algebra for pointed equivalences
+
+Request: After committing and pushing the loop-fiber/fiber-inclusion split,
+Codex continued implementing the library-quality LES cleanup plan by removing
+another reusable non-LES-specific block from the large long exact sequence
+module.
+
+Model context:
+
+- Date: 2026-06-26.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible; this session used `./check.sh` as the proof
+  acceptance gate.
+
+Actions:
+
+- Added `loop-spaces-pointed-equivalences`, a generic support module for the
+  loop-space functor applied to pointed equivalences.
+- Moved the pointed homotopy comparing the loop of an inverse pointed
+  equivalence with the inverse of the looped pointed equivalence, the
+  corresponding loop-map retraction calculation, and the inverse-of-composite
+  pointed homotopies out of `long-exact-sequence-homotopy-groups`.
+- Rewired the LES module to import this support module.
+- Updated `LES-STATUS.md` and `STATUS-REPORT.md` to record the extraction and
+  keep the remaining split target focused on boundary-comparison and exactness
+  code.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/loop-spaces-pointed-equivalences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
+```
+
+All six Agda checks passed.
+
+Related commit:
+
+- This commit - Extract loop-space pointed equivalence algebra.
