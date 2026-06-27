@@ -7,10 +7,13 @@ module synthetic-homotopy-theory.long-exact-sequence-homotopy-groups where
 <details><summary>Imports</summary>
 
 ```agda
+open import synthetic-homotopy-theory.abelian-homotopy-groups
+open import synthetic-homotopy-theory.abelian-long-exact-sequence-homotopy-groups-fiber-sequences
 open import synthetic-homotopy-theory.homomorphisms-homotopy-groups-fiber-sequences
 open import synthetic-homotopy-theory.iterated-boundary-maps-fiber-sequences
 open import synthetic-homotopy-theory.iterated-loop-fiber-sequences
 open import synthetic-homotopy-theory.long-exact-sequence-homotopy-groups-fiber-sequences
+open import synthetic-homotopy-theory.pointed-set-tail-long-exact-sequence-homotopy-groups-fiber-sequences
 open import synthetic-homotopy-theory.set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequences
 ```
 
@@ -41,6 +44,11 @@ the connecting fiber sequence module; the extracted modules below keep the
 recursive boundary maps, canonical boundary maps, direct shifted boundary
 adapters, and induced homomorphisms separate from the exactness proofs.
 
+The public surface now has three checked package layers: the concrete group-level
+long exact sequence, the abelian long exact sequence in dimensions `2` and
+higher, and the low-degree pointed-set tail
+`||ΩE||₀ -> ||ΩB||₀ -> ||F||₀ -> ||E||₀ -> ||B||₀`.
+
 ## Definitions
 
 ### Iterated loop fiber sequences of a fiber sequence
@@ -69,6 +77,18 @@ The set-truncated canonical long exact sequence package is defined in
 
 The group-level long exact sequence package is defined in
 [`long-exact-sequence-homotopy-groups-fiber-sequences`](synthetic-homotopy-theory.long-exact-sequence-homotopy-groups-fiber-sequences.md).
+
+### Abelian homotopy groups and abelian long exact sequence
+
+The higher homotopy groups are packaged as abelian groups in
+[`abelian-homotopy-groups`](synthetic-homotopy-theory.abelian-homotopy-groups.md).
+The abelian-range long exact sequence package is defined in
+[`abelian-long-exact-sequence-homotopy-groups-fiber-sequences`](synthetic-homotopy-theory.abelian-long-exact-sequence-homotopy-groups-fiber-sequences.md).
+
+### Pointed-set tail
+
+The low-degree pointed-set tail is defined in
+[`pointed-set-tail-long-exact-sequence-homotopy-groups-fiber-sequences`](synthetic-homotopy-theory.pointed-set-tail-long-exact-sequence-homotopy-groups-fiber-sequences.md).
 
 ## Properties
 

@@ -6382,3 +6382,42 @@ The documentation diff check passed.
 Related commit:
 
 - This commit - Update LES handoff next steps.
+
+
+### Public LES completion pass
+
+Request: Emily asked Codex to implement the planned library-quality LES completion work after asking for a hard-first plan.
+
+Model context:
+
+- Date: 2026-06-27.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible; final acceptance used `./check.sh <file>`.
+
+Actions:
+
+- Changed the public group-level LES package to expose one canonical boundary map and kept the previous two boundary-position field names as aliases.
+- Added `exact-sequences-abelian-groups`, `abelian-homotopy-groups`, `abelian-long-exact-sequence-homotopy-groups-fiber-sequences`, and `pointed-set-tail-long-exact-sequence-homotopy-groups-fiber-sequences`.
+- Proved higher homotopy groups abelian structurally via Eckmann-Hilton on set-truncated double-loop multiplication, then transported through the concrete homotopy-group underlying-type equivalence.
+- Packaged the abelian-range LES from the checked group-level LES at shifted index `succ n`.
+- Packaged the low-degree pointed-set tail with exactness at the valid middle terms only, avoiding a false surjectivity claim at the terminal base component set.
+- Updated the public LES coordination module and handoff/status docs.
+
+Verification:
+
+```sh
+./check.sh src/group-theory/exact-sequences-abelian-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/pointed-set-tail-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/abelian-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/abelian-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+git diff --check
+rg "\{!|postulate|TERMINATING|--allow-unsolved-metas|--rewriting" <touched Agda files>
+```
+
+All six Agda checks passed. `git diff --check` passed. The touched-file scan produced no matches.
+
+Related commit:
+
+- This commit - Complete public LES packages.

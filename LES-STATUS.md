@@ -1,6 +1,6 @@
 # Long Exact Sequence Status
 
-Last updated: 2026-06-26.
+Last updated: 2026-06-27.
 
 This note summarizes the current local state of the long exact sequence of a
 fibration, with a critical eye toward what would still be needed before this
@@ -513,7 +513,10 @@ module. Completed splits include:
 - generic and fiber-sequence-specific pointed-set-to-group exactness bridges;
 - canonical, direct, and recursive group-level exactness theorem providers;
 - the set-truncated canonical LES package;
-- the group-level LES package.
+- the group-level LES package with a single public canonical boundary field and
+  compatibility aliases;
+- abelian exactness, abelian homotopy groups, and the abelian-range LES package;
+- the low-degree pointed-set LES tail package.
 
 The main remaining issue is no longer file size or ownership of the old
 compatibility layers. The issue is the reviewer-facing API. The exactness
@@ -521,24 +524,24 @@ providers are organized enough to build on, but the public package should expose
 a natural LES surface, hide transport and sign adapters, and explain which
 boundary convention it has chosen.
 
-### The `pi_0` Tail Is Not Packaged
+### Low-Degree And Abelian Packages
 
-The natural-language long exact sequence of a fibration includes a pointed-set
-tail involving lower homotopy groups/components. The current project was aimed
-at concrete homotopy groups indexed from `pi_1` upward and at ordinary group
-exactness, so it does not package the full low-dimensional pointed-set tail as
-part of one LES theorem.
+The low-dimensional pointed-set tail is now packaged in
+`pointed-set-tail-long-exact-sequence-homotopy-groups-fiber-sequences`. It
+records
 
-This is acceptable for the `pi_3(S^2)` project, but not for a complete
-library-quality LES theorem.
+```text
+||ΩE||_0 -> ||ΩB||_0 -> ||F||_0 -> ||E||_0 -> ||B||_0
+```
 
-### No Abelian-Group Refinement
+with exactness at `||ΩB||_0`, `||F||_0`, and `||E||_0`; it deliberately does
+not assert terminal exactness at `||B||_0`, since that would be a surjectivity
+claim for `||E||_0 -> ||B||_0`.
 
-The current group-level exactness is ordinary group exactness. Natural
-statements often note that higher homotopy groups are abelian and that the LES
-eventually lives in abelian groups. This is not needed for the Hopf calculation
-as currently formalized, but it is another gap relative to a polished library
-development.
+The higher abelian range is now packaged in `abelian-homotopy-groups` and
+`abelian-long-exact-sequence-homotopy-groups-fiber-sequences`. The abelian proof
+uses Eckmann-Hilton on set-truncated double-loop multiplication and the existing
+underlying-type equivalence for concrete homotopy groups.
 
 ### Naming Still Reflects The Project History
 
@@ -607,12 +610,12 @@ construction rather than the route by which the blocker was cleared.
    `## Idea` prose and cross-links in the public package files so a reviewer
    can navigate the modules without reconstructing the development history.
 
-5. After the public group-level LES API is stable, extend completeness.
+5. Audit the new low-degree and abelian packages for upstream naming.
 
-   Add the low-dimensional pointed-set `pi_0` tail and then consider the
-   abelian-group refinement for higher homotopy groups. These are real gaps for
-   a complete library-quality LES theorem, but they should come after the
-   current group-level LES surface and boundary convention are settled.
+   The `pi_0` tail and abelian-range LES are now checked, but their names are
+   still intentionally explicit and local. The next pass should decide which
+   projections deserve shorter public aliases and how much of the abelian
+   exactness wrapper belongs upstream next to the existing group exactness API.
 
 For handoff: the next agent should not spend time re-splitting the exactness
 providers unless a concrete API problem requires it. The main target is now the
@@ -1023,3 +1026,21 @@ All eleven checks passed.
 At the time this handoff was written, Agda MCP tools were visible to the agent,
 but `./check.sh <file>` remains the acceptance criterion. This file is a status
 document only; it does not add or modify Agda proofs.
+
+
+## 2026-06-27 Public LES Completion Pass
+
+Codex implemented the planned public LES completion pass. The group-level LES record now has one public canonical boundary field, with compatibility aliases for the two adjacent boundary positions. New checked packages were added for abelian exactness, abelian homotopy groups via Eckmann-Hilton, the abelian-range long exact sequence, and the low-degree pointed-set tail.
+
+The checked commands were:
+
+```sh
+./check.sh src/group-theory/exact-sequences-abelian-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/pointed-set-tail-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/abelian-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/abelian-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+All six Agda checks passed. `git diff --check` passed, and a touched-file scan found no holes, postulates, unsafe termination pragmas, rewrite-rule dependency, or unsolved-meta options.

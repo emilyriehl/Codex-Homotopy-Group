@@ -383,7 +383,7 @@ available in `diagonal-homotopy-groups-spheres`.
 |---|---|---|
 | General pointed fiber sequences | Done | Implemented in [`src/structured-types/fiber-sequences.lagda.md`](src/structured-types/fiber-sequences.lagda.md). |
 | Induced maps on homotopy groups | Done | Implemented via iterated loop functoriality and concrete homotopy group functoriality. |
-| Long exact sequence of homotopy groups | Partial, checked | The structural connecting sequence, loop-fiber equivalence, first fiber-inclusion fiber sequence, boundary-map adapters, base set-truncated exactness package, iterated loop fiber sequence, iterated boundary maps, and homotopy-group homomorphism wrappers have been split into checked modules. The set-truncated iterated total-space theorem, canonical shifted boundary theorem, canonical boundary/fiber-inclusion theorem, direct-indexed shifted-boundary exactness theorem, reassociated public shifted-boundary exactness theorem for all indices, all-index signed looped-canonical boundary exactness theorem, canonical set-truncated LES package, and canonical-boundary group-level LES package are checked. The classifying-map fiber-sequence route is recorded as too strong in general. Remaining library-quality work is exactness-package/API cleanup, plus optional `pi_0` tail and abelian refinements. |
+| Long exact sequence of homotopy groups | Library surface checked locally | The structural connecting sequence, loop-fiber equivalence, boundary-map adapters, set-truncated exactness layers, iterated loop and boundary maps, homotopy-group homomorphism wrappers, canonical set-truncated LES package, canonical-boundary group-level LES package, abelian homotopy groups, abelian-range LES package, and low-degree pointed-set tail package are checked. The remaining work is upstream-facing API, naming, and prose review rather than a known proof gap. |
 | Exactness-to-isomorphism with zero endpoints | Done | Proved in [`src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md`](src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md). |
 | Higher homotopy groups of the circle vanish | Done locally | Positive concrete homotopy groups of the circle and 1-sphere are trivial, and this is now also packaged as ordinary group-level triviality of the underlying groups. |
 | Loop space of the circle is the integers | Done | The loop-space equivalence is formalized, the universal-cover encoder is proved additive on loop concatenation, the result is transferred to the 1-sphere, and the concrete group isomorphism `π₁(S¹) ≅ ℤ` is checked. |
@@ -397,7 +397,7 @@ available in `diagonal-homotopy-groups-spheres`.
 
 ## Remaining tasks
 
-No proof obligations remain for the current route to `π₃(S²) ≅ ℤ`, and the positive diagonal theorem `πₙ(Sⁿ) ≅ ℤ` is now also checked locally in the repository indexing. Future upstream-facing work should polish module boundaries, naming, and exposition for the Blakers-Massey, Freudenthal, diagonal stability, and diagonal theorem developments, and decide which general results should be proposed to agda-unimath proper.
+No proof obligations remain for the current route to `π₃(S²) ≅ ℤ`, and the positive diagonal theorem `πₙ(Sⁿ) ≅ ℤ` is now also checked locally in the repository indexing. Future upstream-facing work should polish module boundaries, naming, and exposition for the LES, Blakers-Massey, Freudenthal, diagonal stability, and diagonal theorem developments, and decide which general results should be proposed to agda-unimath proper.
 
 ## Next agent handoff
 
@@ -410,7 +410,7 @@ The full current route to `π₃(S²) ≅ ℤ` is checked and unconditional. The
 - final unconditional exports `iso-third-homotopy-group-sphere-3-ℤ` and `iso-third-homotopy-group-sphere-2-ℤ`.
 - new general diagonal exports in `diagonal-homotopy-groups-spheres`, especially `iso-diagonal-homotopy-group-sphere-succ-ℤ`, proving `πₙ₊₁(Sⁿ⁺¹) ≅ ℤ` from the base cases and recursive Freudenthal diagonal stability.
 
-The next useful work is not another blocker-clearing proof, but upstream-quality cleanup: review names and file boundaries, improve prose around the Blakers-Massey and Freudenthal bridge, and decide how much of the local development should be split into general agda-unimath-ready modules.
+The next useful work is not another blocker-clearing proof, but upstream-quality cleanup: review names and file boundaries, improve prose around the LES boundary convention, Blakers-Massey, and Freudenthal bridge, and decide how much of the local development should be split into general agda-unimath-ready modules.
 
 ## Current verification
 
@@ -2495,3 +2495,38 @@ Verification:
 ```
 
 All eleven Agda checks passed.
+
+
+### Public LES completion pass
+
+Request: Emily asked Codex to implement the library-quality LES completion plan, focusing on the hard public boundary, pointed-set tail, and abelian refinements rather than further route splitting.
+
+Model context:
+
+- Date: 2026-06-27.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible; this session used `./check.sh` as the proof acceptance gate.
+
+Actions:
+
+- Simplified the public group-level LES record to one canonical boundary field, retaining compatibility aliases for the old fibration-boundary and boundary/fiber-inclusion projections.
+- Added `group-theory.exact-sequences-abelian-groups` as the abelian-group exactness wrapper over underlying group exactness.
+- Added `abelian-homotopy-groups`, proving higher concrete homotopy groups are abelian by applying Eckmann-Hilton to set-truncated double-loop multiplication and transporting through the concrete homotopy-group underlying-type equivalence.
+- Added `abelian-long-exact-sequence-homotopy-groups-fiber-sequences`, packaging the abelian-range LES by shifting the checked concrete group-level exactness to index `succ-ℕ n`.
+- Added `pointed-set-tail-long-exact-sequence-homotopy-groups-fiber-sequences`, packaging the low-degree pointed-set tail `||Omega E||_0 -> ||Omega B||_0 -> ||F||_0 -> ||E||_0 -> ||B||_0` with exactness at the three valid middle terms.
+- Updated the top-level LES coordination module and status docs to expose the new packages.
+
+Verification:
+
+```sh
+./check.sh src/group-theory/exact-sequences-abelian-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/pointed-set-tail-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/abelian-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/abelian-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+git diff --check
+rg "\{!|postulate|TERMINATING|--allow-unsolved-metas|--rewriting" <touched Agda files>
+```
+
+All six Agda checks passed. `git diff --check` passed. The touched-file scan produced no matches.
