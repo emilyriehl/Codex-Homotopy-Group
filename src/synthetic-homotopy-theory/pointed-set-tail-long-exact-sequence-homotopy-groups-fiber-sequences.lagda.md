@@ -21,8 +21,9 @@ open import synthetic-homotopy-theory.set-truncated-exactness-homotopy-groups-fi
 
 ## Idea
 
-The low-degree tail of the long exact sequence is naturally a sequence of
-pointed sets. For a fiber sequence `F -> E -> B`, this package records
+The **pointed-set tail** of the long exact sequence is the low-degree part that
+keeps components as pointed sets rather than forcing them into group structure.
+For a fiber sequence `F -> E -> B`, this package records
 
 ```text
   ||ΩE||₀ -> ||ΩB||₀ -> ||F||₀ -> ||E||₀ -> ||B||₀
@@ -86,6 +87,71 @@ module _
 
   open Pointed-Set-Tail-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence
     public
+
+  hom-loop-fibration-pointed-set-tail-long-exact-sequence :
+    Pointed-Set-Tail-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence →
+    hom-Pointed-Set
+      ( trunc-Pointed-Set (Ω (total-space-fiber-sequence-Pointed-Type S)))
+      ( trunc-Pointed-Set (Ω (base-fiber-sequence-Pointed-Type S)))
+  hom-loop-fibration-pointed-set-tail-long-exact-sequence =
+    hom-loop-fibration-pointed-set-tail-long-exact-sequence-homotopy-groups-fiber-sequence
+
+  hom-boundary-pointed-set-tail-long-exact-sequence :
+    Pointed-Set-Tail-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence →
+    hom-Pointed-Set
+      ( trunc-Pointed-Set (Ω (base-fiber-sequence-Pointed-Type S)))
+      ( trunc-Pointed-Set (fiber-fiber-sequence-Pointed-Type S))
+  hom-boundary-pointed-set-tail-long-exact-sequence =
+    hom-boundary-pointed-set-tail-long-exact-sequence-homotopy-groups-fiber-sequence
+
+  hom-fiber-inclusion-pointed-set-tail-long-exact-sequence :
+    Pointed-Set-Tail-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence →
+    hom-Pointed-Set
+      ( trunc-Pointed-Set (fiber-fiber-sequence-Pointed-Type S))
+      ( trunc-Pointed-Set (total-space-fiber-sequence-Pointed-Type S))
+  hom-fiber-inclusion-pointed-set-tail-long-exact-sequence =
+    hom-fiber-inclusion-pointed-set-tail-long-exact-sequence-homotopy-groups-fiber-sequence
+
+  hom-fibration-pointed-set-tail-long-exact-sequence :
+    Pointed-Set-Tail-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence →
+    hom-Pointed-Set
+      ( trunc-Pointed-Set (total-space-fiber-sequence-Pointed-Type S))
+      ( trunc-Pointed-Set (base-fiber-sequence-Pointed-Type S))
+  hom-fibration-pointed-set-tail-long-exact-sequence =
+    hom-fibration-pointed-set-tail-long-exact-sequence-homotopy-groups-fiber-sequence
+
+  exact-at-loop-base-pointed-set-tail-long-exact-sequence :
+    (T : Pointed-Set-Tail-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence) →
+    is-exact-hom-Pointed-Set
+      ( trunc-Pointed-Set (Ω (total-space-fiber-sequence-Pointed-Type S)))
+      ( trunc-Pointed-Set (Ω (base-fiber-sequence-Pointed-Type S)))
+      ( trunc-Pointed-Set (fiber-fiber-sequence-Pointed-Type S))
+      ( hom-loop-fibration-pointed-set-tail-long-exact-sequence T)
+      ( hom-boundary-pointed-set-tail-long-exact-sequence T)
+  exact-at-loop-base-pointed-set-tail-long-exact-sequence =
+    is-exact-loop-fibration-boundary-pointed-set-tail-long-exact-sequence-homotopy-groups-fiber-sequence
+
+  exact-at-fiber-pointed-set-tail-long-exact-sequence :
+    (T : Pointed-Set-Tail-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence) →
+    is-exact-hom-Pointed-Set
+      ( trunc-Pointed-Set (Ω (base-fiber-sequence-Pointed-Type S)))
+      ( trunc-Pointed-Set (fiber-fiber-sequence-Pointed-Type S))
+      ( trunc-Pointed-Set (total-space-fiber-sequence-Pointed-Type S))
+      ( hom-boundary-pointed-set-tail-long-exact-sequence T)
+      ( hom-fiber-inclusion-pointed-set-tail-long-exact-sequence T)
+  exact-at-fiber-pointed-set-tail-long-exact-sequence =
+    is-exact-boundary-fiber-inclusion-pointed-set-tail-long-exact-sequence-homotopy-groups-fiber-sequence
+
+  exact-at-total-pointed-set-tail-long-exact-sequence :
+    (T : Pointed-Set-Tail-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence) →
+    is-exact-hom-Pointed-Set
+      ( trunc-Pointed-Set (fiber-fiber-sequence-Pointed-Type S))
+      ( trunc-Pointed-Set (total-space-fiber-sequence-Pointed-Type S))
+      ( trunc-Pointed-Set (base-fiber-sequence-Pointed-Type S))
+      ( hom-fiber-inclusion-pointed-set-tail-long-exact-sequence T)
+      ( hom-fibration-pointed-set-tail-long-exact-sequence T)
+  exact-at-total-pointed-set-tail-long-exact-sequence =
+    is-exact-fiber-inclusion-fibration-pointed-set-tail-long-exact-sequence-homotopy-groups-fiber-sequence
 
   pointed-set-tail-long-exact-sequence-homotopy-groups-fiber-sequence :
     Pointed-Set-Tail-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence

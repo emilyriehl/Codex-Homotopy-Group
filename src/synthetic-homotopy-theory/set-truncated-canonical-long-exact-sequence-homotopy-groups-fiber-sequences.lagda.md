@@ -25,7 +25,7 @@ open import synthetic-homotopy-theory.set-truncated-iterated-exactness-homotopy-
 
 ## Idea
 
-The canonical set-truncated long exact sequence package records the two
+The **set-truncated canonical long exact sequence** package records the two
 adjacent uses of the boundary map separately. The fibration-boundary segment
 uses the fresh boundary map of the shifted iterated loop fiber sequence, while
 the boundary-fiber-inclusion segment uses the loop-boundary map of the current
@@ -34,7 +34,9 @@ but this package does not assert that they are equal.
 
 The exactness proofs are imported from the iterated set-truncated exactness
 module. This file is the public package layer that hides the signed comparison
-and transport machinery.
+and transport machinery. The aliases below name the two boundary appearances as
+the shifted boundary and the loop boundary, which is the distinction needed by
+the structural `connect_fiberseq` proof route.
 
 ## Definitions
 
@@ -171,6 +173,40 @@ module _
 
   open Set-Truncated-Canonical-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence
     public
+
+  hom-shifted-boundary-set-truncated-homotopy-group-long-exact-sequence :
+    Set-Truncated-Canonical-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence →
+    (n : ℕ) →
+    hom-Pointed-Set
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( succ-ℕ n)
+            ( base-fiber-sequence-Pointed-Type S))))
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( n)
+            ( fiber-fiber-sequence-Pointed-Type S))))
+  hom-shifted-boundary-set-truncated-homotopy-group-long-exact-sequence =
+    hom-fibration-boundary-set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequence
+
+  hom-loop-boundary-set-truncated-homotopy-group-long-exact-sequence :
+    Set-Truncated-Canonical-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence →
+    (n : ℕ) →
+    hom-Pointed-Set
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( succ-ℕ n)
+            ( base-fiber-sequence-Pointed-Type S))))
+      ( trunc-Pointed-Set
+        ( Ω
+          ( iterated-loop-space
+            ( n)
+            ( fiber-fiber-sequence-Pointed-Type S))))
+  hom-loop-boundary-set-truncated-homotopy-group-long-exact-sequence =
+    hom-boundary-fiber-inclusion-set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequence
 
   set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequence :
     Set-Truncated-Canonical-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence

@@ -2530,3 +2530,38 @@ rg "\{!|postulate|TERMINATING|--allow-unsolved-metas|--rewriting" <touched Agda 
 ```
 
 All six Agda checks passed. `git diff --check` passed. The touched-file scan produced no matches.
+
+
+### Public LES API And Prose Polish Pass
+
+Request: Emily asked Codex to implement the remaining plan after reviewing the previous plan and previous commit for what remained to complete library-quality LES code.
+
+Model context:
+
+- Date: 2026-06-27.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible; final acceptance used `./check.sh <file>`.
+
+Actions:
+
+- Added shorter public aliases for the standard group-level LES maps: fiber inclusion, fibration, and canonical boundary.
+- Added set-truncated boundary aliases distinguishing the shifted boundary from the loop boundary used by the two adjacent exactness positions.
+- Added abelian-range LES map aliases and pointed-set tail map plus `exact-at-...` aliases.
+- Rewrote public prose to make the canonical boundary convention and structural connecting-fiber-sequence proof route explicit.
+- Updated `LES-STATUS.md` so completed public-surface work is no longer listed as future work.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/abelian-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/pointed-set-tail-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+All five Agda checks passed. `git diff --check` passed. The touched-file safety scan produced no matches.
+
+Related commit:
+
+- This commit - Polish LES public API aliases.

@@ -27,11 +27,23 @@ open import synthetic-homotopy-theory.homotopy-groups
 
 ## Idea
 
-The group-level package records the canonical iterated boundary homomorphism as
-the public boundary map of the sequence. Internally, the fibration-boundary
-exactness proof compares the looped canonical boundary with the fresh shifted
-boundary by an all-index signed equivalence, but the signed transport is not
-part of the public long exact sequence data.
+The **group-level long exact sequence** package records the canonical iterated
+boundary homomorphism as the public boundary map of the sequence
+
+```text
+  ... -> pi_(n+2)(B) -> pi_(n+1)(F) -> pi_(n+1)(E) ->
+  pi_(n+1)(B) -> ...
+```
+
+In the repository indexing, `concrete-homotopy-group n A` is `pi_(n+1)(A)`.
+Thus the boundary field at index `n` has source
+`concrete-homotopy-group (succ-ℕ n) B` and target
+`concrete-homotopy-group n F`.
+
+Internally, the fibration-boundary exactness proof compares the looped
+canonical boundary with the fresh shifted boundary by an all-index signed
+equivalence, but the signed transport is not part of the public long exact
+sequence data.
 
 ## Definitions
 
@@ -201,6 +213,45 @@ module _
   hom-boundary-fiber-inclusion-long-exact-sequence-homotopy-groups-fiber-sequence
     L =
     hom-boundary-long-exact-sequence-homotopy-groups-fiber-sequence L
+
+  hom-fiber-inclusion-homotopy-group-long-exact-sequence :
+    Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence →
+    (n : ℕ) →
+    hom-Concrete-Group
+      ( concrete-homotopy-group
+        ( n)
+        ( fiber-fiber-sequence-Pointed-Type S))
+      ( concrete-homotopy-group
+        ( n)
+        ( total-space-fiber-sequence-Pointed-Type S))
+  hom-fiber-inclusion-homotopy-group-long-exact-sequence =
+    hom-fiber-inclusion-long-exact-sequence-homotopy-groups-fiber-sequence
+
+  hom-fibration-homotopy-group-long-exact-sequence :
+    Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence →
+    (n : ℕ) →
+    hom-Concrete-Group
+      ( concrete-homotopy-group
+        ( n)
+        ( total-space-fiber-sequence-Pointed-Type S))
+      ( concrete-homotopy-group
+        ( n)
+        ( base-fiber-sequence-Pointed-Type S))
+  hom-fibration-homotopy-group-long-exact-sequence =
+    hom-fibration-long-exact-sequence-homotopy-groups-fiber-sequence
+
+  hom-boundary-homotopy-group-long-exact-sequence :
+    Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence →
+    (n : ℕ) →
+    hom-Concrete-Group
+      ( concrete-homotopy-group
+        ( succ-ℕ n)
+        ( base-fiber-sequence-Pointed-Type S))
+      ( concrete-homotopy-group
+        ( n)
+        ( fiber-fiber-sequence-Pointed-Type S))
+  hom-boundary-homotopy-group-long-exact-sequence =
+    hom-boundary-long-exact-sequence-homotopy-groups-fiber-sequence
 
   exact-at-total-long-exact-sequence-homotopy-groups-fiber-sequence :
     (L : Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence) →

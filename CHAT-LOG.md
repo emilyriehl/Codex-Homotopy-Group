@@ -6421,3 +6421,36 @@ All six Agda checks passed. `git diff --check` passed. The touched-file scan pro
 Related commit:
 
 - This commit - Complete public LES packages.
+
+
+### Public LES API And Prose Polish Pass
+
+Request: Emily asked Codex to implement the remaining library-quality LES plan after checking the previous plan and previous commit.
+
+Model context:
+
+- Date: 2026-06-27.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible; final acceptance used `./check.sh <file>`.
+
+Actions:
+
+- Added reviewer-facing LES aliases in the group-level, set-truncated, abelian, and pointed-set tail public packages.
+- Clarified the canonical boundary convention and the structural connecting-fiber-sequence proof route in the public prose.
+- Updated the LES status handoff so completed alias/prose work is not still listed as future work.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/abelian-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/pointed-set-tail-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+All five Agda checks passed. `git diff --check` passed. The touched-file safety scan produced no matches.
+
+Related commit:
+
+- This commit - Polish LES public API aliases.

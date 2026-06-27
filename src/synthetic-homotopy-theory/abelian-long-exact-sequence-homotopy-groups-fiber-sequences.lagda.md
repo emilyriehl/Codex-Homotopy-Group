@@ -28,8 +28,12 @@ open import synthetic-homotopy-theory.homotopy-groups
 ## Idea
 
 In dimensions `2` and higher, homotopy groups are abelian. This file packages
-the long exact sequence of a fiber sequence in that abelian range. The boundary
-map is indexed so that
+the **abelian long exact sequence** of a fiber sequence in that range. It is a
+public abelian-group wrapper around the checked concrete-group long exact
+sequence, using the abelian homotopy groups supplied by
+[`abelian-homotopy-groups`](synthetic-homotopy-theory.abelian-homotopy-groups.md).
+
+The boundary map is indexed so that
 
 ```text
   π_{n+3} B -> π_{n+2} F
@@ -134,6 +138,45 @@ module _
             ( n))
 
   open Abelian-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence public
+
+  hom-fiber-inclusion-abelian-homotopy-group-long-exact-sequence :
+    Abelian-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence →
+    (n : ℕ) →
+    hom-Ab
+      ( abelian-homotopy-group
+        ( n)
+        ( fiber-fiber-sequence-Pointed-Type S))
+      ( abelian-homotopy-group
+        ( n)
+        ( total-space-fiber-sequence-Pointed-Type S))
+  hom-fiber-inclusion-abelian-homotopy-group-long-exact-sequence =
+    hom-fiber-inclusion-abelian-long-exact-sequence-homotopy-groups-fiber-sequence
+
+  hom-fibration-abelian-homotopy-group-long-exact-sequence :
+    Abelian-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence →
+    (n : ℕ) →
+    hom-Ab
+      ( abelian-homotopy-group
+        ( n)
+        ( total-space-fiber-sequence-Pointed-Type S))
+      ( abelian-homotopy-group
+        ( n)
+        ( base-fiber-sequence-Pointed-Type S))
+  hom-fibration-abelian-homotopy-group-long-exact-sequence =
+    hom-fibration-abelian-long-exact-sequence-homotopy-groups-fiber-sequence
+
+  hom-boundary-abelian-homotopy-group-long-exact-sequence :
+    Abelian-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence →
+    (n : ℕ) →
+    hom-Ab
+      ( abelian-homotopy-group
+        ( succ-ℕ n)
+        ( base-fiber-sequence-Pointed-Type S))
+      ( abelian-homotopy-group
+        ( n)
+        ( fiber-fiber-sequence-Pointed-Type S))
+  hom-boundary-abelian-homotopy-group-long-exact-sequence =
+    hom-boundary-abelian-long-exact-sequence-homotopy-groups-fiber-sequence
 
   hom-canonical-boundary-abelian-homotopy-group-fiber-sequence :
     (n : ℕ) →

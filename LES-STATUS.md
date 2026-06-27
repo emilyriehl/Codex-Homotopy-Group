@@ -425,201 +425,81 @@ is trivial.
 
 ## What Is Still Missing For Library-Quality LES Code
 
-### Natural-Language LES Surface Still Needs Polish
+### Current Public Surface
 
-There is now a checked set-truncated canonical LES package for the repeating
-adjacent pointed-set exactness positions, and a checked group-level record
-packaging the three repeating ordinary group exactness positions for a fiber
-sequence. The group-level package uses one canonical boundary homomorphism
-convention in both boundary positions.
+The checked public LES surface now has the planned package layers and the first
+reviewer-facing naming pass:
 
-A library-quality result should probably provide a named object or theorem
-whose surface resembles the natural-language statement:
+- `long-exact-sequence-homotopy-groups-fiber-sequences` exposes one canonical
+  group-level boundary convention, plus shorter standard-arrow aliases for the
+  fiber inclusion, fibration, and boundary homomorphisms.
+- `set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequences`
+  exposes aliases distinguishing the shifted boundary and the loop boundary,
+  matching the structural connecting-fiber-sequence proof route.
+- `pointed-set-tail-long-exact-sequence-homotopy-groups-fiber-sequences`
+  exposes shorter map aliases and `exact-at-...` aliases for the valid
+  low-degree middle terms.
+- `abelian-long-exact-sequence-homotopy-groups-fiber-sequences` exposes shorter
+  aliases for the abelian-range LES arrows.
 
-```text
-... -> pi_(n+1)(B) -> pi_n(F) -> pi_n(E) -> pi_n(B) -> pi_(n-1)(F) -> ...
-```
+The public prose now records the chosen group-level boundary convention: the
+public boundary is the canonical iterated boundary homomorphism, while signed
+comparisons, recursive boundaries, direct shifted maps, and image/kernel
+transports remain theorem-provider machinery. The top-level coordination module
+also states the intended proof route: build connecting and iterated-loop fiber
+sequences, prove set-truncated exactness, then transport to concrete
+homotopy-group exactness.
 
-with exactness projections for each middle term.
+### Remaining Upstream Work
 
-### Boundary Conventions Still Need Upstream API Polish
+The remaining work is no longer a proof-search blocker or a file-splitting
+blocker. It is an upstream API review problem:
 
-The total-space exactness statement is available for all indices. The
-fibration-boundary and boundary/fiber-inclusion group exactness statements are
-now also available for all indices using the canonical boundary map of each
-iterated fiber sequence.
-
-The new set-truncated canonical package deliberately follows the Coq-HoTT
-`loops_les` style: each adjacent segment uses the fresh canonical connecting
-map supplied by the relevant iterated fiber sequence. In particular, it records
-two boundary fields with the same displayed source and target, one for
-fibration-boundary exactness and one for boundary/fiber-inclusion exactness,
-and does not assert that these are equal.
-
-The public group-level package has chosen the latter convention: it exposes the
-delooped canonical boundary homomorphism and hides the systematic signed
-adapter in the proof that this boundary gives fibration-boundary exactness. A
-direct unsigned comparison between `Ω` of the canonical boundary and the fresh
-canonical shifted boundary is still not correct for the current definitions;
-the checked all-index theorem records the necessary inversion internally.
-
-### The Proof Shape Is Still Too Transport-Heavy
-
-Much of the current code proves exactness by moving image and kernel predicates
-through comparisons. This was effective for finishing the local Hopf
-calculation, but it is not the ideal final proof.
-
-For upstream, the preferred proof should first package the shifted connecting
-fiber sequence
-
-```text
-Omega E -> Omega B -> F
-```
-
-and its iterates as reusable fiber sequences. Exactness of homotopy groups
-should then be derived from those structural fiber sequences. Transport lemmas
-should remain available, but not be the main public proof narrative.
-
-### Boundary Map Conventions Need A Clear Public Story
-
-The formalization currently has canonical boundary maps, recursive boundary
-maps for packaged fiber sequences, direct shifted maps, and comparison
-theorems between them. These distinctions were necessary to make the code
-check, especially under `--without-K`, but they make the API hard to read.
-
-Before upstreaming, there should be one documented boundary convention and
-clear theorem names explaining:
-
-- which boundary map is canonical;
-- how the boundary associated to a chosen packaged fiber sequence compares with
-  the canonical one;
-- how looping/reindexing changes the displayed boundary map;
-- whether the comparison is definitional, by pointed homotopy, or by transport.
-
-### The Proof Modules Are Split, But Need A Public API Pass
-
-`long-exact-sequence-homotopy-groups.lagda.md` is now only a thin coordination
-module. Completed splits include:
-
-- loop spaces of fibers and fibers of fiber inclusions;
-- shifted connecting fiber sequences;
-- boundary maps of pointed maps and their fiber comparisons;
-- exactness of set truncations of fiber sequences;
-- iterated loop fiber sequences;
-- recursive and canonical iterated boundary maps;
-- homomorphisms induced on concrete homotopy groups by fiber sequences;
-- iterated set-truncated maps, canonical exactness, direct exactness,
-  recursive exactness, and signed boundary comparisons;
-- generic and fiber-sequence-specific pointed-set-to-group exactness bridges;
-- canonical, direct, and recursive group-level exactness theorem providers;
-- the set-truncated canonical LES package;
-- the group-level LES package with a single public canonical boundary field and
-  compatibility aliases;
-- abelian exactness, abelian homotopy groups, and the abelian-range LES package;
-- the low-degree pointed-set LES tail package.
-
-The main remaining issue is no longer file size or ownership of the old
-compatibility layers. The issue is the reviewer-facing API. The exactness
-providers are organized enough to build on, but the public package should expose
-a natural LES surface, hide transport and sign adapters, and explain which
-boundary convention it has chosen.
-
-### Low-Degree And Abelian Packages
-
-The low-dimensional pointed-set tail is now packaged in
-`pointed-set-tail-long-exact-sequence-homotopy-groups-fiber-sequences`. It
-records
-
-```text
-||ΩE||_0 -> ||ΩB||_0 -> ||F||_0 -> ||E||_0 -> ||B||_0
-```
-
-with exactness at `||ΩB||_0`, `||F||_0`, and `||E||_0`; it deliberately does
-not assert terminal exactness at `||B||_0`, since that would be a surjectivity
-claim for `||E||_0 -> ||B||_0`.
-
-The higher abelian range is now packaged in `abelian-homotopy-groups` and
-`abelian-long-exact-sequence-homotopy-groups-fiber-sequences`. The abelian proof
-uses Eckmann-Hilton on set-truncated double-loop multiplication and the existing
-underlying-type equivalence for concrete homotopy groups.
-
-### Naming Still Reflects The Project History
-
-Some exports and wrappers are named around concrete homotopy groups, Hopf-facing
-segments, direct variants, or low-dimensional convenience cases. That is fine
-for local progress, but upstream names should emphasize the stable mathematical
-construction rather than the route by which the blocker was cleared.
+- decide final upstream module names and namespaces for the group-level,
+  set-truncated, abelian, and pointed-set tail packages;
+- decide which compatibility names should stay public and which should move
+  behind re-export or migration facades;
+- decide whether the record projections are enough, or whether the library
+  should also expose a more display-oriented object that renders the standard
+  long exact sequence as a single indexed family of adjacent maps;
+- keep route-specific names such as direct, recursive, signed, and
+  low-dimensional convenience variants out of the main narrative unless a user
+  explicitly asks for those comparison theorems.
 
 ## Recommended Next Steps
 
-1. Build the reviewer-facing natural LES surface.
+1. Do an upstream naming review of the checked public aliases.
 
-   Start in
-   `src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md`
-   and
-   `src/synthetic-homotopy-theory/set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md`.
-   Add names and projections that read like the standard statement
+   Start with the four public package files and decide whether names such as
+   `hom-boundary-homotopy-group-long-exact-sequence`,
+   `hom-shifted-boundary-set-truncated-homotopy-group-long-exact-sequence`, and
+   `exact-at-fiber-pointed-set-tail-long-exact-sequence` are the right upstream
+   surface or should be shortened further.
+
+2. Decide whether to add a display-level LES object.
+
+   The current records package the three repeating exactness positions. A more
+   polished library result might also provide one indexed family of maps whose
+   displayed order looks exactly like
 
    ```text
    ... -> pi_(n+1)(B) -> pi_n(F) -> pi_n(E) -> pi_n(B) -> pi_(n-1)(F) -> ...
    ```
 
-   The existing records already package the repeating exactness data; the task
-   is to expose that data in a form a library user can recognize without
-   reading the proof modules.
+   This should be an additive API layer over the checked records, not a rewrite
+   of the proof providers.
 
-2. Write the boundary-convention story into the public package prose.
+3. Prepare an upstream extraction patch.
 
-   The public group-level package currently uses the delooped canonical
-   boundary homomorphism and keeps the signed comparison inside the imported
-   exactness proof. Document this as the chosen convention. The prose should
-   also state how the fresh canonical shifted boundary, recursive boundary, and
-   direct connecting-map boundary relate, pointing to the provider modules:
+   Keep the structural modules, exactness-provider modules, public package
+   modules, and compatibility facades separate. The exactness-provider split is
+   now useful for review and should not be redone unless a concrete public API
+   problem forces it.
 
-   - `set-truncated-canonical-iterated-exactness-homotopy-groups-fiber-sequences`;
-   - `set-truncated-direct-iterated-exactness-homotopy-groups-fiber-sequences`;
-   - `set-truncated-recursive-iterated-exactness-homotopy-groups-fiber-sequences`;
-   - `signed-boundary-comparisons-fiber-sequences`;
-   - `canonical-exactness-homotopy-groups-fiber-sequences`;
-   - `direct-exactness-homotopy-groups-fiber-sequences`;
-   - `recursive-exactness-homotopy-groups-fiber-sequences`.
-
-   Do not expose the signed transport as the main public theorem.
-
-3. Recast the proof narrative around structural connecting fiber sequences.
-
-   The code has the Coq-HoTT-style `connect_fiberseq` ingredient in
-   `connecting-fiber-sequences` and the direct set-truncated exactness provider.
-   The next library-quality pass should make the public explanation say:
-
-   - first build the shifted connecting fiber sequence
-     `Omega E -> Omega B -> F`;
-   - iterate it;
-   - derive set-truncated exactness;
-   - then transport to concrete homotopy-group exactness.
-
-   Image/kernel and signed transport lemmas should be documented as internal
-   adapters needed to compare boundary conventions, not as the headline proof.
-
-4. Do an upstream-readiness naming and prose pass.
-
-   Remove or de-emphasize names whose main purpose was local Hopf progress,
-   such as low-dimensional convenience aliases, from the public narrative.
-   Keep compatibility names available if downstream files use them, but make
-   the stable names describe the mathematical construction. Add short
-   `## Idea` prose and cross-links in the public package files so a reviewer
-   can navigate the modules without reconstructing the development history.
-
-5. Audit the new low-degree and abelian packages for upstream naming.
-
-   The `pi_0` tail and abelian-range LES are now checked, but their names are
-   still intentionally explicit and local. The next pass should decide which
-   projections deserve shorter public aliases and how much of the abelian
-   exactness wrapper belongs upstream next to the existing group exactness API.
-
-For handoff: the next agent should not spend time re-splitting the exactness
-providers unless a concrete API problem requires it. The main target is now the
-public LES theorem/package interface and its explanatory prose.
+For handoff: the next agent should not spend time re-splitting exactness
+providers or re-proving the LES. The main remaining decisions are public naming,
+namespace placement, and whether to add one final display-oriented theorem
+layer over the checked packages.
 
 ## Verification State
 
@@ -1044,3 +924,20 @@ The checked commands were:
 ```
 
 All six Agda checks passed. `git diff --check` passed, and a touched-file scan found no holes, postulates, unsafe termination pragmas, rewrite-rule dependency, or unsolved-meta options.
+
+
+## 2026-06-27 Public LES API And Prose Polish Pass
+
+Codex implemented the remaining public API and prose pass over the checked LES packages. The group-level, set-truncated, abelian, and pointed-set tail packages now expose shorter reviewer-facing aliases for the standard maps and exactness positions, while the public prose records the canonical boundary convention and the structural connecting-fiber-sequence proof narrative.
+
+The checked commands were:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/abelian-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/pointed-set-tail-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+```
+
+All five Agda checks passed. `git diff --check` passed, and the touched-file safety scan produced no matches.
