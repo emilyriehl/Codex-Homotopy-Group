@@ -6454,3 +6454,45 @@ All five Agda checks passed. `git diff --check` passed. The touched-file safety 
 Related commit:
 
 - This commit - Polish LES public API aliases.
+
+
+### Aggressive LES display and rename pass
+
+Request: Emily asked Codex to follow the agreed LES design decisions aggressively,
+renaming public files and terms and cleaning up the display-level LES layer.
+
+Model context:
+
+- Date: 2026-06-27.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model
+  identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible; final acceptance used `./check.sh <file>`.
+
+Actions:
+
+- Added `structured-types.long-exact-sequences-pointed-sets` with the generic
+  `Long-Exact-Sequence-Pointed-Set` record.
+- Renamed the public LES package files to pluralized names and updated imports.
+- Removed the old compatibility aliases from the main group-level, abelian, and
+  pointed-set tail packages, making the concise names the actual fields.
+- Replaced the old set-truncated two-boundary package with a generic display
+  instance using one looped canonical boundary map.
+- Updated the current LES status and formalization status docs.
+
+Verification:
+
+```sh
+./check.sh src/structured-types/long-exact-sequences-pointed-sets.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-long-exact-sequences-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/abelian-long-exact-sequences-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/pointed-set-tail-long-exact-sequences-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/classifying-fiber-sequences-homotopy-groups.lagda.md
+```
+
+All seven Agda checks passed. `git diff --check` passed, and the touched-file safety scan produced no matches.
+
+Related commit:
+
+- This commit - Rename LES packages and add display layer.

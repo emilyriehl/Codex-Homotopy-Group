@@ -1,20 +1,22 @@
 # Long exact sequences of homotopy groups
 
 ```agda
-module synthetic-homotopy-theory.long-exact-sequence-homotopy-groups where
+module synthetic-homotopy-theory.long-exact-sequences-homotopy-groups where
 ```
 
 <details><summary>Imports</summary>
 
 ```agda
+open import structured-types.long-exact-sequences-pointed-sets
+
 open import synthetic-homotopy-theory.abelian-homotopy-groups
-open import synthetic-homotopy-theory.abelian-long-exact-sequence-homotopy-groups-fiber-sequences
+open import synthetic-homotopy-theory.abelian-long-exact-sequences-homotopy-groups-fiber-sequences
 open import synthetic-homotopy-theory.homomorphisms-homotopy-groups-fiber-sequences
 open import synthetic-homotopy-theory.iterated-boundary-maps-fiber-sequences
 open import synthetic-homotopy-theory.iterated-loop-fiber-sequences
-open import synthetic-homotopy-theory.long-exact-sequence-homotopy-groups-fiber-sequences
-open import synthetic-homotopy-theory.pointed-set-tail-long-exact-sequence-homotopy-groups-fiber-sequences
-open import synthetic-homotopy-theory.set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequences
+open import synthetic-homotopy-theory.long-exact-sequences-homotopy-groups-fiber-sequences
+open import synthetic-homotopy-theory.pointed-set-tail-long-exact-sequences-fiber-sequences
+open import synthetic-homotopy-theory.set-truncated-long-exact-sequences-fiber-sequences
 ```
 
 </details>
@@ -47,13 +49,13 @@ to concrete homotopy-group exactness. Recursive boundary maps, direct shifted
 boundary adapters, signed comparisons, and image/kernel transports remain
 separate theorem-provider machinery rather than the headline LES API.
 
-The public surface now has three checked package layers: the concrete group-level
-long exact sequence, the abelian long exact sequence in dimensions `2` and
-higher, and the low-degree pointed-set tail
-`||ΩE||₀ -> ||ΩB||₀ -> ||F||₀ -> ||E||₀ -> ||B||₀`. These
-packages expose shorter `hom-...-long-exact-sequence` and
-`exact-at-...-long-exact-sequence` aliases for the standard arrows and
-exactness terms while keeping the underlying checked record fields available.
+The public surface now has five checked package layers: a generic three-periodic
+pointed-set LES display, the set-truncated instance for fiber sequences, the
+concrete group-level long exact sequence, the abelian long exact sequence in
+dimensions `2` and higher, and the low-degree pointed-set tail
+`||ΩE||₀ -> ||ΩB||₀ -> ||F||₀ -> ||E||₀ -> ||B||₀`. These packages expose
+their standard arrows and exactness positions as record fields, with route-specific
+comparison machinery kept outside the headline LES API.
 
 ## Definitions
 
@@ -74,27 +76,32 @@ The homomorphisms on concrete homotopy groups induced by the fiber inclusion,
 fibration, and boundary maps of a fiber sequence are defined in
 [`homomorphisms-homotopy-groups-fiber-sequences`](synthetic-homotopy-theory.homomorphisms-homotopy-groups-fiber-sequences.md).
 
-### Set-truncated canonical long exact sequence
+### Generic pointed-set long exact sequence display
 
-The set-truncated canonical long exact sequence package is defined in
-[`set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequences`](synthetic-homotopy-theory.set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequences.md).
+The generic three-periodic pointed-set display is defined in
+[`structured-types.long-exact-sequences-pointed-sets`](structured-types.long-exact-sequences-pointed-sets.md).
+
+### Set-truncated long exact sequence
+
+The set-truncated long exact sequence package is defined in
+[`set-truncated-long-exact-sequences-fiber-sequences`](synthetic-homotopy-theory.set-truncated-long-exact-sequences-fiber-sequences.md).
 
 ### Group-level long exact sequence
 
 The group-level long exact sequence package is defined in
-[`long-exact-sequence-homotopy-groups-fiber-sequences`](synthetic-homotopy-theory.long-exact-sequence-homotopy-groups-fiber-sequences.md).
+[`long-exact-sequences-homotopy-groups-fiber-sequences`](synthetic-homotopy-theory.long-exact-sequences-homotopy-groups-fiber-sequences.md).
 
 ### Abelian homotopy groups and abelian long exact sequence
 
 The higher homotopy groups are packaged as abelian groups in
 [`abelian-homotopy-groups`](synthetic-homotopy-theory.abelian-homotopy-groups.md).
 The abelian-range long exact sequence package is defined in
-[`abelian-long-exact-sequence-homotopy-groups-fiber-sequences`](synthetic-homotopy-theory.abelian-long-exact-sequence-homotopy-groups-fiber-sequences.md).
+[`abelian-long-exact-sequences-homotopy-groups-fiber-sequences`](synthetic-homotopy-theory.abelian-long-exact-sequences-homotopy-groups-fiber-sequences.md).
 
 ### Pointed-set tail
 
 The low-degree pointed-set tail is defined in
-[`pointed-set-tail-long-exact-sequence-homotopy-groups-fiber-sequences`](synthetic-homotopy-theory.pointed-set-tail-long-exact-sequence-homotopy-groups-fiber-sequences.md).
+[`pointed-set-tail-long-exact-sequences-fiber-sequences`](synthetic-homotopy-theory.pointed-set-tail-long-exact-sequences-fiber-sequences.md).
 
 ## Properties
 

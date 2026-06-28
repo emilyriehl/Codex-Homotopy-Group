@@ -38,7 +38,7 @@ An **exact sequence of pointed sets** is a sequence of pointed sets and pointed
 maps whose image at each middle term is equal to the kernel of the following
 map. This uses [pointed sets](structured-types.pointed-sets.md) as the
 ambient structure. It is the pointed-set version used in the proof of the
-[long exact sequence of homotopy groups](synthetic-homotopy-theory.long-exact-sequence-homotopy-groups.md):
+[long exact sequence of homotopy groups](synthetic-homotopy-theory.long-exact-sequences-homotopy-groups.md):
 first apply set truncation to the fiber sequence of a pointed map, then prove
 that each adjacent triple is exact.
 

@@ -7,7 +7,7 @@ Update this file whenever significant progress is made, for example when a
 new theorem is proved, an important definition is formalized, a planned module
 is added, or a major blocked item is resolved or re-scoped.
 
-Last updated: 2026-06-26.
+Last updated: 2026-06-27.
 
 ## Current summary
 
@@ -226,18 +226,13 @@ calculation:
   `coherence-square-canonical-iterated-boundary-fiber-sequence-signed` and the
   exactness theorem
   `is-exact-set-truncation-loop-canonical-iterated-boundary-fiber-sequence-signed`.
-  The approach-2 canonical route also has a checked set-truncated LES package,
-  `Set-Truncated-Canonical-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence`,
-  whose canonical object records the three repeating adjacent exactness
-  positions while keeping the fibration-boundary and boundary/fiber-inclusion
-  boundary maps as separate fresh canonical fields. The pointed boundary API
-  now names these two roles separately as
-  `canonical-pointed-map-iterated-loop-boundary-fiber-sequence` and
-  `loop-canonical-pointed-map-iterated-boundary-fiber-sequence`, so the
-  set-truncated canonical package no longer has to hide the distinction behind
-  overloaded boundary terminology. The group-level LES package now exposes the
-  canonical iterated boundary homomorphism in both boundary slots, with the
-  signed comparison hidden inside the proof of fibration-boundary exactness.
+  The public set-truncated LES package now instantiates the generic
+  `Long-Exact-Sequence-Pointed-Set` display with one looped canonical boundary
+  map. The signed comparison to the fresh shifted boundary remains in
+  `signed-boundary-comparisons-fiber-sequences`, and the group-level LES package
+  exposes one canonical iterated boundary homomorphism as an actual record field
+  rather than as a compatibility alias layer.
+
 - The first structural split toward a library-quality LES module layout is now
   checked. The new module `connecting-fiber-sequences` gives public
   `connect_fiberseq`-style names to the shifted connecting fiber sequence
@@ -255,7 +250,7 @@ calculation:
   The main LES file now focuses on induced homotopy-group maps, recursive
   boundary maps, and homomorphism wrappers.
 - The remaining definition-level LES contents have now been extracted from
-  `long-exact-sequence-homotopy-groups`. The new modules
+  `long-exact-sequences-homotopy-groups`. The new modules
   `iterated-loop-fiber-sequences`, `iterated-boundary-maps-fiber-sequences`,
   and `homomorphisms-homotopy-groups-fiber-sequences` own the iterated loop
   fiber sequence, recursive/canonical boundary maps, direct shifted boundary
@@ -303,7 +298,8 @@ available in `diagonal-homotopy-groups-spheres`.
 | Exactness of group homomorphisms | [`src/group-theory/exact-sequences-groups.lagda.md`](src/group-theory/exact-sequences-groups.lagda.md) | Defines `is-exact-hom-Group` and proves `is-exact-is-fiber-sequence-hom-Concrete-Group`, the forward implication from a fiber sequence of concrete-group classifying maps to exactness of the induced ordinary group homomorphisms. |
 | Pointed sets | [`src/structured-types/pointed-sets.lagda.md`](src/structured-types/pointed-sets.lagda.md) | Defines pointed sets, pointed maps of pointed sets, set truncation as a pointed set and as a pointed map, and transport of `hom-trunc-Pointed-Set` along identified source and target pointed types. |
 | Exactness of pointed sets | [`src/structured-types/exact-sequences-pointed-sets.lagda.md`](src/structured-types/exact-sequences-pointed-sets.lagda.md) | Defines images, kernels, exactness of pointed-set maps, derives the mere-preimage/fiber form of image membership and exactness, proves transport across identified pointed-set triples and maps, pointwise replacement of the second map, image-equivalent replacement of the first map, compatible middle self-map shifts of the second map, and injective comparison of the middle pointed set, and proves that the set truncation of the canonical fiber sequence `fiber g -> E -> B` is exact. |
-| Long exact sequence coordination module | [`src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md) | Thin documentation module pointing to the extracted LES API modules. It no longer owns definition-level maps, boundary adapters, homomorphism wrappers, or exactness proofs. |
+| Pointed-set LES display | [`src/structured-types/long-exact-sequences-pointed-sets.lagda.md`](src/structured-types/long-exact-sequences-pointed-sets.lagda.md) | Defines `Long-Exact-Sequence-Pointed-Set`, a reusable three-periodic display of pointed sets, the fiber-inclusion, fibration, and boundary maps, and exactness at the total, base, and fiber positions. |
+| Long exact sequence coordination module | [`src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md) | Thin documentation module pointing to the extracted LES API modules. It no longer owns definition-level maps, boundary adapters, homomorphism wrappers, or exactness proofs. |
 | Connecting fiber sequences | [`src/synthetic-homotopy-theory/connecting-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/connecting-fiber-sequences.lagda.md) | Standalone structural `connect_fiberseq` module. For a pointed map `g : E ->* B`, it defines `connecting-map-Pointed-Type` and proves `fiber-sequence-connecting-map-Pointed-Type`, packaging `Ω E ->* Ω B ->* fiber g`. For a packaged fiber sequence `F ->* E ->* B`, it compares the canonical fiber with the chosen fiber and proves `fiber-sequence-connecting-map-fiber-sequence-Pointed-Type`, packaging `Ω E ->* Ω B ->* F`. |
 | Loop spaces of fibers | [`src/synthetic-homotopy-theory/loop-spaces-fibers-of-pointed-maps.lagda.md`](src/synthetic-homotopy-theory/loop-spaces-fibers-of-pointed-maps.lagda.md) | Proves the pointed equivalence `Ω (fiber g) ≃* fiber (Ω g)` for a pointed map `g`, together with the pointed homotopy comparing the loop of the fiber inclusion with the canonical inclusion of the loop-map fiber. |
 | Loop spaces of pointed equivalences | [`src/synthetic-homotopy-theory/loop-spaces-pointed-equivalences.lagda.md`](src/synthetic-homotopy-theory/loop-spaces-pointed-equivalences.lagda.md) | Proves reusable pointed homotopies showing that the loop-space functor preserves inverses and composition of pointed equivalences, including the retraction calculation used by the remaining loop-boundary comparison code. |
@@ -347,14 +343,14 @@ available in `diagonal-homotopy-groups-spheres`.
 | Set-truncated direct iterated LES exactness | [`src/synthetic-homotopy-theory/set-truncated-direct-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/set-truncated-direct-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md) | Owns the connecting-map route, direct aliases, and reassociation transports from the natural `Omega^n(Omega X)` indexing to the public shifted iterated-loop indexing. |
 | Set-truncated recursive iterated LES exactness | [`src/synthetic-homotopy-theory/set-truncated-recursive-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/set-truncated-recursive-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md) | Owns kernel, pointwise-homotopy, and pointed-homotopy transports from canonical shifted boundary exactness to recursive boundary exactness. |
 | Set-truncated iterated LES exactness facade | [`src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md) | Re-exports the maps, canonical exactness, signed comparison, direct exactness, and recursive exactness providers so older downstream imports keep working while proof-route ownership is explicit. |
-| Set-truncated canonical LES package | [`src/synthetic-homotopy-theory/set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md) | Packages the approach-2 canonical set-truncated LES as `Set-Truncated-Canonical-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence`, deliberately recording separate fresh canonical boundary maps for the fibration-boundary and boundary/fiber-inclusion adjacent positions while importing the proof inputs from the iterated set-truncated exactness module. |
+| Set-truncated LES display package | [`src/synthetic-homotopy-theory/set-truncated-long-exact-sequences-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/set-truncated-long-exact-sequences-fiber-sequences.lagda.md) | Instantiates `Long-Exact-Sequence-Pointed-Set` for the iterated loop sequence of a fiber sequence as `set-truncated-long-exact-sequence-fiber-sequence`, using `hom-trunc-loop-canonical-iterated-boundary-fiber-sequence` as the single public boundary convention while importing exactness inputs from the iterated set-truncated exactness facade. |
 | Group exactness transport for homotopy groups | [`src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md`](src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md) | Proves the generic transfer theorem from pointed-set exactness to ordinary group exactness using explicit comparison maps, injectivity, unit compatibility, and coherence squares; proves a pointed-type loop-truncation wrapper; and proves a trivial-codomain pointed-type wrapper that avoids comparing the second maps. This file no longer depends on the fiber-sequence LES modules. |
 | Group exactness transport for fiber sequences | [`src/synthetic-homotopy-theory/group-exactness-from-set-truncated-exactness-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/group-exactness-from-set-truncated-exactness-fiber-sequences.lagda.md) | Specializes the generic pointed-set-to-group bridge to set-truncated adjacent triples in a fiber sequence, including the total-space, canonical boundary/fiber-inclusion, recursive fibration-boundary, and looped-canonical fibration-boundary converters. |
 | Canonical group exactness of homotopy groups | [`src/synthetic-homotopy-theory/canonical-exactness-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/canonical-exactness-homotopy-groups-fiber-sequences.lagda.md) | Owns the canonical group-level exactness statements used by the public LES package: all-index total-space exactness, canonical fibration-boundary exactness, and canonical boundary/fiber-inclusion exactness. |
 | Direct group exactness compatibility for homotopy groups | [`src/synthetic-homotopy-theory/direct-exactness-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/direct-exactness-homotopy-groups-fiber-sequences.lagda.md) | Owns the direct shifted connecting-map exactness theorem and historical direct-boundary aliases used around the Hopf LES segments. |
 | Recursive group exactness compatibility for homotopy groups | [`src/synthetic-homotopy-theory/recursive-exactness-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/recursive-exactness-homotopy-groups-fiber-sequences.lagda.md) | Owns the recursive set-truncated-to-group exactness wrapper, pointed-homotopy transport, the low-dimensional boundary/fiber-inclusion statement, and the trivial-codomain fallback retained for downstream compatibility. |
 | Group exactness compatibility facade for homotopy groups | [`src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md) | Re-exports the canonical, direct, and recursive group exactness modules so older downstream imports keep working while proof-route ownership is explicit. |
-| Group-level LES package | [`src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md) | Defines `Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence` and instantiates it as `long-exact-sequence-homotopy-groups-fiber-sequence`, packaging the three repeating group-level exactness positions in one object using the canonical iterated boundary homomorphism in both boundary slots while keeping the signed transport hidden in the imported exactness proof. |
+| Group-level LES package | [`src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups-fiber-sequences.lagda.md) | Defines `Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence` and instantiates it as `long-exact-sequence-homotopy-groups-fiber-sequence`, with the standard fiber-inclusion, fibration, canonical boundary, and exactness projections as fields while keeping signed transport hidden in imported exactness proofs. |
 | Hopf construction | [`src/synthetic-homotopy-theory/hopf-construction.lagda.md`](src/synthetic-homotopy-theory/hopf-construction.lagda.md) | Defines the generic Hopf total space `A * A`, base `suspension A`, cocone, map, pointed total space, pointed base, and pointed Hopf map for any H-space. |
 | Hopf construction on the 1-sphere | [`src/synthetic-homotopy-theory/hopf-construction-circle.lagda.md`](src/synthetic-homotopy-theory/hopf-construction-circle.lagda.md) | Specializes the generic Hopf construction to `sphere-1-H-Space`, yielding the checked pointed map `S¹ * S¹ ->* S²`, and exposes the unpointed comparison from the Hopf-construction total space to `join-power 2 (Fin 2) * join-power 2 (Fin 2)`. |
 | Hopf construction source fiber sequence | [`src/synthetic-homotopy-theory/hopf-construction-fiber-sequence.lagda.md`](src/synthetic-homotopy-theory/hopf-construction-fiber-sequence.lagda.md) | Packages the canonical fiber sequence of the Hopf-construction pointed map and its sphere-1 specialization, and now exposes the total-space accessor comparison to `join-power 2 (Fin 2) * join-power 2 (Fin 2)`. |
@@ -383,7 +379,7 @@ available in `diagonal-homotopy-groups-spheres`.
 |---|---|---|
 | General pointed fiber sequences | Done | Implemented in [`src/structured-types/fiber-sequences.lagda.md`](src/structured-types/fiber-sequences.lagda.md). |
 | Induced maps on homotopy groups | Done | Implemented via iterated loop functoriality and concrete homotopy group functoriality. |
-| Long exact sequence of homotopy groups | Library surface checked locally | The structural connecting sequence, loop-fiber equivalence, boundary-map adapters, set-truncated exactness layers, iterated loop and boundary maps, homotopy-group homomorphism wrappers, canonical set-truncated LES package, canonical-boundary group-level LES package, abelian homotopy groups, abelian-range LES package, and low-degree pointed-set tail package are checked. The remaining work is upstream-facing API, naming, and prose review rather than a known proof gap. |
+| Long exact sequence of homotopy groups | Library surface checked locally | The structural connecting sequence, loop-fiber equivalence, boundary-map adapters, set-truncated exactness layers, iterated loop and boundary maps, homotopy-group homomorphism wrappers, generic pointed-set LES display, set-truncated LES display instance, canonical-boundary group-level LES package, abelian homotopy groups, abelian-range LES package, and low-degree pointed-set tail package are checked. The remaining work is upstream-facing namespace, naming, and optional rendered-view review rather than a known proof gap. |
 | Exactness-to-isomorphism with zero endpoints | Done | Proved in [`src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md`](src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md). |
 | Higher homotopy groups of the circle vanish | Done locally | Positive concrete homotopy groups of the circle and 1-sphere are trivial, and this is now also packaged as ordinary group-level triviality of the underlying groups. |
 | Loop space of the circle is the integers | Done | The loop-space equivalence is formalized, the universal-cover encoder is proved additive on loop concatenation, the result is transferred to the 1-sphere, and the concrete group isomorphism `π₁(S¹) ≅ ℤ` is checked. |
@@ -421,7 +417,7 @@ splits were checked with:
 ./check.sh src/synthetic-homotopy-theory/iterated-loop-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/iterated-boundary-maps-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/homomorphisms-homotopy-groups-fiber-sequences.lagda.md
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ./check.sh src/synthetic-homotopy-theory/set-truncated-exactness-homotopy-groups-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md
@@ -432,7 +428,7 @@ splits were checked with:
 ```
 
 All eleven Agda checks passed. The old
-`long-exact-sequence-homotopy-groups` file is now a thin coordination module,
+`long-exact-sequences-homotopy-groups` file is now a thin coordination module,
 and downstream set-level, group-level, and Hopf consumers import the extracted
 modules directly.
 
@@ -442,7 +438,7 @@ splits were checked with:
 ```sh
 ./check.sh src/synthetic-homotopy-theory/fibers-boundary-maps-pointed-maps.lagda.md
 ./check.sh src/synthetic-homotopy-theory/set-truncated-exactness-homotopy-groups-fiber-sequences.lagda.md
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md
 ./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
@@ -458,9 +454,9 @@ On 2026-06-26, the signed loop-boundary comparison and first-loop
 recursive/canonical set-truncated coherence were checked with:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
-rg -n "\{!!\}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
+rg -n "\{!!\}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
 ```
 
 Both Agda checks passed. The touched-file scan found no holes, unsolved-meta
@@ -692,7 +688,7 @@ On 2026-06-21, the lower Hopf comparison was closed by the direct connecting
 fiber-sequence route and checked with:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
 ./check.sh src/synthetic-homotopy-theory/second-homotopy-group-sphere-2.lagda.md
 ```
@@ -706,7 +702,7 @@ The following refactor-relevant Agda modules were checked on 2026-06-10:
 ```sh
 ./check.sh src/structured-types/pointed-sets.lagda.md
 ./check.sh src/structured-types/exact-sequences-pointed-sets.lagda.md
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ```
 
 All passed after adding pointed-set exactness for arbitrary packaged fiber
@@ -958,7 +954,7 @@ exactness for the canonical shifted fibration-boundary case. The temporary
 route through target-loop inversion was removed. The checked commands were:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
 ```
 
@@ -987,7 +983,7 @@ commands were:
 
 ```sh
 ./check.sh src/structured-types/exact-sequences-pointed-sets.lagda.md
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
 ```
 
@@ -1011,7 +1007,7 @@ comparison remains open for nontrivial targets. The checked commands were:
 ./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
 ./check.sh src/structured-types/exact-sequences-pointed-sets.lagda.md
 ./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ./check.sh src/synthetic-homotopy-theory/hopf-fibration-third-homotopy-groups.lagda.md
 ```
 
@@ -1099,7 +1095,7 @@ canonical-vs-recursive boundary comparison. The checked commands were:
 
 ```sh
 ./check.sh src/structured-types/exact-sequences-pointed-sets.lagda.md
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/homotopy-groups-sphere-3.lagda.md
 ./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
@@ -1116,7 +1112,7 @@ Later on 2026-06-19, the upstream-quality route for the remaining lower Hopf fib
 by comparing `boundary-fiber-Pointed-Type g` with the fiber inclusion of the fiber inclusion via the existing pointed equivalence `Ω B ≃ fiber (inclusion-fiber-Pointed-Type g)` and the generic `fiber-triangle` equivalence. This avoids the earlier brittle direct section proof for `map-fiber-boundary-map-Ω-Pointed-Type`; the remaining refinement is to package the equivalence pointedly, which requires a reusable basepoint-coherence lemma for the `fiber-triangle` map induced by a pointed homotopy. The checked command was:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ```
 
 The check passed, and the touched LES file contains no holes, postulates, or `--allow-unsolved-metas`.
@@ -1137,7 +1133,7 @@ preserves the distinguished fiber point. Composing its pointed inverse with the 
 as `pointed-equiv-fiber-boundary-map-Ω-Pointed-Type`. This removes the previous blocker that the structural comparison had not yet been packaged pointedly. The next direct target is to use this pointed equivalence to prove the canonical loop-fibration-boundary fiber sequence `Ω E ->* Ω B ->* fiber g`, then transport it to the packaged fiber sequence boundary used in the Hopf lower LES segment. The checked command was:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ```
 
 The check passed, and the touched LES file contains no holes, postulates, or `--allow-unsolved-metas`.
@@ -1189,7 +1185,7 @@ canonical-pointed-map-iterated-boundary-fiber-sequence n
 as the boundary map of the iterated-loop fiber sequence transported back along the iterated fiber equivalence. A proposed raw pointed homotopy identifying the recursive looped boundary with this canonical shifted boundary was deliberately not kept: the real `./check.sh` gate reduced the comparison to a source-loop inversion obstruction of the form `ap (λ u → refl ∙ inv u) q = q`. This confirms that the upstreamable bridge must be an explicitly oriented comparison or the full `connect_fiberseq`-style pointed fiber sequence package, not a definitional or unproved sign fix. The checked command was:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ```
 
 The check passed. The touched LES file contains no new holes, postulates, or `--allow-unsolved-metas`. The existing pointed-homotopy adapters downstream remain the correct consumers once the oriented boundary comparison is proved.
@@ -1216,7 +1212,7 @@ using `equiv-tot` over the common loop coordinate and the inverse of `pointed-eq
 An attempted direct package through the older `pointed-equiv-fiber-boundary-map-Ω-Pointed-Type` was not kept, because real Agda reduces its required triangle to a non-definitional first-projection equality. The remaining hard target is therefore precise: construct a direct over-`Omega B` pointed equivalence `Omega E ~=* fiber boundary-pointed-map-fiber-sequence`, or prove the required projection law for the existing equivalence without changing orientations. After that, the package `Omega E ->* Omega B ->* F` can feed the set-truncated exactness theorem needed for the lower Hopf segment. The checked command was:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ```
 
 The check passed. The touched LES file contains no new holes, postulates, or `--allow-unsolved-metas`.
@@ -1247,7 +1243,7 @@ htpy-inclusion-fiber-boundary-fiber-sequence-direct-Pointed-Type
 so the comparison `Omega E ~= fiber boundary-pointed-map-fiber-sequence` is now checked and over `Omega B`. The remaining hard coherence is the basepoint preservation for this direct equivalence; once that is proved, it can be packaged as the pointed equivalence required for the full `Omega E ->* Omega B ->* F` fiber sequence. The checked command was:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ```
 
 The check passed. The touched LES file contains no new holes, postulates, or `--allow-unsolved-metas`.
@@ -1283,7 +1279,7 @@ equivalence should be packageable as a pointed equivalence. The checked command
 was:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ```
 
 The check passed. The touched LES file contains no new holes, postulates, or
@@ -1322,7 +1318,7 @@ pointed-equiv-fiber-boundary-fiber-sequence-direct-Pointed-Type
 This clears the previous hard basepoint-coherence block. The next hard target is to feed this direct pointed fiber-sequence package into the set-truncated exactness layer and then bridge the canonical shifted boundary maps to the recursive concrete homotopy-group boundary maps. The checked command was:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ```
 
 The check passed. `git diff --check` passed, and the touched LES file contains no holes, postulates, or `--allow-unsolved-metas`.
@@ -1371,7 +1367,7 @@ than re-proving image/kernel transport locally.
 The checked command was:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ```
 
 The check passed. `git diff --check` passed, and the touched LES file contains no
@@ -1402,7 +1398,7 @@ where the second map is the boundary map of the direct shifted sequence `Omega E
 The checked command was:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ```
 
 The check passed. `git diff --check` passed, and the touched LES file contains no holes, postulates, or `--allow-unsolved-metas`.
@@ -1431,7 +1427,7 @@ is now just this direct structural proof. The previous hand-built proof at `Omeg
 The checked command was:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ```
 
 The check passed. `git diff --check` passed, and the touched LES file contains no holes, postulates, or `--allow-unsolved-metas`. The remaining hard target is still the K-safe comparison identifying the direct shifted boundary with `pointed-map-Ω (fiber-inclusion-fiber-sequence-Pointed-Type S)`, which would let the recursive shifted boundary theorem collapse onto the direct route.
@@ -1451,7 +1447,7 @@ These lemmas prove that the raw and packaged direct shifted boundary comparison 
 The checked command was:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ```
 
 The check passed. `git diff --check` passed, and the touched LES file contains no holes, postulates, or `--allow-unsolved-metas`.
@@ -1470,7 +1466,7 @@ These lemmas show that the boundary basepoint path cancels before a loop in the 
 The checked command was:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ```
 
 The check passed. `git diff --check` passed, and the touched LES file contains no holes, postulates, or `--allow-unsolved-metas`.
@@ -1487,7 +1483,7 @@ For a pointed map `g` and a loop `q` in its fiber, the hand inverse `map-inv-fib
 The checked command was:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ```
 
 The check passed. `git diff --check` passed, and the touched LES file contains no holes, postulates, or `--allow-unsolved-metas`.
@@ -1505,7 +1501,7 @@ The first lemma says that `equiv-ap` of an equivalence sends reflexivity to refl
 The checked command was:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ```
 
 The check passed. `git diff --check` passed, and the touched LES file contains no holes, postulates, or `--allow-unsolved-metas`.
@@ -1523,7 +1519,7 @@ The first lemma computes the `inv-equiv-total-fiber`/`fiber-ap` wrapper on the c
 The checked command was:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ```
 
 The check passed. `git diff --check` passed, and the touched LES file contains no holes, postulates, or `--allow-unsolved-metas`.
@@ -1541,7 +1537,7 @@ The proof uses `is-equiv-htpy-equiv` and the checked forward-map comparison betw
 The checked command was:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ```
 
 The check passed. `git diff --check` passed, and the touched LES file contains no holes, question-mark metas, postulates, or `--allow-unsolved-metas`.
@@ -1560,7 +1556,7 @@ The proof first observes that `map-inv-fiber-boundary-map-Ω-Pointed-Type` is a 
 The checked command was:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ```
 
 The check passed. `git diff --check` passed, and the touched LES file contains no holes, question-mark metas, postulates, or `--allow-unsolved-metas`.
@@ -1577,7 +1573,7 @@ For a pointed map `g` and a loop `q` in its fiber, this lemma identifies the dir
 The checked command was:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ```
 
 The check passed. `git diff --check` passed, and the touched LES file contains no holes, question-mark metas, postulates, or `--allow-unsolved-metas`.
@@ -1594,7 +1590,7 @@ For a pointed equivalence `e`, this proves that `map-Ω (pointed-map-inv-pointed
 The checked command was:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ```
 
 The check passed. `git diff --check` passed, and the touched LES file contains no holes, question-mark metas, postulates, or `--allow-unsolved-metas`.
@@ -1613,7 +1609,7 @@ The first lemma compares the loop of the packaged fiber inclusion with the loop 
 The checked command was:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ```
 
 The check passed. `git diff --check` passed, and the touched LES file contains no holes, question-mark metas, postulates, or `--allow-unsolved-metas`.
@@ -1646,7 +1642,7 @@ The local `--allow-unsolved-metas` pragma was removed from
 The checked commands were:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
 ./check.sh src/synthetic-homotopy-theory/second-homotopy-group-sphere-2.lagda.md
 ./check.sh src/synthetic-homotopy-theory/third-homotopy-group-sphere-3.lagda.md
@@ -1682,9 +1678,9 @@ This is the correct base path for the remaining dependent second-component proof
 The checked commands were:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 git diff --check
-rg -n "\{!!\}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+rg -n "\{!!\}|allow-unsolved-metas|postulate" src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 rg -n "allow-unsolved-metas|\{!!\}" src/synthetic-homotopy-theory src/group-theory src/structured-types -g "*.lagda.md"
 ```
 
@@ -1821,7 +1817,7 @@ The checked commands were:
 ./check.sh src/structured-types/pointed-sets.lagda.md
 ./check.sh src/structured-types/exact-sequences-pointed-sets.lagda.md
 ./check.sh src/synthetic-homotopy-theory/reassociation-iterated-loop-spaces.lagda.md
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md
@@ -2218,7 +2214,7 @@ hidden from the public LES API.
 Verification:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
 ```
@@ -2250,7 +2246,7 @@ Verification:
 
 ```sh
 ./check.sh src/synthetic-homotopy-theory/connecting-fiber-sequences.lagda.md
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md
 ./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
@@ -2290,7 +2286,7 @@ Verification:
 ```sh
 ./check.sh src/synthetic-homotopy-theory/loop-spaces-fibers-of-pointed-maps.lagda.md
 ./check.sh src/synthetic-homotopy-theory/fiber-sequences-fiber-inclusions.lagda.md
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md
 ./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
@@ -2302,7 +2298,7 @@ All eight Agda checks passed. A touched-file scan found no holes, postulates,
 unsafe termination pragmas, rewrite-rule dependency, or unsolved-meta options,
 and `git diff --check` passed. At that checkpoint, the next library-quality
 split target was the remaining boundary-comparison and exactness code still
-embedded in `long-exact-sequence-homotopy-groups`; later sessions moved those
+embedded in `long-exact-sequences-homotopy-groups`; later sessions moved those
 layers out of the main coordination module.
 
 Later on 2026-06-26, the generic pointed-equivalence algebra used by the LES
@@ -2323,7 +2319,7 @@ Verification:
 
 ```sh
 ./check.sh src/synthetic-homotopy-theory/loop-spaces-pointed-equivalences.lagda.md
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
@@ -2332,14 +2328,14 @@ Verification:
 
 All six Agda checks passed. At that checkpoint, the next major split target
 was the boundary-comparison and exactness code still embedded in
-`long-exact-sequence-homotopy-groups`; later sessions moved those layers out
+`long-exact-sequences-homotopy-groups`; later sessions moved those layers out
 of the main coordination module.
 
 Later on 2026-06-26, the public LES package layer was split out of the
 proof-heavy exactness modules. The new module
-`set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequences`
+`set-truncated-long-exact-sequences-fiber-sequences`
 owns the set-truncated canonical LES record and object, while
-`long-exact-sequence-homotopy-groups-fiber-sequences` owns the group-level LES
+`long-exact-sequences-homotopy-groups-fiber-sequences` owns the group-level LES
 record and object. The current remaining library-quality split target is the
 transport-heavy exactness support layer: the all-index set-truncated
 comparison/support results, the signed boundary comparison support, and the
@@ -2348,9 +2344,9 @@ group-level exactness wrappers below the final package modules.
 Verification:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-long-exact-sequences-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
 ./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
 ```
@@ -2378,10 +2374,10 @@ Verification:
 ./check.sh src/synthetic-homotopy-theory/set-truncated-canonical-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/signed-boundary-comparisons-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
-./check.sh src/synthetic-homotopy-theory/set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-long-exact-sequences-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md
 ./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
 ./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
 ```
@@ -2407,7 +2403,7 @@ Verification:
 ./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-exactness-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md
 ./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
 ./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
 ```
@@ -2432,10 +2428,10 @@ Verification:
 ./check.sh src/synthetic-homotopy-theory/recursive-exactness-homotopy-groups-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/direct-exactness-homotopy-groups-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
 ./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ```
 
 All seven Agda checks passed.
@@ -2456,10 +2452,10 @@ Verification:
 ```sh
 ./check.sh src/synthetic-homotopy-theory/canonical-exactness-homotopy-groups-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
 ./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ```
 
 All six Agda checks passed. A touched-file scan found no holes, postulates,
@@ -2484,14 +2480,14 @@ Verification:
 ./check.sh src/synthetic-homotopy-theory/set-truncated-direct-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/set-truncated-recursive-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md
-./check.sh src/synthetic-homotopy-theory/set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-long-exact-sequences-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/group-exactness-from-set-truncated-exactness-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/canonical-exactness-homotopy-groups-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/direct-exactness-homotopy-groups-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/recursive-exactness-homotopy-groups-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md
 ./check.sh src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ```
 
 All eleven Agda checks passed.
@@ -2512,19 +2508,19 @@ Actions:
 - Simplified the public group-level LES record to one canonical boundary field, retaining compatibility aliases for the old fibration-boundary and boundary/fiber-inclusion projections.
 - Added `group-theory.exact-sequences-abelian-groups` as the abelian-group exactness wrapper over underlying group exactness.
 - Added `abelian-homotopy-groups`, proving higher concrete homotopy groups are abelian by applying Eckmann-Hilton to set-truncated double-loop multiplication and transporting through the concrete homotopy-group underlying-type equivalence.
-- Added `abelian-long-exact-sequence-homotopy-groups-fiber-sequences`, packaging the abelian-range LES by shifting the checked concrete group-level exactness to index `succ-ℕ n`.
-- Added `pointed-set-tail-long-exact-sequence-homotopy-groups-fiber-sequences`, packaging the low-degree pointed-set tail `||Omega E||_0 -> ||Omega B||_0 -> ||F||_0 -> ||E||_0 -> ||B||_0` with exactness at the three valid middle terms.
+- Added `abelian-long-exact-sequences-homotopy-groups-fiber-sequences`, packaging the abelian-range LES by shifting the checked concrete group-level exactness to index `succ-ℕ n`.
+- Added `pointed-set-tail-long-exact-sequences-fiber-sequences`, packaging the low-degree pointed-set tail `||Omega E||_0 -> ||Omega B||_0 -> ||F||_0 -> ||E||_0 -> ||B||_0` with exactness at the three valid middle terms.
 - Updated the top-level LES coordination module and status docs to expose the new packages.
 
 Verification:
 
 ```sh
 ./check.sh src/group-theory/exact-sequences-abelian-groups.lagda.md
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
-./check.sh src/synthetic-homotopy-theory/pointed-set-tail-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/pointed-set-tail-long-exact-sequences-fiber-sequences.lagda.md
 ./check.sh src/synthetic-homotopy-theory/abelian-homotopy-groups.lagda.md
-./check.sh src/synthetic-homotopy-theory/abelian-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/abelian-long-exact-sequences-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 git diff --check
 rg "\{!|postulate|TERMINATING|--allow-unsolved-metas|--rewriting" <touched Agda files>
 ```
@@ -2553,11 +2549,11 @@ Actions:
 Verification:
 
 ```sh
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
-./check.sh src/synthetic-homotopy-theory/set-truncated-canonical-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
-./check.sh src/synthetic-homotopy-theory/abelian-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
-./check.sh src/synthetic-homotopy-theory/pointed-set-tail-long-exact-sequence-homotopy-groups-fiber-sequences.lagda.md
-./check.sh src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-long-exact-sequences-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/abelian-long-exact-sequences-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/pointed-set-tail-long-exact-sequences-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
 ```
 
 All five Agda checks passed. `git diff --check` passed. The touched-file safety scan produced no matches.
@@ -2565,3 +2561,44 @@ All five Agda checks passed. `git diff --check` passed. The touched-file safety 
 Related commit:
 
 - This commit - Polish LES public API aliases.
+
+
+### Aggressive LES display and rename pass
+
+Request: Emily asked Codex to follow the agreed design decisions aggressively,
+renaming public LES files and terms and cleaning up the display-level LES layer.
+
+Model context:
+
+- Date: 2026-06-27.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model
+  identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible; final acceptance used `./check.sh <file>`.
+
+Actions:
+
+- Added the generic pointed-set display record
+  `structured-types.long-exact-sequences-pointed-sets.Long-Exact-Sequence-Pointed-Set`.
+- Renamed the public LES files to pluralized package names and updated imports.
+- Removed the old compatibility alias layer from the group-level, abelian, and
+  pointed-set tail LES packages; the concise names are now the record fields.
+- Replaced the old set-truncated two-boundary package with an instance of the
+  generic display using one looped canonical boundary convention.
+- Updated the LES coordination module and current status docs to describe the new
+  public surface.
+
+Verification:
+
+```sh
+./check.sh src/structured-types/long-exact-sequences-pointed-sets.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-long-exact-sequences-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/abelian-long-exact-sequences-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/pointed-set-tail-long-exact-sequences-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/classifying-fiber-sequences-homotopy-groups.lagda.md
+```
+
+All seven Agda checks passed. `git diff --check` passed, the touched-file
+safety scan produced no matches, and the stale old-module-name scan found no
+source references.

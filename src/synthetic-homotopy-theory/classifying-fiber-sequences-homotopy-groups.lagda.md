@@ -14,7 +14,7 @@ open import foundation.universe-levels
 open import structured-types.fiber-sequences
 
 open import synthetic-homotopy-theory.homotopy-groups
-open import synthetic-homotopy-theory.long-exact-sequence-homotopy-groups
+open import synthetic-homotopy-theory.long-exact-sequences-homotopy-groups
 ```
 
 </details>

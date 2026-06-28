@@ -1,7 +1,7 @@
 # Abelian long exact sequence of homotopy groups of fiber sequences
 
 ```agda
-module synthetic-homotopy-theory.abelian-long-exact-sequence-homotopy-groups-fiber-sequences where
+module synthetic-homotopy-theory.abelian-long-exact-sequences-homotopy-groups-fiber-sequences where
 ```
 
 <details><summary>Imports</summary>
@@ -61,7 +61,7 @@ module _
     where
     constructor make-Abelian-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence
     field
-      hom-fiber-inclusion-abelian-long-exact-sequence-homotopy-groups-fiber-sequence :
+      hom-fiber-inclusion-abelian-homotopy-group-long-exact-sequence :
         (n : ℕ) →
         hom-Ab
           ( abelian-homotopy-group
@@ -70,7 +70,7 @@ module _
           ( abelian-homotopy-group
             ( n)
             ( total-space-fiber-sequence-Pointed-Type S))
-      hom-fibration-abelian-long-exact-sequence-homotopy-groups-fiber-sequence :
+      hom-fibration-abelian-homotopy-group-long-exact-sequence :
         (n : ℕ) →
         hom-Ab
           ( abelian-homotopy-group
@@ -79,7 +79,7 @@ module _
           ( abelian-homotopy-group
             ( n)
             ( base-fiber-sequence-Pointed-Type S))
-      hom-boundary-abelian-long-exact-sequence-homotopy-groups-fiber-sequence :
+      hom-boundary-abelian-homotopy-group-long-exact-sequence :
         (n : ℕ) →
         hom-Ab
           ( abelian-homotopy-group
@@ -88,7 +88,7 @@ module _
           ( abelian-homotopy-group
             ( n)
             ( fiber-fiber-sequence-Pointed-Type S))
-      is-exact-fiber-inclusion-fibration-abelian-long-exact-sequence-homotopy-groups-fiber-sequence :
+      is-exact-at-total-space-abelian-homotopy-group-long-exact-sequence :
         (n : ℕ) →
         is-exact-hom-Ab
           ( abelian-homotopy-group
@@ -100,11 +100,11 @@ module _
           ( abelian-homotopy-group
             ( n)
             ( base-fiber-sequence-Pointed-Type S))
-          ( hom-fiber-inclusion-abelian-long-exact-sequence-homotopy-groups-fiber-sequence
+          ( hom-fiber-inclusion-abelian-homotopy-group-long-exact-sequence
             ( n))
-          ( hom-fibration-abelian-long-exact-sequence-homotopy-groups-fiber-sequence
+          ( hom-fibration-abelian-homotopy-group-long-exact-sequence
             ( n))
-      is-exact-fibration-boundary-abelian-long-exact-sequence-homotopy-groups-fiber-sequence :
+      is-exact-at-base-abelian-homotopy-group-long-exact-sequence :
         (n : ℕ) →
         is-exact-hom-Ab
           ( abelian-homotopy-group
@@ -116,11 +116,11 @@ module _
           ( abelian-homotopy-group
             ( n)
             ( fiber-fiber-sequence-Pointed-Type S))
-          ( hom-fibration-abelian-long-exact-sequence-homotopy-groups-fiber-sequence
+          ( hom-fibration-abelian-homotopy-group-long-exact-sequence
             ( succ-ℕ n))
-          ( hom-boundary-abelian-long-exact-sequence-homotopy-groups-fiber-sequence
+          ( hom-boundary-abelian-homotopy-group-long-exact-sequence
             ( n))
-      is-exact-boundary-fiber-inclusion-abelian-long-exact-sequence-homotopy-groups-fiber-sequence :
+      is-exact-at-fiber-abelian-homotopy-group-long-exact-sequence :
         (n : ℕ) →
         is-exact-hom-Ab
           ( abelian-homotopy-group
@@ -132,51 +132,12 @@ module _
           ( abelian-homotopy-group
             ( n)
             ( total-space-fiber-sequence-Pointed-Type S))
-          ( hom-boundary-abelian-long-exact-sequence-homotopy-groups-fiber-sequence
+          ( hom-boundary-abelian-homotopy-group-long-exact-sequence
             ( n))
-          ( hom-fiber-inclusion-abelian-long-exact-sequence-homotopy-groups-fiber-sequence
+          ( hom-fiber-inclusion-abelian-homotopy-group-long-exact-sequence
             ( n))
 
   open Abelian-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence public
-
-  hom-fiber-inclusion-abelian-homotopy-group-long-exact-sequence :
-    Abelian-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence →
-    (n : ℕ) →
-    hom-Ab
-      ( abelian-homotopy-group
-        ( n)
-        ( fiber-fiber-sequence-Pointed-Type S))
-      ( abelian-homotopy-group
-        ( n)
-        ( total-space-fiber-sequence-Pointed-Type S))
-  hom-fiber-inclusion-abelian-homotopy-group-long-exact-sequence =
-    hom-fiber-inclusion-abelian-long-exact-sequence-homotopy-groups-fiber-sequence
-
-  hom-fibration-abelian-homotopy-group-long-exact-sequence :
-    Abelian-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence →
-    (n : ℕ) →
-    hom-Ab
-      ( abelian-homotopy-group
-        ( n)
-        ( total-space-fiber-sequence-Pointed-Type S))
-      ( abelian-homotopy-group
-        ( n)
-        ( base-fiber-sequence-Pointed-Type S))
-  hom-fibration-abelian-homotopy-group-long-exact-sequence =
-    hom-fibration-abelian-long-exact-sequence-homotopy-groups-fiber-sequence
-
-  hom-boundary-abelian-homotopy-group-long-exact-sequence :
-    Abelian-Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence →
-    (n : ℕ) →
-    hom-Ab
-      ( abelian-homotopy-group
-        ( succ-ℕ n)
-        ( base-fiber-sequence-Pointed-Type S))
-      ( abelian-homotopy-group
-        ( n)
-        ( fiber-fiber-sequence-Pointed-Type S))
-  hom-boundary-abelian-homotopy-group-long-exact-sequence =
-    hom-boundary-abelian-long-exact-sequence-homotopy-groups-fiber-sequence
 
   hom-canonical-boundary-abelian-homotopy-group-fiber-sequence :
     (n : ℕ) →
