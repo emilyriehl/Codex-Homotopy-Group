@@ -150,3 +150,33 @@ module _
       ( is-exact-at-base-set-truncated-long-exact-sequence-fiber-sequence)
       ( is-exact-at-fiber-set-truncated-long-exact-sequence-fiber-sequence)
 ```
+
+## Adjacent Exact Triples
+
+The generic display record renders the set-truncated long exact sequence as the
+three standard adjacent exact triples at each index.
+
+```agda
+module _
+  {l1 l2 l3 : Level}
+  (S : fiber-sequence-Pointed-Type l1 l2 l3)
+  where
+
+  fiber-inclusion-fibration-Exact-Triple-set-truncated-long-exact-sequence-fiber-sequence :
+    ℕ → Exact-Triple-Pointed-Set l1 l2 l3
+  fiber-inclusion-fibration-Exact-Triple-set-truncated-long-exact-sequence-fiber-sequence =
+    fiber-inclusion-fibration-Exact-Triple-Long-Exact-Sequence-Pointed-Set
+      ( set-truncated-long-exact-sequence-fiber-sequence S)
+
+  fibration-boundary-Exact-Triple-set-truncated-long-exact-sequence-fiber-sequence :
+    ℕ → Exact-Triple-Pointed-Set l2 l3 l1
+  fibration-boundary-Exact-Triple-set-truncated-long-exact-sequence-fiber-sequence =
+    fibration-boundary-Exact-Triple-Long-Exact-Sequence-Pointed-Set
+      ( set-truncated-long-exact-sequence-fiber-sequence S)
+
+  boundary-fiber-inclusion-Exact-Triple-set-truncated-long-exact-sequence-fiber-sequence :
+    ℕ → Exact-Triple-Pointed-Set l3 l1 l2
+  boundary-fiber-inclusion-Exact-Triple-set-truncated-long-exact-sequence-fiber-sequence =
+    boundary-fiber-inclusion-Exact-Triple-Long-Exact-Sequence-Pointed-Set
+      ( set-truncated-long-exact-sequence-fiber-sequence S)
+```

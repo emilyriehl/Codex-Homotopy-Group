@@ -424,18 +424,24 @@ mathematics calls for zero endpoints. That is appropriate; the important point
 is that exactness itself is no longer being faked by proving the target group
 is trivial.
 
-## What Is Still Missing For Library-Quality LES Code
+## Library-Quality LES Status
 
-### Current Public Surface
+### Public Surface
 
 The checked public LES surface now has package layers with record projections as
 its API:
 
+- `structured-types.exact-sequences-pointed-sets` defines
+  `Exact-Triple-Pointed-Set`, a reusable package for three pointed sets, two
+  pointed maps, and exactness at the middle term.
 - `structured-types.long-exact-sequences-pointed-sets` defines the reusable
-  three-periodic pointed-set LES display.
+  three-periodic pointed-set LES display and derives the three adjacent exact
+  triples at each index: fiber-inclusion/fibration, fibration/boundary, and
+  boundary/fiber-inclusion.
 - `set-truncated-long-exact-sequences-fiber-sequences` instantiates that display
   for iterated loops of a fiber sequence, using one looped canonical public
-  boundary convention.
+  boundary convention, and re-exposes the three adjacent exact triples for that
+  instance.
 - `long-exact-sequences-homotopy-groups-fiber-sequences` exposes the standard
   group-level fiber-inclusion, fibration, boundary, and exactness projections as
   fields of `Long-Exact-Sequence-Homotopy-Groups-Fiber-Sequence`.
@@ -444,67 +450,36 @@ its API:
 - `abelian-long-exact-sequences-homotopy-groups-fiber-sequences` exposes the
   abelian-range LES arrows and exactness projections as fields.
 
+The display-layer question is now resolved. A long exact sequence remains the
+minimal three-periodic record, while the textbook adjacent-triple view is an
+additive derived API over that record. The public set-truncated package has one
+boundary convention; signed comparisons, recursive boundaries, direct shifted
+maps, and image/kernel transports remain theorem-provider machinery outside the
+headline LES packages.
 
-The public prose now records the chosen group-level boundary convention: the
-public boundary is the canonical iterated boundary homomorphism, while signed
-comparisons, recursive boundaries, direct shifted maps, and image/kernel
-transports remain theorem-provider machinery. The top-level coordination module
-also states the intended proof route: build connecting and iterated-loop fiber
-sequences, prove set-truncated exactness, then transport to concrete
-homotopy-group exactness.
+### Remaining Upstream Integration Decisions
 
-### Remaining Upstream Work
+There are no remaining proof-search, file-splitting, or display-layer blockers
+for a library-quality local LES. The remaining decisions are upstream extraction
+and review decisions:
 
-The remaining work is no longer a proof-search blocker, file-splitting blocker,
-or missing display-layer blocker. It is an upstream extraction and API review
-problem:
-
-- decide final upstream module names and namespaces for the display, group-level,
-  set-truncated, abelian, and pointed-set tail packages;
-- decide whether old downstream names deserve separate migration facades, without
-  putting compatibility aliases back into the main LES packages;
-- decide whether to add a prettier rendered/indexed view over the checked display
-  record whose order reads like the usual textbook LES;
+- choose final upstream module names and namespaces for the exact-triple,
+  pointed-set display, set-truncated, group-level, abelian, and pointed-set tail
+  packages;
+- decide whether older downstream names deserve separate migration facades,
+  without putting compatibility aliases back into the main LES packages;
 - keep route-specific names such as direct, recursive, signed, and
   low-dimensional convenience variants out of the main narrative unless a user
-  explicitly asks for those comparison theorems.
+  explicitly asks for those comparison theorems;
+- prepare the upstream extraction so structural modules, exactness-provider
+  modules, public packages, and any migration facades stay separate.
 
-
-## Recommended Next Steps
-
-1. Do an upstream naming review of the checked record fields.
-
-   Start with the display, group-level, set-truncated, abelian, and pointed-set
-   tail package files. Check whether names such as
-   `hom-boundary-homotopy-group-long-exact-sequence`,
-   `hom-boundary-set-truncated-long-exact-sequence-fiber-sequence`, and
-   `is-exact-at-fiber-pointed-set-tail-long-exact-sequence` are the right
-   upstream surface or should be shortened further.
-
-2. Add an optional rendered LES view if reviewers want it.
-
-   The current display record packages the three repeating exactness positions. A
-   polished library result might also provide one indexed family of displayed
-   terms and maps whose rendered order looks exactly like
-
-   ```text
-   ... -> pi_(n+1)(B) -> pi_n(F) -> pi_n(E) -> pi_n(B) -> pi_(n-1)(F) -> ...
-   ```
-
-   This should be an additive view over the checked display and package records,
-   not a rewrite of the proof providers.
-
-3. Prepare an upstream extraction patch.
-
-   Keep the structural modules, exactness-provider modules, public package
-   modules, and any migration facades separate. The exactness-provider split is
-   now useful for review and should not be redone unless a concrete public API
-   problem forces it.
-
-For handoff: the next agent should not spend time re-splitting exactness
-providers, re-proving the LES, or reintroducing compatibility aliases in the main
-packages. The main remaining decisions are upstream names, namespace placement,
-and whether to add one final rendered view over the checked display layer.
+For handoff: the next agent should not re-split exactness providers, re-prove the
+LES, add another boundary convention to the public set-truncated package, or
+reintroduce compatibility aliases in the main packages. A further single
+ordinal/indexed rendering should only be added if an upstream reviewer asks for
+that specific presentation; the current derived exact-triple view covers the
+standard adjacent display.
 
 ## Verification State
 
@@ -973,3 +948,23 @@ The checked commands were:
 ```
 
 All seven Agda checks passed. `git diff --check` passed, and the touched-file safety scan produced no matches.
+
+
+## 2026-06-28 Exact-Triple Display Completion Pass
+
+Codex completed the remaining display-layer cleanup for the library-quality LES surface. The pointed-set exactness layer now includes `Exact-Triple-Pointed-Set`, and the generic `Long-Exact-Sequence-Pointed-Set` derives the three adjacent exact triples at every index. The set-truncated fiber-sequence LES re-exposes those three exact triples for its checked instance, so the usual textbook adjacent-triple rendering is available without adding another proof route or a second boundary convention.
+
+The checked commands were:
+
+```sh
+./check.sh src/structured-types/exact-sequences-pointed-sets.lagda.md
+./check.sh src/structured-types/long-exact-sequences-pointed-sets.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-long-exact-sequences-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/abelian-long-exact-sequences-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/pointed-set-tail-long-exact-sequences-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/classifying-fiber-sequences-homotopy-groups.lagda.md
+```
+
+All eight Agda checks passed. At this point the local LES code and documentation are library-quality modulo upstream naming, namespace placement, and extraction review.

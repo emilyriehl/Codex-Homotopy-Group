@@ -92,6 +92,43 @@ module _
     is-in-kernel-hom-Pointed-Set {A = B} {B = C} g x
 ```
 
+### Exact triples of pointed sets
+
+An exact triple of pointed sets packages the three pointed sets, the two
+pointed maps, and exactness at the middle term.
+
+```agda
+record Exact-Triple-Pointed-Set
+  (l1 l2 l3 : Level) :
+  UU (lsuc l1 ⊔ lsuc l2 ⊔ lsuc l3)
+  where
+  constructor make-Exact-Triple-Pointed-Set
+  field
+    left-Pointed-Set-Exact-Triple-Pointed-Set :
+      Pointed-Set l1
+    middle-Pointed-Set-Exact-Triple-Pointed-Set :
+      Pointed-Set l2
+    right-Pointed-Set-Exact-Triple-Pointed-Set :
+      Pointed-Set l3
+    left-hom-Exact-Triple-Pointed-Set :
+      hom-Pointed-Set
+        ( left-Pointed-Set-Exact-Triple-Pointed-Set)
+        ( middle-Pointed-Set-Exact-Triple-Pointed-Set)
+    right-hom-Exact-Triple-Pointed-Set :
+      hom-Pointed-Set
+        ( middle-Pointed-Set-Exact-Triple-Pointed-Set)
+        ( right-Pointed-Set-Exact-Triple-Pointed-Set)
+    is-exact-Exact-Triple-Pointed-Set :
+      is-exact-hom-Pointed-Set
+        ( left-Pointed-Set-Exact-Triple-Pointed-Set)
+        ( middle-Pointed-Set-Exact-Triple-Pointed-Set)
+        ( right-Pointed-Set-Exact-Triple-Pointed-Set)
+        ( left-hom-Exact-Triple-Pointed-Set)
+        ( right-hom-Exact-Triple-Pointed-Set)
+
+open Exact-Triple-Pointed-Set public
+```
+
 ## Properties
 
 ### Exactness transports along identifications of pointed-set triples

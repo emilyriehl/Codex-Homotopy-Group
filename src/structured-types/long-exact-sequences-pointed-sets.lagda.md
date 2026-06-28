@@ -19,16 +19,17 @@ open import structured-types.pointed-sets
 
 ## Idea
 
-A **long exact sequence of pointed sets** is a three-periodic family of pointed
-sets and pointed maps
+A **long exact sequence of pointed sets** is a three-periodic family of
+[pointed sets](structured-types.pointed-sets.md) and pointed maps
 
 ```text
   ... -> B(n+1) -> F(n) -> E(n) -> B(n) -> ...
 ```
 
 equipped with exactness at the fiber, total-space, and base terms. This is the
-pointed-set display layer used by the long exact sequence of homotopy groups of
-a fiber sequence.
+pointed-set display layer used by the
+[long exact sequence of homotopy groups](synthetic-homotopy-theory.long-exact-sequences-homotopy-groups.md)
+of a fiber sequence.
 
 ## Definition
 
@@ -86,4 +87,52 @@ record Long-Exact-Sequence-Pointed-Set
         ( hom-fiber-inclusion-Long-Exact-Sequence-Pointed-Set n)
 
 open Long-Exact-Sequence-Pointed-Set public
+```
+
+## Adjacent Exact Triples
+
+Each index in a long exact sequence determines three adjacent
+[exact triples of pointed sets](structured-types.exact-sequences-pointed-sets.md):
+the fiber-inclusion/fibration triple, the fibration/boundary triple, and the
+boundary/fiber-inclusion triple. These are derived display data over the record,
+not alternate proof providers.
+
+```agda
+module _
+  {l1 l2 l3 : Level}
+  (L : Long-Exact-Sequence-Pointed-Set l1 l2 l3)
+  where
+
+  fiber-inclusion-fibration-Exact-Triple-Long-Exact-Sequence-Pointed-Set :
+    ℕ → Exact-Triple-Pointed-Set l1 l2 l3
+  fiber-inclusion-fibration-Exact-Triple-Long-Exact-Sequence-Pointed-Set n =
+    make-Exact-Triple-Pointed-Set
+      ( fiber-Pointed-Set-Long-Exact-Sequence L n)
+      ( total-space-Pointed-Set-Long-Exact-Sequence L n)
+      ( base-Pointed-Set-Long-Exact-Sequence L n)
+      ( hom-fiber-inclusion-Long-Exact-Sequence-Pointed-Set L n)
+      ( hom-fibration-Long-Exact-Sequence-Pointed-Set L n)
+      ( is-exact-at-total-space-Long-Exact-Sequence-Pointed-Set L n)
+
+  fibration-boundary-Exact-Triple-Long-Exact-Sequence-Pointed-Set :
+    ℕ → Exact-Triple-Pointed-Set l2 l3 l1
+  fibration-boundary-Exact-Triple-Long-Exact-Sequence-Pointed-Set n =
+    make-Exact-Triple-Pointed-Set
+      ( total-space-Pointed-Set-Long-Exact-Sequence L (succ-ℕ n))
+      ( base-Pointed-Set-Long-Exact-Sequence L (succ-ℕ n))
+      ( fiber-Pointed-Set-Long-Exact-Sequence L n)
+      ( hom-fibration-Long-Exact-Sequence-Pointed-Set L (succ-ℕ n))
+      ( hom-boundary-Long-Exact-Sequence-Pointed-Set L n)
+      ( is-exact-at-base-Long-Exact-Sequence-Pointed-Set L n)
+
+  boundary-fiber-inclusion-Exact-Triple-Long-Exact-Sequence-Pointed-Set :
+    ℕ → Exact-Triple-Pointed-Set l3 l1 l2
+  boundary-fiber-inclusion-Exact-Triple-Long-Exact-Sequence-Pointed-Set n =
+    make-Exact-Triple-Pointed-Set
+      ( base-Pointed-Set-Long-Exact-Sequence L (succ-ℕ n))
+      ( fiber-Pointed-Set-Long-Exact-Sequence L n)
+      ( total-space-Pointed-Set-Long-Exact-Sequence L n)
+      ( hom-boundary-Long-Exact-Sequence-Pointed-Set L n)
+      ( hom-fiber-inclusion-Long-Exact-Sequence-Pointed-Set L n)
+      ( is-exact-at-fiber-Long-Exact-Sequence-Pointed-Set L n)
 ```

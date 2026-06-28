@@ -7,7 +7,7 @@ Update this file whenever significant progress is made, for example when a
 new theorem is proved, an important definition is formalized, a planned module
 is added, or a major blocked item is resolved or re-scoped.
 
-Last updated: 2026-06-27.
+Last updated: 2026-06-28.
 
 ## Current summary
 
@@ -297,8 +297,8 @@ available in `diagonal-homotopy-groups-spheres`.
 | Classifying fiber-sequence route for homotopy groups | [`src/synthetic-homotopy-theory/classifying-fiber-sequences-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/classifying-fiber-sequences-homotopy-groups.lagda.md) | Records why the classifying-map fiber-sequence route is too strong for adjacent LES exactness and deliberately contains no theorem statements. |
 | Exactness of group homomorphisms | [`src/group-theory/exact-sequences-groups.lagda.md`](src/group-theory/exact-sequences-groups.lagda.md) | Defines `is-exact-hom-Group` and proves `is-exact-is-fiber-sequence-hom-Concrete-Group`, the forward implication from a fiber sequence of concrete-group classifying maps to exactness of the induced ordinary group homomorphisms. |
 | Pointed sets | [`src/structured-types/pointed-sets.lagda.md`](src/structured-types/pointed-sets.lagda.md) | Defines pointed sets, pointed maps of pointed sets, set truncation as a pointed set and as a pointed map, and transport of `hom-trunc-Pointed-Set` along identified source and target pointed types. |
-| Exactness of pointed sets | [`src/structured-types/exact-sequences-pointed-sets.lagda.md`](src/structured-types/exact-sequences-pointed-sets.lagda.md) | Defines images, kernels, exactness of pointed-set maps, derives the mere-preimage/fiber form of image membership and exactness, proves transport across identified pointed-set triples and maps, pointwise replacement of the second map, image-equivalent replacement of the first map, compatible middle self-map shifts of the second map, and injective comparison of the middle pointed set, and proves that the set truncation of the canonical fiber sequence `fiber g -> E -> B` is exact. |
-| Pointed-set LES display | [`src/structured-types/long-exact-sequences-pointed-sets.lagda.md`](src/structured-types/long-exact-sequences-pointed-sets.lagda.md) | Defines `Long-Exact-Sequence-Pointed-Set`, a reusable three-periodic display of pointed sets, the fiber-inclusion, fibration, and boundary maps, and exactness at the total, base, and fiber positions. |
+| Exactness of pointed sets | [`src/structured-types/exact-sequences-pointed-sets.lagda.md`](src/structured-types/exact-sequences-pointed-sets.lagda.md) | Defines images, kernels, exactness of pointed-set maps, packages `Exact-Triple-Pointed-Set`, derives the mere-preimage/fiber form of image membership and exactness, proves transport across identified pointed-set triples and maps, pointwise replacement of the second map, image-equivalent replacement of the first map, compatible middle self-map shifts of the second map, and injective comparison of the middle pointed set, and proves that the set truncation of the canonical fiber sequence `fiber g -> E -> B` is exact. |
+| Pointed-set LES display | [`src/structured-types/long-exact-sequences-pointed-sets.lagda.md`](src/structured-types/long-exact-sequences-pointed-sets.lagda.md) | Defines `Long-Exact-Sequence-Pointed-Set`, a reusable three-periodic display of pointed sets, the fiber-inclusion, fibration, and boundary maps, exactness at the total, base, and fiber positions, and derived exact triples for the fiber-inclusion/fibration, fibration/boundary, and boundary/fiber-inclusion adjacent segments. |
 | Long exact sequence coordination module | [`src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md) | Thin documentation module pointing to the extracted LES API modules. It no longer owns definition-level maps, boundary adapters, homomorphism wrappers, or exactness proofs. |
 | Connecting fiber sequences | [`src/synthetic-homotopy-theory/connecting-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/connecting-fiber-sequences.lagda.md) | Standalone structural `connect_fiberseq` module. For a pointed map `g : E ->* B`, it defines `connecting-map-Pointed-Type` and proves `fiber-sequence-connecting-map-Pointed-Type`, packaging `Ω E ->* Ω B ->* fiber g`. For a packaged fiber sequence `F ->* E ->* B`, it compares the canonical fiber with the chosen fiber and proves `fiber-sequence-connecting-map-fiber-sequence-Pointed-Type`, packaging `Ω E ->* Ω B ->* F`. |
 | Loop spaces of fibers | [`src/synthetic-homotopy-theory/loop-spaces-fibers-of-pointed-maps.lagda.md`](src/synthetic-homotopy-theory/loop-spaces-fibers-of-pointed-maps.lagda.md) | Proves the pointed equivalence `Ω (fiber g) ≃* fiber (Ω g)` for a pointed map `g`, together with the pointed homotopy comparing the loop of the fiber inclusion with the canonical inclusion of the loop-map fiber. |
@@ -343,7 +343,7 @@ available in `diagonal-homotopy-groups-spheres`.
 | Set-truncated direct iterated LES exactness | [`src/synthetic-homotopy-theory/set-truncated-direct-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/set-truncated-direct-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md) | Owns the connecting-map route, direct aliases, and reassociation transports from the natural `Omega^n(Omega X)` indexing to the public shifted iterated-loop indexing. |
 | Set-truncated recursive iterated LES exactness | [`src/synthetic-homotopy-theory/set-truncated-recursive-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/set-truncated-recursive-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md) | Owns kernel, pointwise-homotopy, and pointed-homotopy transports from canonical shifted boundary exactness to recursive boundary exactness. |
 | Set-truncated iterated LES exactness facade | [`src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/set-truncated-iterated-exactness-homotopy-groups-fiber-sequences.lagda.md) | Re-exports the maps, canonical exactness, signed comparison, direct exactness, and recursive exactness providers so older downstream imports keep working while proof-route ownership is explicit. |
-| Set-truncated LES display package | [`src/synthetic-homotopy-theory/set-truncated-long-exact-sequences-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/set-truncated-long-exact-sequences-fiber-sequences.lagda.md) | Instantiates `Long-Exact-Sequence-Pointed-Set` for the iterated loop sequence of a fiber sequence as `set-truncated-long-exact-sequence-fiber-sequence`, using `hom-trunc-loop-canonical-iterated-boundary-fiber-sequence` as the single public boundary convention while importing exactness inputs from the iterated set-truncated exactness facade. |
+| Set-truncated LES display package | [`src/synthetic-homotopy-theory/set-truncated-long-exact-sequences-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/set-truncated-long-exact-sequences-fiber-sequences.lagda.md) | Instantiates `Long-Exact-Sequence-Pointed-Set` for the iterated loop sequence of a fiber sequence as `set-truncated-long-exact-sequence-fiber-sequence`, using `hom-trunc-loop-canonical-iterated-boundary-fiber-sequence` as the single public boundary convention while importing exactness inputs from the iterated set-truncated exactness facade; it also re-exposes the three adjacent `Exact-Triple-Pointed-Set` projections for the checked instance. |
 | Group exactness transport for homotopy groups | [`src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md`](src/synthetic-homotopy-theory/group-exactness-from-set-truncated-homotopy-group-exactness.lagda.md) | Proves the generic transfer theorem from pointed-set exactness to ordinary group exactness using explicit comparison maps, injectivity, unit compatibility, and coherence squares; proves a pointed-type loop-truncation wrapper; and proves a trivial-codomain pointed-type wrapper that avoids comparing the second maps. This file no longer depends on the fiber-sequence LES modules. |
 | Group exactness transport for fiber sequences | [`src/synthetic-homotopy-theory/group-exactness-from-set-truncated-exactness-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/group-exactness-from-set-truncated-exactness-fiber-sequences.lagda.md) | Specializes the generic pointed-set-to-group bridge to set-truncated adjacent triples in a fiber sequence, including the total-space, canonical boundary/fiber-inclusion, recursive fibration-boundary, and looped-canonical fibration-boundary converters. |
 | Canonical group exactness of homotopy groups | [`src/synthetic-homotopy-theory/canonical-exactness-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/canonical-exactness-homotopy-groups-fiber-sequences.lagda.md) | Owns the canonical group-level exactness statements used by the public LES package: all-index total-space exactness, canonical fibration-boundary exactness, and canonical boundary/fiber-inclusion exactness. |
@@ -379,7 +379,7 @@ available in `diagonal-homotopy-groups-spheres`.
 |---|---|---|
 | General pointed fiber sequences | Done | Implemented in [`src/structured-types/fiber-sequences.lagda.md`](src/structured-types/fiber-sequences.lagda.md). |
 | Induced maps on homotopy groups | Done | Implemented via iterated loop functoriality and concrete homotopy group functoriality. |
-| Long exact sequence of homotopy groups | Library surface checked locally | The structural connecting sequence, loop-fiber equivalence, boundary-map adapters, set-truncated exactness layers, iterated loop and boundary maps, homotopy-group homomorphism wrappers, generic pointed-set LES display, set-truncated LES display instance, canonical-boundary group-level LES package, abelian homotopy groups, abelian-range LES package, and low-degree pointed-set tail package are checked. The remaining work is upstream-facing namespace, naming, and optional rendered-view review rather than a known proof gap. |
+| Long exact sequence of homotopy groups | Library surface checked locally | The structural connecting sequence, loop-fiber equivalence, boundary-map adapters, set-truncated exactness layers, iterated loop and boundary maps, homotopy-group homomorphism wrappers, generic pointed-set LES display, derived exact-triple display view, set-truncated LES display instance, canonical-boundary group-level LES package, abelian homotopy groups, abelian-range LES package, and low-degree pointed-set tail package are checked. The remaining work is upstream-facing namespace, naming, and extraction review rather than a known proof or display gap. |
 | Exactness-to-isomorphism with zero endpoints | Done | Proved in [`src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md`](src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md). |
 | Higher homotopy groups of the circle vanish | Done locally | Positive concrete homotopy groups of the circle and 1-sphere are trivial, and this is now also packaged as ordinary group-level triviality of the underlying groups. |
 | Loop space of the circle is the integers | Done | The loop-space equivalence is formalized, the universal-cover encoder is proved additive on loop concatenation, the result is transferred to the 1-sphere, and the concrete group isomorphism `π₁(S¹) ≅ ℤ` is checked. |
@@ -2602,3 +2602,36 @@ Verification:
 All seven Agda checks passed. `git diff --check` passed, the touched-file
 safety scan produced no matches, and the stale old-module-name scan found no
 source references.
+
+
+### Exact-Triple LES display completion pass
+
+Request: Emily asked Codex to keep working until the LES code and documentation were library quality, rather than leaving the remaining display-layer work as a handoff item.
+
+Model context:
+
+- Date: 2026-06-28.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible; final acceptance used `./check.sh <file>`.
+
+Actions:
+
+- Added `Exact-Triple-Pointed-Set` to `structured-types.exact-sequences-pointed-sets`, packaging three pointed sets, two pointed maps, and exactness at the middle term.
+- Added derived adjacent exact-triple projections to `Long-Exact-Sequence-Pointed-Set`: fiber-inclusion/fibration, fibration/boundary, and boundary/fiber-inclusion.
+- Added set-truncated convenience projections for those three exact triples over `set-truncated-long-exact-sequence-fiber-sequence`.
+- Updated `LES-STATUS.md` and this report so the rendered/display layer is recorded as complete locally, leaving only upstream extraction and naming review decisions.
+
+Verification:
+
+```sh
+./check.sh src/structured-types/exact-sequences-pointed-sets.lagda.md
+./check.sh src/structured-types/long-exact-sequences-pointed-sets.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-long-exact-sequences-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/abelian-long-exact-sequences-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/pointed-set-tail-long-exact-sequences-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/classifying-fiber-sequences-homotopy-groups.lagda.md
+```
+
+All eight Agda checks passed.

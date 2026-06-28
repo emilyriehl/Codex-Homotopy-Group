@@ -6496,3 +6496,30 @@ All seven Agda checks passed. `git diff --check` passed, and the touched-file sa
 Related commit:
 
 - This commit - Rename LES packages and add display layer.
+
+
+### Exact-triple LES display completion pass
+
+Request: Emily asked Codex to continue until the LES code and documentation were library quality.
+
+Actions:
+
+- Added `Exact-Triple-Pointed-Set` to the pointed-set exactness layer.
+- Added derived adjacent exact-triple projections to the generic pointed-set LES display.
+- Re-exposed those three adjacent exact triples for the set-truncated fiber-sequence LES instance.
+- Updated `LES-STATUS.md` and `STATUS-REPORT.md` so the display-layer cleanup is no longer listed as future work.
+
+Verification:
+
+```sh
+./check.sh src/structured-types/exact-sequences-pointed-sets.lagda.md
+./check.sh src/structured-types/long-exact-sequences-pointed-sets.lagda.md
+./check.sh src/synthetic-homotopy-theory/set-truncated-long-exact-sequences-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/abelian-long-exact-sequences-homotopy-groups-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/pointed-set-tail-long-exact-sequences-fiber-sequences.lagda.md
+./check.sh src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups.lagda.md
+./check.sh src/synthetic-homotopy-theory/classifying-fiber-sequences-homotopy-groups.lagda.md
+```
+
+All eight Agda checks passed.
