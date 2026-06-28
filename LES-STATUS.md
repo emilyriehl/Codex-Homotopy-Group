@@ -481,6 +481,70 @@ ordinal/indexed rendering should only be added if an upstream reviewer asks for
 that specific presentation; the current derived exact-triple view covers the
 standard adjacent display.
 
+### Upstream Naming And Extraction Review
+
+The local LES surface is ready for upstream review, but it should be extracted in
+small batches rather than as one patch. Recommended extraction order:
+
+1. **Pointed-set exactness and display foundations.**
+   - Keep `Exact-Triple-Pointed-Set` in
+     `structured-types.exact-sequences-pointed-sets` unless reviewers prefer a
+     one-concept split such as `structured-types.exact-triples-pointed-sets`.
+   - Keep `structured-types.long-exact-sequences-pointed-sets` as the generic
+     display module. The pluralized file name matches the local public-surface
+     convention and reads as a subject file, not as one theorem.
+   - Keep the derived adjacent triples in the display module. They are display
+     projections over the record, not a second exactness theory.
+2. **Fiber-sequence set-truncated display.**
+   - Extract
+     `synthetic-homotopy-theory.set-truncated-long-exact-sequences-fiber-sequences`
+     after the generic display. It should keep one public boundary convention:
+     the looped canonical boundary used by the checked display record.
+   - Do not expose direct, recursive, or signed boundary variants from this
+     package; leave them in theorem-provider modules.
+3. **Group-level and abelian public packages.**
+   - Extract
+     `synthetic-homotopy-theory.long-exact-sequences-homotopy-groups-fiber-sequences`
+     as the group-level record package with the canonical public boundary.
+   - Extract
+     `synthetic-homotopy-theory.abelian-long-exact-sequences-homotopy-groups-fiber-sequences`
+     as the abelian-range wrapper after the group-level package and
+     `abelian-homotopy-groups`.
+   - Keep route-specific exactness providers separate:
+     `canonical-exactness-*`, `direct-exactness-*`, `recursive-exactness-*`, and
+     the signed-boundary comparison module.
+4. **Low-degree pointed-set tail.**
+   - Extract
+     `synthetic-homotopy-theory.pointed-set-tail-long-exact-sequences-fiber-sequences`
+     as the low-degree pointed-set tail. Its omission of terminal exactness at
+     `||B||₀` is mathematically intentional and should stay in the prose.
+
+Naming review:
+
+- The current public record and projection names are acceptable upstream
+  candidates because they describe their types and end with the relevant
+  structure, for example `Long-Exact-Sequence-Pointed-Set` and
+  `Exact-Triple-Pointed-Set`.
+- The longest set-truncated projection names are mechanically descriptive. If
+  reviewers request shorter public names, add a separate migration or display
+  facade rather than putting compatibility aliases back into the main packages.
+- The singular value names such as
+  `long-exact-sequence-homotopy-groups-fiber-sequence` are acceptable as
+  canonical instances of the plural subject files.
+- The top-level coordination module
+  `synthetic-homotopy-theory.long-exact-sequences-homotopy-groups` should remain
+  a thin documentation/import surface.
+
+Extraction guardrails:
+
+- Preserve the public proof narrative: structural fiber sequences first,
+  set-truncated exactness second, concrete-group exactness transport third.
+- Keep signed, direct, recursive, and low-dimensional convenience results out of
+  the headline LES packages unless an upstream reviewer explicitly asks for a
+  comparison theorem there.
+- Recheck every extracted or renamed module with `./check.sh <file>` before
+  adding it to an umbrella import.
+
 ## Verification State
 
 The relevant Agda modules have been checked in recent sessions with

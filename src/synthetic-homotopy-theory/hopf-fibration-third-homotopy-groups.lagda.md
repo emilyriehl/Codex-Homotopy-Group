@@ -26,8 +26,8 @@ exact sequence of homotopy groups, together with the vanishing of the higher
 homotopy groups of `S¹`, identifies the third homotopy group of `S³` with the
 third homotopy group of `S²`.
 
-This file now delegates the comparison to the Hopf-specific long-exact-sequence
-scaffold.
+This file delegates the comparison to the Hopf-specific long-exact-sequence
+package.
 
 ## Theorem
 

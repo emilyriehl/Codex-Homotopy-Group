@@ -1,7 +1,19 @@
 # Formalization plan: pi_3(S^2) = Z
 
 This is a planning artifact only. It does not add proofs, postulates, or
-modules under `src/`.
+modules under `src/`. It was originally written before the local proof route was
+completed; the current proof state is summarized here and in
+[`STATUS-REPORT.md`](STATUS-REPORT.md).
+
+## Current status
+
+As of 2026-06-28, the local formalization of the target theorem is checked and
+unconditional. The exported theorem is
+`iso-third-homotopy-group-sphere-2-ℤ` in
+[`src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md`](src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md).
+No proof obligations remain for the local route. Remaining work is
+upstream-facing: module extraction, naming review, prose polish, and deciding
+which general components should be proposed to agda-unimath proper.
 
 ## Scope and target statement
 
@@ -24,8 +36,8 @@ iso-Group
   ℤ-Group
 ```
 
-Before proving anything, this target signature should be confirmed with the
-maintainers/harness and then treated as pinned.
+This target signature is now checked in the final theorem module, with index `2`
+for the ordinary third homotopy group.
 
 ## Mathematical route
 
@@ -160,7 +172,7 @@ repository. For the authoritative current proof state, see
 | 23 | Double/triple loop coherence and Eckmann-Hilton | EXISTS | Library dependency | `synthetic-homotopy-theory.double-loop-spaces`, `synthetic-homotopy-theory.triple-loop-spaces`, `synthetic-homotopy-theory.eckmann-hilton-argument` | The book points to Eckmann-Hilton as underlying the Hopf phenomenon. |
 | 24 | Cofibers of pointed maps | EXISTS | Library dependency | `synthetic-homotopy-theory.cofibers-of-pointed-maps` | Not central to the main route, but adjacent sequence infrastructure exists. |
 | 25 | General pointed fiber sequences | MISSING | Done locally | `src/structured-types/fiber-sequences.lagda.md`; HoTT book `homotopy.tex` lines 108-119 | The local module defines and packages pointed fiber sequences. |
-| 26 | Long exact sequence of homotopy groups | MISSING | Partial locally | `src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md`; Coq-HoTT `ExactSequence.v` as decomposition guide only | The local LES bridge covers the Hopf-facing set-truncated and group-exactness segments, including arbitrary-index direct fibration-boundary exactness, but not a full upstream-ready HoTT Book Theorem 8.4.6 package. |
+| 26 | Long exact sequence of homotopy groups | MISSING | Done locally; upstream extraction review remains | `src/structured-types/long-exact-sequences-pointed-sets.lagda.md`, `src/synthetic-homotopy-theory/set-truncated-long-exact-sequences-fiber-sequences.lagda.md`, `src/synthetic-homotopy-theory/long-exact-sequences-homotopy-groups-fiber-sequences.lagda.md`, `src/synthetic-homotopy-theory/abelian-long-exact-sequences-homotopy-groups-fiber-sequences.lagda.md`, `src/synthetic-homotopy-theory/pointed-set-tail-long-exact-sequences-fiber-sequences.lagda.md`; Coq-HoTT `ExactSequence.v` as decomposition guide only | The local LES surface is checked and library-quality: it has a generic pointed-set display, derived adjacent exact triples, the set-truncated fiber-sequence instance, the canonical-boundary group-level package, the abelian-range package, and the pointed-set tail. Remaining LES work is namespace/naming/extraction review, recorded in `LES-STATUS.md`. |
 | 27 | Exactness-to-isomorphism lemma with zero endpoints | MISSING | Done locally | `src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md` | Used to extract Hopf LES comparison isomorphisms. |
 | 28 | Hopf construction for connected H-spaces | MISSING | Done locally for the needed `S¹` route | `src/synthetic-homotopy-theory/hopf-construction.lagda.md`, `src/synthetic-homotopy-theory/hopf-construction-circle.lagda.md`, `src/synthetic-homotopy-theory/hopf-construction-fiber-sequence.lagda.md`; HoTT book `sec:hopf` | The generic Hopf construction, the `S¹` specialization, and the source fiber sequence are checked; the project uses the Hopf-family route to identify the total space with `S³`. |
 | 29 | Circle as connected H-space | MISSING | Done locally | `src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md`; `synthetic-homotopy-theory.circle` | The local module packages `𝕊¹-H-Space` and the transported `sphere-1-H-Space`, proves that left and right translations on both are equivalences, and packages the Hopf shear equivalence `(x , y) ↦ (y , x · y)` on `S¹ × S¹`; circle connectedness is supplied by the library circle module. |
@@ -194,174 +206,86 @@ A shallow Coq-HoTT clone was searched separately for comparative references.
 The findings are recorded above and should be treated as proof guidance, not
 port targets.
 
-## New agda-unimath additions needed
+## Upstream extraction candidates
 
-Prefer new leaf modules under `src/synthetic-homotopy-theory/` rather than
-extending foundational modules until absolutely necessary.
+The local route is checked. Upstream work should be organized as reviewable
+batches, keeping high-fan-in files stable unless maintainers request otherwise:
 
-Likely new modules:
+1. **LES and exactness packages.** Extract the generic pointed-set exactness
+   layer, the pointed-set LES display, the set-truncated fiber-sequence
+   instance, the group-level and abelian LES packages, and the pointed-set tail.
+   The detailed naming and extraction review is in `LES-STATUS.md`.
+2. **Hopf fibration packages.** Extract the circle H-space, Hopf construction,
+   Hopf family, total-space comparison, and packaged Hopf fiber sequence in
+   small subject files.
+3. **Freudenthal and Blakers-Massey packages.** Extract the span-pushout
+   Blakers-Massey theorem, the suspension-span specialization, and the
+   Freudenthal suspension theorem.
+4. **Sphere stability and diagonal theorem packages.** Extract diagonal
+   stability, the positive diagonal theorem, and the final low-dimensional
+   corollaries.
 
-- `src/synthetic-homotopy-theory/fiber-sequences.lagda.md`
-- `src/synthetic-homotopy-theory/long-exact-sequence-homotopy-groups.lagda.md`
-- `src/synthetic-homotopy-theory/exactness-homotopy-groups-fiber-sequences.lagda.md`
-- `src/synthetic-homotopy-theory/underlying-groups-concrete-homotopy-groups.lagda.md`,
-  if a separate one-concept bridge module is needed to compare concrete
-  homotopy groups with set-truncated loop spaces.
-- `src/synthetic-homotopy-theory/higher-homotopy-groups-truncated-types.lagda.md`
-- `src/synthetic-homotopy-theory/hopf-fibration.lagda.md`
-- `src/synthetic-homotopy-theory/freudenthal-suspension-theorem.lagda.md`
-- `src/synthetic-homotopy-theory/stability-homotopy-groups-spheres.lagda.md`
-- `src/synthetic-homotopy-theory/homotopy-groups-spheres.lagda.md`
-- `src/synthetic-homotopy-theory/third-homotopy-group-sphere-2.lagda.md`
+Supporting algebra and foundation bridge modules such as
+`group-theory.isomorphisms-from-exact-sequences-groups`,
+`group-theory.trivial-underlying-groups-concrete-groups`, and the concrete
+homotopy-group underlying-type comparisons should be reviewed as separate
+dependencies rather than folded into the top-level theorem files.
 
-Potential small supporting modules outside `synthetic-homotopy-theory`:
-
-- `src/group-theory/isomorphisms-from-exact-sequences-groups.lagda.md`, if the
-  exactness-to-isomorphism extraction is best stated algebraically.
-- A small concrete-group bridge module only if the final theorem must use
-  `Concrete-Group` isomorphisms rather than `Group` isomorphisms of underlying
-  groups.
-
-High-fan-in/cache-sensitive targets:
+High-fan-in/cache-sensitive targets remain:
 
 - `src/foundation/` and `src/foundation-core/`: avoid edits unless a reusable
-  truncation/connectedness lemma clearly belongs there. New leaf modules are
-  safer for cache invalidation.
+  truncation/connectedness lemma clearly belongs there.
 - `src/synthetic-homotopy-theory.lagda.md` and other umbrella/import modules:
-  delay adding imports until each leaf module typechecks.
+  add imports only after each leaf module typechecks and the extraction shape is
+  agreed.
 - Existing central modules such as
   `synthetic-homotopy-theory.homotopy-groups`,
   `synthetic-homotopy-theory.spheres`, and
   `synthetic-homotopy-theory.suspensions-of-types`: avoid changing their public
   APIs unless maintainers request it.
 
-## Tractability and risks
+## Tractability and risks after completion
 
-This is not a single narrow formalization. The target depends on several large
-missing developments: the homotopy LES, the Hopf fibration, Freudenthal, and
-the diagonal theorem for spheres. The existing library has good foundations
-for the route: circles, spheres, suspensions, pushouts, joins, truncations,
-connectedness, loop spaces, homotopy groups, and integers are present. The
-missing work is mainly theorem infrastructure and proof packaging, not basic
-definitions.
+The local theorem infrastructure is no longer the main risk: the final route
+checks with no local holes, postulates, or weakening pragmas. The remaining risks
+are upstream integration risks:
 
-Main risks:
+- **Review size:** the development spans LES, Hopf, Blakers-Massey,
+  Freudenthal, stability, and diagonal homotopy groups. It should be proposed in
+  small dependency-ordered batches, not as one large patch.
+- **Naming and namespace fit:** local names are descriptive and checked, but
+  maintainers may prefer different module boundaries or some migration facades.
+- **Proof readability:** several proof-provider modules are necessarily
+  technical. Public packages should keep structural statements prominent and
+  route-specific transports hidden.
+- **Cache risk:** touching umbrella or central modules too early will invalidate
+  large parts of the library.
 
-- **Long exact sequence risk:** requires careful pointed-map/fiber-sequence
-  bookkeeping, induced maps on homotopy groups, exactness, and group/abelian
-  group compatibility.
-- **Hopf fibration risk:** constructing the fibration from the H-space circle
-  and proving the total space is `S^3` will stress pushout, join, and
-  fiberwise-descent infrastructure.
-- **Freudenthal risk:** large encode-decode proof with high coherence cost.
-  Coq-HoTT suggests a Blakers-Massey route; older HoTT-Agda and Coq-HoTT should
-  be used as proof-architecture references rather than code to port.
-- **Statement-shape risk:** the library's concrete homotopy-group indexing and
-  concrete-group/group bridge must be fixed before any proof work starts.
-- **Cache risk:** touching `foundation` or umbrella modules too early will
-  invalidate large parts of the library.
+## Completed route and remaining upstream order
 
-Verification note: sanity typechecks were attempted with `./check.sh` on
-existing relevant modules, but this sandbox could not reach the Nix daemon or
-write Nix fetcher locks, so Agda did not start. The failure was environmental,
-not an Agda type error. On the intended environment, every new `.lagda.md` file
-should be checked with:
+The original proof plan has been carried out locally:
 
-```sh
-./check.sh src/synthetic-homotopy-theory/<module>.lagda.md
-```
+1. The final theorem signature was fixed using the
+   `concrete-homotopy-group 2` indexing convention.
+2. Circle and 1-sphere homotopy-group facts were packaged, including
+   `π₁(S¹) ≅ ℤ` and vanishing of positive higher homotopy groups of `S¹`.
+3. Pointed fiber sequences, boundary maps, and induced maps on homotopy groups
+   were formalized.
+4. The LES was built through structural fiber-sequence packages, set-truncated
+   exactness, and transport to concrete group exactness.
+5. The Hopf construction and Hopf fibration `S¹ ->* S³ ->* S²` were checked.
+6. The Hopf LES comparisons `π₂(S²) ≅ π₁(S¹)` and `π₃(S³) ≅ π₃(S²)` were
+   extracted.
+7. Blakers-Massey, Freudenthal, sphere stability, and the positive diagonal
+   theorem were checked.
+8. The final theorem was assembled as a short composition ending in
+   `iso-third-homotopy-group-sphere-2-ℤ`.
 
-## Recommended order of work
+The remaining work is upstream preparation:
 
-1. **Human checkpoint and go/no-go.** Confirm the final theorem signature,
-   especially the `concrete-homotopy-group 2` indexing and whether the desired
-   target is a `Group` isomorphism or a `Concrete-Group` equivalence.
-
-2. **Small packaging lemmas first.** Package the existing circle result into
-   group-level statements:
-
-   ```text
-   pi_1(S^1) ~= Z
-   pi_n(S^1) = 0 for n > 1
-   ```
-
-   Also build any small exactness-to-isomorphism and trivial-group lemmas needed
-   by the later LES extraction.
-
-3. **Define pointed fiber sequences and induced maps on homotopy groups.** Keep
-   this generic but minimal: enough to state and use the LES for Hopf.
-
-4. **Develop the long exact sequence of homotopy groups.** Prove the exact
-   segment needed for the Hopf application first, then bridge the existing
-   set-truncated pointed-set exactness to ordinary group exactness of concrete
-   homotopy groups. The natural comparison target is the underlying set of
-   `concrete-homotopy-group n X` against the set truncation of the next
-   iterated loop space. Do not route adjacent exactness through a claim that
-   the concrete homotopy-group classifying maps form fiber sequences: that
-   would impose short-exact-style information, while the long exact sequence
-   only gives exactness at the middle group of each adjacent triple. For the
-   fibration-boundary part, prioritize direct shifted connecting fiber sequences
-   where they match the public iterated-loop indexing. The Hopf `π₃` segment is
-   now handled this way, and the arbitrary-index public fibration-boundary
-   exactness theorem is checked by transporting the direct `Ω^n(Ω X)` theorem
-   through clean reassociation comparisons between `Ω^n(Ω X)` and
-   `Ω^(n+1) X`, including the induced maps. Use Coq-HoTT
-   `ExactSequence.v` only for decomposition guidance.
-
-5. **Develop the Hopf construction and Hopf fibration.** The circle and
-   1-sphere H-space structures are now checked, including equivalence proofs
-   for all left and right translations and the Hopf shear equivalence on
-   `S¹ × S¹`, as are the generic Hopf map and its `S^1` specialization. The
-   Hopf-family and first total-space comparison layers are also checked: the
-   family over `S²` classified by left multiplication on `S¹` and its
-   projection fiber sequence with fiber `S¹`, the flattening-lemma pushout for
-   the actual family total space, the proof that `S¹ * S¹` is a pushout of the
-   explicit flattened Hopf-family descent span, `Fin 2 * X ≃ suspension X`,
-   `join-power (succ n) (Fin 2) ≃ sphere n`, functoriality of joins under
-   equivalences, commutativity of joins, the checked structural associator map
-   and inverse-direction associator map for joins, the checked right-composite
-   homotopy, inverse-side left-composite homotopy, retraction/section endpoint
-   reductions for the associator inverse route, product/left-product cocone
-   glue computation laws, and reductions from two ordinary dependent-function
-   coherence squares to the two-sided inverse homotopies and associator
-   equivalence, the bridge from
-   `S^1 * S^1` to
-   `join-power 2 (Fin 2) * join-power 2 (Fin 2)`, the completed two-leg
-   comparison between the family-induced flattened span and the explicit
-   flattened descent span, the canonical equivalence
-   `total-space-hopf-family-sphere-1 ≃ S¹ * S¹`, the comparison between the
-   Hopf-family and Hopf-construction total spaces, and the composed
-   comparisons from both Hopf total-space models to
-   `join-power 2 (Fin 2) * join-power 2 (Fin 2)`, the checked structural
-   map from that join to `join-power 4 (Fin 2)`, and the checked reduction of
-   that map's equivalence proof to the two ordinary square coherences for the
-   first associator instance, with the second middle-empty instance discharged
-   vacuously. Next, prove those two ordinary square coherences or an equivalent
-   pushout universal-property proof, then use
-   `join-power 4 (Fin 2) ≃ S^3` to package the total-space equivalence with
-   `S^3` and attack the geometric fiber identification. Use Coq-HoTT
-   `Hopf.v`/`HSpaceS1.v` to identify milestones, not to translate code.
-
-6. **Extract `pi_3(S^3) ~= pi_3(S^2)`.** Use the Hopf LES and the vanishing of
-   `pi_3(S^1)` and `pi_2(S^1)`.
-
-7. **Develop Freudenthal and sphere stability.** Use the HoTT book as the
-   mathematical reference, and use Coq-HoTT `BlakersMassey.v` plus older
-   HoTT-Agda only for decomposition and dependency order.
-
-8. **Develop `pi_n(S^n) ~= Z`.** Use the HoTT-book induction and consult
-   Coq-HoTT `PinSn.v` plus older HoTT-Agda only for proof architecture and
-   dependency order, then instantiate it at `n = 3`.
-
-9. **Assemble the final theorem.** The final module should be a short
-   composition of:
-
-   ```text
-   pi_3(S^2) ~= pi_3(S^3) ~= Z
-   ```
-
-   It should not contain new Hopf/Freudenthal proof work.
-
-10. **Pre-PR verification.** For every new module, run `./check.sh <file>`.
-    Before any PR, run `make pre-commit` and ask for human review that the
-    literate exposition reads like normal agda-unimath documentation.
+1. Apply the LES naming/extraction review in `LES-STATUS.md`.
+2. Do the same review for Blakers-Massey/Freudenthal and the sphere-stability
+   layers.
+3. Run the relevant `./check.sh <file>` commands after any extraction or rename.
+4. Before any PR, run the upstream pre-commit checks and get human review that
+   the literate exposition reads like normal agda-unimath documentation.

@@ -11,7 +11,7 @@ Last updated: 2026-06-28.
 
 ## Current summary
 
-The repository currently contains early infrastructure for the planned
+The repository currently contains a checked local formalization of the planned
 calculation:
 
 - General pointed fiber sequences have been formalized, and the set
@@ -362,7 +362,7 @@ available in `diagonal-homotopy-groups-spheres`.
 | Hopf fiber sequence | [`src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md`](src/synthetic-homotopy-theory/hopf-fiber-sequence.lagda.md) | Packages the checked fiber sequence `S¹ ->* S³ ->* S²` by transporting the Hopf-family projection fiber sequence across the pointed equivalence `pointed-total-space-hopf-family-sphere-1 ≃* sphere-Pointed-Type 3`. It has no local holes or `--allow-unsolved-metas`. |
 | Hopf LES comparison for second homotopy groups | [`src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/hopf-long-exact-sequence-second-homotopy-groups.lagda.md) | Proves the right-hand boundary/fiber-inclusion exactness statement for the lower Hopf segment, the left fibration-boundary exactness statement by applying `is-exact-set-truncation-loop-fiber-sequence` to `fiber-sequence-boundary-fiber-sequence-direct-Pointed-Type` instantiated at the Hopf fiber sequence, and the algebraic extraction identifying `π₂(S²)` with `π₁(S¹)` from the two exactness statements and the checked trivial outer `S³` groups. |
 | Hopf LES comparison for third homotopy groups | [`src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/hopf-long-exact-sequence-third-homotopy-groups.lagda.md) | Builds the Hopf comparison isomorphism from the Hopf fibration homomorphism, the checked total-space exactness theorem, the new direct fibration-boundary exactness theorem for the second shifted segment, and the two trivial endpoint hypotheses. The exactness proof no longer uses triviality of `π₂(S¹)` as a shortcut. |
-| Hopf comparison for third homotopy groups | [`src/synthetic-homotopy-theory/hopf-fibration-third-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/hopf-fibration-third-homotopy-groups.lagda.md) | Delegates `π₃(S³) ≅ π₃(S²)` to the Hopf LES comparison scaffold and has no direct proof hole. |
+| Hopf comparison for third homotopy groups | [`src/synthetic-homotopy-theory/hopf-fibration-third-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/hopf-fibration-third-homotopy-groups.lagda.md) | Delegates `π₃(S³) ≅ π₃(S²)` to the Hopf-specific LES comparison package and has no direct proof hole. |
 | Freudenthal suspension theorem interface | [`src/synthetic-homotopy-theory/freudenthal-suspension-theorem.lagda.md`](src/synthetic-homotopy-theory/freudenthal-suspension-theorem.lagda.md) | Proves the reusable Freudenthal suspension theorem from the checked Blakers-Massey span-pushout theorem: the suspension-loop unit is identified with the suspension pushout gap map followed by an equivalence, the ordinary-span Blakers-Massey corollary is specialized to `unit <- A -> unit`, terminal-map connectedness supplies the hypotheses, and the result exports `is-connected-map-Freudenthal-suspension-Blakers-Massey`. |
 | Stabilization homomorphisms on homotopy groups | [`src/synthetic-homotopy-theory/stabilization-homotopy-groups.lagda.md`](src/synthetic-homotopy-theory/stabilization-homotopy-groups.lagda.md) | Defines the canonical concrete-group and abstract-group homomorphisms induced by the Freudenthal suspension map, `πₖ A -> πₖ ΩΣA`. This file is checked and has no holes. |
 | Stability comparison for `π₃(S³)` | [`src/synthetic-homotopy-theory/stability-third-homotopy-group-sphere-3.lagda.md`](src/synthetic-homotopy-theory/stability-third-homotopy-group-sphere-3.lagda.md) | Specializes the checked Freudenthal theorem to `S²`, identifies the canonical stabilization homomorphism `π₂(S²) -> π₃(S³)`, proves the needed set-truncated double-loop equivalence, and packages the resulting group isomorphism. Conditional bridge lemmas remain available with explicit hypothesis names, while the Blakers-Massey instance supplies the unconditional comparison. |
@@ -406,9 +406,14 @@ The full current route to `π₃(S²) ≅ ℤ` is checked and unconditional. The
 - final unconditional exports `iso-third-homotopy-group-sphere-3-ℤ` and `iso-third-homotopy-group-sphere-2-ℤ`.
 - new general diagonal exports in `diagonal-homotopy-groups-spheres`, especially `iso-diagonal-homotopy-group-sphere-succ-ℤ`, proving `πₙ₊₁(Sⁿ⁺¹) ≅ ℤ` from the base cases and recursive Freudenthal diagonal stability.
 
-The next useful work is not another blocker-clearing proof, but upstream-quality cleanup: review names and file boundaries, improve prose around the LES boundary convention, Blakers-Massey, and Freudenthal bridge, and decide how much of the local development should be split into general agda-unimath-ready modules.
+The next useful work is not another blocker-clearing proof, but upstream-quality cleanup. The LES naming and extraction review is now recorded in `LES-STATUS.md`; analogous reviews should be done for Blakers-Massey, Freudenthal, diagonal stability, and the diagonal theorem before proposing upstream patches.
 
 ## Current verification
+
+The entries below are a chronological verification log. Older entries intentionally
+record intermediate scaffolds and `--allow-unsolved-metas` states that were later
+removed; the authoritative current state is the summary above and the latest
+dated checks at the top of this section.
 
 On 2026-06-26, the iterated-loop, iterated-boundary, and homomorphism-wrapper
 splits were checked with:

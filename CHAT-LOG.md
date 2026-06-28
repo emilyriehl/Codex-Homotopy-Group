@@ -6523,3 +6523,32 @@ Verification:
 ```
 
 All eight Agda checks passed.
+
+
+### Current-state document refresh and LES upstream review
+
+Request: Emily asked Codex to update `FORMALIZATION-PLAN.md`, `STATUS-REPORT.md`, and `LES-STATUS.md` so they accurately reflect the current code, and in parallel perform the upstream naming/extraction review for the LES.
+
+Model context:
+
+- Date: 2026-06-28.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served model identity and reasoning effort are not exposed directly in the chat context.
+- Agda MCP tools were visible; this pass changed documentation/prose and used `./check.sh` for the touched literate Agda prose file.
+
+Actions:
+
+- Updated `FORMALIZATION-PLAN.md` from a stale future-work plan into a historical plan with a current-status section, current LES inventory row, upstream extraction candidates, and completed-route summary.
+- Updated `STATUS-REPORT.md` so the current summary reflects a checked local formalization rather than early infrastructure, and redirected LES cleanup guidance to `LES-STATUS.md`.
+- Added an upstream naming/extraction review to `LES-STATUS.md`, covering extraction order, naming decisions, and guardrails for keeping route-specific proof providers out of the public LES API.
+- Replaced stale “scaffold” wording in the checked Hopf third-homotopy comparison prose with “package.”
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/hopf-fibration-third-homotopy-groups.lagda.md
+rg -n "Partial locally|long-exact-sequence-homotopy-groups\.lagda\.md|early infrastructure|Hopf LES comparison scaffold|Next, prove those two ordinary square coherences|could not reach the Nix daemon" FORMALIZATION-PLAN.md STATUS-REPORT.md LES-STATUS.md src/synthetic-homotopy-theory/hopf-fibration-third-homotopy-groups.lagda.md
+rg -n "\{!!\}|!\}|--allow-unsolved-metas|postulate|TERMINATING|NON_TERMINATING|--rewriting|lossy-unification" src -g "*.lagda.md"
+git diff --check
+```
+
+The Agda check passed. The stale-wording scan produced no matches for the targeted obsolete claims. The source safety scan produced no matches. `git diff --check` passed.
