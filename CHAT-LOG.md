@@ -6552,3 +6552,48 @@ git diff --check
 ```
 
 The Agda check passed. The stale-wording scan produced no matches for the targeted obsolete claims. The source safety scan produced no matches. `git diff --check` passed.
+
+
+### Agda MCP UX report extraction
+
+Request: Emily asked Codex to implement the plan for extracting a comprehensive
+user-experience report about Agda MCP server bugs from the full Codex logs, not
+from `CHAT-LOG.md`, with enough context for an external Agda user unfamiliar
+with agda-unimath.
+
+Model context:
+
+- Date: 2026-06-30.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible, but this was a documentation/evidence extraction
+  task rather than Agda formalization work.
+
+Actions:
+
+- Added `tools/extract-mcp-evidence.mjs` to scan the full local Codex session
+  JSONL logs and runtime SQLite log for Agda MCP evidence.
+- Generated `mcp-evidence.json` and `mcp-evidence.csv` with redacted, shortened
+  evidence excerpts, category counts, and source pointers into the full logs.
+- Added `MCP-UX-REPORT.md`, an external-facing report that explains the
+  observed MCP issue categories, separates normal Agda/agda-unimath flag effects
+  from MCP status bugs, and records the completeness method.
+
+Verification:
+
+```sh
+node tools/extract-mcp-evidence.mjs
+node -e 'const e=require("./mcp-evidence.json"); if(e.totals.agda_mcp_calls!==711) throw new Error("unexpected call count"); if(e.totals.unclassified_suspicious_items!==0) throw new Error("unclassified suspicious evidence"); const ids=new Set(e.category_summary.map(c=>c.id)); for (const r of e.all_classified_call_occurrences) for (const c of r.categories) if(!ids.has(c)) throw new Error("unknown category "+c); console.log("evidence consistency checks passed");'
+node -e 'const fs=require("fs"); const e=require("./mcp-evidence.json"); const md=fs.readFileSync("MCP-UX-REPORT.md","utf8"); for (const c of e.category_summary) { const row="| `"+c.id+"` | "+c.count+" |"; if(!md.includes(row)) throw new Error("missing/mismatched row "+row); } if(!md.includes("Agda MCP calls counted: `711`")) throw new Error("missing call count"); console.log("report counts match evidence");'
+rg -n "Hi all|Edward Hunter|DSAI|postdoc|/Users/eriehl|OPENAI|sk-|api[_-]?key|Bearer|Authorization|password|secret" MCP-UX-REPORT.md mcp-evidence.json mcp-evidence.csv tools/extract-mcp-evidence.mjs
+```
+
+The extractor scanned 13 full session files, counted 711 Agda MCP calls, and
+reported 0 unclassified suspicious items. The consistency checks passed. The
+sensitive-string scan produced no matches. No Agda proof check was needed
+because this pass did not change Agda source code.
+
+Related commit:
+
+- This commit - Add Agda MCP UX report and evidence artifacts.
