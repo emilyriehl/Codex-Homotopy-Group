@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-30T20:34:40.352Z",
-  "generator": "tools/extract-mcp-evidence.mjs",
+  "generated_at": "2026-06-30T20:38:09.343Z",
+  "generator": "agda-mcp-ux-report/extract-mcp-evidence.mjs",
   "sources": {
     "sessions_root": "~/.codex/sessions/2026/06",
     "session_files_scanned": [

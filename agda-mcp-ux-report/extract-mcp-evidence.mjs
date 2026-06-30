@@ -6,7 +6,8 @@ import { homedir } from "node:os";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const reportDir = dirname(fileURLToPath(import.meta.url));
+const repoRoot = resolve(reportDir, "..");
 const sessionsRoot =
   process.env.CODEX_MCP_SESSIONS_DIR ??
   join(homedir(), ".codex", "sessions", "2026", "06");
@@ -14,9 +15,9 @@ const logDb =
   process.env.CODEX_MCP_LOG_DB ??
   join(homedir(), ".codex", "logs_2.sqlite");
 const outJson =
-  process.env.MCP_EVIDENCE_JSON ?? join(repoRoot, "mcp-evidence.json");
+  process.env.MCP_EVIDENCE_JSON ?? join(reportDir, "mcp-evidence.json");
 const outCsv =
-  process.env.MCP_EVIDENCE_CSV ?? join(repoRoot, "mcp-evidence.csv");
+  process.env.MCP_EVIDENCE_CSV ?? join(reportDir, "mcp-evidence.csv");
 
 const categoryDefinitions = {
   auto_malformed_search_payload: {

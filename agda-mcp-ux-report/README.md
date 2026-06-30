@@ -2,6 +2,10 @@
 
 Report date: 2026-06-30.
 
+This directory is the shareable report package. It contains the human-readable
+report, the redacted evidence artifacts, and the extractor used to regenerate
+them from local full Codex logs.
+
 This report summarizes Agda MCP server issues observed while using the server for
 Agda development in a repository that depends on `agda-unimath`. It is written
 for an Agda user or MCP maintainer who may not know homotopy type theory or the
@@ -18,7 +22,7 @@ The report is based on full Codex session logs, not on `CHAT-LOG.md`.
 
 - Full session logs scanned locally: `~/.codex/sessions/2026/06/*.jsonl`.
 - Runtime log database scanned locally: `~/.codex/logs_2.sqlite`.
-- Extractor: `tools/extract-mcp-evidence.mjs`.
+- Extractor: `extract-mcp-evidence.mjs`.
 - Structured evidence: `mcp-evidence.json`.
 - Compact evidence index: `mcp-evidence.csv`.
 

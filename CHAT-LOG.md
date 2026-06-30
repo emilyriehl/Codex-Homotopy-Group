@@ -6597,3 +6597,47 @@ because this pass did not change Agda source code.
 Related commit:
 
 - This commit - Add Agda MCP UX report and evidence artifacts.
+
+
+### Move Agda MCP UX report into shareable folder
+
+Request: Emily asked Codex to put the Agda MCP UX report materials into a
+subfolder of the git repository so they would be easy to separate from the rest
+of the project and share.
+
+Model context:
+
+- Date: 2026-06-30.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible, but this was a repository organization task
+  rather than Agda formalization work.
+
+Actions:
+
+- Moved the report package into `agda-mcp-ux-report/`.
+- Renamed the report to `agda-mcp-ux-report/README.md` so the folder renders as
+  a shareable report on GitHub.
+- Moved the JSON/CSV evidence artifacts and extractor into the same folder.
+- Updated the extractor defaults so regenerated evidence is written beside the
+  extractor inside `agda-mcp-ux-report/`.
+
+Verification:
+
+```sh
+node agda-mcp-ux-report/extract-mcp-evidence.mjs
+node -e 'const e=require("./agda-mcp-ux-report/mcp-evidence.json"); if(e.totals.agda_mcp_calls!==711) throw new Error("unexpected call count"); if(e.totals.unclassified_suspicious_items!==0) throw new Error("unclassified suspicious evidence"); const ids=new Set(e.category_summary.map(c=>c.id)); for (const r of e.all_classified_call_occurrences) for (const c of r.categories) if(!ids.has(c)) throw new Error("unknown category "+c); console.log("evidence consistency checks passed");'
+node -e 'const fs=require("fs"); const e=require("./agda-mcp-ux-report/mcp-evidence.json"); const md=fs.readFileSync("agda-mcp-ux-report/README.md","utf8"); for (const c of e.category_summary) { const row="| `"+c.id+"` | "+c.count+" |"; if(!md.includes(row)) throw new Error("missing/mismatched row "+row); } if(!md.includes("Agda MCP calls counted: `711`")) throw new Error("missing call count"); console.log("report counts match evidence");'
+rg -n "Hi all|Edward Hunter|DSAI|postdoc|/Users/eriehl|OPENAI|sk-|api[_-]?key|Bearer|Authorization|password|secret" agda-mcp-ux-report
+git diff --check
+```
+
+The extractor scanned 13 full session files, counted 711 Agda MCP calls, and
+reported 0 unclassified suspicious items. The consistency checks passed. The
+sensitive-string scan produced no matches. `git diff --check` passed. No Agda
+proof check was needed because this pass did not change Agda source code.
+
+Related commit:
+
+- This commit - Move Agda MCP UX report into shareable folder.
