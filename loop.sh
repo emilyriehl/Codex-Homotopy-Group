@@ -24,7 +24,7 @@
 set -uo pipefail   # deliberately NOT -e: per-module failures are handled, not fatal
 
 # ---------- config (override via env) ----------
-HOTT_REPO="${HOTT_REPO:-$HOME/projects6/HoTT-Auto}"
+HOTT_REPO="${HOTT_REPO:-$(cd "$(dirname "$0")" && pwd)}"   # this repo (auto-located from the script path)
 WORK="${AGDA_UNIMATH:-$HOME/agda-unimath}"          # agda-unimath working copy (Codex cwd)
 WORK_BRANCH="${WORK_BRANCH:-math-team-autoformalization}"
 MAX_ROUNDS="${MAX_ROUNDS:-3}"                        # driver re-invocations per module before pausing
