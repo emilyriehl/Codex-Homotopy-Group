@@ -1,7 +1,7 @@
 # Using `codex-run.sh` and `loop.sh` in this repo
 
-These two scripts drive the π₃(S²) autoformalization. They were carried over
-from the **HoTT-Auto** repo and use the same architecture:
+These two scripts drive the π₃(S²) autoformalization. They use the following
+architecture:
 
 - **This repo is the deliverable source.** It holds the plan, the task queue,
   telemetry, and the portable bundle that gets deployed (`AGENTS.md`,
@@ -32,17 +32,16 @@ limitations:
    direction is to replace this driver with an **MCP-based service**; the
    scripts are the interim mechanism, not the destination.
 
-## What already differs from HoTT-Auto (already applied — nothing to do)
+## Portability (already applied — nothing to do)
 
-Only two path facts differ, and both scripts are already patched for them:
+Two path facts are worth knowing, and both scripts are already patched for them:
 
 1. `HOTT_REPO` / `REPO` **auto-locate this repo from the script's own path**
    (`$(cd "$(dirname "$0")" && pwd)`) — no hard-coded local path, so it works
    wherever each collaborator clones it.
 2. `codex-run.sh` deploys this repo's `.codex/skills/agda-unimath-skills/SKILL.md`
-   (HoTT-Auto used `.claude/skills/...`) and deploys `check-sandbox.sh` as the
-   sandbox's `./check.sh` (this repo's *root* `check.sh` is submodule-aware and
-   would not run in the flat sandbox).
+   and deploys `check-sandbox.sh` as the sandbox's `./check.sh` (this repo's
+   *root* `check.sh` is submodule-aware and would not run in the flat sandbox).
 
 Everything else (`WORK=$HOME/agda-unimath`, the deploy target
 `.agent/agda-unimath-skill.md`, in-sandbox paths like
@@ -112,6 +111,49 @@ committed in the **sandbox** on `$WORK_BRANCH` — bring finished modules back i
 this repo's `src/` for archival and local re-verification with the repo-root
 `./check.sh`.
 
+## Inside `loop.sh` (the key code)
+
+~190 lines of bash; these are the parts that matter.
+
+**Config, override via env (top of file).** Every knob has an env default:
+`HOTT_REPO` auto-locates this repo from the script's path, `WORK` is the sandbox
+(`$AGDA_UNIMATH` or `$HOME/agda-unimath`, Codex's cwd), plus `WORK_BRANCH`,
+`MAX_ROUNDS`, `MODULE_TIMEOUT`, `REASONING`, `ESCALATE`.
+
+**`gate_verify <file>` — the sound gate (the heart of the loop).** The *driver*,
+not Codex, decides pass/fail. Four independent checks, each returning a one-word
+reason on failure:
+1. real type-check — `cd "$WORK" && ./check.sh "$file"` must exit 0, with no
+   `unsolved (meta|constraint|interaction)` in the output;
+2. no open holes — no `?` / `{! !}` left in the file;
+3. no `postulate` in the authored file (anti-hallucination);
+4. target signature unchanged — if `tasks/<id>.sig` is pinned, its verbatim text
+   must still be present (anti goal-weakening).
+Codex's own "it's done" is never trusted.
+
+**`build_prompt` / `run_codex` — one attempt.** `build_prompt` assembles the task
+(read `AGENTS.md` + the deployed skill, the per-module `tasks/<id>.task.md` spec,
+the hard rules, and — on a retry — the gate's failure detail). `run_codex` runs
+`codex exec --sandbox workspace-write` headless (cwd = sandbox), under
+`with_timeout $MODULE_TIMEOUT` at reasoning effort `$REASONING`.
+
+**`prove_module <file> <id>` — retry loop.** Up to `MAX_ROUNDS`: run one attempt,
+then `gate_verify`; on `ok`, log telemetry and return success; otherwise feed the
+gate's failure text back into the next prompt. Bust after the last round.
+
+**Main queue walk (bottom).** Reads `tasks/queue.txt` in order (`#` = comment,
+`*`-prefix = human checkpoint after that module). Skips any module with a
+`state/<id>.done` marker → **resumable**. On success: `commit_module` makes an
+**atomic commit** on `$WORK_BRANCH` and writes the done-marker; pauses at `*`
+checkpoints. On bust: optionally `escalate_best_of_n`, else `pause` for a human.
+
+**`escalate_best_of_n` (dormant, `ESCALATE=1`).** Fans out `ESCALATE_N` parallel
+attempts in isolated `git worktree`s; the compiler picks any that verifies. Off
+by default.
+
+**Telemetry.** `telem` appends one JSONL line per attempt (module, round,
+verified, gate reason, token count) to `telemetry/runs/loop-<RUN_ID>.jsonl`.
+
 ## The two `check.sh` files (don't mix them up)
 
 | File | Runs where | Library | Purpose |
@@ -123,9 +165,3 @@ For the repo-root local check you also need the submodule initialized:
 ```sh
 git submodule update --init --depth 1
 ```
-
-## Optional: Agda MCP server
-
-Agents may use the Agda MCP server for interactive proof development — see
-`MCP-SETUP.md`. It is **not** the verification gate; final acceptance is always a
-real `./check.sh <file>`.
