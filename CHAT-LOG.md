@@ -6641,3 +6641,49 @@ proof check was needed because this pass did not change Agda source code.
 Related commit:
 
 - This commit - Move Agda MCP UX report into shareable folder.
+
+
+### Compare the formalized LES with HoTT Book Section 8.4
+
+Request: Emily asked Codex to determine whether the formalized long exact
+sequence documented in `LES-STATUS.md` follows the construction in HoTT Book
+Section 8.4, especially Lemma 8.4.4 and Theorem 8.4.6, to summarize the answer,
+and to append the findings to `LES-STATUS.md`.
+
+Model context:
+
+- Date: 2026-08-01.
+- Agent-visible runtime identity: Codex, a GPT-5 coding agent; exact served
+  model identity and reasoning effort are not exposed directly in the chat
+  context.
+- Agda MCP tools were visible, but this was a source-comparison and
+  documentation task rather than new Agda proof development.
+
+Actions:
+
+- Compared the current HoTT Book source for Section 8.4 with the local fiber
+  sequence, connecting sequence, iterated-loop, boundary, set-truncated
+  exactness, group-level, abelian, and low-degree tail modules.
+- Established that the formalization uses the same fiber-sequence and
+  set-truncation proof as the Book, while packaging it as reusable finite fiber
+  sequences and a three-periodic record rather than literally defining the
+  Book's recursive infinite `X^(n), f^(n)` sequence.
+- Documented the component-by-component correspondence with Lemma 8.4.4, the
+  sign-normalized boundary convention, the direct counterpart of the proof of
+  Theorem 8.4.6, and the split between the group-level LES and its pointed-set
+  tail in `LES-STATUS.md`.
+
+Verification:
+
+```sh
+rg -n "Comparison With HoTT Book|Lemma 8.4.4|Theorem 8.4.6|Bottom Line" LES-STATUS.md
+rg -n "pointed-equiv-fiber-inclusion-boundary-fiber-Pointed-Type|pointed-equiv-fiber-connecting-map-Pointed-Type|pointed-equiv-iterated-loop-fiber-fiber-sequence|is-exact-trunc-fiber-inclusion-Pointed-Type|long-exact-sequence-homotopy-groups-fiber-sequence|pointed-set-tail-long-exact-sequence-fiber-sequence" src
+git diff --check
+```
+
+The documentation-to-source name scan and `git diff --check` passed. No Agda
+check was needed because no Agda source file changed.
+
+Related commit:
+
+- This commit - Compare the LES with HoTT Book Section 8.4.

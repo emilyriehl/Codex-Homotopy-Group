@@ -1,6 +1,6 @@
 # Long Exact Sequence Status
 
-Last updated: 2026-06-27.
+Last updated: 2026-08-01.
 
 This note summarizes the current local state of the long exact sequence of a
 fibration, with a critical eye toward what would still be needed before this
@@ -1032,3 +1032,109 @@ The checked commands were:
 ```
 
 All eight Agda checks passed. At this point the local LES code and documentation are library-quality modulo upstream naming, namespace placement, and extraction review.
+
+
+## 2026-08-01 Comparison With HoTT Book Section 8.4
+
+### Verdict
+
+The formalized long exact sequence uses the same mathematical construction as
+[HoTT Book Section 8.4](https://github.com/HoTT/book/blob/master/homotopy.tex#L105-L133):
+form the fiber sequence of a pointed map, identify its successive fibers with
+loop spaces, apply set truncation, and use exactness of each canonical
+fiber-projection triple. It is not an unrelated algebraic or image/kernel-only
+proof.
+
+The match is structural rather than literal. The Book defines one recursive
+infinite sequence of types `X^(n)` and projections `f^(n)`. The Agda code does
+not encode that particular sequence as a single recursively defined object.
+Instead, it packages the identified fiber, loop, and connecting triples as
+reusable pointed fiber sequences, iterates them by a natural-number index, and
+assembles their set-truncated exact triples into a three-periodic long-exact-
+sequence record. Thus there is no formal theorem equating the local record with
+a separate Agda encoding of the Book's `X^(n), f^(n)` sequence; the comparison
+is witnessed component by component by the structural theorems below.
+
+### Lemma 8.4.4
+
+The three parts of Lemma 8.4.4 have the following local counterparts.
+
+| HoTT Book statement | Local structural counterpart | Relationship |
+|---|---|---|
+| The fiber of `fiber g -> E` is equivalent to `Ω B`. | `pointed-equiv-fiber-inclusion-boundary-fiber-Pointed-Type` and `fiber-sequence-boundary-fiber-Pointed-Type` in `fiber-sequences-fiber-inclusions` | This is the pointed equivalence and the packaged fiber sequence `Ω B -> fiber g -> E`. |
+| The fiber of the resulting connecting map `∂ : Ω B -> fiber g` is equivalent to `Ω E`. | `pointed-equiv-fiber-connecting-map-Pointed-Type` and `fiber-sequence-connecting-map-Pointed-Type` in `connecting-fiber-sequences` | This packages `Ω E -> Ω B -> fiber g` as a pointed fiber sequence. For a general packaged sequence `F -> E -> B`, it is transported across the chosen equivalence `F ≃ fiber g`. |
+| With the Book's recursively induced equivalences, the next projection is `Ω g` precomposed with loop inversion. | The connecting fiber sequence uses `pointed-map-Ω g` directly; `signed-boundary-comparisons-fiber-sequences` records the systematic loop-inversion comparisons needed on iteration. | The Agda construction chooses its comparison equivalence so that the inversion is absorbed and the displayed map is the standard loop map. This is a sign-normalized version of the Book's identification, not a different fiber sequence. |
+
+The all-index analogue is
+`pointed-equiv-iterated-loop-fiber-fiber-sequence` together with
+`iterated-loop-fiber-sequence`: it identifies `Ω^n F` with the fiber of
+`Ω^n E -> Ω^n B` and keeps the iterated fiber-inclusion map compatible. The
+fresh connecting map of each iterated-loop fiber sequence is separately named
+`canonical-pointed-map-iterated-boundary-fiber-sequence`. This avoids asserting
+that it is definitionally the iterated loop of the preceding boundary map.
+
+This last choice is the main presentational difference from the Book. The Book
+first retains the alternating inversions arising from the recursive fiber
+sequence and then observes that signs do not change images or kernels. The
+formalization instead uses the standard maps induced by the fiber inclusion and
+fibration in its public LES, uses one fresh canonical boundary convention, and
+proves the required signed comparison explicitly. The sign machinery is hidden
+inside the exactness providers rather than exposed as public LES data.
+
+### Theorem 8.4.6
+
+The core proof of Theorem 8.4.6 is formalized directly. The theorem
+`is-exact-trunc-fiber-inclusion-Pointed-Type` in
+`structured-types.exact-sequences-pointed-sets` proves that
+
+```text
+  ||fiber f||_0 -> ||W||_0 -> ||Z||_0
+```
+
+is exact. Its two directions are the formal versions of the Book's argument:
+a point of the fiber maps into the kernel, while an element of the kernel in
+`||W||_0` can be eliminated to a representative `w : W`; effectiveness of set
+truncation then supplies a merely existing path `f w = z_0`, and hence a merely
+existing point `(w , p)` of the fiber. The local definition stores this as a
+logical equivalence between image and kernel predicates rather than literally
+as equality of subsets, but it expresses the same exactness condition.
+
+The formalization then applies this canonical theorem to the structural fiber
+sequences above, exactly as the Book applies the same argument to every
+adjacent triple of its recursive fiber sequence. The resulting public packages
+split the Book's single displayed sequence by algebraic range:
+
+- `set-truncated-long-exact-sequence-fiber-sequence` records the all-index
+  pointed-set sequence on `pi_(n+1)(F)`, `pi_(n+1)(E)`, and `pi_(n+1)(B)` and
+  derives the three adjacent exact triples at every index;
+- `long-exact-sequence-homotopy-groups-fiber-sequence` presents the same range
+  as ordinary group homomorphisms and group exactness;
+- `abelian-long-exact-sequence-homotopy-groups-fiber-sequence` restricts to
+  degrees at least two, matching the Book's Eckmann--Hilton observation; and
+- `pointed-set-tail-long-exact-sequence-fiber-sequence` supplies the remaining
+  low-degree segment
+
+  ```text
+  pi_1(E) -> pi_1(B) -> pi_0(F) -> pi_0(E) -> pi_0(B).
+  ```
+
+  It intentionally makes no exactness claim at the terminal `pi_0(B)`, since
+  that would incorrectly assert surjectivity onto every component of `B`.
+
+Consequently, the group-level package by itself does not display the final
+three pointed sets appearing in Theorem 8.4.6, but the group package together
+with the pointed-set tail matches the Book's range. The abelian package matches
+the Book's claim that the terms are abelian from degree two upward.
+
+### Bottom Line
+
+The local result should be described as a modular, sign-normalized
+formalization of the HoTT Book construction. Its extra layers--packaged fiber
+sequences, explicit equivalence transports for a noncanonical fiber `F`,
+separate pointed-set/group/abelian records, and signed boundary comparison
+lemmas--are proof-engineering and reuse improvements. They do not replace the
+Book's homotopy-theoretic argument with a different idea. The only important
+caveat is that the exact recursive infinite fiber sequence of Definition 8.4.3
+is not itself a public Agda object; the formalized public object is the
+equivalent three-periodic LES after the loop-space identifications and sign
+normalization.
