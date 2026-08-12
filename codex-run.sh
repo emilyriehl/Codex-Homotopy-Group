@@ -7,16 +7,16 @@
 #         AGDA_UNIMATH=/path ./codex-run.sh   # override working-copy location
 set -euo pipefail
 
-REPO="${HOTT_REPO:-$HOME/projects6/HoTT-Auto}"   # deliverable source (this repo)
+REPO="${HOTT_REPO:-$(cd "$(dirname "$0")" && pwd)}"   # deliverable source = this repo (auto-located from the script)
 WORK="${AGDA_UNIMATH:-$HOME/agda-unimath}"       # agda-unimath working copy (Codex cwd)
 
 [ -d "$WORK/src" ] || { echo "agda-unimath not found at $WORK (set AGDA_UNIMATH)"; exit 1; }
 
 # 1) deploy the portable bundle into the working copy (idempotent — keeps it in sync)
 cp "$REPO/AGENTS.md" "$WORK/AGENTS.md"
-cp "$REPO/check.sh"  "$WORK/check.sh"; chmod +x "$WORK/check.sh"
+cp "$REPO/check-sandbox.sh"  "$WORK/check.sh"; chmod +x "$WORK/check.sh"
 mkdir -p "$WORK/.agent"
-cp "$REPO/.claude/skills/agda-unimath-formalization/SKILL.md" "$WORK/.agent/agda-unimath-skill.md"
+cp "$REPO/.codex/skills/agda-unimath-skills/SKILL.md" "$WORK/.agent/agda-unimath-skill.md"
 
 # 2) planning prompt (plan + dependency inventory; NO proving, NO library edits)
 PROMPT="$(cat <<'PROMPT_EOF'
