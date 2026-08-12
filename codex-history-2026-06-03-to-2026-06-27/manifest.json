@@ -1,0 +1,147 @@
+{
+  "title": "Codex history for Codex-Homotopy-Group, 2026-06-03 through 2026-06-27",
+  "status": "partial: mac-local logs only; linux laptop logs pending",
+  "date_range_inclusive": {
+    "start": "2026-06-03",
+    "end": "2026-06-27",
+    "timestamp_window_utc": {
+      "start": "2026-06-03T00:00:00+00:00",
+      "end_exclusive": "2026-06-28T00:00:00+00:00"
+    }
+  },
+  "selection_rule": {
+    "source_root_redacted": "<HOME>/.codex/sessions",
+    "repo_cwd_match_redacted": "<REPO_ROOT>",
+    "include_if": "session metadata cwd matches repo and event timestamps overlap the requested UTC window"
+  },
+  "redaction_version": "2026-08-12.1",
+  "private_redaction_term_count": 6,
+  "source_machines": [
+    {
+      "label": "mac-local",
+      "status": "included",
+      "notes": "Local macOS Codex sessions available on this machine."
+    },
+    {
+      "label": "linux-laptop",
+      "status": "pending",
+      "notes": "To be imported later from the Linux laptop using the same sanitizer and manifest schema."
+    }
+  ],
+  "session_count": 8,
+  "history_entry_count": 172,
+  "sessions": [
+    {
+      "session_id": "019e8e5a-cbb6-7dd3-a831-bdc9c70f9d7e",
+      "source_machine": "mac-local",
+      "original_path_redacted": "<HOME>/.codex/sessions/2026/06/03/rollout-2026-06-03T12-39-35-019e8e5a-cbb6-7dd3-a831-bdc9c70f9d7e.jsonl",
+      "bundle_path": "sessions/2026/06/03/rollout-2026-06-03T12-39-35-019e8e5a-cbb6-7dd3-a831-bdc9c70f9d7e.jsonl",
+      "started_at": "2026-06-03T16:39:35.606Z",
+      "first_event_at": "2026-06-03T16:39:54.643000+00:00",
+      "last_event_at": "2026-06-03T16:45:56.229000+00:00",
+      "source_line_count": 164,
+      "sanitized_line_count": 164,
+      "sanitized_sha256": "511d35ba08293d7b6d2adf6e8cbdf9d8796a5b3bfe6129305144c4c0f1502d95",
+      "inclusion_reason": "session cwd matched repository and activity overlapped 2026-06-03 through 2026-06-27 inclusive",
+      "redaction_version": "2026-08-12.1"
+    },
+    {
+      "session_id": "019e8e6e-e65d-7cc2-bb1d-b15a3c73a937",
+      "source_machine": "mac-local",
+      "original_path_redacted": "<HOME>/.codex/sessions/2026/06/03/rollout-2026-06-03T13-01-33-019e8e6e-e65d-7cc2-bb1d-b15a3c73a937.jsonl",
+      "bundle_path": "sessions/2026/06/03/rollout-2026-06-03T13-01-33-019e8e6e-e65d-7cc2-bb1d-b15a3c73a937.jsonl",
+      "started_at": "2026-06-03T17:01:33.149Z",
+      "first_event_at": "2026-06-03T17:05:49.180000+00:00",
+      "last_event_at": "2026-06-03T17:16:05.488000+00:00",
+      "source_line_count": 151,
+      "sanitized_line_count": 151,
+      "sanitized_sha256": "897628fe72dd0edcd02bd3cdaa7c564527752e4a03e1b54fd4cb1c2ad43277aa",
+      "inclusion_reason": "session cwd matched repository and activity overlapped 2026-06-03 through 2026-06-27 inclusive",
+      "redaction_version": "2026-08-12.1"
+    },
+    {
+      "session_id": "019e8e7c-9e68-77a0-9e93-44f7d1a9702d",
+      "source_machine": "mac-local",
+      "original_path_redacted": "<HOME>/.codex/sessions/2026/06/03/rollout-2026-06-03T13-16-32-019e8e7c-9e68-77a0-9e93-44f7d1a9702d.jsonl",
+      "bundle_path": "sessions/2026/06/03/rollout-2026-06-03T13-16-32-019e8e7c-9e68-77a0-9e93-44f7d1a9702d.jsonl",
+      "started_at": "2026-06-03T17:16:32.232Z",
+      "first_event_at": "2026-06-03T17:17:48.763000+00:00",
+      "last_event_at": "2026-06-04T16:24:35.241000+00:00",
+      "source_line_count": 1720,
+      "sanitized_line_count": 1720,
+      "sanitized_sha256": "5a9f0a2e71fe9ba5b57391a98edce46e43f4cbf02d9f5ecdd25fc57bef0b9701",
+      "inclusion_reason": "session cwd matched repository and activity overlapped 2026-06-03 through 2026-06-27 inclusive",
+      "redaction_version": "2026-08-12.1"
+    },
+    {
+      "session_id": "019e9937-00a3-7422-b0f1-e35aac5023f5",
+      "source_machine": "mac-local",
+      "original_path_redacted": "<HOME>/.codex/sessions/2026/06/05/rollout-2026-06-05T15-16-19-019e9937-00a3-7422-b0f1-e35aac5023f5.jsonl",
+      "bundle_path": "sessions/2026/06/05/rollout-2026-06-05T15-16-19-019e9937-00a3-7422-b0f1-e35aac5023f5.jsonl",
+      "started_at": "2026-06-05T19:16:19.270Z",
+      "first_event_at": "2026-06-05T19:27:16.464000+00:00",
+      "last_event_at": "2026-06-05T21:02:25.122000+00:00",
+      "source_line_count": 1537,
+      "sanitized_line_count": 1537,
+      "sanitized_sha256": "757cc8231fb710ef07dbf94a69ee4517ad86321ad332b9888051ba3655f1ded9",
+      "inclusion_reason": "session cwd matched repository and activity overlapped 2026-06-03 through 2026-06-27 inclusive",
+      "redaction_version": "2026-08-12.1"
+    },
+    {
+      "session_id": "019ed22a-546e-7b41-82fe-08a9944c64ec",
+      "source_machine": "mac-local",
+      "original_path_redacted": "<HOME>/.codex/sessions/2026/06/16/rollout-2026-06-16T16-40-50-019ed22a-546e-7b41-82fe-08a9944c64ec.jsonl",
+      "bundle_path": "sessions/2026/06/16/rollout-2026-06-16T16-40-50-019ed22a-546e-7b41-82fe-08a9944c64ec.jsonl",
+      "started_at": "2026-06-16T20:40:50.079Z",
+      "first_event_at": "2026-06-16T20:41:17.635000+00:00",
+      "last_event_at": "2026-06-16T22:08:08.591000+00:00",
+      "source_line_count": 1354,
+      "sanitized_line_count": 1354,
+      "sanitized_sha256": "fd5fa47e620f9076a77f5d22a00197fde2ae771a68dddc600e133858f3029466",
+      "inclusion_reason": "session cwd matched repository and activity overlapped 2026-06-03 through 2026-06-27 inclusive",
+      "redaction_version": "2026-08-12.1"
+    },
+    {
+      "session_id": "019edc41-0859-7512-a810-3d2182fd6563",
+      "source_machine": "mac-local",
+      "original_path_redacted": "<HOME>/.codex/sessions/2026/06/18/rollout-2026-06-18T15-41-50-019edc41-0859-7512-a810-3d2182fd6563.jsonl",
+      "bundle_path": "sessions/2026/06/18/rollout-2026-06-18T15-41-50-019edc41-0859-7512-a810-3d2182fd6563.jsonl",
+      "started_at": "2026-06-18T19:41:50.070Z",
+      "first_event_at": "2026-06-18T19:42:12.971000+00:00",
+      "last_event_at": "2026-06-18T20:24:00.352000+00:00",
+      "source_line_count": 1149,
+      "sanitized_line_count": 1149,
+      "sanitized_sha256": "a75610ab693c31c92d078ebdbb9d3b8e2fc58894a649cdee08e6c3a7a91a0519",
+      "inclusion_reason": "session cwd matched repository and activity overlapped 2026-06-03 through 2026-06-27 inclusive",
+      "redaction_version": "2026-08-12.1"
+    },
+    {
+      "session_id": "019edc6b-6b4b-7d61-bd99-e144991bc81f",
+      "source_machine": "mac-local",
+      "original_path_redacted": "<HOME>/.codex/sessions/2026/06/18/rollout-2026-06-18T16-28-07-019edc6b-6b4b-7d61-bd99-e144991bc81f.jsonl",
+      "bundle_path": "sessions/2026/06/18/rollout-2026-06-18T16-28-07-019edc6b-6b4b-7d61-bd99-e144991bc81f.jsonl",
+      "started_at": "2026-06-18T20:28:07.909Z",
+      "first_event_at": "2026-06-18T20:28:18.517000+00:00",
+      "last_event_at": "2026-06-19T17:54:22.411000+00:00",
+      "source_line_count": 5206,
+      "sanitized_line_count": 5206,
+      "sanitized_sha256": "0c1779b9c2d6919163b3d7d7f84cb7632f24cdae3a5f48c720f2d2851cd78962",
+      "inclusion_reason": "session cwd matched repository and activity overlapped 2026-06-03 through 2026-06-27 inclusive",
+      "redaction_version": "2026-08-12.1"
+    },
+    {
+      "session_id": "019eefaa-d066-73b3-a28b-9a01db6764ab",
+      "source_machine": "mac-local",
+      "original_path_redacted": "<HOME>/.codex/sessions/2026/06/22/rollout-2026-06-22T10-10-09-019eefaa-d066-73b3-a28b-9a01db6764ab.jsonl",
+      "bundle_path": "sessions/2026/06/22/rollout-2026-06-22T10-10-09-019eefaa-d066-73b3-a28b-9a01db6764ab.jsonl",
+      "started_at": "2026-06-22T14:10:09.664Z",
+      "first_event_at": "2026-06-22T14:10:23.549000+00:00",
+      "last_event_at": "2026-06-26T21:43:52.454000+00:00",
+      "source_line_count": 58046,
+      "sanitized_line_count": 58046,
+      "sanitized_sha256": "bff10da0a47d8c311abbd9afc3d3315c093cb68be3c7458873bf68d7d65731a9",
+      "inclusion_reason": "session cwd matched repository and activity overlapped 2026-06-03 through 2026-06-27 inclusive",
+      "redaction_version": "2026-08-12.1"
+    }
+  ]
+}

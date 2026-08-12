@@ -1,0 +1,338 @@
+#!/usr/bin/env python3
+"""Build a publishable, redacted Codex history bundle.
+
+The script copies matching Codex session JSONL files into this bundle, preserving
+JSONL structure while recursively redacting sensitive strings in JSON values.
+It also writes a manifest and a filtered prompt-history file for the included
+session ids.
+"""
+
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import hashlib
+import json
+import re
+from pathlib import Path
+from typing import Any
+
+
+REDACTION_VERSION = "2026-08-12.1"
+DATE_START_UTC = dt.datetime.fromisoformat("2026-06-03T00:00:00+00:00")
+DATE_END_EXCLUSIVE_UTC = dt.datetime.fromisoformat("2026-06-28T00:00:00+00:00")
+
+
+SECRET_PATTERNS = [
+    (re.compile(r"sk-proj-[A-Za-z0-9_-]+"), "<OPENAI_API_KEY_REDACTED>"),
+    (re.compile(r"sk-[A-Za-z0-9_-]{20,}"), "<OPENAI_API_KEY_REDACTED>"),
+    (re.compile(r"org-[A-Za-z0-9_-]{5,}"), "<OPENAI_ORG_ID_REDACTED>"),
+    (re.compile(r"proj_[A-Za-z0-9_-]{5,}"), "<OPENAI_PROJECT_ID_REDACTED>"),
+    (re.compile(r"github_pat_[A-Za-z0-9_]+"), "<GITHUB_TOKEN_REDACTED>"),
+    (re.compile(r"gh[pousr]_[A-Za-z0-9_]{20,}"), "<GITHUB_TOKEN_REDACTED>"),
+    (
+        re.compile(r"(?i)(OPENAI_API_KEY\s*[:=]\s*)[A-Za-z0-9_./+=-]+"),
+        r"\1<OPENAI_API_KEY_REDACTED>",
+    ),
+    (
+        re.compile(r"(?i)(Authorization:\s*Bearer\s+)[A-Za-z0-9_./+=-]+"),
+        r"\1<BEARER_TOKEN_REDACTED>",
+    ),
+]
+
+CONTACT_PATTERNS = [
+    (
+        re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"),
+        "<EMAIL_REDACTED>",
+    ),
+]
+
+STATIC_PATTERNS = CONTACT_PATTERNS + SECRET_PATTERNS
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--source-root",
+        default=str(Path.home() / ".codex" / "sessions"),
+        help="Codex sessions root containing YYYY/MM/DD/*.jsonl.",
+    )
+    parser.add_argument(
+        "--history-file",
+        default=str(Path.home() / ".codex" / "history.jsonl"),
+        help="Codex history.jsonl file to filter by included session id.",
+    )
+    parser.add_argument(
+        "--repo-root",
+        default=None,
+        help="Exact cwd value identifying sessions for this repository.",
+    )
+    parser.add_argument(
+        "--output-root",
+        default=str(Path(__file__).resolve().parents[1]),
+        help="Bundle root where sessions/, manifest.json, and history.filtered.jsonl are written.",
+    )
+    parser.add_argument(
+        "--source-machine",
+        default="mac-local",
+        help="Label recorded in the manifest for this source machine.",
+    )
+    parser.add_argument(
+        "--redact-term",
+        action="append",
+        default=[],
+        metavar="RAW=REPLACEMENT",
+        help="Private literal to redact, for example 'Name=<RESEARCHER_1>'. May be repeated.",
+    )
+    return parser.parse_args()
+
+
+def parse_timestamp(value: str | None) -> dt.datetime | None:
+    if not value:
+        return None
+    return dt.datetime.fromisoformat(value.replace("Z", "+00:00"))
+
+
+def literal_patterns(args: argparse.Namespace) -> list[tuple[re.Pattern[str], str]]:
+    repo_root = args.repo_root or str(Path.cwd())
+    home = str(Path.home())
+    patterns: list[tuple[re.Pattern[str], str]] = [
+        (re.compile(re.escape(repo_root)), "<REPO_ROOT>"),
+        (re.compile(re.escape(home) + r"\b"), "<HOME>"),
+        (re.compile(r"/Users/([A-Za-z0-9._-]+)\b"), "<HOME_MAC>"),
+        (
+            re.compile(r"/home/([A-Za-z0-9._-]+)/Codex-Homotopy-Group\b"),
+            "<REPO_ROOT_LINUX>",
+        ),
+        (re.compile(r"/home/([A-Za-z0-9._-]+)\b"), "<HOME_LINUX>"),
+    ]
+    for term in args.redact_term:
+        if "=" not in term:
+            raise ValueError(f"invalid --redact-term {term!r}; expected RAW=REPLACEMENT")
+        raw, replacement = term.split("=", 1)
+        if not raw:
+            raise ValueError("--redact-term raw value must not be empty")
+        if re.fullmatch(r"[A-Za-z]{1,4}", raw):
+            raw_pattern = rf"(?<![A-Za-z0-9_-]){re.escape(raw)}(?![A-Za-z0-9_-])"
+        else:
+            raw_pattern = re.escape(raw)
+        patterns.append(
+            (
+                re.compile(raw_pattern, re.IGNORECASE),
+                replacement,
+            )
+        )
+    return patterns
+
+
+def redact_string(value: str, patterns: list[tuple[re.Pattern[str], str]]) -> str:
+    redacted = value
+    for _ in range(3):
+        previous = redacted
+        for pattern, replacement in patterns + STATIC_PATTERNS:
+            redacted = pattern.sub(replacement, redacted)
+        if redacted == previous:
+            break
+    return redacted
+
+
+def redact_json(value: Any, patterns: list[tuple[re.Pattern[str], str]]) -> Any:
+    if isinstance(value, str):
+        return redact_string(value, patterns)
+    if isinstance(value, list):
+        return [redact_json(item, patterns) for item in value]
+    if isinstance(value, dict):
+        return {
+            redact_string(str(key), patterns): redact_json(item, patterns)
+            for key, item in value.items()
+        }
+    return value
+
+
+def iter_session_files(source_root: Path) -> list[Path]:
+    return sorted(source_root.glob("2026/*/*/*.jsonl"))
+
+
+def session_metadata(path: Path) -> dict[str, Any] | None:
+    with path.open("r", encoding="utf-8") as handle:
+        first_line = handle.readline()
+    try:
+        first = json.loads(first_line)
+    except json.JSONDecodeError:
+        return None
+    payload = first.get("payload", {})
+    return {
+        "session_id": payload.get("id"),
+        "started_at": payload.get("timestamp") or first.get("timestamp"),
+        "cwd": payload.get("cwd"),
+    }
+
+
+def session_window(path: Path) -> tuple[dt.datetime | None, dt.datetime | None, int]:
+    earliest: dt.datetime | None = None
+    latest: dt.datetime | None = None
+    line_count = 0
+    with path.open("r", encoding="utf-8") as handle:
+        for line in handle:
+            line_count += 1
+            try:
+                timestamp = parse_timestamp(json.loads(line).get("timestamp"))
+            except json.JSONDecodeError:
+                continue
+            if timestamp is None:
+                continue
+            earliest = timestamp if earliest is None or timestamp < earliest else earliest
+            latest = timestamp if latest is None or timestamp > latest else latest
+    return earliest, latest, line_count
+
+
+def overlaps_requested_window(
+    earliest: dt.datetime | None, latest: dt.datetime | None
+) -> bool:
+    return (
+        earliest is not None
+        and latest is not None
+        and earliest < DATE_END_EXCLUSIVE_UTC
+        and latest >= DATE_START_UTC
+    )
+
+
+def relative_session_path(path: Path) -> Path:
+    parts = path.parts
+    try:
+        index = parts.index("sessions")
+    except ValueError:
+        return Path(path.name)
+    return Path(*parts[index + 1 :])
+
+
+def write_redacted_jsonl(
+    source: Path, destination: Path, patterns: list[tuple[re.Pattern[str], str]]
+) -> tuple[int, str]:
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    line_count = 0
+    sha256 = hashlib.sha256()
+    with source.open("r", encoding="utf-8") as input_handle, destination.open(
+        "w", encoding="utf-8"
+    ) as output_handle:
+        for raw_line in input_handle:
+            line_count += 1
+            obj = json.loads(raw_line)
+            rendered = json.dumps(
+                redact_json(obj, patterns), ensure_ascii=False, separators=(",", ":")
+            )
+            output_handle.write(rendered + "\n")
+            sha256.update(rendered.encode("utf-8"))
+            sha256.update(b"\n")
+    return line_count, sha256.hexdigest()
+
+
+def build_bundle(args: argparse.Namespace) -> int:
+    source_root = Path(args.source_root).expanduser()
+    output_root = Path(args.output_root).resolve()
+    repo_root = args.repo_root or str(Path.cwd())
+    patterns = literal_patterns(args)
+    sessions_output = output_root / "sessions"
+    included_session_ids: set[str] = set()
+    manifest_sessions: list[dict[str, Any]] = []
+
+    for source_path in iter_session_files(source_root):
+        metadata = session_metadata(source_path)
+        if metadata is None or metadata["cwd"] != repo_root:
+            continue
+        earliest, latest, source_line_count = session_window(source_path)
+        if not overlaps_requested_window(earliest, latest):
+            continue
+
+        relative_path = relative_session_path(source_path)
+        destination_path = sessions_output / relative_path
+        output_line_count, digest = write_redacted_jsonl(
+            source_path, destination_path, patterns
+        )
+
+        session_id = metadata["session_id"]
+        included_session_ids.add(session_id)
+        manifest_sessions.append(
+            {
+                "session_id": session_id,
+                "source_machine": args.source_machine,
+                "original_path_redacted": redact_string(str(source_path), patterns),
+                "bundle_path": str(Path("sessions") / relative_path),
+                "started_at": metadata["started_at"],
+                "first_event_at": earliest.isoformat() if earliest else None,
+                "last_event_at": latest.isoformat() if latest else None,
+                "source_line_count": source_line_count,
+                "sanitized_line_count": output_line_count,
+                "sanitized_sha256": digest,
+                "inclusion_reason": "session cwd matched repository and activity overlapped 2026-06-03 through 2026-06-27 inclusive",
+                "redaction_version": REDACTION_VERSION,
+            }
+        )
+
+    history_path = Path(args.history_file).expanduser()
+    history_output = output_root / "history.filtered.jsonl"
+    history_count = 0
+    if history_path.exists():
+        with history_path.open("r", encoding="utf-8") as input_handle, history_output.open(
+            "w", encoding="utf-8"
+        ) as output_handle:
+            for raw_line in input_handle:
+                obj = json.loads(raw_line)
+                if obj.get("session_id") not in included_session_ids:
+                    continue
+                rendered = json.dumps(
+                    redact_json(obj, patterns), ensure_ascii=False, separators=(",", ":")
+                )
+                output_handle.write(rendered + "\n")
+                history_count += 1
+    else:
+        history_output.write_text("", encoding="utf-8")
+
+    manifest = {
+        "title": "Codex history for Codex-Homotopy-Group, 2026-06-03 through 2026-06-27",
+        "status": "partial: mac-local logs only; linux laptop logs pending",
+        "date_range_inclusive": {
+            "start": "2026-06-03",
+            "end": "2026-06-27",
+            "timestamp_window_utc": {
+                "start": DATE_START_UTC.isoformat(),
+                "end_exclusive": DATE_END_EXCLUSIVE_UTC.isoformat(),
+            },
+        },
+        "selection_rule": {
+            "source_root_redacted": redact_string(str(source_root), patterns),
+            "repo_cwd_match_redacted": redact_string(repo_root, patterns),
+            "include_if": "session metadata cwd matches repo and event timestamps overlap the requested UTC window",
+        },
+        "redaction_version": REDACTION_VERSION,
+        "private_redaction_term_count": len(args.redact_term),
+        "source_machines": [
+            {
+                "label": args.source_machine,
+                "status": "included",
+                "notes": "Local macOS Codex sessions available on this machine.",
+            },
+            {
+                "label": "linux-laptop",
+                "status": "pending",
+                "notes": "To be imported later from the Linux laptop using the same sanitizer and manifest schema.",
+            },
+        ],
+        "session_count": len(manifest_sessions),
+        "history_entry_count": history_count,
+        "sessions": manifest_sessions,
+    }
+    (output_root / "manifest.json").write_text(
+        json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
+    return len(manifest_sessions)
+
+
+def main() -> None:
+    args = parse_args()
+    count = build_bundle(args)
+    print(f"wrote {count} sanitized sessions")
+
+
+if __name__ == "__main__":
+    main()
