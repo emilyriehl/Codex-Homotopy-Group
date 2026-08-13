@@ -1,6 +1,6 @@
 {
   "title": "Codex history for Codex-Homotopy-Group, 2026-06-03 through 2026-06-27",
-  "status": "partial: mac-local logs only; linux laptop logs pending",
+  "status": "complete: mac-local and linux-laptop logs included",
   "date_range_inclusive": {
     "start": "2026-06-03",
     "end": "2026-06-27",
@@ -9,27 +9,46 @@
       "end_exclusive": "2026-06-28T00:00:00+00:00"
     }
   },
-  "selection_rule": {
-    "source_root_redacted": "<HOME>/.codex/sessions",
-    "repo_cwd_match_redacted": "<REPO_ROOT>",
-    "include_if": "session metadata cwd matches repo and event timestamps overlap the requested UTC window"
-  },
-  "redaction_version": "2026-08-12.1",
-  "private_redaction_term_count": 6,
+  "selection_rules": [
+    {
+      "source_machine": "mac-local",
+      "source_root_redacted": "<HOME>/.codex/sessions",
+      "repo_cwd_match_redacted": "<REPO_ROOT>",
+      "include_if": "session metadata cwd matches repo and event timestamps overlap the requested UTC window"
+    },
+    {
+      "source_machine": "linux-laptop",
+      "source_root_redacted": "<HOME>/.codex/sessions",
+      "repo_cwd_match_redacted": "<REPO_ROOT>",
+      "include_if": "session metadata cwd matches repo and event timestamps overlap the requested UTC window"
+    }
+  ],
+  "redaction_version": "2026-08-13.1",
+  "private_redaction_term_count": 30,
+  "researchers": [
+    {
+      "researcher_id": "<RESEARCHER_1>",
+      "source_machines": [
+        "mac-local",
+        "linux-laptop"
+      ],
+      "notes": "The same researcher prompted all included sessions across these source machines."
+    }
+  ],
   "source_machines": [
     {
       "label": "mac-local",
       "status": "included",
-      "notes": "Local macOS Codex sessions available on this machine."
+      "notes": "Sanitized local Codex sessions imported from mac-local."
     },
     {
       "label": "linux-laptop",
-      "status": "pending",
-      "notes": "To be imported later from the Linux laptop using the same sanitizer and manifest schema."
+      "status": "included",
+      "notes": "Sanitized local Codex sessions imported from linux-laptop."
     }
   ],
-  "session_count": 8,
-  "history_entry_count": 172,
+  "session_count": 19,
+  "history_entry_count": 339,
   "sessions": [
     {
       "session_id": "019e8e5a-cbb6-7dd3-a831-bdc9c70f9d7e",
@@ -43,7 +62,8 @@
       "sanitized_line_count": 164,
       "sanitized_sha256": "511d35ba08293d7b6d2adf6e8cbdf9d8796a5b3bfe6129305144c4c0f1502d95",
       "inclusion_reason": "session cwd matched repository and activity overlapped 2026-06-03 through 2026-06-27 inclusive",
-      "redaction_version": "2026-08-12.1"
+      "redaction_version": "2026-08-13.1",
+      "researcher_id": "<RESEARCHER_1>"
     },
     {
       "session_id": "019e8e6e-e65d-7cc2-bb1d-b15a3c73a937",
@@ -55,9 +75,10 @@
       "last_event_at": "2026-06-03T17:16:05.488000+00:00",
       "source_line_count": 151,
       "sanitized_line_count": 151,
-      "sanitized_sha256": "897628fe72dd0edcd02bd3cdaa7c564527752e4a03e1b54fd4cb1c2ad43277aa",
+      "sanitized_sha256": "a4cda9109ae14ede3603c82ee57797d9d7c4d2ddaf7296a63c2737e18c4160df",
       "inclusion_reason": "session cwd matched repository and activity overlapped 2026-06-03 through 2026-06-27 inclusive",
-      "redaction_version": "2026-08-12.1"
+      "redaction_version": "2026-08-13.1",
+      "researcher_id": "<RESEARCHER_1>"
     },
     {
       "session_id": "019e8e7c-9e68-77a0-9e93-44f7d1a9702d",
@@ -69,9 +90,25 @@
       "last_event_at": "2026-06-04T16:24:35.241000+00:00",
       "source_line_count": 1720,
       "sanitized_line_count": 1720,
-      "sanitized_sha256": "5a9f0a2e71fe9ba5b57391a98edce46e43f4cbf02d9f5ecdd25fc57bef0b9701",
+      "sanitized_sha256": "d38994fbb86bf8d825d473b856a01714069dbb3a4cb29eeb3efcecfb349ca15f",
       "inclusion_reason": "session cwd matched repository and activity overlapped 2026-06-03 through 2026-06-27 inclusive",
-      "redaction_version": "2026-08-12.1"
+      "redaction_version": "2026-08-13.1",
+      "researcher_id": "<RESEARCHER_1>"
+    },
+    {
+      "session_id": "019e93e4-93d8-7eb3-8326-44ddebe76a80",
+      "source_machine": "linux-laptop",
+      "researcher_id": "<RESEARCHER_1>",
+      "original_path_redacted": "<HOME>/.codex/sessions/2026/06/04/rollout-2026-06-04T14-28-11-019e93e4-93d8-7eb3-8326-44ddebe76a80.jsonl",
+      "bundle_path": "sessions/2026/06/04/rollout-2026-06-04T14-28-11-019e93e4-93d8-7eb3-8326-44ddebe76a80.jsonl",
+      "started_at": "2026-06-04T18:28:11.361Z",
+      "first_event_at": "2026-06-04T18:28:51.141000+00:00",
+      "last_event_at": "2026-06-04T18:29:16.842000+00:00",
+      "source_line_count": 30,
+      "sanitized_line_count": 30,
+      "sanitized_sha256": "10496c0b7b21bbcc604e57dcc642c665659de5a9a71e6e648bb9e9f0e6b4d9a7",
+      "inclusion_reason": "session cwd matched repository and activity overlapped 2026-06-03 through 2026-06-27 inclusive",
+      "redaction_version": "2026-08-13.1"
     },
     {
       "session_id": "019e9937-00a3-7422-b0f1-e35aac5023f5",
@@ -85,7 +122,98 @@
       "sanitized_line_count": 1537,
       "sanitized_sha256": "757cc8231fb710ef07dbf94a69ee4517ad86321ad332b9888051ba3655f1ded9",
       "inclusion_reason": "session cwd matched repository and activity overlapped 2026-06-03 through 2026-06-27 inclusive",
-      "redaction_version": "2026-08-12.1"
+      "redaction_version": "2026-08-13.1",
+      "researcher_id": "<RESEARCHER_1>"
+    },
+    {
+      "session_id": "019ea62e-0f8f-7dc1-b299-d0a9524f612d",
+      "source_machine": "linux-laptop",
+      "researcher_id": "<RESEARCHER_1>",
+      "original_path_redacted": "<HOME>/.codex/sessions/2026/06/08/rollout-2026-06-08T09-41-37-019ea62e-0f8f-7dc1-b299-d0a9524f612d.jsonl",
+      "bundle_path": "sessions/2026/06/08/rollout-2026-06-08T09-41-37-019ea62e-0f8f-7dc1-b299-d0a9524f612d.jsonl",
+      "started_at": "2026-06-08T07:41:37.054Z",
+      "first_event_at": "2026-06-08T07:41:43.327000+00:00",
+      "last_event_at": "2026-06-08T07:41:51.725000+00:00",
+      "source_line_count": 17,
+      "sanitized_line_count": 17,
+      "sanitized_sha256": "4612d22725e802fedb46dfe685673bd7d35ec1661250a275c678af56cdc31f61",
+      "inclusion_reason": "session cwd matched repository and activity overlapped 2026-06-03 through 2026-06-27 inclusive",
+      "redaction_version": "2026-08-13.1"
+    },
+    {
+      "session_id": "019eab4c-a3e3-7ba1-9c9d-8de6f19d9c99",
+      "source_machine": "linux-laptop",
+      "researcher_id": "<RESEARCHER_1>",
+      "original_path_redacted": "<HOME>/.codex/sessions/2026/06/09/rollout-2026-06-09T09-33-07-019eab4c-a3e3-7ba1-9c9d-8de6f19d9c99.jsonl",
+      "bundle_path": "sessions/2026/06/09/rollout-2026-06-09T09-33-07-019eab4c-a3e3-7ba1-9c9d-8de6f19d9c99.jsonl",
+      "started_at": "2026-06-09T07:33:07.184Z",
+      "first_event_at": "2026-06-09T07:34:31.135000+00:00",
+      "last_event_at": "2026-06-09T07:35:19.773000+00:00",
+      "source_line_count": 14,
+      "sanitized_line_count": 14,
+      "sanitized_sha256": "46ad4557862d72048855975568c6264335db3a67caf01bd1b254546568375225",
+      "inclusion_reason": "session cwd matched repository and activity overlapped 2026-06-03 through 2026-06-27 inclusive",
+      "redaction_version": "2026-08-13.1"
+    },
+    {
+      "session_id": "019eab53-05f6-7293-916d-8863329cd314",
+      "source_machine": "linux-laptop",
+      "researcher_id": "<RESEARCHER_1>",
+      "original_path_redacted": "<HOME>/.codex/sessions/2026/06/09/rollout-2026-06-09T09-40-05-019eab53-05f6-7293-916d-8863329cd314.jsonl",
+      "bundle_path": "sessions/2026/06/09/rollout-2026-06-09T09-40-05-019eab53-05f6-7293-916d-8863329cd314.jsonl",
+      "started_at": "2026-06-09T07:40:05.504Z",
+      "first_event_at": "2026-06-09T07:42:16.870000+00:00",
+      "last_event_at": "2026-06-09T07:42:34.887000+00:00",
+      "source_line_count": 9,
+      "sanitized_line_count": 9,
+      "sanitized_sha256": "82995dc64fecdaacea2d8b6b9b4544309f26ad90640ee17557309a9b38cb0028",
+      "inclusion_reason": "session cwd matched repository and activity overlapped 2026-06-03 through 2026-06-27 inclusive",
+      "redaction_version": "2026-08-13.1"
+    },
+    {
+      "session_id": "019eab59-a52c-7ac0-b9f3-468aa4421fb7",
+      "source_machine": "linux-laptop",
+      "researcher_id": "<RESEARCHER_1>",
+      "original_path_redacted": "<HOME>/.codex/sessions/2026/06/09/rollout-2026-06-09T09-47-19-019eab59-a52c-7ac0-b9f3-468aa4421fb7.jsonl",
+      "bundle_path": "sessions/2026/06/09/rollout-2026-06-09T09-47-19-019eab59-a52c-7ac0-b9f3-468aa4421fb7.jsonl",
+      "started_at": "2026-06-09T07:47:19.479Z",
+      "first_event_at": "2026-06-09T07:48:17.939000+00:00",
+      "last_event_at": "2026-06-16T12:25:23.682000+00:00",
+      "source_line_count": 9953,
+      "sanitized_line_count": 9953,
+      "sanitized_sha256": "ce1824e5dd892abf91be00f34a7065f6cf264940fec7ffbc801ff55f33de8463",
+      "inclusion_reason": "session cwd matched repository and activity overlapped 2026-06-03 through 2026-06-27 inclusive",
+      "redaction_version": "2026-08-13.1"
+    },
+    {
+      "session_id": "019eb5b1-0256-7453-b1b2-ab02cbe2d5bd",
+      "source_machine": "linux-laptop",
+      "researcher_id": "<RESEARCHER_1>",
+      "original_path_redacted": "<HOME>/.codex/sessions/2026/06/11/rollout-2026-06-11T09-58-57-019eb5b1-0256-7453-b1b2-ab02cbe2d5bd.jsonl",
+      "bundle_path": "sessions/2026/06/11/rollout-2026-06-11T09-58-57-019eb5b1-0256-7453-b1b2-ab02cbe2d5bd.jsonl",
+      "started_at": "2026-06-11T07:58:57.122Z",
+      "first_event_at": "2026-06-11T07:58:57.443000+00:00",
+      "last_event_at": "2026-06-11T07:59:18.587000+00:00",
+      "source_line_count": 25,
+      "sanitized_line_count": 25,
+      "sanitized_sha256": "5788ff67135cf2b079bd730b552f98f835c819f7166d48d71d83081ec7cedc65",
+      "inclusion_reason": "session cwd matched repository and activity overlapped 2026-06-03 through 2026-06-27 inclusive",
+      "redaction_version": "2026-08-13.1"
+    },
+    {
+      "session_id": "019ec168-304b-7360-a955-692b30bfcdfa",
+      "source_machine": "linux-laptop",
+      "researcher_id": "<RESEARCHER_1>",
+      "original_path_redacted": "<HOME>/.codex/sessions/2026/06/13/rollout-2026-06-13T10-34-51-019ec168-304b-7360-a955-692b30bfcdfa.jsonl",
+      "bundle_path": "sessions/2026/06/13/rollout-2026-06-13T10-34-51-019ec168-304b-7360-a955-692b30bfcdfa.jsonl",
+      "started_at": "2026-06-13T14:34:51.353Z",
+      "first_event_at": "2026-06-13T14:34:55.580000+00:00",
+      "last_event_at": "2026-06-13T14:35:00.060000+00:00",
+      "source_line_count": 9,
+      "sanitized_line_count": 9,
+      "sanitized_sha256": "68a75d88cfa907b413d342c19f31664e092dcccb57f4db7035476595ee9f2178",
+      "inclusion_reason": "session cwd matched repository and activity overlapped 2026-06-03 through 2026-06-27 inclusive",
+      "redaction_version": "2026-08-13.1"
     },
     {
       "session_id": "019ed22a-546e-7b41-82fe-08a9944c64ec",
@@ -99,7 +227,38 @@
       "sanitized_line_count": 1354,
       "sanitized_sha256": "fd5fa47e620f9076a77f5d22a00197fde2ae771a68dddc600e133858f3029466",
       "inclusion_reason": "session cwd matched repository and activity overlapped 2026-06-03 through 2026-06-27 inclusive",
-      "redaction_version": "2026-08-12.1"
+      "redaction_version": "2026-08-13.1",
+      "researcher_id": "<RESEARCHER_1>"
+    },
+    {
+      "session_id": "019ed7fb-0992-72c3-b12c-0b2c7e1bd69f",
+      "source_machine": "linux-laptop",
+      "researcher_id": "<RESEARCHER_1>",
+      "original_path_redacted": "<HOME>/.codex/sessions/2026/06/17/rollout-2026-06-17T19-46-53-019ed7fb-0992-72c3-b12c-0b2c7e1bd69f.jsonl",
+      "bundle_path": "sessions/2026/06/17/rollout-2026-06-17T19-46-53-019ed7fb-0992-72c3-b12c-0b2c7e1bd69f.jsonl",
+      "started_at": "2026-06-17T23:46:53.979Z",
+      "first_event_at": "2026-06-17T23:46:54.317000+00:00",
+      "last_event_at": "2026-06-17T23:47:01.892000+00:00",
+      "source_line_count": 9,
+      "sanitized_line_count": 9,
+      "sanitized_sha256": "a36582362188b793ce6120a5c78a971076a5bcdd1afbda87bfcccd71419e2d97",
+      "inclusion_reason": "session cwd matched repository and activity overlapped 2026-06-03 through 2026-06-27 inclusive",
+      "redaction_version": "2026-08-13.1"
+    },
+    {
+      "session_id": "019ed7fb-c934-71a3-9a01-61f564cef3e9",
+      "source_machine": "linux-laptop",
+      "researcher_id": "<RESEARCHER_1>",
+      "original_path_redacted": "<HOME>/.codex/sessions/2026/06/17/rollout-2026-06-17T19-47-43-019ed7fb-c934-71a3-9a01-61f564cef3e9.jsonl",
+      "bundle_path": "sessions/2026/06/17/rollout-2026-06-17T19-47-43-019ed7fb-c934-71a3-9a01-61f564cef3e9.jsonl",
+      "started_at": "2026-06-17T23:47:43.037Z",
+      "first_event_at": "2026-06-17T23:48:53.002000+00:00",
+      "last_event_at": "2026-06-18T11:17:12.953000+00:00",
+      "source_line_count": 4456,
+      "sanitized_line_count": 4456,
+      "sanitized_sha256": "03b2db9f808021591463f57621a266cad8123d0af64aca35449594dd8cb778b4",
+      "inclusion_reason": "session cwd matched repository and activity overlapped 2026-06-03 through 2026-06-27 inclusive",
+      "redaction_version": "2026-08-13.1"
     },
     {
       "session_id": "019edc41-0859-7512-a810-3d2182fd6563",
@@ -113,7 +272,8 @@
       "sanitized_line_count": 1149,
       "sanitized_sha256": "a75610ab693c31c92d078ebdbb9d3b8e2fc58894a649cdee08e6c3a7a91a0519",
       "inclusion_reason": "session cwd matched repository and activity overlapped 2026-06-03 through 2026-06-27 inclusive",
-      "redaction_version": "2026-08-12.1"
+      "redaction_version": "2026-08-13.1",
+      "researcher_id": "<RESEARCHER_1>"
     },
     {
       "session_id": "019edc6b-6b4b-7d61-bd99-e144991bc81f",
@@ -125,9 +285,25 @@
       "last_event_at": "2026-06-19T17:54:22.411000+00:00",
       "source_line_count": 5206,
       "sanitized_line_count": 5206,
-      "sanitized_sha256": "0c1779b9c2d6919163b3d7d7f84cb7632f24cdae3a5f48c720f2d2851cd78962",
+      "sanitized_sha256": "d464123cb51e592f9d5f291355199e8691dcd001bb16d73638d015ba4dcae7af",
       "inclusion_reason": "session cwd matched repository and activity overlapped 2026-06-03 through 2026-06-27 inclusive",
-      "redaction_version": "2026-08-12.1"
+      "redaction_version": "2026-08-13.1",
+      "researcher_id": "<RESEARCHER_1>"
+    },
+    {
+      "session_id": "019ee21d-1e42-7ae0-9434-f8c02df69a20",
+      "source_machine": "linux-laptop",
+      "researcher_id": "<RESEARCHER_1>",
+      "original_path_redacted": "<HOME>/.codex/sessions/2026/06/19/rollout-2026-06-19T19-00-19-019ee21d-1e42-7ae0-9434-f8c02df69a20.jsonl",
+      "bundle_path": "sessions/2026/06/19/rollout-2026-06-19T19-00-19-019ee21d-1e42-7ae0-9434-f8c02df69a20.jsonl",
+      "started_at": "2026-06-19T23:00:19.663Z",
+      "first_event_at": "2026-06-19T23:00:41.599000+00:00",
+      "last_event_at": "2026-06-26T02:03:46.478000+00:00",
+      "source_line_count": 17345,
+      "sanitized_line_count": 17345,
+      "sanitized_sha256": "5d9443cda4972140e2aa563a8c531bd4b7fc885ea36e914663fd4120db4f1f3e",
+      "inclusion_reason": "session cwd matched repository and activity overlapped 2026-06-03 through 2026-06-27 inclusive",
+      "redaction_version": "2026-08-13.1"
     },
     {
       "session_id": "019eefaa-d066-73b3-a28b-9a01db6764ab",
@@ -139,9 +315,25 @@
       "last_event_at": "2026-06-26T21:43:52.454000+00:00",
       "source_line_count": 58046,
       "sanitized_line_count": 58046,
-      "sanitized_sha256": "bff10da0a47d8c311abbd9afc3d3315c093cb68be3c7458873bf68d7d65731a9",
+      "sanitized_sha256": "1c601260743aafa10f18e9e74c686f7572c8283a457b818f23fa2c90902035c2",
       "inclusion_reason": "session cwd matched repository and activity overlapped 2026-06-03 through 2026-06-27 inclusive",
-      "redaction_version": "2026-08-12.1"
+      "redaction_version": "2026-08-13.1",
+      "researcher_id": "<RESEARCHER_1>"
+    },
+    {
+      "session_id": "019f0a51-d0ad-76b3-9688-a1efa101a5f4",
+      "source_machine": "linux-laptop",
+      "researcher_id": "<RESEARCHER_1>",
+      "original_path_redacted": "<HOME>/.codex/sessions/2026/06/27/rollout-2026-06-27T14-22-41-019f0a51-d0ad-76b3-9688-a1efa101a5f4.jsonl",
+      "bundle_path": "sessions/2026/06/27/rollout-2026-06-27T14-22-41-019f0a51-d0ad-76b3-9688-a1efa101a5f4.jsonl",
+      "started_at": "2026-06-27T18:22:41.855Z",
+      "first_event_at": "2026-06-27T18:23:52.456000+00:00",
+      "last_event_at": "2026-06-28T02:50:28.352000+00:00",
+      "source_line_count": 2830,
+      "sanitized_line_count": 2830,
+      "sanitized_sha256": "ea1d864c9084479e972a03de61e965b2a2a3197b59de7e4c5eb175dc72e85efd",
+      "inclusion_reason": "session cwd matched repository and activity overlapped 2026-06-03 through 2026-06-27 inclusive",
+      "redaction_version": "2026-08-13.1"
     }
   ]
 }

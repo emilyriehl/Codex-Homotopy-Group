@@ -22,9 +22,14 @@ The JSONL structure, event order, session ids, relative repository paths,
 commit hashes, theorem names, Agda names, prompts, assistant responses, and tool
 events are otherwise preserved.
 
-The current macOS import used private literal redaction terms for researcher
-names and local account names. The raw values are deliberately not recorded in
-this repository.
+The same stable researcher pseudonym is used for sessions from both computers.
+Machine provenance is recorded separately as `mac-local` or `linux-laptop` in
+the manifest and filtered prompt history.
+
+The imports used private literal redaction terms for researcher names, personal
+references, and local account names. Bibliographic author attributions and
+standard eponymous mathematical terminology are preserved. The raw redaction
+values are deliberately not recorded in this repository.
 
 ## Manual Review Checklist
 
@@ -34,6 +39,12 @@ Before publishing or committing a regenerated bundle, validate that:
 - `manifest.json` session count matches the number of sanitized session files;
 - `history.filtered.jsonl` contains only entries for included session ids;
 - searches for likely secrets and private identifiers return no matches.
+
+Run the structural checks with:
+
+```sh
+python3 tools/validate_codex_history.py
+```
 
 Suggested searches:
 

@@ -127,6 +127,8 @@ class MergeBundleTest(unittest.TestCase):
                 repo_root=repo_root,
                 output_root=str(output_root),
                 source_machine="linux-laptop",
+                researcher_id="<RESEARCHER_1>",
+                session_id=[],
                 redact_term=["Ada=<RESEARCHER_1>"],
             )
             self.assertEqual(SANITIZER.build_bundle(args), 1)
@@ -145,9 +147,32 @@ class MergeBundleTest(unittest.TestCase):
                 ["mac-local", "linux-laptop"],
             )
             self.assertTrue(manifest["status"].startswith("complete:"))
+            self.assertEqual(
+                manifest["researchers"],
+                [
+                    {
+                        "researcher_id": "<RESEARCHER_1>",
+                        "source_machines": ["mac-local", "linux-laptop"],
+                        "notes": "The same researcher prompted all included sessions across these source machines.",
+                    }
+                ],
+            )
+            self.assertTrue(
+                all(
+                    session["researcher_id"] == "<RESEARCHER_1>"
+                    for session in manifest["sessions"]
+                )
+            )
 
             history = SANITIZER.load_jsonl(output_root / "history.filtered.jsonl")
             self.assertEqual([entry["ts"] for entry in history], [100, 200])
+            self.assertEqual(
+                [entry["source_machine"] for entry in history],
+                ["linux-laptop", "mac-local"],
+            )
+            self.assertTrue(
+                all(entry["researcher_id"] == "<RESEARCHER_1>" for entry in history)
+            )
             self.assertTrue(
                 all("Ada" not in json.dumps(entry) for entry in history), history
             )
@@ -161,6 +186,14 @@ class MergeBundleTest(unittest.TestCase):
             )
             self.assertEqual(rerun_manifest["session_count"], 2)
             self.assertEqual(rerun_manifest["history_entry_count"], 2)
+
+            args.session_id = ["linux-session"]
+            self.assertEqual(SANITIZER.build_bundle(args), 1)
+            targeted_manifest = json.loads(
+                (output_root / "manifest.json").read_text(encoding="utf-8")
+            )
+            self.assertEqual(targeted_manifest["session_count"], 2)
+            self.assertEqual(targeted_manifest["history_entry_count"], 2)
 
 
 if __name__ == "__main__":
