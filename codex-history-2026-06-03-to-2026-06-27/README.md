@@ -12,12 +12,14 @@ this machine. A second set of logs from a Linux laptop still needs to be added.
 
 - `sessions/`: sanitized Codex session JSONL files, preserving the original
   `YYYY/MM/DD/*.jsonl` layout expected by Codex history tooling.
-- `history.filtered.jsonl`: sanitized prompt-history entries for the included
-  session ids.
+- `history.filtered.jsonl`: sanitized prompt-history entries for all included
+  session ids and source machines, ordered chronologically by timestamp.
 - `manifest.json`: provenance, timestamps, line counts, checksums, and inclusion
   reasons for each sanitized session.
 - `REDACTION.md`: the redaction policy and review checklist.
 - `tools/sanitize_codex_history.py`: the script used to generate this bundle.
+- `tools/test_sanitize_codex_history.py`: a regression test for merging records
+  from multiple source machines.
 
 The `sessions/**/*.jsonl` files are tracked with Git LFS because the largest
 local session is over GitHub's normal per-file blob limit. After cloning this
@@ -60,7 +62,10 @@ To add the Linux laptop logs later:
    session root, `--repo-root` set to the laptop's absolute checkout path, and
    `--source-machine linux-laptop`. Supply private names and account strings as
    repeated `--redact-term 'raw value=<PLACEHOLDER>'` arguments. These raw
-   values should not be committed to the repository.
+   values should not be committed to the repository. The sanitizer preserves
+   sessions from other source machines, reapplies the supplied redactions to
+   those retained records, and rebuilds the combined prompt history in
+   chronological order.
 3. Review the updated `sessions/`, `history.filtered.jsonl`, and
    `manifest.json`.
 4. Run the validation checks in `REDACTION.md` before committing.

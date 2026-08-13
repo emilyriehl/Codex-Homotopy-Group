@@ -227,6 +227,80 @@ def write_redacted_jsonl(
     return line_count, sha256.hexdigest()
 
 
+def rewrite_redacted_jsonl(
+    path: Path, patterns: list[tuple[re.Pattern[str], str]]
+) -> tuple[int, str]:
+    temporary_path = path.with_name(f".{path.name}.redacting")
+    try:
+        line_count, digest = write_redacted_jsonl(path, temporary_path, patterns)
+        temporary_path.replace(path)
+    finally:
+        temporary_path.unlink(missing_ok=True)
+    return line_count, digest
+
+
+def load_json(path: Path) -> dict[str, Any] | None:
+    if not path.exists():
+        return None
+    with path.open("r", encoding="utf-8") as handle:
+        return json.load(handle)
+
+
+def load_jsonl(path: Path) -> list[dict[str, Any]]:
+    if not path.exists():
+        return []
+    entries: list[dict[str, Any]] = []
+    with path.open("r", encoding="utf-8") as handle:
+        for raw_line in handle:
+            entries.append(json.loads(raw_line))
+    return entries
+
+
+def history_sort_key(entry: dict[str, Any]) -> tuple[float, str]:
+    timestamp = entry.get("ts")
+    if isinstance(timestamp, (int, float)):
+        numeric_timestamp = float(timestamp)
+    else:
+        parsed_timestamp = parse_timestamp(entry.get("timestamp"))
+        numeric_timestamp = parsed_timestamp.timestamp() if parsed_timestamp else 0.0
+    return numeric_timestamp, str(entry.get("session_id", ""))
+
+
+def selection_rules_from_manifest(
+    manifest: dict[str, Any] | None,
+) -> list[dict[str, Any]]:
+    if manifest is None:
+        return []
+    selection_rules = manifest.get("selection_rules")
+    if isinstance(selection_rules, list):
+        return [rule for rule in selection_rules if isinstance(rule, dict)]
+    selection_rule = manifest.get("selection_rule")
+    if not isinstance(selection_rule, dict):
+        return []
+    sessions = manifest.get("sessions", [])
+    source_machine = next(
+        (
+            session.get("source_machine")
+            for session in sessions
+            if isinstance(session, dict) and session.get("source_machine")
+        ),
+        "unknown",
+    )
+    return [{"source_machine": source_machine, **selection_rule}]
+
+
+def source_machine_records(labels: set[str]) -> list[dict[str, str]]:
+    preferred_order = {"mac-local": 0, "linux-laptop": 1}
+    return [
+        {
+            "label": label,
+            "status": "included",
+            "notes": f"Sanitized local Codex sessions imported from {label}.",
+        }
+        for label in sorted(labels, key=lambda label: (preferred_order.get(label, 2), label))
+    ]
+
+
 def build_bundle(args: argparse.Namespace) -> int:
     source_root = Path(args.source_root).expanduser()
     output_root = Path(args.output_root).resolve()
@@ -234,7 +308,32 @@ def build_bundle(args: argparse.Namespace) -> int:
     patterns = literal_patterns(args)
     sessions_output = output_root / "sessions"
     included_session_ids: set[str] = set()
-    manifest_sessions: list[dict[str, Any]] = []
+    manifest_path = output_root / "manifest.json"
+    existing_manifest = load_json(manifest_path)
+    existing_sessions = existing_manifest.get("sessions", []) if existing_manifest else []
+    retained_sessions = [
+        redact_json(session, patterns)
+        for session in existing_sessions
+        if isinstance(session, dict)
+        and session.get("source_machine") != args.source_machine
+    ]
+    replaced_sessions = [
+        session
+        for session in existing_sessions
+        if isinstance(session, dict)
+        and session.get("source_machine") == args.source_machine
+    ]
+    retained_session_ids = {
+        session["session_id"]
+        for session in retained_sessions
+        if session.get("session_id")
+    }
+    retained_bundle_paths = {
+        session["bundle_path"]
+        for session in retained_sessions
+        if session.get("bundle_path")
+    }
+    imported_sessions: list[dict[str, Any]] = []
 
     for source_path in iter_session_files(source_root):
         metadata = session_metadata(source_path)
@@ -246,18 +345,27 @@ def build_bundle(args: argparse.Namespace) -> int:
 
         relative_path = relative_session_path(source_path)
         destination_path = sessions_output / relative_path
+        bundle_path = str(Path("sessions") / relative_path)
+        session_id = metadata["session_id"]
+        if session_id in retained_session_ids:
+            raise ValueError(
+                f"session id {session_id} is already recorded for another source machine"
+            )
+        if bundle_path in retained_bundle_paths:
+            raise ValueError(
+                f"bundle path {bundle_path} is already used by another source machine"
+            )
         output_line_count, digest = write_redacted_jsonl(
             source_path, destination_path, patterns
         )
 
-        session_id = metadata["session_id"]
         included_session_ids.add(session_id)
-        manifest_sessions.append(
+        imported_sessions.append(
             {
                 "session_id": session_id,
                 "source_machine": args.source_machine,
                 "original_path_redacted": redact_string(str(source_path), patterns),
-                "bundle_path": str(Path("sessions") / relative_path),
+                "bundle_path": bundle_path,
                 "started_at": metadata["started_at"],
                 "first_event_at": earliest.isoformat() if earliest else None,
                 "last_event_at": latest.isoformat() if latest else None,
@@ -269,28 +377,86 @@ def build_bundle(args: argparse.Namespace) -> int:
             }
         )
 
+    imported_bundle_paths = {session["bundle_path"] for session in imported_sessions}
+    for session in replaced_sessions:
+        bundle_path = session.get("bundle_path")
+        if not bundle_path or bundle_path in imported_bundle_paths:
+            continue
+        stale_path = (output_root / bundle_path).resolve()
+        if sessions_output not in stale_path.parents:
+            raise ValueError(f"refusing to remove session outside bundle: {stale_path}")
+        stale_path.unlink(missing_ok=True)
+
+    for session in retained_sessions:
+        bundle_path = session.get("bundle_path")
+        if not bundle_path:
+            raise ValueError("existing manifest session is missing bundle_path")
+        session_path = output_root / bundle_path
+        line_count, digest = rewrite_redacted_jsonl(session_path, patterns)
+        session["sanitized_line_count"] = line_count
+        session["sanitized_sha256"] = digest
+        session["redaction_version"] = REDACTION_VERSION
+
+    manifest_sessions = sorted(
+        retained_sessions + imported_sessions,
+        key=lambda session: (
+            session.get("first_event_at") or session.get("started_at") or "",
+            session.get("session_id") or "",
+        ),
+    )
+    all_session_ids = {
+        session["session_id"] for session in manifest_sessions if session.get("session_id")
+    }
+
     history_path = Path(args.history_file).expanduser()
     history_output = output_root / "history.filtered.jsonl"
-    history_count = 0
+    history_entries = [
+        redact_json(entry, patterns)
+        for entry in load_jsonl(history_output)
+        if entry.get("session_id") in retained_session_ids
+    ]
     if history_path.exists():
-        with history_path.open("r", encoding="utf-8") as input_handle, history_output.open(
-            "w", encoding="utf-8"
-        ) as output_handle:
+        with history_path.open("r", encoding="utf-8") as input_handle:
             for raw_line in input_handle:
                 obj = json.loads(raw_line)
                 if obj.get("session_id") not in included_session_ids:
                     continue
-                rendered = json.dumps(
-                    redact_json(obj, patterns), ensure_ascii=False, separators=(",", ":")
-                )
-                output_handle.write(rendered + "\n")
-                history_count += 1
+                history_entries.append(redact_json(obj, patterns))
+    history_entries.sort(key=history_sort_key)
+    with history_output.open("w", encoding="utf-8") as output_handle:
+        for entry in history_entries:
+            output_handle.write(
+                json.dumps(entry, ensure_ascii=False, separators=(",", ":")) + "\n"
+            )
+
+    selection_rules = [
+        redact_json(rule, patterns)
+        for rule in selection_rules_from_manifest(existing_manifest)
+        if rule.get("source_machine") != args.source_machine
+    ]
+    selection_rules.append(
+        {
+            "source_machine": args.source_machine,
+            "source_root_redacted": redact_string(str(source_root), patterns),
+            "repo_cwd_match_redacted": redact_string(repo_root, patterns),
+            "include_if": "session metadata cwd matches repo and event timestamps overlap the requested UTC window",
+        }
+    )
+    machine_labels = {
+        session["source_machine"]
+        for session in manifest_sessions
+        if session.get("source_machine")
+    }
+    expected_machine_labels = {"mac-local", "linux-laptop"}
+    if expected_machine_labels <= machine_labels:
+        status = "complete: mac-local and linux-laptop logs included"
     else:
-        history_output.write_text("", encoding="utf-8")
+        missing_labels = ", ".join(sorted(expected_machine_labels - machine_labels))
+        status = f"partial: pending logs from {missing_labels}"
 
     manifest = {
         "title": "Codex history for Codex-Homotopy-Group, 2026-06-03 through 2026-06-27",
-        "status": "partial: mac-local logs only; linux laptop logs pending",
+        "status": status,
         "date_range_inclusive": {
             "start": "2026-06-03",
             "end": "2026-06-27",
@@ -299,33 +465,20 @@ def build_bundle(args: argparse.Namespace) -> int:
                 "end_exclusive": DATE_END_EXCLUSIVE_UTC.isoformat(),
             },
         },
-        "selection_rule": {
-            "source_root_redacted": redact_string(str(source_root), patterns),
-            "repo_cwd_match_redacted": redact_string(repo_root, patterns),
-            "include_if": "session metadata cwd matches repo and event timestamps overlap the requested UTC window",
-        },
+        "selection_rules": selection_rules,
         "redaction_version": REDACTION_VERSION,
         "private_redaction_term_count": len(args.redact_term),
-        "source_machines": [
-            {
-                "label": args.source_machine,
-                "status": "included",
-                "notes": "Local macOS Codex sessions available on this machine.",
-            },
-            {
-                "label": "linux-laptop",
-                "status": "pending",
-                "notes": "To be imported later from the Linux laptop using the same sanitizer and manifest schema.",
-            },
-        ],
+        "source_machines": source_machine_records(machine_labels),
         "session_count": len(manifest_sessions),
-        "history_entry_count": history_count,
+        "history_entry_count": len(history_entries),
         "sessions": manifest_sessions,
     }
-    (output_root / "manifest.json").write_text(
+    manifest_path.write_text(
         json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
-    return len(manifest_sessions)
+    if all_session_ids != retained_session_ids | included_session_ids:
+        raise ValueError("manifest session ids do not match retained and imported sessions")
+    return len(imported_sessions)
 
 
 def main() -> None:
