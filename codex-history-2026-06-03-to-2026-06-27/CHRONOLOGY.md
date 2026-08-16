@@ -14,7 +14,7 @@ researcher, recorded under the stable pseudonym `<RESEARCHER_1>`.
 
 The default researcher-local display timezone is `America/New_York`.
 
-For `linux-laptop` from 2026-06-08 through 2026-06-12 inclusive, the display timezone is `Europe/Stockholm`. The 67 prompts in that interval range from 09:07–19:08 local time; validation checks that they remain within 07:00–21:00 local time.
+For `linux-laptop` from 2026-06-08 through 2026-06-12 inclusive, the display timezone is `Europe/Stockholm`. The 67 prompts in that interval range from 09:07–19:08 local time.
 
 ## Reading order
 

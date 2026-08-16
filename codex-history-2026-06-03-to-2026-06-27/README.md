@@ -39,11 +39,9 @@ instead of JSONL.
 
 ## Viewing The Logs
 
-Start with [`CHRONOLOGY.md`](CHRONOLOGY.md) to follow the work in absolute
-chronological order. It records the stable researcher pseudonym, source
-machine, local and UTC prompt windows, and when to switch to or resume another
-native session file. The guide is derived navigation metadata; it does not
-replace or rewrite any session record.
+The [`CHRONOLOGY.md`](CHRONOLOGY.md) guide explains the chronology of the
+prompting across the two machines, including when to switch to or resume a
+session file.
 
 The files can be viewed as raw JSONL, or with a Codex history viewer extension
 for VS Code. One option is the Codex History Viewer extension on Open VSX:
@@ -66,9 +64,7 @@ the repository working directory and whose event timestamps overlapped June 3
 through June 27, 2026 inclusive. Sessions and prompt history are ordered by
 timestamp across machines, not grouped by source machine.
 
-Sessions from other projects in the same date range were excluded. A June 30
-session in this repository was also excluded because it falls outside the
-requested date range.
+Sessions from other projects in the same date range were excluded.
 
 ## Refreshing Source Logs
 

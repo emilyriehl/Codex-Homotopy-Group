@@ -248,7 +248,6 @@ def render_guide(
             if observed_range
             else "no prompts"
         )
-        window = item["daytime_window_local"]
         lines.extend(
             [
                 "",
@@ -256,9 +255,7 @@ def render_guide(
                     f"For `{item['source_machine']}` from {item['local_date_start']} through "
                     f"{item['local_date_end_inclusive']} inclusive, the display timezone is "
                     f"`{item['timezone']}`. The {item['observed_prompt_count']} prompts in "
-                    f"that interval range from {observed_text} local time; validation checks "
-                    f"that they remain within {window['start_inclusive']}–"
-                    f"{window['end_exclusive']} local time."
+                    f"that interval range from {observed_text} local time."
                 ),
             ]
         )
