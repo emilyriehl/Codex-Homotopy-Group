@@ -17,6 +17,8 @@ import re
 from pathlib import Path
 from typing import Any
 
+from generate_chronology_guide import render_guide
+
 
 REDACTION_VERSION = "2026-08-13.1"
 DATE_START_UTC = dt.datetime.fromisoformat("2026-06-03T00:00:00+00:00")
@@ -525,8 +527,13 @@ def build_bundle(args: argparse.Namespace) -> int:
         "history_entry_count": len(history_entries),
         "sessions": manifest_sessions,
     }
+    guide_text, chronology_metadata, _ = render_guide(manifest, history_entries)
+    manifest["chronology_guide"] = chronology_metadata
     manifest_path.write_text(
         json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
+    (output_root / chronology_metadata["path"]).write_text(
+        guide_text, encoding="utf-8"
     )
     if all_session_ids != retained_session_ids | included_session_ids:
         raise ValueError("manifest session ids do not match retained and imported sessions")

@@ -13,6 +13,9 @@ operated both machines.
 
 - `sessions/`: sanitized Codex session JSONL files, preserving the original
   `YYYY/MM/DD/*.jsonl` layout expected by Codex history tooling.
+- `CHRONOLOGY.md`: a timezone-aware reading guide that orders prompting across
+  both machines and points readers to the native session file at each handoff
+  or resumption.
 - `history.filtered.jsonl`: sanitized prompt-history entries for all included
   session ids and source machines, ordered chronologically by timestamp. Each
   entry records the stable researcher pseudonym and its source machine.
@@ -20,9 +23,12 @@ operated both machines.
   reasons for each sanitized session. The manifest records that one stable
   researcher identity operated both source machines.
 - `REDACTION.md`: the redaction policy and review checklist.
+- `tools/generate_chronology_guide.py`: the reproducible renderer for the
+  timezone-aware reading guide.
 - `tools/sanitize_codex_history.py`: the script used to generate this bundle.
-- `tools/test_sanitize_codex_history.py`: a regression test for merging records
-  from multiple source machines.
+- `tools/test_sanitize_codex_history.py` and
+  `tools/test_generate_chronology_guide.py`: regression tests for merging source
+  machines, chronology segmentation, handoffs, and timezone validation.
 - `tools/validate_codex_history.py`: structural, chronological-order, line-count,
   and checksum validation for a generated bundle.
 
@@ -32,6 +38,12 @@ repository, run `git lfs pull` if the session files appear as LFS pointer files
 instead of JSONL.
 
 ## Viewing The Logs
+
+Start with [`CHRONOLOGY.md`](CHRONOLOGY.md) to follow the work in absolute
+chronological order. It records the stable researcher pseudonym, source
+machine, local and UTC prompt windows, and when to switch to or resume another
+native session file. The guide is derived navigation metadata; it does not
+replace or rewrite any session record.
 
 The files can be viewed as raw JSONL, or with a Codex history viewer extension
 for VS Code. One option is the Codex History Viewer extension on Open VSX:
@@ -77,5 +89,8 @@ To refresh logs from either source machine:
 3. Review the updated `sessions/`, `history.filtered.jsonl`, and
    `manifest.json`.
 4. Run the validation checks in `REDACTION.md` before committing.
+
+The sanitizer regenerates `CHRONOLOGY.md` automatically. To rebuild only the
+guide and its manifest metadata, run `python3 tools/generate_chronology_guide.py`.
 
 Do not add unsanitized Codex session files to this repository.

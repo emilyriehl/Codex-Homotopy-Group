@@ -164,6 +164,14 @@ class MergeBundleTest(unittest.TestCase):
                 )
             )
 
+            self.assertEqual(manifest["chronology_guide"]["prompt_count"], 2)
+            self.assertEqual(manifest["chronology_guide"]["segment_count"], 2)
+            chronology = (output_root / "CHRONOLOGY.md").read_text(
+                encoding="utf-8"
+            )
+            self.assertIn("`<RESEARCHER_1>`", chronology)
+            self.assertIn(str(mac_bundle_path), chronology)
+
             history = SANITIZER.load_jsonl(output_root / "history.filtered.jsonl")
             self.assertEqual([entry["ts"] for entry in history], [100, 200])
             self.assertEqual(

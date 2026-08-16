@@ -335,5 +335,34 @@
       "inclusion_reason": "session cwd matched repository and activity overlapped 2026-06-03 through 2026-06-27 inclusive",
       "redaction_version": "2026-08-13.1"
     }
-  ]
+  ],
+  "chronology_guide": {
+    "path": "CHRONOLOGY.md",
+    "source": "history.filtered.jsonl",
+    "default_timezone": "America/New_York",
+    "timezone_overrides": [
+      {
+        "source_machine": "linux-laptop",
+        "timezone": "Europe/Stockholm",
+        "local_date_start": "2026-06-08",
+        "local_date_end_inclusive": "2026-06-12",
+        "start_utc": "2026-06-07T22:00:00+00:00",
+        "end_exclusive_utc": "2026-06-12T22:00:00+00:00",
+        "daytime_window_local": {
+          "start_inclusive": "07:00",
+          "end_exclusive": "21:00"
+        },
+        "expected_prompt_count": 67,
+        "notes": "Researcher-reported timezone for this machine and date interval.",
+        "observed_prompt_count": 67,
+        "observed_prompt_time_range_local": {
+          "start": "09:07",
+          "end": "19:08"
+        }
+      }
+    ],
+    "segment_count": 37,
+    "prompt_count": 339,
+    "sha256": "6005c3cdccf3f03de9a91be1d15660389679b5fea8efd53c5b20a44dcbb141a5"
+  }
 }

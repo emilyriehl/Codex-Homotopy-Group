@@ -9,6 +9,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+from generate_chronology_guide import render_guide
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -50,6 +52,34 @@ def history_sort_key(entry: dict[str, Any]) -> tuple[float, str]:
     if not isinstance(timestamp, (int, float)):
         raise ValueError(f"history entry has nonnumeric timestamp: {timestamp!r}")
     return float(timestamp), str(entry.get("session_id", ""))
+
+
+def validate_timezone_evidence(
+    chronology: dict[str, Any], source_machines: set[str] | None = None
+) -> None:
+    for override in chronology.get("timezone_overrides", []):
+        if (
+            source_machines is not None
+            and override.get("source_machine") not in source_machines
+        ):
+            continue
+        expected_count = override.get("expected_prompt_count")
+        observed_count = override.get("observed_prompt_count")
+        if expected_count is not None and observed_count != expected_count:
+            raise ValueError(
+                f"timezone evidence prompt-count mismatch: expected {expected_count}, "
+                f"observed {observed_count}"
+            )
+        observed_range = override.get("observed_prompt_time_range_local")
+        window = override.get("daytime_window_local")
+        if not observed_range or not window:
+            raise ValueError("timezone evidence lacks an observed range or daytime window")
+        start = window["start_inclusive"]
+        end = window["end_exclusive"]
+        if not (start <= observed_range["start"] < end):
+            raise ValueError("earliest observed prompt falls outside daytime window")
+        if not (start <= observed_range["end"] < end):
+            raise ValueError("latest observed prompt falls outside daytime window")
 
 
 def validate_bundle(bundle_root: Path) -> tuple[int, int]:
@@ -118,6 +148,28 @@ def validate_bundle(bundle_root: Path) -> tuple[int, int]:
             raise ValueError(f"history researcher mismatch for session {session_id}")
         if entry.get("researcher_id") not in researcher_ids:
             raise ValueError(f"history researcher is absent from manifest: {session_id}")
+
+    chronology = manifest.get("chronology_guide")
+    if not isinstance(chronology, dict):
+        raise ValueError("manifest lacks chronology_guide metadata")
+    if chronology.get("prompt_count") != len(history):
+        raise ValueError("chronology prompt_count does not match filtered history")
+
+    guide_relative_path = Path(str(chronology.get("path", "")))
+    if guide_relative_path.is_absolute() or ".." in guide_relative_path.parts:
+        raise ValueError(f"invalid chronology guide path: {guide_relative_path}")
+    guide_path = bundle_root / guide_relative_path
+    if not guide_path.is_file():
+        raise ValueError(f"chronology guide is missing: {guide_relative_path}")
+
+    expected_guide, expected_metadata, segments = render_guide(manifest, history)
+    if chronology != expected_metadata:
+        raise ValueError("chronology metadata is stale or inconsistent")
+    if guide_path.read_text(encoding="utf-8") != expected_guide:
+        raise ValueError("chronology guide is stale or inconsistent")
+    if sum(segment["prompt_count"] for segment in segments) != len(history):
+        raise ValueError("chronology segments do not account for every prompt")
+    validate_timezone_evidence(chronology, source_machines)
 
     return len(sessions), len(history)
 

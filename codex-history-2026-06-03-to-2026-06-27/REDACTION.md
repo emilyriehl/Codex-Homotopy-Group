@@ -38,6 +38,10 @@ Before publishing or committing a regenerated bundle, validate that:
 - every `.jsonl` file parses line-by-line as JSON;
 - `manifest.json` session count matches the number of sanitized session files;
 - `history.filtered.jsonl` contains only entries for included session ids;
+- `CHRONOLOGY.md` is current, accounts for every prompt exactly once, and links
+  only to included native session files;
+- the recorded June 8-12 `Europe/Stockholm` prompt evidence remains within the
+  documented 07:00-21:00 CEST sanity window;
 - searches for likely secrets and private identifiers return no matches.
 
 Run the structural checks with:
@@ -49,8 +53,8 @@ python3 tools/validate_codex_history.py
 Suggested searches:
 
 ```sh
-rg -n 'sk-|OPENAI_API_KEY|org-|proj_|github_pat_|ghp_|Authorization: Bearer' codex-history-2026-06-03-to-2026-06-27/sessions codex-history-2026-06-03-to-2026-06-27/history.filtered.jsonl codex-history-2026-06-03-to-2026-06-27/manifest.json
-rg -n '/Users/|/home/|@' codex-history-2026-06-03-to-2026-06-27/sessions codex-history-2026-06-03-to-2026-06-27/history.filtered.jsonl codex-history-2026-06-03-to-2026-06-27/manifest.json
+rg -n 'sk-|OPENAI_API_KEY|org-|proj_|github_pat_|ghp_|Authorization: Bearer' codex-history-2026-06-03-to-2026-06-27/sessions codex-history-2026-06-03-to-2026-06-27/history.filtered.jsonl codex-history-2026-06-03-to-2026-06-27/manifest.json codex-history-2026-06-03-to-2026-06-27/CHRONOLOGY.md
+rg -n '/Users/|/home/|@' codex-history-2026-06-03-to-2026-06-27/sessions codex-history-2026-06-03-to-2026-06-27/history.filtered.jsonl codex-history-2026-06-03-to-2026-06-27/manifest.json codex-history-2026-06-03-to-2026-06-27/CHRONOLOGY.md
 ```
 
 If a search finds a real sensitive value, update
