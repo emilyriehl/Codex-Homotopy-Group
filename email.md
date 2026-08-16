@@ -1,4 +1,6 @@
-Hi all (including Edward Hunter, who was forwarded another message I sent to DSAI a few days ago, as an FYI).
+> Personal names and affiliations have been replaced with stable role-based placeholders.
+
+Hi all (including <RECIPIENT_1>, who was forwarded another message I sent to <CONSULTING_GROUP> a few days ago, as an FYI).
 
 Great! Thank you for offering to meet. The best times for me would be
 
@@ -13,7 +15,7 @@ Firstly, this is part of a three-year grant aimed at producing AI generated form
 
 https://www.darpa.mil/research/programs/expmath-exponential-mathematics
 
-Our specific team hopes to generate proofs in the computer proof assistant Agda, using the Agda-Unimath library (cofounded by my postdoc Egbert Rijke):
+Our specific team hopes to generate proofs in the computer proof assistant Agda, using the Agda-Unimath library (cofounded by my postdoc <POSTDOC_1>):
 
 https://unimath.github.io/agda-unimath/
 
@@ -24,7 +26,7 @@ https://arxiv.org/abs/2212.11082
 
 (Note both of these websites include the LaTeX source files as well as compiled PDFs. Which format is easier for models to read?)
 
-The broader project has two co-PIs who are both computer scientists: Yuriy Brun at UMass Amherst and Talia Ringer at UIUC. Our aim to ultimately build our own autoformalization agent. But the project I've written you about below is intended to be an experiment in agentic formal theorem proving that I expect to be successful based on some talks I attended at a conference two weeks ago:
+The broader project has two co-PIs who are both computer scientists: <CO_PI_1> at <UNIVERSITY_1> and <CO_PI_2> at <UNIVERSITY_2>. Our aim to ultimately build our own autoformalization agent. But the project I've written you about below is intended to be an experiment in agentic formal theorem proving that I expect to be successful based on some talks I attended at a conference two weeks ago:
 
 https://arxiv.org/abs/2601.03298
 https://types2026.cse.chalmers.se/abstracts/64.pdf
@@ -49,7 +51,7 @@ https://github.com/faezs/agda-mcp
 (ii) a thorough documentation of all the prompts, resource use, human interactions etc, for reporting purposes
 (iii) the prototypical "agda unimath skills" that we can continue to refine and feed to other models, such as the one my co-PIs will develop in house.
 
-If someone at DSAI would like to be involved throughout the whole experiment, that's great. In fact, I have some money in the year one budget that could go to an interested graduate student or researcher. But I'm also hoping that my team (myself, my postdoc, and my PhD student; all mathematicians) can learn enough in the initial consultation to continue from there.
+If someone at <CONSULTING_GROUP> would like to be involved throughout the whole experiment, that's great. In fact, I have some money in the year one budget that could go to an interested graduate student or researcher. But I'm also hoping that my team (myself, my postdoc, and my PhD student; all mathematicians) can learn enough in the initial consultation to continue from there.
 
 Let me know attempt to answer your questions in line:
 
@@ -65,9 +67,9 @@ It's likely the results will be for publication with the "agda unimath skills" p
 
 This is a rough draft with human interaction. I'd like to document performance metrics (and could use advice on how best to do so) but at this time we're not trying to optimize anything.
 
-* Is the end goal of this request high-level feedback on an approach? Or is the vision that DSAI would participate in a shared effort of some sort?
+* Is the end goal of this request high-level feedback on an approach? Or is the vision that <CONSULTING_GROUP> would participate in a shared effort of some sort?
 
-As noted above, I think this can be successful if we just have some DSAI help getting started. But if someone there would like to be involved longer term, we're open to this as well.
+As noted above, I think this can be successful if we just have some <CONSULTING_GROUP> help getting started. But if someone there would like to be involved longer term, we're open to this as well.
 
 * What is the library of formal proofs the team is using? Can you provide a link to it before the call?
  
@@ -87,4 +89,4 @@ https://github.com/HoTT/book/blob/master/homotopy.tex
 I don't know exactly what you mean by this.
 
 Thanks!
-Emily
+<RESEARCHER_1>
