@@ -3,6 +3,11 @@
 This repository contains planning artifacts and experimental agda-unimath
 formalization files for the `pi_3(S^2) = Z` project.
 
+## Preprint
+
+- [Preprint PDF (tagged)](auto-pi3S2-tagged.pdf)
+- [Frozen arXiv v1 repository snapshot](https://github.com/emilyriehl/Codex-Homotopy-Group/tree/arxiv-v1)
+
 ## Getting the library
 
 The agda-unimath library is included as a Git submodule. To clone this
