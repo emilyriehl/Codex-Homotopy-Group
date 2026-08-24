@@ -6,22 +6,21 @@ The JSONL files are intended to stay close to the original Codex session format
 while redacting sensitive local details.
 
 Current status: complete. This bundle contains eight sessions imported from a
-Mac and eleven sessions imported from a Linux laptop. The same researcher
-operated both machines.
+Mac and eleven sessions imported from a Linux laptop for `<RESEARCHER_1>`, plus
+two sessions imported from a third machine for `<RESEARCHER_2>`.
 
 ## Contents
 
 - `sessions/`: sanitized Codex session JSONL files, preserving the original
   `YYYY/MM/DD/*.jsonl` layout expected by Codex history tooling.
 - `CHRONOLOGY.md`: a timezone-aware reading guide that orders prompting across
-  both machines and points readers to the native session file at each handoff
-  or resumption.
+  all three machines and both researchers, and points readers to the native
+  session file at each handoff or resumption.
 - `history.filtered.jsonl`: sanitized prompt-history entries for all included
   session ids and source machines, ordered chronologically by timestamp. Each
   entry records the stable researcher pseudonym and its source machine.
-- `manifest.json`: provenance, timestamps, line counts, checksums, and inclusion
-  reasons for each sanitized session. The manifest records that one stable
-  researcher identity operated both source machines.
+- `manifest.json`: provenance, researcher pseudonyms, timestamps, line counts,
+  checksums, and inclusion reasons for each sanitized session.
 - `REDACTION.md`: the redaction policy and review checklist.
 - `tools/generate_chronology_guide.py`: the reproducible renderer for the
   timezone-aware reading guide.
@@ -40,8 +39,8 @@ instead of JSONL.
 ## Viewing The Logs
 
 The [`CHRONOLOGY.md`](CHRONOLOGY.md) guide explains the chronology of the
-prompting across the two machines, including when to switch to or resume a
-session file.
+prompting across the three machines and two researchers, including when to
+switch to or resume a session file.
 
 The files can be viewed as raw JSONL, or with a Codex history viewer extension
 for VS Code. One option is the Codex History Viewer extension on Open VSX:
@@ -68,18 +67,21 @@ Sessions from other projects in the same date range were excluded.
 
 ## Refreshing Source Logs
 
-To refresh logs from either source machine:
+To refresh logs from any source machine:
 
 1. Make the source machine's Codex session root readable on the machine running
    the sanitizer.
 2. Run `tools/sanitize_codex_history.py` with `--source-root` pointing at that
    session root, `--repo-root` set to the source machine's absolute checkout
-   path, and the matching `--source-machine` label. Supply private names and
-   account strings as repeated `--redact-term 'raw value=<PLACEHOLDER>'`
-   arguments. These raw values should not be committed to the repository. The
-   sanitizer preserves sessions from other source machines, reapplies the
-   supplied redactions to those retained records, and rebuilds the combined
-   prompt history in chronological order.
+   path, and the matching `--source-machine` and `--researcher-id` labels.
+   Supply private names and account strings as repeated
+   `--redact-term 'raw value=<PLACEHOLDER>'` arguments. These raw values should
+   not be committed to the repository. The sanitizer preserves sessions from
+   other source machines and researchers, reapplies supplied private redactions
+   only to retained records for the selected researcher, and rebuilds the
+   combined prompt history in chronological order. Use
+   `--global-redact-term 'raw value=<PLACEHOLDER>'` only when the same private
+   identifier must be removed from every researcher's records.
    A damaged or stale individual session can be refreshed without rewriting the
    rest of the bundle by repeating the command with `--session-id SESSION_ID`.
 3. Review the updated `sessions/`, `history.filtered.jsonl`, and

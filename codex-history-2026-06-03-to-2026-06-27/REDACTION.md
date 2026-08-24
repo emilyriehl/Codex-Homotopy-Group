@@ -22,14 +22,19 @@ The JSONL structure, event order, session ids, relative repository paths,
 commit hashes, theorem names, Agda names, prompts, assistant responses, and tool
 events are otherwise preserved.
 
-The same stable researcher pseudonym is used for sessions from both computers.
-Machine provenance is recorded separately as `mac-local` or `linux-laptop` in
-the manifest and filtered prompt history.
+Stable pseudonyms distinguish the two researchers: `<RESEARCHER_1>` for the
+sessions from `mac-local` and `linux-laptop`, and `<RESEARCHER_2>` for the
+sessions from `third-machine`. Researcher and machine provenance are recorded
+separately in the manifest and filtered prompt history.
 
 The imports used private literal redaction terms for researcher names, personal
-references, and local account names. Bibliographic author attributions and
-standard eponymous mathematical terminology are preserved. The raw redaction
-values are deliberately not recorded in this repository.
+references, and local account names. Such terms are scoped to retained records
+for the same researcher when machines are merged, so one researcher's private
+redactions do not alter another researcher's records. Bibliographic author
+attributions and standard eponymous mathematical terminology are preserved.
+The raw redaction values are deliberately not recorded in this repository.
+Explicitly approved identifiers that occur across researchers' records can be
+removed with the separate global private-redaction option.
 
 ## Manual Review Checklist
 

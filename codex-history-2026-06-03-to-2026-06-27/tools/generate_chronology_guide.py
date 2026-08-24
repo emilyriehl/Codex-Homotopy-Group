@@ -94,15 +94,21 @@ def transition_label(
     session_id = segment["session_id"]
     if previous is None:
         return "Archive begins"
+    researcher_changed = segment["researcher_id"] != previous["researcher_id"]
+    machine_changed = segment["source_machine"] != previous["source_machine"]
     if session_id == previous["session_id"]:
         if segment["timezone"] != previous["timezone"]:
             return "Continued session; display timezone changes"
         return "Continued session on a new local day"
     if session_id in seen_session_ids:
-        if segment["source_machine"] != previous["source_machine"]:
+        if researcher_changed:
+            return "Researcher handoff; resumed earlier session"
+        if machine_changed:
             return "Machine handoff; resumed earlier session"
         return "Resumed earlier session"
-    if segment["source_machine"] != previous["source_machine"]:
+    if researcher_changed:
+        return "Researcher handoff to a new session"
+    if machine_changed:
         return "Machine handoff to a new session"
     return "New session on the same machine"
 
@@ -223,6 +229,24 @@ def render_guide(
     policy = policy or chronology_policy_from_manifest(manifest)
     segments = build_segments(manifest, history, policy)
     evidence = override_evidence(history, policy)
+    researcher_ids = sorted(
+        {
+            entry["researcher_id"]
+            for entry in history
+            if entry.get("researcher_id")
+        }
+    )
+    if len(researcher_ids) == 1:
+        researcher_summary = (
+            "All prompts were made by one researcher, recorded under the stable "
+            f"pseudonym `{researcher_ids[0]}`."
+        )
+    else:
+        rendered_researchers = ", ".join(f"`{item}`" for item in researcher_ids)
+        researcher_summary = (
+            f"The archive contains prompts from {len(researcher_ids)} researchers, "
+            f"recorded under the stable pseudonyms {rendered_researchers}."
+        )
 
     lines = [
         "# Chronological Reading Guide",
@@ -234,8 +258,8 @@ def render_guide(
         "",
         "Rows are ordered by the absolute prompt timestamp. A \"machine handoff\" means",
         "that the next recorded human prompt came from another machine; it does not claim",
-        "that Codex created a native session boundary. All prompts were made by the same",
-        "researcher, recorded under the stable pseudonym `<RESEARCHER_1>`.",
+        "that Codex created a native session boundary.",
+        researcher_summary,
         "",
         "## Time zones",
         "",

@@ -20,7 +20,7 @@ from typing import Any
 from generate_chronology_guide import render_guide
 
 
-REDACTION_VERSION = "2026-08-13.1"
+REDACTION_VERSION = "2026-08-24.1"
 DATE_START_UTC = dt.datetime.fromisoformat("2026-06-03T00:00:00+00:00")
 DATE_END_EXCLUSIVE_UTC = dt.datetime.fromisoformat("2026-06-28T00:00:00+00:00")
 DEFAULT_RESEARCHER_ID = "<RESEARCHER_1>"
@@ -98,6 +98,13 @@ def parse_args() -> argparse.Namespace:
         metavar="RAW=REPLACEMENT",
         help="Private literal to redact, for example 'Name=<RESEARCHER_1>'. May be repeated.",
     )
+    parser.add_argument(
+        "--global-redact-term",
+        action="append",
+        default=[],
+        metavar="RAW=REPLACEMENT",
+        help="Private literal to redact across records for every researcher. May be repeated.",
+    )
     return parser.parse_args()
 
 
@@ -107,7 +114,9 @@ def parse_timestamp(value: str | None) -> dt.datetime | None:
     return dt.datetime.fromisoformat(value.replace("Z", "+00:00"))
 
 
-def literal_patterns(args: argparse.Namespace) -> list[tuple[re.Pattern[str], str]]:
+def literal_patterns(
+    args: argparse.Namespace, redact_terms: list[str] | None = None
+) -> list[tuple[re.Pattern[str], str]]:
     repo_root = args.repo_root or str(Path.cwd())
     home = str(Path.home())
     patterns: list[tuple[re.Pattern[str], str]] = [
@@ -120,7 +129,8 @@ def literal_patterns(args: argparse.Namespace) -> list[tuple[re.Pattern[str], st
         ),
         (re.compile(r"/home/([A-Za-z0-9._-]+)\b"), "<HOME_LINUX>"),
     ]
-    for term in args.redact_term:
+    terms = args.redact_term if redact_terms is None else redact_terms
+    for term in terms:
         if "=" not in term:
             raise ValueError(f"invalid --redact-term {term!r}; expected RAW=REPLACEMENT")
         raw, replacement = term.split("=", 1)
@@ -304,7 +314,7 @@ def selection_rules_from_manifest(
 
 
 def source_machine_records(labels: set[str]) -> list[dict[str, str]]:
-    preferred_order = {"mac-local": 0, "linux-laptop": 1}
+    preferred_order = {"mac-local": 0, "linux-laptop": 1, "third-machine": 2}
     return [
         {
             "label": label,
@@ -315,31 +325,64 @@ def source_machine_records(labels: set[str]) -> list[dict[str, str]]:
     ]
 
 
+def researcher_records(sessions: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    machines_by_researcher: dict[str, set[str]] = {}
+    for session in sessions:
+        researcher_id = session.get("researcher_id")
+        source_machine = session.get("source_machine")
+        if not researcher_id or not source_machine:
+            raise ValueError(
+                "manifest session lacks researcher or source-machine provenance"
+            )
+        machines_by_researcher.setdefault(researcher_id, set()).add(source_machine)
+    return [
+        {
+            "researcher_id": researcher_id,
+            "source_machines": [
+                machine["label"]
+                for machine in source_machine_records(source_machines)
+            ],
+            "notes": (
+                "Stable pseudonym for the researcher who prompted these "
+                "source-machine sessions."
+            ),
+        }
+        for researcher_id, source_machines in sorted(machines_by_researcher.items())
+    ]
+
+
 def build_bundle(args: argparse.Namespace) -> int:
     source_root = Path(args.source_root).expanduser()
     output_root = Path(args.output_root).resolve()
     repo_root = args.repo_root or str(Path.cwd())
-    patterns = literal_patterns(args)
+    global_redact_terms = getattr(args, "global_redact_term", [])
+    patterns = literal_patterns(args, args.redact_term + global_redact_terms)
+    global_patterns = literal_patterns(args, global_redact_terms)
     selected_session_ids = set(args.session_id)
     sessions_output = output_root / "sessions"
     included_session_ids: set[str] = set()
     manifest_path = output_root / "manifest.json"
     existing_manifest = load_json(manifest_path)
     existing_sessions = existing_manifest.get("sessions", []) if existing_manifest else []
-    retained_sessions = [
-        redact_json(session, patterns)
-        for session in existing_sessions
-        if isinstance(session, dict)
-        and (
+    retained_sessions = []
+    for session in existing_sessions:
+        if not isinstance(session, dict) or not (
             session.get("source_machine") != args.source_machine
             or (
                 selected_session_ids
                 and session.get("session_id") not in selected_session_ids
             )
+        ):
+            continue
+        retained_sessions.append(
+            redact_json(session, patterns)
+            if session.get("researcher_id") == args.researcher_id
+            else (
+                redact_json(session, global_patterns)
+                if global_redact_terms
+                else dict(session)
+            )
         )
-    ]
-    for session in retained_sessions:
-        session["researcher_id"] = args.researcher_id
     replaced_sessions = [
         session
         for session in existing_sessions
@@ -417,13 +460,19 @@ def build_bundle(args: argparse.Namespace) -> int:
             raise ValueError(f"refusing to remove session outside bundle: {stale_path}")
         stale_path.unlink(missing_ok=True)
 
-    if not selected_session_ids:
+    if not selected_session_ids and (args.redact_term or global_redact_terms):
         for session in retained_sessions:
+            same_researcher = session.get("researcher_id") == args.researcher_id
+            if not same_researcher and not global_redact_terms:
+                continue
             bundle_path = session.get("bundle_path")
             if not bundle_path:
                 raise ValueError("existing manifest session is missing bundle_path")
             session_path = output_root / bundle_path
-            line_count, digest = rewrite_redacted_jsonl(session_path, patterns)
+            applicable_patterns = patterns if same_researcher else global_patterns
+            line_count, digest = rewrite_redacted_jsonl(
+                session_path, applicable_patterns
+            )
             session["sanitized_line_count"] = line_count
             session["sanitized_sha256"] = digest
             session["redaction_version"] = REDACTION_VERSION
@@ -443,14 +492,27 @@ def build_bundle(args: argparse.Namespace) -> int:
         for session in manifest_sessions
         if session.get("session_id") and session.get("source_machine")
     }
+    researcher_by_session_id = {
+        session["session_id"]: session["researcher_id"]
+        for session in manifest_sessions
+        if session.get("session_id") and session.get("researcher_id")
+    }
 
     history_path = Path(args.history_file).expanduser()
     history_output = output_root / "history.filtered.jsonl"
-    history_entries = [
-        redact_json(entry, patterns)
-        for entry in load_jsonl(history_output)
-        if entry.get("session_id") in retained_session_ids
-    ]
+    history_entries = []
+    for entry in load_jsonl(history_output):
+        if entry.get("session_id") not in retained_session_ids:
+            continue
+        history_entries.append(
+            redact_json(entry, patterns)
+            if entry.get("researcher_id") == args.researcher_id
+            else (
+                redact_json(entry, global_patterns)
+                if global_redact_terms
+                else entry
+            )
+        )
     if history_path.exists():
         with history_path.open("r", encoding="utf-8") as input_handle:
             for raw_line in input_handle:
@@ -465,7 +527,12 @@ def build_bundle(args: argparse.Namespace) -> int:
             raise ValueError(
                 f"history entry refers to unmanifested session id {session_id}"
             )
-        entry["researcher_id"] = args.researcher_id
+        researcher_id = researcher_by_session_id.get(session_id)
+        if researcher_id is None:
+            raise ValueError(
+                f"history entry refers to session without researcher provenance {session_id}"
+            )
+        entry["researcher_id"] = researcher_id
         entry["source_machine"] = source_machine
     history_entries.sort(key=history_sort_key)
     with history_output.open("w", encoding="utf-8") as output_handle:
@@ -492,12 +559,7 @@ def build_bundle(args: argparse.Namespace) -> int:
         for session in manifest_sessions
         if session.get("source_machine")
     }
-    expected_machine_labels = {"mac-local", "linux-laptop"}
-    if expected_machine_labels <= machine_labels:
-        status = "complete: mac-local and linux-laptop logs included"
-    else:
-        missing_labels = ", ".join(sorted(expected_machine_labels - machine_labels))
-        status = f"partial: pending logs from {missing_labels}"
+    status = f"complete: {len(machine_labels)} source machines included"
 
     manifest = {
         "title": "Codex history for Codex-Homotopy-Group, 2026-06-03 through 2026-06-27",
@@ -513,15 +575,8 @@ def build_bundle(args: argparse.Namespace) -> int:
         "selection_rules": selection_rules,
         "redaction_version": REDACTION_VERSION,
         "private_redaction_term_count": len(args.redact_term),
-        "researchers": [
-            {
-                "researcher_id": args.researcher_id,
-                "source_machines": [
-                    machine["label"] for machine in source_machine_records(machine_labels)
-                ],
-                "notes": "The same researcher prompted all included sessions across these source machines.",
-            }
-        ],
+        "global_private_redaction_term_count": len(global_redact_terms),
+        "researchers": researcher_records(manifest_sessions),
         "source_machines": source_machine_records(machine_labels),
         "session_count": len(manifest_sessions),
         "history_entry_count": len(history_entries),
