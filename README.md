@@ -5,6 +5,7 @@ formalization files for the `pi_3(S^2) = Z` project.
 
 ## Preprint
 
+- [arXiv version](https://arxiv.org/abs/2608.23721)
 - [Preprint PDF (tagged)](auto-pi3S2-tagged.pdf)
 - [Frozen arXiv v1 repository snapshot](https://github.com/emilyriehl/Codex-Homotopy-Group/tree/arxiv-v1)
 
