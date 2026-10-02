@@ -19,7 +19,9 @@ open import foundation.type-arithmetic-cartesian-product-types
 open import foundation.unital-binary-operations
 open import foundation.universe-levels
 
+open import structured-types.equality-pointed-maps
 open import structured-types.h-spaces
+open import structured-types.pointed-maps
 
 open import synthetic-homotopy-theory.circle
 open import synthetic-homotopy-theory.multiplication-circle
@@ -33,7 +35,9 @@ open import synthetic-homotopy-theory.spheres
 The [circle](synthetic-homotopy-theory.circle.md) is an
 [H-space](structured-types.h-spaces.md). The multiplication is the standard
 multiplication on the circle, and the unit laws are the left and right unit
-laws of that multiplication.
+laws of that multiplication. Their coherence follows directly from the base
+point computation rule of the circle's dependent eliminator, which is an
+identification of pointed maps.
 
 The Hopf construction is naturally phrased for a connected H-space. Since the
 local Hopf fiber sequence is stated using the `1`-sphere rather than the circle,
@@ -41,6 +45,33 @@ we also transport the multiplication across the equivalence between the circle
 and the `1`-sphere.
 
 ## Definitions
+
+### Coherence of the given unit laws on the circle
+
+The circle multiplication is constructed as a dependent family of pointed
+maps `(mul-𝕊¹ x , right-unit-law-mul-𝕊¹ x)`. At `base-𝕊¹`, the computation
+rule `pr1 (pr2 mul-Π-𝕊¹)` identifies this pointed map with the identity
+pointed map. The induced homotopy of underlying maps is exactly
+`left-unit-law-mul-𝕊¹`. Its base point coherence says
+
+```text
+right-unit-law-mul-𝕊¹ base-𝕊¹ ＝ left-unit-law-mul-𝕊¹ base-𝕊¹ ∙ refl.
+```
+
+Removing the concatenation with `refl` and inverting gives the required
+coherence of the original unit laws.
+
+```agda
+coh-unit-laws-mul-𝕊¹ :
+  left-unit-law-mul-𝕊¹ base-𝕊¹ ＝ right-unit-law-mul-𝕊¹ base-𝕊¹
+coh-unit-laws-mul-𝕊¹ =
+  inv
+    ( coherence-point-htpy-eq-pointed-map
+      ( pr1 mul-Π-𝕊¹ base-𝕊¹)
+      ( id-pointed-map)
+      ( pr1 (pr2 mul-Π-𝕊¹)) ∙
+      right-unit)
+```
 
 ### The H-space structure on the circle
 
@@ -50,9 +81,7 @@ coherent-unital-mul-𝕊¹-Pointed-Type :
 pr1 coherent-unital-mul-𝕊¹-Pointed-Type =
   mul-𝕊¹
 pr2 coherent-unital-mul-𝕊¹-Pointed-Type =
-  coherent-unit-laws-unit-laws
-    ( mul-𝕊¹)
-    ( left-unit-law-mul-𝕊¹ , right-unit-law-mul-𝕊¹)
+  ( left-unit-law-mul-𝕊¹ , right-unit-law-mul-𝕊¹ , coh-unit-laws-mul-𝕊¹)
 
 𝕊¹-H-Space : H-Space lzero
 𝕊¹-H-Space =

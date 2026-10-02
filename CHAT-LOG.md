@@ -6687,3 +6687,55 @@ check was needed because no Agda source file changed.
 Related commit:
 
 - This commit - Compare the LES with HoTT Book Section 8.4.
+
+## 2026-10-02
+
+### Prove direct coherence of the circle unit laws
+
+Request: The user asked Codex to prove that the given unit laws for the higher
+inductive circle multiplication are already coherent, replacing the use of
+the general construction of a coherent H-space from a noncoherent one. During
+the proof work, the user also offered to set up Agda MCP and requested setup
+instructions.
+
+Model context:
+
+- Agent-visible identity: Codex, based on GPT-6. The exact served model variant
+  and reasoning effort are not exposed in this session.
+- Agda MCP tools were not available. Final acceptance used `./check.sh`.
+
+Actions:
+
+- Inspected `mul-Π-𝕊¹` and its base point computation rule, which identifies
+  the pointed left multiplication map at the unit with the identity pointed
+  map.
+- Added the reusable lemma `coherence-point-htpy-eq-pointed-map`, proving by
+  path induction that the homotopy obtained by projecting an equality of
+  pointed maps preserves their base points.
+- Applied that lemma to the circle computation rule to prove
+  `coh-unit-laws-mul-𝕊¹`. Packaged the original left and right unit laws
+  unchanged in `𝕊¹-H-Space`, with explanatory prose.
+- Left the separate transported 1-sphere H-space construction unchanged and
+  documented this scope in `STATUS-REPORT.md`.
+- Checked local MCP prerequisites and configuration, and supplied the setup
+  command targeting this session's `/home/eriehl/.codex-astral` configuration.
+  No MCP configuration was changed by the agent.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-construction-fiber-sequence.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-family-circle.lagda.md
+git diff --check
+```
+
+All three Agda checks passed, including the new pointed-map lemma and the
+Hopf consumers. A source scan found no holes, postulates, unsolved-meta
+options, or termination overrides in the authored Agda files. The initial
+scope error for `htpy-eq` was resolved by importing its defining module,
+`foundation.function-extensionality-axiom`.
+
+Related commit:
+
+- This commit - Prove direct coherence of the circle unit laws.

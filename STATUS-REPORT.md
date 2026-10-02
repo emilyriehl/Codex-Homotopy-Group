@@ -7,7 +7,7 @@ Update this file whenever significant progress is made, for example when a
 new theorem is proved, an important definition is formalized, a planned module
 is added, or a major blocked item is resolved or re-scoped.
 
-Last updated: 2026-06-28.
+Last updated: 2026-10-02.
 
 ## Current summary
 
@@ -58,6 +58,13 @@ calculation:
   `sphere-1-H-Space`. It now also proves that all left and right translations
   by circle and 1-sphere points are equivalences, and packages the Hopf shear
   equivalence `(x , y) ↦ (y , x · y)` on `S¹ × S¹`.
+  The higher inductive circle now uses its original left and right unit laws:
+  `coh-unit-laws-mul-𝕊¹` proves their coherence directly from the dependent
+  eliminator's base point computation rule as an equality of pointed maps.
+  The reusable base point coherence lemma is in
+  [`equality-pointed-maps`](src/structured-types/equality-pointed-maps.lagda.md).
+  The separate transported `sphere-1-H-Space` still uses the general
+  construction of coherent unit laws.
 - The first Hopf-construction layer is now checked. The generic module
   `hopf-construction` defines the Hopf map `A * A -> suspension A` and its
   pointed form for any H-space, and `hopf-construction-circle` specializes it
@@ -311,7 +318,8 @@ available in `diagonal-homotopy-groups-spheres`.
 | Homomorphisms induced by fiber sequences | [`src/synthetic-homotopy-theory/homomorphisms-homotopy-groups-fiber-sequences.lagda.md`](src/synthetic-homotopy-theory/homomorphisms-homotopy-groups-fiber-sequences.lagda.md) | Defines the concrete homotopy-group homomorphisms induced by the fiber inclusion, fibration, recursive boundary map, and canonical boundary map of a packaged fiber sequence, plus the canonical boundary homomorphism of a pointed map. |
 | Higher homotopy groups of 1-types | [`src/synthetic-homotopy-theory/higher-homotopy-groups-truncated-types.lagda.md`](src/synthetic-homotopy-theory/higher-homotopy-groups-truncated-types.lagda.md) | Proves that positive concrete homotopy groups of pointed 1-types are trivial. |
 | Circle and 1-sphere homotopy facts | [`src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md`](src/synthetic-homotopy-theory/homotopy-groups-circle.lagda.md) | Proves the loop-space equivalences for the circle and 1-sphere, the 1-type facts, triviality of their positive concrete homotopy groups, and ordinary group-level triviality wrappers for those positive concrete homotopy groups. |
-| Circle and 1-sphere H-space structures | [`src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md`](src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md) | Packages the existing circle multiplication as a coherent `𝕊¹-H-Space`, transports it across the circle--1-sphere equivalence, packages the transported multiplication as `sphere-1-H-Space`, proves that left and right translations on both the circle and 1-sphere are equivalences, and proves the Hopf shear equivalence on `S¹ × S¹`. |
+| Equality of pointed maps | [`src/structured-types/equality-pointed-maps.lagda.md`](src/structured-types/equality-pointed-maps.lagda.md) | Proves that the homotopy obtained by projecting an equality of pointed maps preserves the base point, by path induction. |
+| Circle and 1-sphere H-space structures | [`src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md`](src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md) | Proves direct coherence of the existing circle unit laws and packages them unchanged as `𝕊¹-H-Space`, transports the multiplication across the circle--1-sphere equivalence, packages the transported multiplication as `sphere-1-H-Space`, proves that left and right translations on both the circle and 1-sphere are equivalences, and proves the Hopf shear equivalence on `S¹ × S¹`. |
 | Low homotopy groups of `S³` | [`src/synthetic-homotopy-theory/homotopy-groups-sphere-3.lagda.md`](src/synthetic-homotopy-theory/homotopy-groups-sphere-3.lagda.md) | Proves that inhabited types are `(-1)`-connected, that `1`-connected pointed types have trivial concrete group, that `S³` is 2-connected by iterated suspension connectivity, and that `concrete-homotopy-group 0 (S³)` and `concrete-homotopy-group 1 (S³)` are trivial. |
 | Integer powers of loops | [`src/synthetic-homotopy-theory/computing-integer-powers-of-loops.lagda.md`](src/synthetic-homotopy-theory/computing-integer-powers-of-loops.lagda.md) | Proves successor, predecessor, and automorphism-iteration addition computations for integer powers of loops. |
 | Computing the loop space of the circle | [`src/synthetic-homotopy-theory/computing-loop-space-circle.lagda.md`](src/synthetic-homotopy-theory/computing-loop-space-circle.lagda.md) | Proves the universal-cover encoder concatenation computation, generator and inverse-generator integer-code computations, that integer powers of the circle loop encode to their exponents, and that `compute-loop-space-𝕊¹` sends loop concatenation to integer addition. |
@@ -414,6 +422,20 @@ The entries below are a chronological verification log. Older entries intentiona
 record intermediate scaffolds and `--allow-unsolved-metas` states that were later
 removed; the authoritative current state is the summary above and the latest
 dated checks at the top of this section.
+
+On 2026-10-02, direct coherence of the original circle unit laws and the
+downstream Hopf constructions were checked with:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-construction-fiber-sequence.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-family-circle.lagda.md
+```
+
+All three checks passed. The first also checks the new reusable lemma in
+`structured-types.equality-pointed-maps`. The circle H-space now retains both
+original unit laws definitionally, with coherence extracted from the base
+point computation rule for its family of pointed multiplication maps.
 
 On 2026-06-26, the iterated-loop, iterated-boundary, and homomorphism-wrapper
 splits were checked with:
