@@ -7,7 +7,7 @@ The user requested an Agda MCP smoke test, then asked to consider Peter
 Thiemann's server, Agda Native AIR, and cliu238's fork alongside the server
 used previously in this repository.
 
-Peter Thiemann's server is now configured for the current experimental session.
+Peter Thiemann's server is now configured and usable through the current client.
 The three JavaScript implementations passed the small diagnostic tests below.
 Native AIR was reviewed from source, but its runtime was not tested. These
 results support an initial trial, not a comprehensive reliability ranking.
@@ -35,10 +35,10 @@ documented capabilities, not runtime observations in this comparison.
 
 ## Method
 
-All live tests used the locally installed Agda 2.8.0 and direct MCP stdio
+The initial live tests used the locally installed Agda 2.8.0 and direct MCP stdio
 JSON-RPC calls (`initialize`, `tools/list`, `tools/call`) from a temporary
 Python harness. Agda tools were not yet exposed in the running Codex client's
-tool catalogue. A client restart is still needed to test that integration.
+tool catalogue. The follow-up below verifies that integration after restart.
 
 Temporary fixtures and downloaded checkouts were kept under `/tmp`. No
 formalization source in this repository was edited. Four standalone
@@ -100,6 +100,50 @@ That observation does not invalidate the historical failures documented in
 the [June UX report](README.md), or establish correctness for untested cases.
 `./check.sh` remains the final proof acceptance gate for every server.
 
+## Follow-up: live client integration
+
+After restarting the client, the user requested another test and a recommendation.
+All 18 Peter 0.4.1 tools were exposed to the agent. Calls in this follow-up used
+the client's actual MCP tools rather than the temporary JSON-RPC harness.
+
+- `agda_server_info` reported the configured repository root, Agda 2.8.0, a
+  supported adapter, and the preview-by-default mutation policy.
+- An asynchronous `agda_load_module` job for `pointed-sets.lagda.md` completed
+  with no diagnostics, goals, or invisible metavariables. Type inference for
+  `point-Pointed-Set` returned the expected dependent function type.
+  `./check.sh src/structured-types/pointed-sets.lagda.md` independently passed.
+- An isolated literate fixture contained `identity : Two → Two` with
+  `identity x = {!!}`. Loading it returned a goal of type `Two` and context
+  `x : Two`.
+- Refining with `x` and `apply: false` returned the expected edit, preserved
+  the source file's Git object hash, and returned a fresh goal handle.
+- Refining that fresh goal with `x` and `apply: true` updated the temporary
+  file and returned no goals. Normalizing `identity left` returned `left`.
+  Independent `agda --no-allow-unsolved-metas Interactive.lagda.md`, run from
+  the fixture's own library directory, exited 0.
+- A distinct fixture with an actual type mismatch returned `checked: false`
+  and the diagnostic `B !=< A`. An invisible-meta fixture returned one entry
+  in `invisibleMetavariables`. Independent batch Agda runs rejected both with
+  exit code 42 and the corresponding type-error and unsolved-meta diagnostics.
+
+The temporary fixtures used a separate `.agda-lib` beneath the ignored `temp/`
+directory because this server accepts only paths within its configured
+workspace. The project wrapper always selects the repository library, so it
+cannot check these standalone fixture module names; their batch checks used
+their own working directory. After testing, the fixture directory was moved
+to `/tmp`. No tracked formalization source was changed.
+
+One reporting detail matters: for the invisible-meta fixture, the short text
+summary said `checked: true`, zero diagnostics, and zero goals. The unresolved
+meta was present in `structuredContent.data.invisibleMetavariables`. Consumers
+must inspect that field as well as the visible goals.
+
+This supports choosing Peter's server for this project's current interactive
+workflow: module loading, goal inspection, a refinement preview, applying the
+refinement, and normalization now work through the actual client. It does not
+establish a universal reliability or performance ranking, or test case splits,
+automatic proof search, or the other servers' transformation behavior.
+
 ## Native AIR setup limitation
 
 The installed GHC is 9.4.7. The server's Cabal package requires
@@ -117,7 +161,8 @@ compact tool surface, returned structured goal contexts, and passed both the
 small diagnostics and the real project load. Its
 [documented defaults](https://github.com/peterthiemann/agda-mcp#installation-and-use)
 support asynchronous jobs and transformation previews, with edits explicitly
-requested per call. Transformation behavior itself was not exercised here.
+requested per call. The initial comparison did not exercise transformations;
+the live-client follow-up verified refinement preview and application.
 
 The original server and cliu238 fork remain viable alternatives on this smoke
 test evidence. The test did not distinguish their reliability; the fork adds
@@ -139,7 +184,7 @@ AGDA_MCP_OPTIONS = '{"workspaceRoots":["/home/eriehl/Math/Formalization/Codex-Ho
 The initial absence of tools was a configuration-directory mismatch: the
 original server existed in `~/.codex/config.toml`, but this client reads
 `~/.codex-astral/config.toml`. The latter now contains Peter's server, as
-confirmed by `codex mcp get agda`. Restart the client and request another MCP
-smoke test to confirm that the tools are available through Codex itself.
+confirmed by `codex mcp get agda`. The follow-up after restart confirmed that
+the tools are available and usable through Codex itself.
 
 See [MCP-SETUP.md](../MCP-SETUP.md) for the commands and the tool workflow.

@@ -27,6 +27,11 @@ smoke tests, and loaded `src/structured-types/pointed-sets.lagda.md` successfull
 See the [four-server comparison](agda-mcp-ux-report/server-comparison-2026-10-02.md)
 for the measured results and limitations.
 
+A follow-up in the restarted client confirmed that all 18 tools are exposed
+and that the server works through Codex itself. The live test covered the
+repository module, type inference, goal contexts, normalization, refinement preview, applying a
+refinement, type-error diagnostics, and invisible metavariables.
+
 This server requires Node.js 22 or newer and an Agda installation. The tested
 Agda version was 2.8.0. Its default transformation mode is preview; an
 individual transformation can explicitly request `apply: true`.

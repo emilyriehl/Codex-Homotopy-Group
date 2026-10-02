@@ -6796,3 +6796,55 @@ requires a restart; direct server testing does not establish that integration.
 Related commit:
 
 - This commit - Compare Agda MCP servers and configure the experimental setup.
+
+### Verify the Agda MCP integration after restart
+
+Request: The user asked to test Agda MCP again and recommend the best option.
+
+Model context:
+
+- Agent-visible identity: Codex, based on GPT-6. The exact served model variant
+  and reasoning effort were not exposed.
+- All 18 Peter Thiemann Agda MCP tools were exposed in this client. This run
+  used those tools directly, completing the integration check left pending
+  in the previous comparison.
+
+Actions and results:
+
+- Confirmed the pinned `agda-mcp@0.4.1` registration and a supported Agda 2.8.0
+  adapter, then loaded `pointed-sets.lagda.md` asynchronously with no errors,
+  goals, or invisible metavariables. Inferred the expected dependent function
+  type of `point-Pointed-Set`.
+- Created isolated literate fixtures beneath ignored `temp/` to stay within
+  the configured workspace. Inspected a goal and its local context, previewed
+  refinement with `x`, and confirmed the preview preserved the source's Git
+  object hash. Applied the refinement using the fresh goal handle; the goal
+  closed, and normalization of `identity left` returned `left`.
+- Confirmed that the live tools reject a genuine type error and expose an
+  invisible metavariable. The latter is present in the structured result even
+  though the short text summary reports zero goals and diagnostics.
+- Independently batch-checked the completed fixture (exit 0) and the invalid
+  type-error and invisible-meta fixtures (expected exit 42). These standalone
+  libraries need batch checks from their own directory: the repository wrapper
+  selects the project library and rejects their top-level module paths.
+- Recommended Peter's server for the current project based on the verified
+  interactive workflow. The earlier comparison did not distinguish the
+  reliability of the original and cliu238 servers; Native AIR remains untested
+  at runtime because of its toolchain requirements.
+- Updated the setup guide and comparison to record successful client
+  integration. Moved the temporary fixture directory to `/tmp` after testing.
+  No tracked formalization source or server configuration changed.
+
+Verification:
+
+```sh
+./check.sh src/structured-types/pointed-sets.lagda.md
+git diff --check
+```
+
+The repository Agda check passed. All live MCP tests behaved as expected on
+the tested examples; case splitting and automatic proof search remain untested.
+
+Related commit:
+
+- This commit - Verify live Agda MCP integration and refinement workflow.
