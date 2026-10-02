@@ -6739,3 +6739,60 @@ scope error for `htpy-eq` was resolved by importing its defining module,
 Related commit:
 
 - This commit - Prove direct coherence of the circle unit laws.
+
+### Test and compare Agda MCP servers
+
+Request: The user asked Codex to test Agda MCP, clarified that they wanted to
+experiment with Peter Thiemann's `agda-mcp`, and added Agda Native AIR and
+cliu238's `agda-mcp-server` to the comparison. The original server remained an
+acceptable alternative.
+
+Model context:
+
+- Agent-visible identity: Codex, based on GPT-6. The exact served model variant
+  and reasoning effort were not exposed.
+- No Agda tools were exposed in the current client. Testing used direct MCP
+  stdio calls from a temporary Python harness and independent batch Agda runs.
+
+Actions:
+
+- Diagnosed the configuration mismatch: the original server was registered
+  in `~/.codex/config.toml`, while this client uses `~/.codex-astral`.
+- Initially registered the original server in the active configuration, then
+  replaced that entry with Peter's npm release `agda-mcp@0.4.1` after the
+  user's clarification and successful tests. Configured the project workspace
+  and a 300-second load timeout.
+- Tested Peter 0.4.1, InvariantHoldings 0.6.7, and cliu238's Git revision
+  `5fa2475` (package 0.6.8). Built the fork in `/tmp` without running its team
+  setup or upload workflow.
+- Checked completed literate code, an actual type mismatch, a visible hole
+  and its context, an invisible meta, and the real `pointed-sets` module.
+  All three servers reported the relevant proof states correctly on these
+  examples. An initial Peter project load timed out at 120 seconds; a later
+  attempt with a 300-second limit succeeded in about 113 seconds.
+- Reviewed Native AIR revision `7825392`. Its package requires a newer GHC
+  than the installed 9.4.7, and its offline Nix backend setup failed because
+  required dependencies were not cached. Recorded this as an untested runtime,
+  not a server failure.
+- Added `agda-mcp-ux-report/server-comparison-2026-10-02.md`, linked it from
+  the historical UX report, and updated `MCP-SETUP.md` with the experimental
+  server's configuration and distinct tool workflow.
+
+Verification:
+
+```sh
+./check.sh src/structured-types/pointed-sets.lagda.md
+codex mcp get agda
+git diff --check
+```
+
+The project Agda check passed. Independent batch checks of the temporary
+fixtures returned 0 for the complete proof and 42 for the type error, visible
+hole, and invisible meta. The three live MCP implementations returned those
+obligations and the expected goal context. `codex mcp get agda` confirmed the
+new registration. No formalization source changed. Client tool discovery still
+requires a restart; direct server testing does not establish that integration.
+
+Related commit:
+
+- This commit - Compare Agda MCP servers and configure the experimental setup.

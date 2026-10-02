@@ -17,7 +17,56 @@ For a milestone check that should ignore cached interface files, use:
 ./check.sh --fresh src/path/to/file.lagda.md
 ```
 
-## Recommended Server
+## Current experimental server: Peter Thiemann's agda-mcp
+
+The 2026-10-02 session tested
+[`peterthiemann/agda-mcp`](https://github.com/peterthiemann/agda-mcp), pinned to
+the npm release `agda-mcp@0.4.1`, and configured it for the current Codex client.
+It passed the literate-file, type-error, open-goal, and invisible-metavariable
+smoke tests, and loaded `src/structured-types/pointed-sets.lagda.md` successfully.
+See the [four-server comparison](agda-mcp-ux-report/server-comparison-2026-10-02.md)
+for the measured results and limitations.
+
+This server requires Node.js 22 or newer and an Agda installation. The tested
+Agda version was 2.8.0. Its default transformation mode is preview; an
+individual transformation can explicitly request `apply: true`.
+
+### Register it in the configuration used by this client
+
+This session uses `CODEX_HOME=/home/eriehl/.codex-astral`. A server registered
+only in `~/.codex/config.toml` is therefore not visible to this client. Check
+`printenv CODEX_HOME` in the client environment when diagnosing missing tools.
+For the configuration used in the 2026-10-02 session:
+
+```sh
+CODEX_HOME=/home/eriehl/.codex-astral codex mcp add agda \
+  --env 'AGDA_MCP_OPTIONS={"workspaceRoots":["/home/eriehl/Math/Formalization/Codex-Homotopy-Group"],"loadTimeoutMs":300000}' \
+  -- npx -y agda-mcp@0.4.1
+
+CODEX_HOME=/home/eriehl/.codex-astral codex mcp get agda
+```
+
+The five-minute load timeout accommodates the library: the first test hit the
+default two-minute limit, while the subsequent attempt completed in about
+113 seconds. Keep the server's default asynchronous mode so long calls return
+a job handle that can be collected with `agda_job_await`.
+
+Restart the Codex client after registration and check that Agda tools appear
+in the new session. The direct stdio tests in the comparison verify the server;
+they do not establish that an already-running client has loaded its tools.
+
+### Smoke test for this server
+
+1. Call `agda_server_info` and check the Agda version and workspace policy.
+2. Call `agda_load_module` with the absolute path to
+   `src/structured-types/pointed-sets.lagda.md`, and `includeContexts: true`.
+3. If the call returns a pending job, collect it with `agda_job_await`.
+4. Inspect `diagnostics`, `goals`, and `invisibleMetavariables` in the final
+   structured result. `checked: true` alone does not mean a proof is complete:
+   both visible holes and invisible metas can remain in an interactive load.
+5. Run `./check.sh src/structured-types/pointed-sets.lagda.md`.
+
+## Original server: InvariantHoldings/agda-mcp-server
 
 Use the npm package `agda-mcp-server`, currently pinned here to version `0.6.7`.
 This is the server that was smoke-tested in this repository.
@@ -29,7 +78,7 @@ Requirements:
 - Agda on `PATH`.
 - The `agda-unimath` submodule initialized.
 
-## Install For Codex
+### Install For Codex
 
 From the repository root, run:
 
@@ -49,7 +98,7 @@ codex mcp get agda
 Restart Codex after adding the server. MCP tools are loaded when a new Codex
 session starts; an already-running session will not gain them retroactively.
 
-## Smoke Test
+### Smoke Test
 
 In the restarted agent session, ask the agent to test the MCP server without
 editing files. A suitable prompt is:
@@ -69,7 +118,7 @@ A successful smoke test should confirm:
   `-l Codex-Homotopy-Group`;
 - `./check.sh src/structured-types/pointed-sets.lagda.md` also passes.
 
-For agents with direct MCP tools, the corresponding tool sequence is:
+For agents using the original server's MCP tools, the corresponding sequence is:
 
 1. `agda_show_version`
 2. `agda_effective_options` for the file being edited

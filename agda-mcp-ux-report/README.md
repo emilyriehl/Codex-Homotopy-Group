@@ -2,6 +2,11 @@
 
 Report date: 2026-06-30.
 
+A later [four-server smoke-test comparison](server-comparison-2026-10-02.md)
+records the 2026-10-02 experiment with Peter Thiemann's server, the original
+server, cliu238's fork, and a source review of Agda Native AIR. The historical
+observations below retain their original scope and date.
+
 This directory is the shareable report package. It contains the human-readable
 report, the redacted evidence artifacts, and the extractor used to regenerate
 them from local full Codex logs.
