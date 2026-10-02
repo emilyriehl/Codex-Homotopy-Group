@@ -6848,3 +6848,54 @@ the tested examples; case splitting and automatic proof search remain untested.
 Related commit:
 
 - This commit - Verify live Agda MCP integration and refinement workflow.
+
+### Express circle coherence using agda-unimath primitives
+
+Request: The user asked to remove imports of local constructions from the
+circle H-space coherence proof, explicitly asking for a factorization through
+existing agda-unimath concepts rather than copying
+`coherence-point-htpy-eq-pointed-map` into the circle module. During the work,
+the user asked whether the now-unused equality-of-pointed-maps file should be
+deleted.
+
+Model context:
+
+- Agent-visible identity: Codex, based on GPT-6. The exact served model variant
+  and reasoning effort were not exposed.
+- Peter Thiemann's Agda MCP tools were available. The rewritten circle module
+  loaded with no diagnostics, goals, or invisible metavariables.
+
+Actions:
+
+- Audited the imports and found that the equality-of-pointed-maps helper was
+  the circle module's only local dependency.
+- Rewrote `coh-unit-laws-mul-𝕊¹` using the upstream
+  `dependent-identification-eq-pair`, `fiber-ap-eq-fiber-fiberwise`, and
+  `right-unit`. The argument regards pointed maps as the fiber of evaluation
+  at the base point, extracts the second component of the circle computation
+  rule, and computes it as an equality of the original unit paths.
+- Preserved the circle multiplication and both original unit laws. Added
+  explanatory prose describing the general dependent-pair and fiber argument.
+- Confirmed that every one of the circle module's 18 imports exists in the
+  agda-unimath submodule and has no local shadowing module.
+- Removed `src/structured-types/equality-pointed-maps.lagda.md` after confirming
+  that it had no remaining source consumers. Updated the current status report
+  while preserving the historical development entries.
+
+Verification:
+
+```sh
+./check.sh src/synthetic-homotopy-theory/h-space-structure-circle.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-construction-fiber-sequence.lagda.md
+./check.sh src/synthetic-homotopy-theory/hopf-family-circle.lagda.md
+git diff --check
+```
+
+All three Agda checks passed. An import-origin audit confirmed all 18 imports
+come directly from agda-unimath. A source search found no remaining references
+to the deleted module or helper, and the rewritten circle file contains no
+holes, added postulates, or checking overrides.
+
+Related commit:
+
+- This commit - Prove circle coherence using agda-unimath fiber identities.

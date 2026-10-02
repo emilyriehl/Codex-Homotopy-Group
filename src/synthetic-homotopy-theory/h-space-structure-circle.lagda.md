@@ -10,6 +10,8 @@ module synthetic-homotopy-theory.h-space-structure-circle where
 open import foundation.action-on-identifications-functions
 open import foundation.cartesian-product-types
 open import foundation.dependent-pair-types
+open import foundation.equality-dependent-pair-types
+open import foundation.equality-fibers-of-maps
 open import foundation.equivalences
 open import foundation.function-types
 open import foundation.functoriality-dependent-pair-types
@@ -19,7 +21,6 @@ open import foundation.type-arithmetic-cartesian-product-types
 open import foundation.unital-binary-operations
 open import foundation.universe-levels
 
-open import structured-types.equality-pointed-maps
 open import structured-types.h-spaces
 open import structured-types.pointed-maps
 
@@ -51,26 +52,32 @@ and the `1`-sphere.
 The circle multiplication is constructed as a dependent family of pointed
 maps `(mul-𝕊¹ x , right-unit-law-mul-𝕊¹ x)`. At `base-𝕊¹`, the computation
 rule `pr1 (pr2 mul-Π-𝕊¹)` identifies this pointed map with the identity
-pointed map. The induced homotopy of underlying maps is exactly
-`left-unit-law-mul-𝕊¹`. Its base point coherence says
+pointed map. Pointed maps are the fiber of evaluation at `base-𝕊¹` over
+`base-𝕊¹`. The second component of an equality of dependent pairs gives an
+identification between the transported base point paths. The standard
+[equality in a fiber](foundation.equality-fibers-of-maps.md) calculation
+`fiber-ap-eq-fiber-fiberwise` therefore gives
 
 ```text
-right-unit-law-mul-𝕊¹ base-𝕊¹ ＝ left-unit-law-mul-𝕊¹ base-𝕊¹ ∙ refl.
+left-unit-law-mul-𝕊¹ base-𝕊¹ ＝ right-unit-law-mul-𝕊¹ base-𝕊¹ ∙ refl.
 ```
 
-Removing the concatenation with `refl` and inverting gives the required
-coherence of the original unit laws.
+Here the left side is definitionally evaluation of the induced equality of
+underlying maps. Removing the concatenation with `refl` gives the required
+coherence, using only the library's general lemmas about dependent pairs and
+fibers.
 
 ```agda
 coh-unit-laws-mul-𝕊¹ :
   left-unit-law-mul-𝕊¹ base-𝕊¹ ＝ right-unit-law-mul-𝕊¹ base-𝕊¹
 coh-unit-laws-mul-𝕊¹ =
-  inv
-    ( coherence-point-htpy-eq-pointed-map
-      ( pr1 mul-Π-𝕊¹ base-𝕊¹)
-      ( id-pointed-map)
-      ( pr1 (pr2 mul-Π-𝕊¹)) ∙
-      right-unit)
+  ( fiber-ap-eq-fiber-fiberwise
+    ( λ f → f base-𝕊¹)
+    ( pr1 mul-Π-𝕊¹ base-𝕊¹)
+    ( id-pointed-map)
+    ( ap pr1 (pr1 (pr2 mul-Π-𝕊¹)))
+    ( dependent-identification-eq-pair (pr1 (pr2 mul-Π-𝕊¹)))) ∙
+  right-unit
 ```
 
 ### The H-space structure on the circle
